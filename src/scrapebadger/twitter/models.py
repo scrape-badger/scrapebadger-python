@@ -11,11 +11,19 @@ Models are organized into:
 
 from __future__ import annotations
 
+import sys
 from datetime import datetime
-from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum
+else:
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        """String enum for Python 3.10 compatibility."""
 
 # =============================================================================
 # Enums

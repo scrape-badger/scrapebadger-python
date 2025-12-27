@@ -200,7 +200,7 @@ class BaseClient:
 
                 # Parse response
                 try:
-                    data = response.json()
+                    data: dict[str, Any] = response.json()
                 except Exception:
                     data = {}
 

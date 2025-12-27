@@ -83,7 +83,7 @@ class ClientConfig:
             new_config = config.with_overrides(timeout=60.0)
             ```
         """
-        current = {
+        current: dict[str, Any] = {
             "api_key": self.api_key,
             "base_url": self.base_url,
             "timeout": self.timeout,
