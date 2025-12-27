@@ -333,7 +333,7 @@ All responses use strongly-typed Pydantic models:
 - `Place` - Geographic place
 - `PaginatedResponse[T]` - Wrapper for paginated results
 
-See the [full API documentation](https://docs.scrapebadger.com) for complete details.
+See the [full API documentation](https://scrapebadger.com/docs) for complete details.
 
 ## Development
 
@@ -398,7 +398,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- **Documentation**: [docs.scrapebadger.com](https://docs.scrapebadger.com)
+- **Documentation**: [scrapebadger.com/docs](https://scrapebadger.com/docs)
 - **Issues**: [GitHub Issues](https://github.com/scrapebadger/scrapebadger-python/issues)
 - **Email**: support@scrapebadger.com
 - **Discord**: [Join our community](https://discord.gg/scrapebadger)
