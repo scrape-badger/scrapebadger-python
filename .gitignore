@@ -139,7 +139,6 @@ cython_debug/
 
 # UV
 .uv/
-uv.lock
 
 # IDE
 .idea/
