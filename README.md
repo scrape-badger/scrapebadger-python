@@ -2,9 +2,9 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/scrapebadger.svg)](https://pypi.org/project/scrapebadger/)
 [![Python versions](https://img.shields.io/pypi/pyversions/scrapebadger.svg)](https://pypi.org/project/scrapebadger/)
-[![License](https://img.shields.io/pypi/l/scrapebadger.svg)](https://github.com/scrapebadger/scrapebadger-python/blob/main/LICENSE)
-[![Tests](https://github.com/scrapebadger/scrapebadger-python/actions/workflows/test.yml/badge.svg)](https://github.com/scrapebadger/scrapebadger-python/actions/workflows/test.yml)
-[![Coverage](https://codecov.io/gh/scrapebadger/scrapebadger-python/branch/main/graph/badge.svg)](https://codecov.io/gh/scrapebadger/scrapebadger-python)
+[![License](https://img.shields.io/pypi/l/scrapebadger.svg)](https://github.com/scrape-badger/scrapebadger-python/blob/main/LICENSE)
+[![Tests](https://github.com/scrape-badger/scrapebadger-python/actions/workflows/test.yml/badge.svg)](https://github.com/scrape-badger/scrapebadger-python/actions/workflows/test.yml)
+[![Coverage](https://codecov.io/gh/scrape-badger/scrapebadger-python/branch/main/graph/badge.svg)](https://codecov.io/gh/scrape-badger/scrapebadger-python)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](https://mypy-lang.org/)
 
@@ -341,7 +341,7 @@ See the [full API documentation](https://scrapebadger.com/docs) for complete det
 
 ```bash
 # Clone the repository
-git clone https://github.com/scrapebadger/scrapebadger-python.git
+git clone https://github.com/scrape-badger/scrapebadger-python.git
 cd scrapebadger-python
 
 # Install dependencies with uv
@@ -399,7 +399,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - **Documentation**: [scrapebadger.com/docs](https://scrapebadger.com/docs)
-- **Issues**: [GitHub Issues](https://github.com/scrapebadger/scrapebadger-python/issues)
+- **Issues**: [GitHub Issues](https://github.com/scrape-badger/scrapebadger-python/issues)
 - **Email**: support@scrapebadger.com
 - **Discord**: [Join our community](https://discord.gg/scrapebadger)
 
