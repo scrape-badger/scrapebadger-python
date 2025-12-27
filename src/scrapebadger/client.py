@@ -5,11 +5,14 @@ This module provides the main entry point for the ScrapeBadger SDK.
 
 from __future__ import annotations
 
-from types import TracebackType
+from typing import TYPE_CHECKING
 
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.twitter.client import TwitterClient
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 
 class ScrapeBadger:
@@ -149,7 +152,7 @@ class ScrapeBadger:
 
     async def __aenter__(self) -> ScrapeBadger:
         """Enter async context manager."""
-        await self._base_client._get_client()  # noqa: SLF001
+        await self._base_client._get_client()
         return self
 
     async def __aexit__(

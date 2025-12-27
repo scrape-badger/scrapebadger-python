@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 
 from scrapebadger import ScrapeBadger
-from scrapebadger._internal.config import ClientConfig
 from scrapebadger.twitter.client import TwitterClient
+
+if TYPE_CHECKING:
+    from scrapebadger._internal.config import ClientConfig
 
 
 class TestScrapeBadgerClient:

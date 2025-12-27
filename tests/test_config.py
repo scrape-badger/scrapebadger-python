@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import FrozenInstanceError
+
 import pytest
 
 from scrapebadger._internal.config import (
@@ -74,7 +76,7 @@ class TestClientConfig:
     def test_config_is_frozen(self, api_key: str) -> None:
         """Test that config is immutable."""
         config = ClientConfig(api_key=api_key)
-        with pytest.raises(Exception):  # FrozenInstanceError
+        with pytest.raises(FrozenInstanceError):
             config.api_key = "new_key"  # type: ignore[misc]
 
     def test_with_overrides(self, api_key: str) -> None:

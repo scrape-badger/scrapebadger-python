@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import asyncio
-from types import TracebackType
 from typing import TYPE_CHECKING, Any, TypeVar
 
 import httpx
 
-from scrapebadger._internal.config import ClientConfig
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
     InsufficientCreditsError,
@@ -21,6 +19,9 @@ from scrapebadger._internal.exceptions import (
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
+    from types import TracebackType
+
+    from scrapebadger._internal.config import ClientConfig
 
 T = TypeVar("T")
 

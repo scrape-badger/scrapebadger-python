@@ -5,13 +5,14 @@ Provides methods for fetching tweets, searching, and getting tweet metadata.
 
 from __future__ import annotations
 
-from collections.abc import AsyncIterator
 from typing import TYPE_CHECKING
 
 from scrapebadger._internal.pagination import PaginatedResponse, paginate
 from scrapebadger.twitter.models import QueryType, Tweet, User
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
     from scrapebadger._internal.client import BaseClient
 
 

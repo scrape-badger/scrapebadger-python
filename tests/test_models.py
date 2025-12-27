@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
+from pydantic import ValidationError
 
 from scrapebadger.twitter.models import (
     Community,
@@ -76,7 +77,7 @@ class TestTweetModel:
     def test_tweet_is_frozen(self, sample_tweet_data: dict[str, Any]) -> None:
         """Test tweet is immutable."""
         tweet = Tweet.model_validate(sample_tweet_data)
-        with pytest.raises(Exception):  # ValidationError for frozen
+        with pytest.raises(ValidationError):
             tweet.text = "Modified"  # type: ignore[misc]
 
     def test_tweet_with_media(self) -> None:
@@ -144,7 +145,7 @@ class TestUserModel:
     def test_user_is_frozen(self, sample_user_data: dict[str, Any]) -> None:
         """Test user is immutable."""
         user = User.model_validate(sample_user_data)
-        with pytest.raises(Exception):
+        with pytest.raises(ValidationError):
             user.username = "newname"  # type: ignore[misc]
 
 

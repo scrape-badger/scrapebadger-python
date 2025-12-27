@@ -45,20 +45,20 @@ from scrapebadger.client import ScrapeBadger
 __version__ = "0.1.0"
 
 __all__ = [
-    # Main client
-    "ScrapeBadger",
+    "AuthenticationError",
     # Configuration
     "ClientConfig",
-    # Pagination
-    "PaginatedResponse",
-    # Exceptions
-    "ScrapeBadgerError",
-    "AuthenticationError",
-    "RateLimitError",
     "InsufficientCreditsError",
     "NotFoundError",
-    "ValidationError",
+    # Pagination
+    "PaginatedResponse",
+    "RateLimitError",
+    # Main client
+    "ScrapeBadger",
+    # Exceptions
+    "ScrapeBadgerError",
     "ServerError",
+    "ValidationError",
     # Version
     "__version__",
 ]

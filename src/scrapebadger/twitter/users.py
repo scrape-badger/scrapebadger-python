@@ -5,13 +5,14 @@ Provides methods for fetching user profiles, followers, following, and related d
 
 from __future__ import annotations
 
-from collections.abc import AsyncIterator
 from typing import TYPE_CHECKING
 
 from scrapebadger._internal.pagination import PaginatedResponse, paginate
 from scrapebadger.twitter.models import Tweet, User, UserAbout, UserIds
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
     from scrapebadger._internal.client import BaseClient
 
 
