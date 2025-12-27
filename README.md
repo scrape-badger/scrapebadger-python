@@ -1,12 +1,18 @@
-# ScrapeBadger Python SDK
+<p align="center">
+  <img src="https://scrapebadger.com/logo-dark.png" alt="ScrapeBadger" width="400">
+</p>
 
-[![PyPI version](https://img.shields.io/pypi/v/scrapebadger.svg)](https://pypi.org/project/scrapebadger/)
-[![Python versions](https://img.shields.io/pypi/pyversions/scrapebadger.svg)](https://pypi.org/project/scrapebadger/)
-[![License](https://img.shields.io/pypi/l/scrapebadger.svg)](https://github.com/scrape-badger/scrapebadger-python/blob/main/LICENSE)
-[![Tests](https://github.com/scrape-badger/scrapebadger-python/actions/workflows/test.yml/badge.svg)](https://github.com/scrape-badger/scrapebadger-python/actions/workflows/test.yml)
-[![Coverage](https://codecov.io/gh/scrape-badger/scrapebadger-python/branch/main/graph/badge.svg)](https://codecov.io/gh/scrape-badger/scrapebadger-python)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](https://mypy-lang.org/)
+<h1 align="center">ScrapeBadger Python SDK</h1>
+
+<p align="center">
+  <a href="https://pypi.org/project/scrapebadger/"><img src="https://img.shields.io/pypi/v/scrapebadger.svg" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/scrapebadger/"><img src="https://img.shields.io/pypi/pyversions/scrapebadger.svg" alt="Python versions"></a>
+  <a href="https://github.com/scrape-badger/scrapebadger-python/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/scrapebadger.svg" alt="License"></a>
+  <a href="https://github.com/scrape-badger/scrapebadger-python/actions/workflows/test.yml"><img src="https://github.com/scrape-badger/scrapebadger-python/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+  <a href="https://codecov.io/gh/scrape-badger/scrapebadger-python"><img src="https://codecov.io/gh/scrape-badger/scrapebadger-python/branch/main/graph/badge.svg" alt="Coverage"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/badge/code%20style-ruff-000000.svg" alt="Code style: ruff"></a>
+  <a href="https://mypy-lang.org/"><img src="https://img.shields.io/badge/type%20checked-mypy-blue.svg" alt="Type checked: mypy"></a>
+</p>
 
 The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web scraping APIs for Twitter and more.
 
