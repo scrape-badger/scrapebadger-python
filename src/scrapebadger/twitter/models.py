@@ -768,6 +768,8 @@ class PlaceTrends(_BaseModel):
         woeid: Where On Earth ID.
         name: Location name.
         country: Country name.
+        as_of: Timestamp when trends were retrieved.
+        created_at: Timestamp when the data was created.
         trends: List of trends for this location.
 
     Example:
@@ -782,6 +784,8 @@ class PlaceTrends(_BaseModel):
     woeid: int
     name: str | None = None
     country: str | None = None
+    as_of: str | None = None
+    created_at: str | None = None
     trends: list[Trend] = Field(default_factory=list)
 
 
