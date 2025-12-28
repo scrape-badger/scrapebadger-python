@@ -252,7 +252,7 @@ class Tweet(_BaseModel):
         retweeted: Whether the authenticated user retweeted this.
         bookmarked: Whether the authenticated user bookmarked this.
 
-        possibly_sensitive: Whether the tweet is marked as sensitive.
+        possibly_sensitive: Whether the tweet is marked as sensitive (None if unknown).
         is_quote_status: Whether this is a quote tweet.
         is_retweet: Whether this is a retweet.
 
@@ -316,7 +316,7 @@ class Tweet(_BaseModel):
     bookmarked: bool = False
 
     # Tweet properties
-    possibly_sensitive: bool = False
+    possibly_sensitive: bool | None = None
     is_quote_status: bool = False
     is_retweet: bool = False
     conversation_id: str | None = None
