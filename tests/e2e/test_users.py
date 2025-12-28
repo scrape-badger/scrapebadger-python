@@ -39,7 +39,9 @@ class TestGetByUsername:
 class TestGetById:
     """Tests for get_by_id method."""
 
-    async def test_get_by_id_returns_user(self, client: ScrapeBadger, test_data: E2ETestData) -> None:
+    async def test_get_by_id_returns_user(
+        self, client: ScrapeBadger, test_data: E2ETestData
+    ) -> None:
         """Test fetching a user by ID returns valid user data."""
         user = await client.twitter.users.get_by_id(test_data.user_id)
 

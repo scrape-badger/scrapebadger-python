@@ -16,7 +16,9 @@ from .conftest import E2ETestData
 class TestGetDetail:
     """Tests for get_detail method."""
 
-    async def test_get_detail_returns_list(self, client: ScrapeBadger, test_data: E2ETestData) -> None:
+    async def test_get_detail_returns_list(
+        self, client: ScrapeBadger, test_data: E2ETestData
+    ) -> None:
         """Test fetching list details returns valid list data."""
         lst = await client.twitter.lists.get_detail(test_data.list_id)
 

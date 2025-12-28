@@ -1,0 +1,26 @@
+# Pre-commit hooks configuration
+# Install: uv run pre-commit install
+# Run manually: uv run pre-commit run --all-files
+
+repos:
+  # Ruff - linting and formatting (same as CI)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.6
+    hooks:
+      # Linting: ruff check src/ tests/
+      - id: ruff
+        args: [--fix]
+        types_or: [python, pyi]
+      # Formatting: ruff format src/ tests/
+      - id: ruff-format
+        types_or: [python, pyi]
+
+  # Type checking with mypy (same as CI: mypy src/)
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: uv run mypy src/
+        language: system
+        types: [python]
+        pass_filenames: false

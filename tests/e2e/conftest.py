@@ -48,13 +48,13 @@ class E2ETestData:
 
     # Tweet test data - use recent tweets from stable accounts
     # These may need periodic updates if tweets are deleted
-    tweet_id: str = os.environ.get("TEST_TWEET_ID", "1802331592918618529")
+    tweet_id: str = "1802331592918618529"
 
     # List test data - use public lists
-    list_id: str = os.environ.get("TEST_LIST_ID", "1736495155853967360")
+    list_id: str = "1736495155853967360"
 
     # Community test data
-    community_id: str = os.environ.get("TEST_COMMUNITY_ID", "1493016274714259462")
+    community_id: str = "1493016274714259462"
 
     # Geo test data
     place_id: str = "5a110d312052166f"  # San Francisco

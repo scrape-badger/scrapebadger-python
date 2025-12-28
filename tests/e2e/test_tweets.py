@@ -14,7 +14,9 @@ from .conftest import E2ETestData
 class TestGetById:
     """Tests for get_by_id method."""
 
-    async def test_get_by_id_returns_tweet(self, client: ScrapeBadger, test_data: E2ETestData) -> None:
+    async def test_get_by_id_returns_tweet(
+        self, client: ScrapeBadger, test_data: E2ETestData
+    ) -> None:
         """Test fetching a tweet by ID returns valid tweet data."""
         tweet = await client.twitter.tweets.get_by_id(test_data.tweet_id)
 
