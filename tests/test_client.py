@@ -20,7 +20,7 @@ class TestScrapeBadgerClient:
         """Test client initialization with API key."""
         client = ScrapeBadger(api_key=api_key)
         assert client.config.api_key == api_key
-        assert client.config.base_url == "https://api.scrapebadger.com"
+        assert client.config.base_url == "https://scrapebadger.com"
 
     def test_init_with_custom_base_url(self, api_key: str) -> None:
         """Test client initialization with custom base URL."""
@@ -66,7 +66,7 @@ class TestScrapeBadgerClient:
         """Test string representation."""
         client = ScrapeBadger(api_key=api_key)
         assert "ScrapeBadger" in repr(client)
-        assert "api.scrapebadger.com" in repr(client)
+        assert "scrapebadger.com" in repr(client)
 
     async def test_context_manager(self, api_key: str) -> None:
         """Test async context manager."""

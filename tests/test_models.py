@@ -44,7 +44,7 @@ class TestEnums:
     def test_trend_category_values(self) -> None:
         """Test TrendCategory enum values."""
         assert TrendCategory.TRENDING == "trending"
-        assert TrendCategory.FOR_YOU == "for_you"
+        assert TrendCategory.FOR_YOU == "for-you"
         assert TrendCategory.NEWS == "news"
         assert TrendCategory.SPORTS == "sports"
         assert TrendCategory.ENTERTAINMENT == "entertainment"
