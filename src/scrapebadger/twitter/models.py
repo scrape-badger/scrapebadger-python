@@ -180,9 +180,11 @@ class Hashtag(_BaseModel):
 
     Attributes:
         tag: The hashtag text (without #).
+        indices: Character positions of the hashtag in the tweet text.
     """
 
-    tag: str
+    tag: str = Field(alias="text")
+    indices: list[int] | None = None
 
 
 class UserMention(_BaseModel):
