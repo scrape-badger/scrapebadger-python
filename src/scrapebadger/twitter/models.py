@@ -564,7 +564,7 @@ class List(_BaseModel):
         id: Unique list identifier.
         name: List name.
         description: List description.
-        created_at: List creation timestamp.
+        created_at: List creation timestamp (may be string or Unix timestamp).
         member_count: Number of members.
         subscriber_count: Number of subscribers.
         mode: 'public' or 'private'.
@@ -582,7 +582,7 @@ class List(_BaseModel):
     id: str
     name: str = ""
     description: str | None = None
-    created_at: str | None = None
+    created_at: str | int | None = None
     member_count: int | None = None
     subscriber_count: int | None = None
     mode: str | None = None
