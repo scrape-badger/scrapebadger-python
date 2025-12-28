@@ -302,7 +302,7 @@ from scrapebadger._internal import ClientConfig
 
 config = ClientConfig(
     api_key="your-key",
-    base_url="https://api.scrapebadger.com",
+    base_url="https://scrapebadger.com",
     timeout=300.0,
     connect_timeout=10.0,
     max_retries=3,

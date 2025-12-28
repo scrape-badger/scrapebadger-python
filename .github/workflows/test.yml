@@ -43,7 +43,7 @@ jobs:
         run: uv run --frozen mypy src/
 
       - name: Run tests with coverage
-        run: uv run --frozen pytest --cov=src/scrapebadger --cov-report=xml --cov-report=term-missing
+        run: uv run --frozen pytest --cov=src/scrapebadger --cov-report=xml --cov-report=term-missing --ignore=tests/e2e
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.12'

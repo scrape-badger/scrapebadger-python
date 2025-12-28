@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 # Default API base URL
-DEFAULT_BASE_URL = "https://api.scrapebadger.com"
+DEFAULT_BASE_URL = "https://scrapebadger.com"
 
 # Default timeout in seconds
 DEFAULT_TIMEOUT = 300.0  # 5 minutes (matching server MAX_POLL_TIME)

@@ -56,7 +56,7 @@ class TrendCategory(StrEnum):
     """
 
     TRENDING = "trending"
-    FOR_YOU = "for_you"
+    FOR_YOU = "for-you"
     NEWS = "news"
     SPORTS = "sports"
     ENTERTAINMENT = "entertainment"

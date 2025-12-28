@@ -74,6 +74,9 @@ addopts = [
     "-ra",
     "-q",
 ]
+markers = [
+    "e2e: mark test as end-to-end test requiring real API access",
+]
 
 [tool.coverage.run]
 source = ["src/scrapebadger"]
@@ -114,6 +117,13 @@ select = [
 ]
 ignore = [
     "A003",   # Class attribute shadowing builtin
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "TCH001",  # Imports needed at runtime for isinstance checks
+    "TCH002",
+    "TCH003",
 ]
 
 [tool.ruff.lint.isort]
