@@ -213,6 +213,90 @@ class TweetsClient:
         data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
 
+    async def get_quotes(
+        self,
+        tweet_id: str,
+        *,
+        cursor: str | None = None,
+    ) -> PaginatedResponse[Tweet]:
+        """Get tweets that quote a specific tweet.
+
+        Args:
+            tweet_id: The tweet ID to get quote tweets for.
+            cursor: Pagination cursor for fetching more results.
+
+        Returns:
+            Paginated response containing tweets that quote this tweet.
+
+        Example:
+            ```python
+            quotes = await client.twitter.tweets.get_quotes("1234567890")
+            for quote in quotes.data:
+                print(f"@{quote.username} quoted: {quote.text[:100]}...")
+
+            # Get next page
+            if quotes.has_more:
+                more = await client.twitter.tweets.get_quotes(
+                    "1234567890",
+                    cursor=quotes.next_cursor
+                )
+            ```
+        """
+        response = await self._client.get(
+            f"/v1/twitter/tweets/tweet/{tweet_id}/quotes",
+            params={"cursor": cursor},
+        )
+        data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_quotes_all(
+        self,
+        tweet_id: str,
+        *,
+        max_pages: int | None = None,
+        max_items: int | None = None,
+    ) -> AsyncIterator[Tweet]:
+        """Iterate through all quote tweets with automatic pagination.
+
+        This is a convenience method that automatically handles pagination,
+        yielding quote tweets one at a time.
+
+        Args:
+            tweet_id: The tweet ID to get quote tweets for.
+            max_pages: Maximum number of pages to fetch. None for unlimited.
+            max_items: Maximum number of tweets to yield. None for unlimited.
+
+        Yields:
+            Tweet objects that quote the specified tweet.
+
+        Example:
+            ```python
+            # Get all quote tweets (up to 500)
+            async for quote in client.twitter.tweets.get_quotes_all(
+                "1234567890",
+                max_items=500
+            ):
+                print(f"@{quote.username}: {quote.text}")
+
+            # Collect into a list
+            quotes = [
+                q async for q in client.twitter.tweets.get_quotes_all(
+                    "1234567890",
+                    max_pages=10
+                )
+            ]
+            ```
+        """
+        async for tweet in paginate(
+            self._client,
+            f"/v1/twitter/tweets/tweet/{tweet_id}/quotes",
+            {},
+            Tweet.model_validate,
+            max_pages=max_pages,
+            max_items=max_items,
+        ):
+            yield tweet
+
     async def search(
         self,
         query: str,
