@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.twitter.client import TwitterClient
+from scrapebadger.web.client import WebClient
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -108,11 +109,23 @@ class ScrapeBadger:
 
         self._base_client = BaseClient(self._config)
         self._twitter: TwitterClient | None = None
+        self._web: WebClient | None = None
 
     @property
     def config(self) -> ClientConfig:
         """Get the client configuration."""
         return self._config
+
+    @property
+    def web(self) -> WebClient:
+        """Access web scraping operations.
+
+        Returns:
+            WebClient providing access to scrape, screenshot, extract, batch, and sessions.
+        """
+        if self._web is None:
+            self._web = WebClient(self._base_client)
+        return self._web
 
     @property
     def twitter(self) -> TwitterClient:
