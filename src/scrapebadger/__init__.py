@@ -41,13 +41,23 @@ from scrapebadger._internal.exceptions import (
 )
 from scrapebadger._internal.pagination import PaginatedResponse
 from scrapebadger.client import ScrapeBadger
+from scrapebadger.web.models import (
+    BatchResult,
+    ExtractResult,
+    ScrapeResult,
+    ScreenshotResult,
+    SessionInfo,
+)
 
 __version__ = "0.1.1"
 
 __all__ = [
     "AuthenticationError",
+    # Web scraping
+    "BatchResult",
     # Configuration
     "ClientConfig",
+    "ExtractResult",
     "InsufficientCreditsError",
     "NotFoundError",
     # Pagination
@@ -57,7 +67,10 @@ __all__ = [
     "ScrapeBadger",
     # Exceptions
     "ScrapeBadgerError",
+    "ScrapeResult",
+    "ScreenshotResult",
     "ServerError",
+    "SessionInfo",
     "ValidationError",
     # Version
     "__version__",
