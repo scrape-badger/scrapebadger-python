@@ -132,7 +132,10 @@ class TestUserModel:
         user = User(id="123", username="test")
         assert user.id == "123"
         assert user.username == "test"
-        assert user.followers_count == 0
+        assert user.followers_count is None
+        assert user.following_count is None
+        assert user.tweet_count is None
+        assert user.listed_count is None
 
     def test_full_user(self, sample_user_data: dict[str, Any]) -> None:
         """Test user with full data."""

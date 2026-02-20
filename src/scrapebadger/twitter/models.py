@@ -427,10 +427,10 @@ class User(_BaseModel):
     profile_banner_url: str | None = None
 
     # Account metrics
-    followers_count: int = 0
-    following_count: int = 0
-    tweet_count: int = 0
-    listed_count: int = 0
+    followers_count: int | None = None
+    following_count: int | None = None
+    tweet_count: int | None = None
+    listed_count: int | None = None
     favourites_count: int | None = None
     media_count: int | None = None
 
