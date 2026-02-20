@@ -45,6 +45,33 @@ class CommunitiesClient:
         """
         self._client = client
 
+    @staticmethod
+    def _parse_community_member(item: dict[str, object]) -> CommunityMember:
+        """Parse a community member from the API response.
+
+        Handles both flat format (user_id, username, role at top level)
+        and nested format (user object with id, username).
+        """
+        from scrapebadger.twitter.models import User
+
+        if "user" in item:
+            return CommunityMember.model_validate(item)
+
+        # Flat format: map user_id -> id for User model
+        user_data = {
+            "id": item.get("user_id", ""),
+            "username": item.get("username", ""),
+            "name": item.get("name", ""),
+            "profile_image_url": item.get("profile_image_url"),
+            "verified": item.get("verified"),
+            "is_blue_verified": item.get("is_blue_verified"),
+        }
+        return CommunityMember(
+            user=User.model_validate(user_data),
+            role=item.get("role"),
+            joined_at=item.get("joined_at"),
+        )
+
     async def get_detail(self, community_id: str) -> Community:
         """Get details for a specific community.
 
@@ -176,19 +203,7 @@ class CommunitiesClient:
         raw_data = response.get("data", []) or []
         data = []
         for item in raw_data:
-            # If the API returns User directly, wrap it
-            if "user" not in item:
-                from scrapebadger.twitter.models import User
-
-                data.append(
-                    CommunityMember(
-                        user=User.model_validate(item),
-                        role=item.get("role"),
-                        joined_at=item.get("joined_at"),
-                    )
-                )
-            else:
-                data.append(CommunityMember.model_validate(item))
+            data.append(self._parse_community_member(item))
 
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
 
@@ -216,18 +231,7 @@ class CommunitiesClient:
         raw_data = response.get("data", []) or []
         data = []
         for item in raw_data:
-            if "user" not in item:
-                from scrapebadger.twitter.models import User
-
-                data.append(
-                    CommunityMember(
-                        user=User.model_validate(item),
-                        role="moderator",
-                        joined_at=item.get("joined_at"),
-                    )
-                )
-            else:
-                data.append(CommunityMember.model_validate(item))
+            data.append(self._parse_community_member(item))
 
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
 
