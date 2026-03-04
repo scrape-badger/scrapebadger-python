@@ -48,27 +48,81 @@ from scrapebadger.twitter.models import (
     UserIds,
     UserMention,
 )
+from scrapebadger.twitter.stream import StreamClient, verify_webhook_signature
+from scrapebadger.twitter.stream_models import (
+    BillingLog,
+    BillingLogList,
+    ConnectedEvent,
+    DeliveryLog,
+    DeliveryLogList,
+    ErrorEvent,
+    FilterRuleDeliveryLog,
+    FilterRuleDeliveryLogList,
+    FilterRulePricingTier,
+    FilterRulePricingTierList,
+    FilterRuleQueryValidation,
+    FilterRuleResponse,
+    FilterRuleResponseList,
+    FilterRuleStatus,
+    MonitorStatus,
+    PingEvent,
+    StreamEvent,
+    StreamEventType,
+    StreamMonitor,
+    StreamMonitorList,
+    StreamTweet,
+    TweetEvent,
+)
 
 __all__ = [
+    "BillingLog",
+    "BillingLogList",
     "Community",
     "CommunityBanner",
     "CommunityMember",
     "CommunityRule",
+    # Stream WebSocket event models
+    "ConnectedEvent",
+    "DeliveryLog",
+    "DeliveryLogList",
+    "ErrorEvent",
+    # Filter rule models
+    "FilterRuleDeliveryLog",
+    "FilterRuleDeliveryLogList",
+    "FilterRulePricingTier",
+    "FilterRulePricingTierList",
+    "FilterRuleQueryValidation",
+    "FilterRuleResponse",
+    "FilterRuleResponseList",
+    # Filter rule enums
+    "FilterRuleStatus",
     "Hashtag",
     "List",
     "Location",
     # Nested models
     "Media",
+    # Stream enums
+    "MonitorStatus",
+    "PingEvent",
     "Place",
     "PlaceTrends",
     "Poll",
     "PollOption",
     # Enums
     "QueryType",
+    # Stream client
+    "StreamClient",
+    "StreamEvent",
+    "StreamEventType",
+    # Stream models
+    "StreamMonitor",
+    "StreamMonitorList",
+    "StreamTweet",
     "Trend",
     "TrendCategory",
     # Core models
     "Tweet",
+    "TweetEvent",
     # Client
     "TwitterClient",
     "Url",
@@ -76,4 +130,6 @@ __all__ = [
     "UserAbout",
     "UserIds",
     "UserMention",
+    # Webhook verification
+    "verify_webhook_signature",
 ]

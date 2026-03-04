@@ -224,3 +224,43 @@ class ServerError(ScrapeBadgerError):
         response_data: dict[str, Any] | None = None,
     ) -> None:
         super().__init__(message, status_code, response_data)
+
+
+class WebSocketStreamError(ScrapeBadgerError):
+    """Raised when the WebSocket stream connection fails or is terminated.
+
+    Attributes:
+        code: WebSocket close code or server error code (4001, 4003, etc.).
+              None if the error is a network-level failure.
+
+    Common codes:
+        4001 -- Invalid or missing API key (auth failure)
+        4003 -- Connection limit exceeded (max 5 per API key)
+        1001 -- Server closed due to pong timeout
+
+    Example:
+        ```python
+        from scrapebadger import WebSocketStreamError
+
+        try:
+            async with client.twitter.stream.connect() as events:
+                async for event in events:
+                    ...
+        except WebSocketStreamError as e:
+            if e.code == 4001:
+                print("API key rejected -- check your key")
+            else:
+                print(f"Stream error: {e}")
+        ```
+    """
+
+    def __init__(
+        self,
+        message: str = "WebSocket stream error",
+        status_code: int | None = None,
+        response_data: dict[str, Any] | None = None,
+        *,
+        code: int | None = None,
+    ) -> None:
+        super().__init__(message, status_code, response_data)
+        self.code = code

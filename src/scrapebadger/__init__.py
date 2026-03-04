@@ -38,6 +38,7 @@ from scrapebadger._internal.exceptions import (
     ScrapeBadgerError,
     ServerError,
     ValidationError,
+    WebSocketStreamError,
 )
 from scrapebadger._internal.pagination import PaginatedResponse
 from scrapebadger.client import ScrapeBadger
@@ -72,6 +73,8 @@ __all__ = [
     "ServerError",
     "SessionInfo",
     "ValidationError",
+    # Stream exceptions
+    "WebSocketStreamError",
     # Version
     "__version__",
 ]

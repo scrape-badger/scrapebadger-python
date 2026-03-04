@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-03-05
+
+### Added
+
+- **Twitter Streams**: Real-time tweet monitoring via WebSocket and webhooks
+  - `StreamClient` with full monitor CRUD: `create_monitor`, `list_monitors`, `get_monitor`, `update_monitor`, `pause_monitor`, `resume_monitor`, `delete_monitor`
+  - WebSocket streaming via `connect()` async context manager with auto-reconnect support
+  - `verify_webhook_signature()` utility for HMAC-SHA256 webhook verification
+  - Delivery log and billing log listing: `list_delivery_logs`, `list_billing_logs`
+  - Full type-safe models: `StreamMonitor`, `StreamMonitorList`, `TweetEvent`, `ConnectedEvent`, `PingEvent`, `ErrorEvent`, `DeliveryLog`, `BillingLog`
+  - `WebSocketStreamError` exception for stream connection failures
 
 ## [0.1.1] - 2024-12-27
 
