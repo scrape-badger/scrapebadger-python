@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from scrapebadger.twitter.communities import CommunitiesClient
 from scrapebadger.twitter.geo import GeoClient
 from scrapebadger.twitter.lists import ListsClient
+from scrapebadger.twitter.stream import StreamClient
 from scrapebadger.twitter.trends import TrendsClient
 from scrapebadger.twitter.tweets import TweetsClient
 from scrapebadger.twitter.users import UsersClient
@@ -32,6 +33,7 @@ class TwitterClient:
         communities: Client for Twitter communities operations.
         trends: Client for trending topics operations.
         geo: Client for geographic/places operations.
+        stream: Client for real-time stream monitor management and WebSocket streaming.
 
     Example:
         ```python
@@ -83,6 +85,7 @@ class TwitterClient:
         self._communities = CommunitiesClient(client)
         self._trends = TrendsClient(client)
         self._geo = GeoClient(client)
+        self._stream = StreamClient(client)
 
     @property
     def tweets(self) -> TweetsClient:
@@ -210,3 +213,28 @@ class TwitterClient:
             ```
         """
         return self._geo
+
+    @property
+    def stream(self) -> StreamClient:
+        """Access Twitter Streams -- real-time monitor management and WebSocket streaming.
+
+        Returns:
+            StreamClient for creating monitors and connecting to the live tweet stream.
+
+        Example:
+            ```python
+            # Create a monitor
+            monitor = await client.twitter.stream.create_monitor(
+                name="Breaking News",
+                usernames=["cnnbrk", "bbcbreaking"],
+                poll_interval_seconds=5.0,
+            )
+
+            # Stream live tweets
+            async with client.twitter.stream.connect() as events:
+                async for event in events:
+                    if isinstance(event, TweetEvent):
+                        print(f"@{event.author_username}: {event.tweet.text}")
+            ```
+        """
+        return self._stream

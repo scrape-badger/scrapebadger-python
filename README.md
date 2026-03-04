@@ -244,6 +244,62 @@ async with ScrapeBadger(api_key="your-key") as client:
     place = await client.twitter.geo.get_detail("5a110d312052166f")
 ```
 
+### Twitter Streams (Real-Time Monitoring)
+
+Monitor Twitter accounts in real-time with WebSocket delivery:
+
+```python
+import asyncio
+from scrapebadger import ScrapeBadger
+
+async def main():
+    async with ScrapeBadger(api_key="your-key") as client:
+        # Create a stream monitor
+        monitor = await client.twitter.stream.create_monitor(
+            name="Tech CEOs",
+            usernames=["elonmusk", "sama", "naval"],
+            poll_interval_seconds=5.0,
+        )
+        print(f"Monitor '{monitor.name}' created (tier: {monitor.pricing_tier})")
+        print(f"Estimated cost: {monitor.estimated_credits_per_hour:.0f} credits/hour")
+
+        # List monitors
+        result = await client.twitter.stream.list_monitors(status="active")
+        print(f"{result.total} active monitors")
+
+        # Stream tweets via WebSocket
+        async with client.twitter.stream.connect(reconnect=True) as events:
+            async for event in events:
+                if event.type == "tweet":
+                    print(f"@{event.author_username}: {event.tweet.text}")
+                    print(f"  Detected in {event.latency_ms}ms")
+                elif event.type == "connected":
+                    print(f"Connected (id: {event.connection_id})")
+
+        # Pause/resume/delete
+        await client.twitter.stream.pause_monitor(monitor.id)
+        await client.twitter.stream.delete_monitor(monitor.id)
+
+asyncio.run(main())
+```
+
+#### Webhook Verification
+
+Verify incoming webhook signatures in your receiver:
+
+```python
+from scrapebadger.twitter.stream import verify_webhook_signature
+
+@app.post("/webhook")
+async def handle_webhook(request):
+    signature = request.headers["x-scrapebadger-signature"]
+    body = await request.body()
+    if not verify_webhook_signature("your-secret", body, signature):
+        return JSONResponse({"error": "Invalid signature"}, status_code=401)
+    event = json.loads(body)
+    # Process event...
+```
+
 ## Error Handling
 
 The SDK provides specific exception types for different error scenarios:
@@ -325,6 +381,7 @@ client = ScrapeBadger(config=config)
 | **Communities** | `get_detail`, `search`, `get_tweets`, `get_tweets_all`, `get_members`, `get_moderators`, `search_tweets`, `get_timeline` |
 | **Trends** | `get_trends`, `get_place_trends`, `get_available_locations` |
 | **Geo** | `get_detail`, `search` |
+| **Streams** | `create_monitor`, `list_monitors`, `get_monitor`, `update_monitor`, `pause_monitor`, `resume_monitor`, `delete_monitor`, `list_delivery_logs`, `list_billing_logs`, `connect` |
 
 ### Response Models
 
@@ -338,6 +395,11 @@ All responses use strongly-typed Pydantic models:
 - `Trend` - Trending topic
 - `Place` - Geographic place
 - `PaginatedResponse[T]` - Wrapper for paginated results
+- `StreamMonitor` - Stream monitor configuration and status
+- `StreamMonitorList` - Paginated list of monitors
+- `TweetEvent` - Real-time tweet delivery event with latency
+- `ConnectedEvent`, `PingEvent`, `ErrorEvent` - WebSocket lifecycle events
+- `DeliveryLog`, `BillingLog` - Audit log records
 
 See the [full API documentation](https://scrapebadger.com/docs) for complete details.
 

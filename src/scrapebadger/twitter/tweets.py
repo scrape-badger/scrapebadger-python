@@ -302,6 +302,7 @@ class TweetsClient:
         query: str,
         *,
         query_type: QueryType = QueryType.TOP,
+        count: int | None = None,
         cursor: str | None = None,
     ) -> PaginatedResponse[Tweet]:
         """Search for tweets.
@@ -309,6 +310,7 @@ class TweetsClient:
         Args:
             query: Search query string. Supports Twitter advanced search operators.
             query_type: Type of search results (TOP, LATEST, or MEDIA).
+            count: Number of tweets to fetch per page (1-100, default 20).
             cursor: Pagination cursor for fetching more results.
 
         Returns:
@@ -319,10 +321,11 @@ class TweetsClient:
             # Basic search
             results = await client.twitter.tweets.search("python programming")
 
-            # Latest tweets only
+            # Latest tweets with custom count
             results = await client.twitter.tweets.search(
                 "python",
-                query_type=QueryType.LATEST
+                query_type=QueryType.LATEST,
+                count=50
             )
 
             # Advanced search operators
@@ -331,13 +334,16 @@ class TweetsClient:
             )
             ```
         """
+        params: dict = {
+            "query": query,
+            "query_type": query_type.value,
+            "cursor": cursor,
+        }
+        if count is not None:
+            params["count"] = count
         response = await self._client.get(
             "/v1/twitter/tweets/advanced_search",
-            params={
-                "query": query,
-                "query_type": query_type.value,
-                "cursor": cursor,
-            },
+            params=params,
         )
         data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
@@ -347,6 +353,7 @@ class TweetsClient:
         query: str,
         *,
         query_type: QueryType = QueryType.TOP,
+        count: int | None = None,
         max_pages: int | None = None,
         max_items: int | None = None,
     ) -> AsyncIterator[Tweet]:
@@ -358,6 +365,7 @@ class TweetsClient:
         Args:
             query: Search query string.
             query_type: Type of search results (TOP, LATEST, or MEDIA).
+            count: Number of tweets to fetch per page (1-100, default 20).
             max_pages: Maximum number of pages to fetch. None for unlimited.
             max_items: Maximum number of tweets to yield. None for unlimited.
 
@@ -366,9 +374,10 @@ class TweetsClient:
 
         Example:
             ```python
-            # Get up to 1000 tweets
+            # Get up to 1000 tweets with 50 per page
             async for tweet in client.twitter.tweets.search_all(
                 "python",
+                count=50,
                 max_items=1000
             ):
                 print(tweet.text)
@@ -382,10 +391,13 @@ class TweetsClient:
             ]
             ```
         """
+        params: dict = {"query": query, "query_type": query_type.value}
+        if count is not None:
+            params["count"] = count
         async for tweet in paginate(
             self._client,
             "/v1/twitter/tweets/advanced_search",
-            {"query": query, "query_type": query_type.value},
+            params,
             Tweet.model_validate,
             max_pages=max_pages,
             max_items=max_items,
