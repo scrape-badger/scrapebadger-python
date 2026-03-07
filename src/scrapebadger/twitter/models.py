@@ -242,6 +242,16 @@ class Tweet(_BaseModel):
         user_id: Author's user ID.
         username: Author's username.
         user_name: Author's display name.
+        user_profile_image_url: Author's profile image URL.
+        user_description: Author's bio.
+        user_location: Author's location.
+        user_url: Author's website URL.
+        user_followers_count: Author's follower count.
+        user_following_count: Author's following count.
+        user_tweet_count: Author's tweet count.
+        user_verified: Author's legacy verification status.
+        user_is_blue_verified: Author's Twitter Blue verification status.
+        user_created_at: Author's account creation date.
 
         favorite_count: Number of likes.
         retweet_count: Number of retweets.
@@ -303,6 +313,16 @@ class Tweet(_BaseModel):
     user_id: str | None = None
     username: str | None = None
     user_name: str | None = None
+    user_profile_image_url: str | None = None
+    user_description: str | None = None
+    user_location: str | None = None
+    user_url: str | None = None
+    user_followers_count: int | None = None
+    user_following_count: int | None = None
+    user_tweet_count: int | None = None
+    user_verified: bool | None = None
+    user_is_blue_verified: bool | None = None
+    user_created_at: str | None = None
 
     # Engagement metrics
     favorite_count: int = 0
