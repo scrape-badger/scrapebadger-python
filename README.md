@@ -21,7 +21,8 @@ The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web
 - **Async-first design** - Built with `asyncio` for high-performance concurrent scraping
 - **Type-safe** - Full type hints and Pydantic models for all API responses
 - **Automatic pagination** - Iterator methods for seamless pagination through large datasets
-- **Retry logic** - Built-in exponential backoff for transient errors
+- **Smart rate limit handling** - Reads API rate limit headers and automatically throttles pagination to avoid hitting limits
+- **Resilient retries** - 10 automatic retries with exponential backoff on 502/503/504 errors, with console warnings on each retry
 - **Comprehensive coverage** - Access to 37+ Twitter endpoints (tweets, users, lists, communities, trends, geo)
 
 ## Installation
@@ -346,7 +347,7 @@ from scrapebadger import ScrapeBadger
 client = ScrapeBadger(
     api_key="your-key",
     timeout=120.0,      # Request timeout in seconds (default: 300)
-    max_retries=5,      # Retry attempts (default: 3)
+    max_retries=5,      # Retry attempts (default: 10)
 )
 ```
 
@@ -361,13 +362,44 @@ config = ClientConfig(
     base_url="https://scrapebadger.com",
     timeout=300.0,
     connect_timeout=10.0,
-    max_retries=3,
+    max_retries=10,
     retry_on_status=(502, 503, 504),
     headers={"X-Custom-Header": "value"},
 )
 
 client = ScrapeBadger(config=config)
 ```
+
+### Retry Behavior
+
+The SDK automatically retries requests that fail with 502, 503, or 504 status codes
+using exponential backoff (1s, 2s, 4s, 8s, ...). Each retry logs a warning:
+
+```
+⚠ 503 Service Unavailable — retrying in 4s (attempt 3/10)
+```
+
+To see these warnings, configure Python logging:
+
+```python
+import logging
+logging.basicConfig(level=logging.WARNING)
+```
+
+### Rate Limit Aware Pagination
+
+When using `*_all` pagination methods, the SDK reads `X-RateLimit-Remaining` and
+`X-RateLimit-Reset` headers from each response. When remaining requests drop below
+20% of your tier's limit, pagination automatically slows down to spread requests
+across the remaining window — preventing 429 errors. A warning is logged when
+throttling activates:
+
+```
+⚠ Rate limit: 25/300 remaining (resets in 42s), throttling pagination to ~0.6 req/s
+```
+
+This works transparently with all tier levels (Free: 60/min, Basic: 300/min,
+Pro: 1000/min, Enterprise: 5000/min).
 
 ## API Reference
 

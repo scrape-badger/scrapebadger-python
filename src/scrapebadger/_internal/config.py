@@ -27,7 +27,7 @@ class ClientConfig:
         base_url: The API base URL. Defaults to production API.
         timeout: Request timeout in seconds. Defaults to 300s (5 minutes).
         connect_timeout: Connection timeout in seconds. Defaults to 10s.
-        max_retries: Maximum number of retries for failed requests. Defaults to 3.
+        max_retries: Maximum number of retries for failed requests. Defaults to 10.
         retry_on_status: HTTP status codes that trigger a retry.
         headers: Additional headers to include in all requests.
 
@@ -49,7 +49,7 @@ class ClientConfig:
     base_url: str = DEFAULT_BASE_URL
     timeout: float = DEFAULT_TIMEOUT
     connect_timeout: float = DEFAULT_CONNECT_TIMEOUT
-    max_retries: int = 3
+    max_retries: int = 10
     retry_on_status: tuple[int, ...] = (502, 503, 504)
     headers: dict[str, str] = field(default_factory=dict)
 

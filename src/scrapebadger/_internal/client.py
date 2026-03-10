@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
 import httpx
@@ -17,6 +18,8 @@ from scrapebadger._internal.exceptions import (
     ValidationError,
 )
 
+logger = logging.getLogger("scrapebadger")
+
 if TYPE_CHECKING:
     from collections.abc import Mapping
     from types import TracebackType
@@ -26,7 +29,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.1.1"
+SDK_VERSION = "0.3.1"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -159,6 +162,131 @@ class BaseClient:
 
         raise ScrapeBadgerError(message, status_code, data)
 
+    async def _execute_request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> httpx.Response:
+        """Execute a single HTTP request without any retry logic.
+
+        Args:
+            method: HTTP method (GET, POST, etc.).
+            path: API endpoint path.
+            params: Query parameters.
+            json: JSON body for POST/PUT requests.
+
+        Returns:
+            The raw httpx.Response.
+        """
+        client = await self._get_client()
+        return await client.request(
+            method=method,
+            url=path,
+            params=params,
+            json=json,
+        )
+
+    async def _request_with_retry(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> tuple[dict[str, Any], dict[str, str]]:
+        """Make an HTTP request with retry logic, returning data and headers.
+
+        Args:
+            method: HTTP method (GET, POST, etc.).
+            path: API endpoint path.
+            params: Query parameters.
+            json: JSON body for POST/PUT requests.
+
+        Returns:
+            A (data, headers) tuple where data is the parsed JSON response and
+            headers is a dict of response header name → value strings.
+
+        Raises:
+            ScrapeBadgerError: For API errors.
+            httpx.RequestError: For network errors after retries exhausted.
+        """
+        # Filter out None values from params
+        if params:
+            params = {k: v for k, v in params.items() if v is not None}
+
+        last_exception: Exception | None = None
+        for attempt in range(self._config.max_retries + 1):
+            try:
+                response = await self._execute_request(
+                    method, path, params=params, json=json
+                )
+
+                # Parse response body
+                try:
+                    data: dict[str, Any] = response.json()
+                except Exception:
+                    data = {}
+
+                # Build a plain dict of headers for the caller
+                headers: dict[str, str] = dict(response.headers)
+
+                # Check for errors
+                if response.status_code >= 400:
+                    # Don't retry client errors (except specific status codes)
+                    if response.status_code not in self._config.retry_on_status:
+                        self._handle_error_response(response, data)
+
+                    # Retry on configured status codes
+                    if attempt < self._config.max_retries:
+                        delay = 2**attempt
+                        logger.warning(
+                            "⚠ %s %s — retrying in %ss (attempt %d/%d)",
+                            response.status_code,
+                            response.reason_phrase,
+                            delay,
+                            attempt + 1,
+                            self._config.max_retries,
+                        )
+                        await asyncio.sleep(delay)
+                        continue
+
+                    self._handle_error_response(response, data)
+
+                # Check for application-level errors in response
+                if data.get("error"):
+                    raise ScrapeBadgerError(
+                        data["error"],
+                        response.status_code,
+                        data,
+                    )
+
+                return data, headers
+
+            except (httpx.ConnectError, httpx.ReadTimeout, httpx.WriteTimeout) as e:
+                last_exception = e
+                if attempt < self._config.max_retries:
+                    delay = 2**attempt
+                    error_type = type(e).__name__
+                    logger.warning(
+                        "⚠ %s — retrying in %ss (attempt %d/%d)",
+                        error_type,
+                        delay,
+                        attempt + 1,
+                        self._config.max_retries,
+                    )
+                    await asyncio.sleep(delay)
+                    continue
+                raise
+
+        # Should not reach here, but just in case
+        if last_exception:
+            raise last_exception
+        msg = "Request failed after retries"
+        raise ScrapeBadgerError(msg)
+
     async def _request(
         self,
         method: str,
@@ -182,63 +310,8 @@ class BaseClient:
             ScrapeBadgerError: For API errors.
             httpx.RequestError: For network errors after retries exhausted.
         """
-        client = await self._get_client()
-
-        # Filter out None values from params
-        if params:
-            params = {k: v for k, v in params.items() if v is not None}
-
-        last_exception: Exception | None = None
-        for attempt in range(self._config.max_retries + 1):
-            try:
-                response = await client.request(
-                    method=method,
-                    url=path,
-                    params=params,
-                    json=json,
-                )
-
-                # Parse response
-                try:
-                    data: dict[str, Any] = response.json()
-                except Exception:
-                    data = {}
-
-                # Check for errors
-                if response.status_code >= 400:
-                    # Don't retry client errors (except specific status codes)
-                    if response.status_code not in self._config.retry_on_status:
-                        self._handle_error_response(response, data)
-
-                    # Retry on configured status codes
-                    if attempt < self._config.max_retries:
-                        await asyncio.sleep(2**attempt)  # Exponential backoff
-                        continue
-
-                    self._handle_error_response(response, data)
-
-                # Check for application-level errors in response
-                if data.get("error"):
-                    raise ScrapeBadgerError(
-                        data["error"],
-                        response.status_code,
-                        data,
-                    )
-
-                return data
-
-            except (httpx.ConnectError, httpx.ReadTimeout, httpx.WriteTimeout) as e:
-                last_exception = e
-                if attempt < self._config.max_retries:
-                    await asyncio.sleep(2**attempt)  # Exponential backoff
-                    continue
-                raise
-
-        # Should not reach here, but just in case
-        if last_exception:
-            raise last_exception
-        msg = "Request failed after retries"
-        raise ScrapeBadgerError(msg)
+        data, _ = await self._request_with_retry(method, path, params=params, json=json)
+        return data
 
     async def get(
         self,
@@ -256,6 +329,25 @@ class BaseClient:
             Parsed JSON response.
         """
         return await self._request("GET", path, params=params)
+
+    async def get_with_headers(
+        self,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+    ) -> tuple[dict[str, Any], dict[str, str]]:
+        """Make a GET request, returning both the JSON data and response headers.
+
+        Args:
+            path: API endpoint path.
+            params: Query parameters.
+
+        Returns:
+            A (data, headers) tuple. ``data`` is the parsed JSON response;
+            ``headers`` is a plain dict of response header name → value strings
+            (e.g. ``{"X-RateLimit-Remaining": "250", ...}``).
+        """
+        return await self._request_with_retry("GET", path, params=params)
 
     async def post(
         self,
