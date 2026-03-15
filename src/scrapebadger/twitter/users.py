@@ -501,3 +501,165 @@ class UsersClient:
             max_items=max_items,
         ):
             yield user
+
+    async def get_by_ids(self, user_ids: list[str]) -> PaginatedResponse[User]:
+        """Get multiple users by their numeric IDs.
+
+        Args:
+            user_ids: List of numeric user IDs to fetch.
+
+        Returns:
+            Paginated response containing the users.
+
+        Example:
+            ```python
+            users = await client.twitter.users.get_by_ids(["44196397", "783214"])
+            for user in users.data:
+                print(f"@{user.username}")
+            ```
+        """
+        ids_param = ",".join(user_ids)
+        response = await self._client.get("/v1/twitter/users/batch_by_ids", params={"user_ids": ids_param})
+        data = [User.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_by_usernames(self, usernames: list[str]) -> PaginatedResponse[User]:
+        """Get multiple users by their usernames.
+
+        Args:
+            usernames: List of usernames (without @) to fetch.
+
+        Returns:
+            Paginated response containing the users.
+
+        Example:
+            ```python
+            users = await client.twitter.users.get_by_usernames(["elonmusk", "sama"])
+            for user in users.data:
+                print(f"{user.name} (@{user.username})")
+            ```
+        """
+        names_param = ",".join(usernames)
+        response = await self._client.get("/v1/twitter/users/batch_by_usernames", params={"usernames": names_param})
+        data = [User.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_mentions(
+        self,
+        username: str,
+        *,
+        count: int = 20,
+        cursor: str | None = None,
+    ) -> PaginatedResponse[Tweet]:
+        """Get tweets mentioning a user.
+
+        Args:
+            username: The user's username (without @).
+            count: Number of tweets per page (default 20).
+            cursor: Pagination cursor for fetching more results.
+
+        Returns:
+            Paginated response containing mention tweets.
+
+        Example:
+            ```python
+            mentions = await client.twitter.users.get_mentions("elonmusk")
+            for tweet in mentions.data:
+                print(f"@{tweet.username}: {tweet.text[:100]}...")
+            ```
+        """
+        response = await self._client.get(
+            f"/v1/twitter/users/{username}/mentions",
+            params={"count": count, "cursor": cursor},
+        )
+        data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_mentions_all(
+        self,
+        username: str,
+        *,
+        count: int = 20,
+        max_pages: int | None = None,
+        max_items: int | None = None,
+    ) -> AsyncIterator[Tweet]:
+        """Iterate through all mentions with automatic pagination.
+
+        Args:
+            username: The user's username (without @).
+            count: Number of tweets per page (default 20).
+            max_pages: Maximum number of pages to fetch.
+            max_items: Maximum number of tweets to yield.
+
+        Yields:
+            Tweet objects mentioning the user.
+        """
+        async for tweet in paginate(
+            self._client,
+            f"/v1/twitter/users/{username}/mentions",
+            {"count": count},
+            Tweet.model_validate,
+            max_pages=max_pages,
+            max_items=max_items,
+        ):
+            yield tweet
+
+    async def get_articles(
+        self,
+        user_id: str,
+        *,
+        count: int = 20,
+        cursor: str | None = None,
+    ) -> PaginatedResponse[Tweet]:
+        """Get long-form articles by a user.
+
+        Args:
+            user_id: The user's numeric ID.
+            count: Number of articles per page (default 20).
+            cursor: Pagination cursor for fetching more results.
+
+        Returns:
+            Paginated response containing article tweets.
+
+        Example:
+            ```python
+            articles = await client.twitter.users.get_articles("44196397")
+            for article in articles.data:
+                print(f"{article.created_at}: {article.text[:100]}...")
+            ```
+        """
+        response = await self._client.get(
+            f"/v1/twitter/users/{user_id}/articles",
+            params={"count": count, "cursor": cursor},
+        )
+        data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_articles_all(
+        self,
+        user_id: str,
+        *,
+        count: int = 20,
+        max_pages: int | None = None,
+        max_items: int | None = None,
+    ) -> AsyncIterator[Tweet]:
+        """Iterate through all articles with automatic pagination.
+
+        Args:
+            user_id: The user's numeric ID.
+            count: Number of articles per page (default 20).
+            max_pages: Maximum number of pages to fetch.
+            max_items: Maximum number of tweets to yield.
+
+        Yields:
+            Tweet objects representing articles by the user.
+        """
+        async for tweet in paginate(
+            self._client,
+            f"/v1/twitter/users/{user_id}/articles",
+            {"count": count},
+            Tweet.model_validate,
+            max_pages=max_pages,
+            max_items=max_items,
+        ):
+            yield tweet

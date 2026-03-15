@@ -374,6 +374,12 @@ class Tweet(_BaseModel):
     # Source
     source: str | None = None
 
+    # Reply context
+    in_reply_to_screen_name: str | None = None
+
+    # Display metadata
+    display_text_range: list[int] | None = None
+
     @property
     def created_at_datetime(self) -> datetime | None:
         """Parse created_at to datetime object."""
@@ -485,6 +491,19 @@ class User(_BaseModel):
     is_translation_enabled: bool | None = None
     professional_type: str | None = None
     advertiser_account_type: str | None = None
+
+    # Profile presentation
+    profile_image_shape: str | None = None
+    profile_interstitial_type: str | None = None
+
+    # Creator / subscription features
+    creator_subscriptions_count: int | None = None
+    super_follow_eligible: bool | None = None
+    super_following: bool | None = None
+    super_followed_by: bool | None = None
+
+    # Verification details
+    verification_info: dict | None = None
 
     # Engagement
     pinned_tweet_ids: list[str] | None = None
@@ -611,6 +630,16 @@ class List(_BaseModel):
     user_id: str | None = None
     username: str | None = None
 
+    # Member preview
+    facepile_urls: list[str] | None = None
+    followers_context: str | None = None
+    members_context: str | None = None
+
+    # Ownership (denormalised for convenience)
+    owner_id: str | None = None
+    owner_username: str | None = None
+    owner_name: str | None = None
+
 
 class CommunityBanner(_BaseModel):
     """Banner image for a community.
@@ -716,6 +745,10 @@ class Community(_BaseModel):
 
     # Rules
     rules: list[CommunityRule] | None = None
+
+    # Topic and extended banner
+    primary_community_topic: str | None = None
+    custom_banner: CommunityBanner | None = None
 
 
 class CommunityMember(_BaseModel):
@@ -842,3 +875,113 @@ class Place(_BaseModel):
     url: str | None = None
     bounding_box: dict[str, Any] | None = None
     attributes: dict[str, str] | None = None
+
+
+class Article(_BaseModel):
+    """A long-form article on Twitter.
+
+    Attributes:
+        id: Article identifier.
+        title: Article title.
+        text: Article text content.
+        cover_image_url: Cover image URL.
+        created_at: Creation timestamp.
+    """
+
+    id: str
+    title: str | None = None
+    text: str | None = None
+    cover_image_url: str | None = None
+    created_at: str | None = None
+
+
+class CommunityNote(_BaseModel):
+    """A community note (Birdwatch) on a tweet.
+
+    Attributes:
+        id: Note identifier.
+        text: Note text content.
+        created_at: Creation timestamp.
+        status: Note status.
+    """
+
+    id: str | None = None
+    text: str | None = None
+    created_at: str | None = None
+    status: str | None = None
+
+
+class Space(_BaseModel):
+    """A Twitter Space (audio room).
+
+    Attributes:
+        id: Space identifier.
+        title: Space title.
+        state: Current state (e.g. 'Running', 'Ended').
+        created_at: Creation timestamp.
+        started_at: Start timestamp.
+        ended_at: End timestamp.
+        scheduled_start: Scheduled start time.
+        updated_at: Last updated timestamp.
+        is_locked: Whether the space is locked.
+        is_space_available_for_replay: Whether replay is available.
+        is_space_available_for_clipping: Whether clipping is available.
+        total_replay_watched: Total replay views.
+        total_live_listeners: Peak live listeners.
+        media_key: Media key for the space.
+        content_type: Content type (e.g. 'visual_audio').
+        creator_id: Creator's user ID.
+        creator_username: Creator's username.
+        creator_name: Creator's display name.
+        admin_count: Number of admins.
+        speaker_count: Number of speakers.
+        listener_count: Number of listeners.
+    """
+
+    id: str
+    title: str | None = None
+    state: str | None = None
+    created_at: str | None = None
+    started_at: str | None = None
+    ended_at: str | None = None
+    scheduled_start: str | None = None
+    updated_at: str | None = None
+    is_locked: bool | None = None
+    is_space_available_for_replay: bool | None = None
+    is_space_available_for_clipping: bool | None = None
+    total_replay_watched: int | None = None
+    total_live_listeners: int | None = None
+    media_key: str | None = None
+    content_type: str | None = None
+    creator_id: str | None = None
+    creator_username: str | None = None
+    creator_name: str | None = None
+    admin_count: int | None = None
+    speaker_count: int | None = None
+    listener_count: int | None = None
+
+
+class Broadcast(_BaseModel):
+    """A live video broadcast.
+
+    Attributes:
+        id: Broadcast identifier.
+        title: Broadcast title.
+        state: Current state.
+        media_key: Media key.
+        created_at: Creation timestamp.
+        started_at: Start timestamp.
+        width: Video width.
+        height: Video height.
+        total_viewers: Total viewer count.
+    """
+
+    id: str
+    title: str | None = None
+    state: str | None = None
+    media_key: str | None = None
+    created_at: str | None = None
+    started_at: str | None = None
+    width: int | None = None
+    height: int | None = None
+    total_viewers: int | None = None

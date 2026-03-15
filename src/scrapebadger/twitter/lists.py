@@ -255,3 +255,70 @@ class ListsClient:
         )
         data = [List.model_validate(item) for item in response.get("data", []) or []]
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def search_tweets(
+        self,
+        list_id: str,
+        *,
+        query: str,
+        count: int = 20,
+        cursor: str | None = None,
+    ) -> PaginatedResponse[Tweet]:
+        """Search tweets within a list.
+
+        Args:
+            list_id: The list ID.
+            query: Search query string.
+            count: Number of tweets per page (default 20).
+            cursor: Pagination cursor for fetching more results.
+
+        Returns:
+            Paginated response containing matching tweets from the list.
+
+        Example:
+            ```python
+            results = await client.twitter.lists.search_tweets(
+                "123456",
+                query="python",
+            )
+            for tweet in results.data:
+                print(f"@{tweet.username}: {tweet.text[:100]}...")
+            ```
+        """
+        response = await self._client.get(
+            f"/v1/twitter/lists/{list_id}/search_tweets",
+            params={"query": query, "count": count, "cursor": cursor},
+        )
+        data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def search_tweets_all(
+        self,
+        list_id: str,
+        *,
+        query: str,
+        count: int = 20,
+        max_pages: int | None = None,
+        max_items: int | None = None,
+    ) -> AsyncIterator[Tweet]:
+        """Iterate through all list search results with automatic pagination.
+
+        Args:
+            list_id: The list ID.
+            query: Search query string.
+            count: Number of tweets per page (default 20).
+            max_pages: Maximum number of pages to fetch.
+            max_items: Maximum number of tweets to yield.
+
+        Yields:
+            Tweet objects matching the query within the list.
+        """
+        async for tweet in paginate(
+            self._client,
+            f"/v1/twitter/lists/{list_id}/search_tweets",
+            {"query": query, "count": count},
+            Tweet.model_validate,
+            max_pages=max_pages,
+            max_items=max_items,
+        ):
+            yield tweet

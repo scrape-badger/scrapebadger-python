@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from scrapebadger._internal.pagination import PaginatedResponse, paginate
-from scrapebadger.twitter.models import QueryType, Tweet, User
+from scrapebadger.twitter.models import Article, CommunityNote, QueryType, Tweet, User
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -468,3 +468,64 @@ class TweetsClient:
             max_items=max_items,
         ):
             yield tweet
+
+    async def get_edit_history(self, tweet_id: str) -> PaginatedResponse[Tweet]:
+        """Get the edit history of a tweet.
+
+        Args:
+            tweet_id: The tweet ID to get edit history for.
+
+        Returns:
+            Paginated response containing edit history tweets.
+
+        Example:
+            ```python
+            history = await client.twitter.tweets.get_edit_history("1234567890")
+            for version in history.data:
+                print(f"{version.created_at}: {version.text}")
+            ```
+        """
+        response = await self._client.get(f"/v1/twitter/tweets/tweet/{tweet_id}/edit_history")
+        data = [Tweet.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_community_notes(self, tweet_id: str) -> PaginatedResponse[CommunityNote]:
+        """Get community notes for a tweet.
+
+        Args:
+            tweet_id: The tweet ID to get community notes for.
+
+        Returns:
+            Paginated response containing community notes.
+
+        Example:
+            ```python
+            notes = await client.twitter.tweets.get_community_notes("1234567890")
+            for note in notes.data:
+                print(f"{note.status}: {note.text}")
+            ```
+        """
+        response = await self._client.get(f"/v1/twitter/tweets/tweet/{tweet_id}/community_notes")
+        data = [CommunityNote.model_validate(item) for item in response.get("data", []) or []]
+        return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
+
+    async def get_article(self, article_id: str) -> Article:
+        """Get a long-form article by ID.
+
+        Args:
+            article_id: The article ID to fetch.
+
+        Returns:
+            The article data.
+
+        Raises:
+            NotFoundError: If the article doesn't exist.
+
+        Example:
+            ```python
+            article = await client.twitter.tweets.get_article("abc123")
+            print(f"{article.title}: {article.text[:200]}...")
+            ```
+        """
+        response = await self._client.get(f"/v1/twitter/tweets/article/{article_id}")
+        return Article.model_validate(response)

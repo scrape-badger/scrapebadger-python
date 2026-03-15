@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from scrapebadger.twitter.communities import CommunitiesClient
 from scrapebadger.twitter.geo import GeoClient
 from scrapebadger.twitter.lists import ListsClient
+from scrapebadger.twitter.spaces import SpacesClient
 from scrapebadger.twitter.stream import StreamClient
 from scrapebadger.twitter.trends import TrendsClient
 from scrapebadger.twitter.tweets import TweetsClient
@@ -33,6 +34,7 @@ class TwitterClient:
         communities: Client for Twitter communities operations.
         trends: Client for trending topics operations.
         geo: Client for geographic/places operations.
+        spaces: Client for Twitter Spaces and broadcast operations.
         stream: Client for real-time stream monitor management and WebSocket streaming.
 
     Example:
@@ -85,6 +87,7 @@ class TwitterClient:
         self._communities = CommunitiesClient(client)
         self._trends = TrendsClient(client)
         self._geo = GeoClient(client)
+        self._spaces = SpacesClient(client)
         self._stream = StreamClient(client)
 
     @property
@@ -213,6 +216,26 @@ class TwitterClient:
             ```
         """
         return self._geo
+
+    @property
+    def spaces(self) -> SpacesClient:
+        """Access Twitter Spaces endpoints.
+
+        Returns:
+            SpacesClient for fetching Space and broadcast details.
+
+        Example:
+            ```python
+            # Get Space details
+            space = await client.twitter.spaces.get_detail("1YqJDqDpqzAxV")
+            print(f"{space.title} ({space.state})")
+
+            # Get broadcast details
+            broadcast = await client.twitter.spaces.get_broadcast("1zqKVBnwwPoxB")
+            print(f"Total viewers: {broadcast.total_viewers}")
+            ```
+        """
+        return self._spaces
 
     @property
     def stream(self) -> StreamClient:
