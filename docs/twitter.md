@@ -264,7 +264,7 @@ All responses use strongly-typed Pydantic models:
 | `ConnectedEvent`, `PingEvent`, `ErrorEvent` | WebSocket lifecycle events |
 | `DeliveryLog`, `BillingLog` | Audit log records |
 
-See the [full API documentation](https://scrapebadger.com/docs) for complete details.
+See the [full API documentation](https://docs.scrapebadger.com) for complete details.
 
 ---
 

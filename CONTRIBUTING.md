@@ -283,6 +283,6 @@ Include:
 
 - Open a GitHub issue
 - Email: support@scrapebadger.com
-- Discord: [Join our community](https://discord.gg/scrapebadger)
+- Discord: [Join our community](https://discord.com/invite/3WvwTyWVCx)
 
 Thank you for contributing!

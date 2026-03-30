@@ -245,10 +245,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- **Documentation**: [scrapebadger.com/docs](https://scrapebadger.com/docs)
+- **Documentation**: [docs.scrapebadger.com](https://docs.scrapebadger.com)
 - **Issues**: [GitHub Issues](https://github.com/scrape-badger/scrapebadger-python/issues)
 - **Email**: support@scrapebadger.com
-- **Discord**: [Join our community](https://discord.gg/scrapebadger)
+- **Discord**: [Join our community](https://discord.com/invite/3WvwTyWVCx)
 
 ---
 

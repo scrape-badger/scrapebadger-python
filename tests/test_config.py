@@ -25,7 +25,7 @@ class TestClientConfig:
         assert config.base_url == DEFAULT_BASE_URL
         assert config.timeout == DEFAULT_TIMEOUT
         assert config.connect_timeout == DEFAULT_CONNECT_TIMEOUT
-        assert config.max_retries == 3
+        assert config.max_retries == 10
         assert config.retry_on_status == (502, 503, 504)
         assert config.headers == {}
 
@@ -86,7 +86,7 @@ class TestClientConfig:
 
         # Original unchanged
         assert config.timeout == DEFAULT_TIMEOUT
-        assert config.max_retries == 3
+        assert config.max_retries == 10
 
         # New config has overrides
         assert new_config.timeout == 60.0
