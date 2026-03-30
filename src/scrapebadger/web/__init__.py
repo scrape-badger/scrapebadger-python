@@ -1,19 +1,10 @@
 """Web scraping module for ScrapeBadger SDK."""
 
 from scrapebadger.web.client import WebClient
-from scrapebadger.web.models import (
-    BatchResult,
-    ExtractResult,
-    ScrapeResult,
-    ScreenshotResult,
-    SessionInfo,
-)
+from scrapebadger.web.models import DetectResult, ScrapeResult
 
 __all__ = [
-    "BatchResult",
-    "ExtractResult",
+    "DetectResult",
     "ScrapeResult",
-    "ScreenshotResult",
-    "SessionInfo",
     "WebClient",
 ]

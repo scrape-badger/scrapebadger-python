@@ -12,57 +12,40 @@ class ScrapeResult(BaseModel):
 
     model_config = ConfigDict(frozen=True)
 
-    content: str = ""
-    status_code: int = 0
+    success: bool = True
     url: str = ""
+    status_code: int = 0
+    content: str | None = None
+    format: str = "html"
     engine_used: str | None = None
     credits_used: int = 0
-    processing_time_ms: float | None = None
-    anti_bot_detected: bool = False
-    anti_bot_provider: str | None = None
-    captcha_solved: bool = False
-    session_id: str | None = None
-    session_reused: bool = False
+    duration_ms: int = 0
+    retries_used: int = 0
+    content_length: int = 0
+    screenshot_url: str | None = None
+    video_url: str | None = None
+    headers: dict[str, str] = Field(default_factory=dict)
+    blocking_detected: bool = False
+    blocking_details: dict[str, Any] | None = None
+    antibot_systems: list[dict[str, Any]] = Field(default_factory=list)
+    captcha_systems: list[dict[str, Any]] = Field(default_factory=list)
+    anti_bot_solved: bool = False
+    solver_used: str | None = None
+    ai_extraction: dict[str, Any] | str | list[Any] | None = None
+    ai_model: str | None = None
+    ai_error: str | None = None
 
 
-class ScreenshotResult(BaseModel):
-    """Result from a screenshot request."""
+class DetectResult(BaseModel):
+    """Result from an anti-bot detection request."""
 
     model_config = ConfigDict(frozen=True)
 
-    image_data: str = ""
-    format: str = "png"
     url: str = ""
+    antibot_systems: list[dict[str, Any]] = Field(default_factory=list)
+    captcha_systems: list[dict[str, Any]] = Field(default_factory=list)
+    is_blocked: bool = False
+    blocking_type: str | None = None
+    recommendation: str | None = None
     credits_used: int = 0
-
-
-class ExtractResult(BaseModel):
-    """Result from a data extraction request."""
-
-    model_config = ConfigDict(frozen=True)
-
-    data: dict[str, Any] = Field(default_factory=dict)
-    url: str = ""
-    credits_used: int = 0
-
-
-class BatchResult(BaseModel):
-    """Result from a batch scraping request."""
-
-    model_config = ConfigDict(frozen=True)
-
-    results: list[ScrapeResult] = Field(default_factory=list)
-    total: int = 0
-    successful: int = 0
-    failed: int = 0
-
-
-class SessionInfo(BaseModel):
-    """Session information from create/reuse operations."""
-
-    model_config = ConfigDict(frozen=True)
-
-    session_id: str = ""
-    domain: str = ""
-    reused: bool = False
-    fingerprint_id: str | None = None
+    duration_ms: int = 0
