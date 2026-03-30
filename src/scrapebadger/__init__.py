@@ -42,23 +42,16 @@ from scrapebadger._internal.exceptions import (
 )
 from scrapebadger._internal.pagination import PaginatedResponse
 from scrapebadger.client import ScrapeBadger
-from scrapebadger.web.models import (
-    BatchResult,
-    ExtractResult,
-    ScrapeResult,
-    ScreenshotResult,
-    SessionInfo,
-)
+from scrapebadger.web.models import DetectResult, ScrapeResult
 
 __version__ = "0.1.1"
 
 __all__ = [
     "AuthenticationError",
-    # Web scraping
-    "BatchResult",
     # Configuration
     "ClientConfig",
-    "ExtractResult",
+    # Web scraping
+    "DetectResult",
     "InsufficientCreditsError",
     "NotFoundError",
     # Pagination
@@ -69,9 +62,7 @@ __all__ = [
     # Exceptions
     "ScrapeBadgerError",
     "ScrapeResult",
-    "ScreenshotResult",
     "ServerError",
-    "SessionInfo",
     "ValidationError",
     # Stream exceptions
     "WebSocketStreamError",

@@ -4,13 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from scrapebadger.web.models import (
-    BatchResult,
-    ExtractResult,
-    ScrapeResult,
-    ScreenshotResult,
-    SessionInfo,
-)
+from scrapebadger.web.models import DetectResult, ScrapeResult
 
 if TYPE_CHECKING:
     from scrapebadger._internal.client import BaseClient
@@ -19,27 +13,33 @@ if TYPE_CHECKING:
 class WebClient:
     """Client for web scraping operations.
 
-    Provides async methods for scraping web pages, taking screenshots,
-    extracting structured data, and managing scraping sessions.
+    Provides async methods for scraping web pages, extracting data with AI,
+    and detecting anti-bot systems.
 
     Example:
         ```python
         async with ScrapeBadger(api_key="key") as client:
             # Simple scrape
-            result = await client.web.scrape("https://example.com")
+            result = await client.web.scrape("https://scrapebadger.com")
             print(result.content)
 
-            # Screenshot
-            screenshot = await client.web.screenshot("https://example.com")
-
-            # Extract data
-            data = await client.web.extract(
-                "https://example.com",
-                schema={"title": "css:h1"}
+            # Scrape with JavaScript rendering
+            result = await client.web.scrape(
+                "https://scrapebadger.com",
+                render_js=True,
+                format="markdown",
             )
 
-            # Batch scrape
-            batch = await client.web.batch(["https://a.com", "https://b.com"])
+            # AI extraction
+            result = await client.web.extract(
+                "https://scrapebadger.com",
+                prompt="Extract the main heading and description",
+            )
+            print(result.ai_extraction)
+
+            # Anti-bot detection
+            detection = await client.web.detect("https://scrapebadger.com")
+            print(detection.antibot_systems)
         ```
     """
 
@@ -50,199 +50,192 @@ class WebClient:
         self,
         url: str,
         *,
+        format: str = "html",
         render_js: bool = False,
-        output_format: str = "html",
-        proxy_country: str | None = None,
-        proxy_type: str | None = None,
-        session_id: str | None = None,
         engine: str | None = None,
-        max_cost: int | None = None,
-        headers: dict[str, str] | None = None,
         wait_for: str | None = None,
-        timeout: float | None = None,
+        wait_timeout: int | None = None,
+        wait_after_load: int | None = None,
         js_scenario: list[dict[str, Any]] | None = None,
+        session_id: str | None = None,
+        retry_count: int | None = None,
+        retry_on_block: bool | None = None,
+        country: str | None = None,
+        custom_headers: dict[str, str] | None = None,
+        screenshot: bool = False,
+        video: bool = False,
+        anti_bot: bool = False,
+        escalate: bool = False,
+        max_cost: int | None = None,
+        ai_extract: bool = False,
+        ai_prompt: str | None = None,
     ) -> ScrapeResult:
         """Scrape a web page.
 
         Args:
             url: URL to scrape.
+            format: Output format (html, markdown, text, json).
             render_js: Whether to render JavaScript.
-            output_format: Output format (html, markdown, text, json).
-            proxy_country: Country code for proxy (e.g. "US").
-            proxy_type: Proxy type (datacenter, residential).
-            session_id: Reuse an existing session.
             engine: Force a specific engine.
-            max_cost: Maximum credit cost.
-            headers: Custom HTTP headers.
             wait_for: CSS selector to wait for.
-            timeout: Request timeout in seconds.
+            wait_timeout: Maximum wait time in milliseconds.
+            wait_after_load: Delay after page load in milliseconds.
             js_scenario: JavaScript actions to execute.
+            session_id: Reuse an existing session.
+            retry_count: Number of retries on failure.
+            retry_on_block: Whether to retry when blocking is detected.
+            country: Country code for proxy (e.g. "US").
+            custom_headers: Custom HTTP headers to send.
+            screenshot: Whether to capture a screenshot.
+            video: Whether to record a video.
+            anti_bot: Whether to enable anti-bot solving.
+            escalate: Whether to escalate to more powerful engines on failure.
+            max_cost: Maximum credit cost.
+            ai_extract: Whether to enable AI data extraction.
+            ai_prompt: Prompt for AI extraction.
 
         Returns:
             ScrapeResult with page content and metadata.
         """
         body: dict[str, Any] = {"url": url}
+        if format != "html":
+            body["format"] = format
         if render_js:
             body["render_js"] = True
-        if output_format != "html":
-            body["output_format"] = output_format
-        if proxy_country is not None:
-            body["proxy_country"] = proxy_country
-        if proxy_type is not None:
-            body["proxy_type"] = proxy_type
-        if session_id is not None:
-            body["session_id"] = session_id
         if engine is not None:
             body["engine"] = engine
-        if max_cost is not None:
-            body["max_cost"] = max_cost
-        if headers is not None:
-            body["headers"] = headers
         if wait_for is not None:
             body["wait_for"] = wait_for
-        if timeout is not None:
-            body["timeout"] = timeout
+        if wait_timeout is not None:
+            body["wait_timeout"] = wait_timeout
+        if wait_after_load is not None:
+            body["wait_after_load"] = wait_after_load
         if js_scenario is not None:
             body["js_scenario"] = js_scenario
+        if session_id is not None:
+            body["session_id"] = session_id
+        if retry_count is not None:
+            body["retry_count"] = retry_count
+        if retry_on_block is not None:
+            body["retry_on_block"] = retry_on_block
+        if country is not None:
+            body["country"] = country
+        if custom_headers is not None:
+            body["custom_headers"] = custom_headers
+        if screenshot:
+            body["screenshot"] = True
+        if video:
+            body["video"] = True
+        if anti_bot:
+            body["anti_bot"] = True
+        if escalate:
+            body["escalate"] = True
+        if max_cost is not None:
+            body["max_cost"] = max_cost
+        if ai_extract:
+            body["ai_extract"] = True
+        if ai_prompt is not None:
+            body["ai_prompt"] = ai_prompt
 
         response = await self._client.post("/v1/web/scrape", json=body)
         return ScrapeResult.model_validate(response)
 
-    async def screenshot(
-        self,
-        url: str,
-        *,
-        full_page: bool = False,
-        viewport_width: int = 1280,
-        viewport_height: int = 720,
-        image_format: str = "png",
-        wait_for: str | None = None,
-        timeout: float | None = None,
-    ) -> ScreenshotResult:
-        """Take a screenshot of a web page.
-
-        Args:
-            url: URL to screenshot.
-            full_page: Capture full page (not just viewport).
-            viewport_width: Viewport width in pixels.
-            viewport_height: Viewport height in pixels.
-            image_format: Image format (png, jpeg).
-            wait_for: CSS selector to wait for.
-            timeout: Request timeout in seconds.
-
-        Returns:
-            ScreenshotResult with base64 image data.
-        """
-        body: dict[str, Any] = {"url": url}
-        if full_page:
-            body["full_page"] = True
-        if viewport_width != 1280:
-            body["viewport_width"] = viewport_width
-        if viewport_height != 720:
-            body["viewport_height"] = viewport_height
-        if image_format != "png":
-            body["image_format"] = image_format
-        if wait_for is not None:
-            body["wait_for"] = wait_for
-        if timeout is not None:
-            body["timeout"] = timeout
-
-        response = await self._client.post("/v1/web/screenshot", json=body)
-        return ScreenshotResult.model_validate(response)
-
     async def extract(
         self,
         url: str,
+        prompt: str,
         *,
-        schema: dict[str, Any] | None = None,
+        format: str = "markdown",
         render_js: bool = False,
+        engine: str | None = None,
         wait_for: str | None = None,
-        timeout: float | None = None,
-    ) -> ExtractResult:
-        """Extract structured data from a web page.
+        wait_timeout: int | None = None,
+        wait_after_load: int | None = None,
+        js_scenario: list[dict[str, Any]] | None = None,
+        session_id: str | None = None,
+        retry_count: int | None = None,
+        retry_on_block: bool | None = None,
+        country: str | None = None,
+        custom_headers: dict[str, str] | None = None,
+        screenshot: bool = False,
+        video: bool = False,
+        anti_bot: bool = False,
+        escalate: bool = False,
+        max_cost: int | None = None,
+    ) -> ScrapeResult:
+        """Extract structured data from a web page using AI.
+
+        Convenience wrapper around scrape() with ai_extract=True.
 
         Args:
             url: URL to extract from.
-            schema: Extraction schema (CSS/XPath selectors).
+            prompt: AI extraction prompt describing what to extract.
+            format: Output format (html, markdown, text, json).
             render_js: Whether to render JavaScript.
+            engine: Force a specific engine.
             wait_for: CSS selector to wait for.
-            timeout: Request timeout in seconds.
+            wait_timeout: Maximum wait time in milliseconds.
+            wait_after_load: Delay after page load in milliseconds.
+            js_scenario: JavaScript actions to execute.
+            session_id: Reuse an existing session.
+            retry_count: Number of retries on failure.
+            retry_on_block: Whether to retry when blocking is detected.
+            country: Country code for proxy (e.g. "US").
+            custom_headers: Custom HTTP headers to send.
+            screenshot: Whether to capture a screenshot.
+            video: Whether to record a video.
+            anti_bot: Whether to enable anti-bot solving.
+            escalate: Whether to escalate to more powerful engines on failure.
+            max_cost: Maximum credit cost.
 
         Returns:
-            ExtractResult with extracted data.
+            ScrapeResult with ai_extraction field containing extracted data.
+        """
+        return await self.scrape(
+            url,
+            format=format,
+            render_js=render_js,
+            engine=engine,
+            wait_for=wait_for,
+            wait_timeout=wait_timeout,
+            wait_after_load=wait_after_load,
+            js_scenario=js_scenario,
+            session_id=session_id,
+            retry_count=retry_count,
+            retry_on_block=retry_on_block,
+            country=country,
+            custom_headers=custom_headers,
+            screenshot=screenshot,
+            video=video,
+            anti_bot=anti_bot,
+            escalate=escalate,
+            max_cost=max_cost,
+            ai_extract=True,
+            ai_prompt=prompt,
+        )
+
+    async def detect(
+        self,
+        url: str,
+        *,
+        timeout: int | None = None,
+        country: str | None = None,
+    ) -> DetectResult:
+        """Detect anti-bot systems on a web page.
+
+        Args:
+            url: URL to detect anti-bot systems on.
+            timeout: Request timeout in milliseconds.
+            country: Country code for proxy (e.g. "US").
+
+        Returns:
+            DetectResult with detected anti-bot and captcha systems.
         """
         body: dict[str, Any] = {"url": url}
-        if schema is not None:
-            body["extraction_schema"] = schema
-        if render_js:
-            body["render_js"] = True
-        if wait_for is not None:
-            body["wait_for"] = wait_for
         if timeout is not None:
             body["timeout"] = timeout
+        if country is not None:
+            body["country"] = country
 
-        response = await self._client.post("/v1/web/extract", json=body)
-        return ExtractResult.model_validate(response)
-
-    async def batch(
-        self,
-        urls: list[str],
-        *,
-        render_js: bool = False,
-        output_format: str = "html",
-        max_concurrency: int = 5,
-        engine: str | None = None,
-        timeout: float | None = None,
-    ) -> BatchResult:
-        """Scrape multiple URLs in a batch.
-
-        Args:
-            urls: List of URLs to scrape.
-            render_js: Whether to render JavaScript.
-            output_format: Output format (html, markdown, text, json).
-            max_concurrency: Maximum concurrent requests.
-            engine: Force a specific engine.
-            timeout: Request timeout in seconds.
-
-        Returns:
-            BatchResult with results for each URL.
-        """
-        body: dict[str, Any] = {"urls": urls}
-        if render_js:
-            body["render_js"] = True
-        if output_format != "html":
-            body["output_format"] = output_format
-        if max_concurrency != 5:
-            body["max_concurrency"] = max_concurrency
-        if engine is not None:
-            body["engine"] = engine
-        if timeout is not None:
-            body["timeout"] = timeout
-
-        response = await self._client.post("/v1/web/batch", json=body)
-        return BatchResult.model_validate(response)
-
-    async def create_session(
-        self,
-        domain: str,
-        *,
-        persist: bool = True,
-    ) -> SessionInfo:
-        """Create a new scraping session for a domain.
-
-        Sessions maintain cookies, fingerprints, and state across requests.
-
-        Args:
-            domain: Domain to create session for.
-            persist: Whether to persist session across requests.
-
-        Returns:
-            SessionInfo with session ID for reuse.
-        """
-        body: dict[str, Any] = {
-            "domain": domain,
-            "new_session": True,
-            "persist_session": persist,
-        }
-        response = await self._client.post("/v1/web/sessions", json=body)
-        return SessionInfo.model_validate(response)
+        response = await self._client.post("/v1/web/detect", json=body)
+        return DetectResult.model_validate(response)

@@ -24,6 +24,7 @@ The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web
 - **Smart rate limit handling** - Reads API rate limit headers and automatically throttles pagination to avoid hitting limits
 - **Resilient retries** - 10 automatic retries with exponential backoff on 502/503/504 errors, with console warnings on each retry
 - **Comprehensive coverage** - Access to 37+ Twitter endpoints (tweets, users, lists, communities, trends, geo)
+- **Web scraping API** - Scrape any website with anti-bot bypass, JS rendering, and AI data extraction
 
 ## Installation
 
@@ -48,6 +49,10 @@ async def main():
         # Get a user profile
         user = await client.twitter.users.get_by_username("elonmusk")
         print(f"{user.name} has {user.followers_count:,} followers")
+
+        # Scrape a website
+        result = await client.web.scrape("https://scrapebadger.com", format="markdown")
+        print(result.content)
 
         # Search tweets
         tweets = await client.twitter.tweets.search("python programming")
@@ -74,6 +79,74 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 ```
 
 ## Usage Examples
+
+### Web Scraping
+
+#### Basic Scrape
+
+```python
+async with ScrapeBadger(api_key="your-key") as client:
+    result = await client.web.scrape("https://scrapebadger.com", format="markdown")
+    print(result.content)
+    print(f"Credits used: {result.credits_used}")
+```
+
+#### JavaScript Rendering
+
+```python
+result = await client.web.scrape(
+    "https://spa-website.com",
+    render_js=True,
+    wait_for="#dynamic-content",
+    wait_timeout=10000,
+)
+```
+
+#### Anti-Bot Bypass with Escalation
+
+```python
+result = await client.web.scrape(
+    "https://protected-site.com",
+    escalate=True,
+    anti_bot=True,
+    country="US",
+    max_cost=20,
+)
+```
+
+#### AI Data Extraction
+
+```python
+result = await client.web.extract(
+    "https://scrapebadger.com/pricing",
+    prompt="Extract all pricing plan names and prices as a JSON array",
+    format="markdown",
+)
+print(result.ai_extraction)  # Structured data from LLM
+```
+
+#### Detect Anti-Bot Protection
+
+```python
+detection = await client.web.detect("https://protected-site.com")
+for system in detection.antibot_systems:
+    print(f"{system['system']}: confidence {system['confidence']}")
+print(f"Recommendation: {detection.recommendation}")
+```
+
+#### Browser Automation
+
+```python
+result = await client.web.scrape(
+    "https://scrapebadger.com",
+    render_js=True,
+    js_scenario=[
+        {"type": "click", "selector": "#load-more"},
+        {"type": "wait", "milliseconds": 2000},
+        {"type": "scroll", "direction": "down", "amount": 1000},
+    ],
+)
+```
 
 ### Twitter Users
 
@@ -403,6 +476,19 @@ Pro: 1000/min, Enterprise: 5000/min).
 
 ## API Reference
 
+### Web Scraping Endpoints
+
+| Method | Description |
+|--------|-------------|
+| `scrape` | Scrape a URL with optional JS rendering, anti-bot bypass, screenshots, video, and AI extraction |
+| `extract` | Convenience wrapper — scrapes with AI extraction enabled |
+| `detect` | Detect anti-bot and CAPTCHA systems on a URL |
+
+### Web Scraping Response Models
+
+- `ScrapeResult` - Full scrape response with content, metadata, blocking info, and AI extraction
+- `DetectResult` - Protection detection results with system list and recommendation
+
 ### Twitter Endpoints
 
 | Category | Methods |
@@ -432,6 +518,8 @@ All responses use strongly-typed Pydantic models:
 - `TweetEvent` - Real-time tweet delivery event with latency
 - `ConnectedEvent`, `PingEvent`, `ErrorEvent` - WebSocket lifecycle events
 - `DeliveryLog`, `BillingLog` - Audit log records
+- `ScrapeResult` - Web scrape result with content, blocking details, AI extraction
+- `DetectResult` - Anti-bot/CAPTCHA detection result
 
 See the [full API documentation](https://scrapebadger.com/docs) for complete details.
 
