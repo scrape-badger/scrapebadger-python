@@ -5,7 +5,7 @@ Provides methods for fetching tweets, searching, and getting tweet metadata.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from scrapebadger._internal.pagination import PaginatedResponse, paginate
 from scrapebadger.twitter.models import Article, CommunityNote, QueryType, Tweet, User
