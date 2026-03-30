@@ -220,9 +220,7 @@ class BaseClient:
         last_exception: Exception | None = None
         for attempt in range(self._config.max_retries + 1):
             try:
-                response = await self._execute_request(
-                    method, path, params=params, json=json
-                )
+                response = await self._execute_request(method, path, params=params, json=json)
 
                 # Parse response body
                 try:

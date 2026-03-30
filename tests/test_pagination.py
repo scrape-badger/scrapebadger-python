@@ -52,12 +52,7 @@ class TestPaginateBasic:
         page, headers = _make_page([{"id": "1"}, {"id": "2"}])
         base_client.get_with_headers = AsyncMock(return_value=(page, headers))  # type: ignore[method-assign]
 
-        results = [
-            item
-            async for item in paginate(
-                base_client, "/v1/test", {}, lambda x: x
-            )
-        ]
+        results = [item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)]
 
         assert results == [{"id": "1"}, {"id": "2"}]
         assert base_client.get_with_headers.call_count == 1
@@ -85,10 +80,7 @@ class TestPaginateBasic:
         base_client.get_with_headers = AsyncMock(return_value=(page, headers))  # type: ignore[method-assign]
 
         results = [
-            item
-            async for item in paginate(
-                base_client, "/v1/test", {}, lambda x: x, max_pages=2
-            )
+            item async for item in paginate(base_client, "/v1/test", {}, lambda x: x, max_pages=2)
         ]
 
         assert len(results) == 2
@@ -103,10 +95,7 @@ class TestPaginateBasic:
         )
 
         results = [
-            item
-            async for item in paginate(
-                base_client, "/v1/test", {}, lambda x: x, max_items=2
-            )
+            item async for item in paginate(base_client, "/v1/test", {}, lambda x: x, max_items=2)
         ]
 
         assert len(results) == 2
@@ -127,10 +116,7 @@ class TestPaginateBasic:
         base_client.get_with_headers = AsyncMock(return_value=(page, headers))  # type: ignore[method-assign]
 
         results = [
-            item
-            async for item in paginate(
-                base_client, "/v1/test", {}, lambda x: x["value"] * 10
-            )
+            item async for item in paginate(base_client, "/v1/test", {}, lambda x: x["value"] * 10)
         ]
 
         assert results == [10, 20]
@@ -139,14 +125,10 @@ class TestPaginateBasic:
 class TestPaginateRateLimitThrottling:
     """Tests for rate-limit-aware throttling behaviour."""
 
-    async def test_no_sleep_when_remaining_above_threshold(
-        self, base_client: BaseClient
-    ) -> None:
+    async def test_no_sleep_when_remaining_above_threshold(self, base_client: BaseClient) -> None:
         """Does NOT sleep when remaining is above 20% of limit."""
         # 100/300 = 33% > 20% — should not throttle
-        page, headers = _make_page(
-            [{"id": "1"}], next_cursor=None, remaining=100, limit=300
-        )
+        page, headers = _make_page([{"id": "1"}], next_cursor=None, remaining=100, limit=300)
         base_client.get_with_headers = AsyncMock(return_value=(page, headers))  # type: ignore[method-assign]
 
         with patch("scrapebadger._internal.pagination.asyncio.sleep") as mock_sleep:
@@ -155,9 +137,7 @@ class TestPaginateRateLimitThrottling:
         assert results == [{"id": "1"}]
         mock_sleep.assert_not_called()
 
-    async def test_sleep_when_remaining_below_20_percent(
-        self, base_client: BaseClient
-    ) -> None:
+    async def test_sleep_when_remaining_below_20_percent(self, base_client: BaseClient) -> None:
         """Sleeps between pages when remaining drops below 20% of limit."""
         reset_ts = int(time.time()) + 60
 
@@ -165,9 +145,7 @@ class TestPaginateRateLimitThrottling:
         page1, h1 = _make_page(
             [{"id": "1"}], next_cursor="c", remaining=10, limit=300, reset_at=reset_ts
         )
-        page2, h2 = _make_page(
-            [{"id": "2"}], remaining=5, limit=300, reset_at=reset_ts
-        )
+        page2, h2 = _make_page([{"id": "2"}], remaining=5, limit=300, reset_at=reset_ts)
         base_client.get_with_headers = AsyncMock(  # type: ignore[method-assign]
             side_effect=[(page1, h1), (page2, h2)]
         )
@@ -199,9 +177,7 @@ class TestPaginateRateLimitThrottling:
             patch("scrapebadger._internal.pagination.asyncio.sleep"),
             caplog.at_level(logging.WARNING, logger="scrapebadger"),
         ):
-            results = [
-                item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)
-            ]
+            results = [item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)]
 
         assert results == [{"id": "1"}, {"id": "2"}]
         assert any("throttling" in record.message.lower() for record in caplog.records)
@@ -231,9 +207,7 @@ class TestPaginateRateLimitThrottling:
         msg = warning_msgs[0]
         assert "12/300" in msg  # remaining/limit
 
-    async def test_missing_rate_limit_headers_no_throttle(
-        self, base_client: BaseClient
-    ) -> None:
+    async def test_missing_rate_limit_headers_no_throttle(self, base_client: BaseClient) -> None:
         """Gracefully handles responses with no rate-limit headers (no sleep)."""
         page: dict[str, Any] = {"data": [{"id": "1"}]}
         headers: dict[str, str] = {}  # no rate limit headers
