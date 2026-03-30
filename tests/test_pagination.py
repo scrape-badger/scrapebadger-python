@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import time
 from typing import Any
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -195,15 +195,17 @@ class TestPaginateRateLimitThrottling:
             side_effect=[(page1, h1), (page2, h2)]
         )
 
-        with patch("scrapebadger._internal.pagination.asyncio.sleep"):
-            with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                results = [
-                    item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)
-                ]
+        with (
+            patch("scrapebadger._internal.pagination.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            results = [
+                item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)
+            ]
 
         assert results == [{"id": "1"}, {"id": "2"}]
         assert any("throttling" in record.message.lower() for record in caplog.records)
-        assert any("scrapebadger" == record.name for record in caplog.records)
+        assert any(record.name == "scrapebadger" for record in caplog.records)
 
     async def test_warning_message_contains_rate_limit_info(
         self, base_client: BaseClient, caplog: pytest.LogCaptureFixture
@@ -218,9 +220,11 @@ class TestPaginateRateLimitThrottling:
             side_effect=[(page1, h1), (page2, h2)]
         )
 
-        with patch("scrapebadger._internal.pagination.asyncio.sleep"):
-            with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                [item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)]
+        with (
+            patch("scrapebadger._internal.pagination.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            [item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)]
 
         warning_msgs = [r.message for r in caplog.records if r.levelno == logging.WARNING]
         assert warning_msgs, "Expected at least one WARNING log"

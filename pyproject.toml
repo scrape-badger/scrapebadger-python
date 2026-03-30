@@ -117,6 +117,7 @@ select = [
     "RUF",    # ruff-specific
 ]
 ignore = [
+    "A002",   # Function argument shadowing builtin (e.g. `format` in public API)
     "A003",   # Class attribute shadowing builtin
 ]
 

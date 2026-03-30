@@ -519,7 +519,9 @@ class UsersClient:
             ```
         """
         ids_param = ",".join(user_ids)
-        response = await self._client.get("/v1/twitter/users/batch_by_ids", params={"user_ids": ids_param})
+        response = await self._client.get(
+            "/v1/twitter/users/batch_by_ids", params={"user_ids": ids_param}
+        )
         data = [User.model_validate(item) for item in response.get("data", []) or []]
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
 
@@ -540,7 +542,9 @@ class UsersClient:
             ```
         """
         names_param = ",".join(usernames)
-        response = await self._client.get("/v1/twitter/users/batch_by_usernames", params={"usernames": names_param})
+        response = await self._client.get(
+            "/v1/twitter/users/batch_by_usernames", params={"usernames": names_param}
+        )
         data = [User.model_validate(item) for item in response.get("data", []) or []]
         return PaginatedResponse(data=data, next_cursor=response.get("next_cursor"))
 

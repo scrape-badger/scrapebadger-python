@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import httpx
@@ -11,6 +10,7 @@ import pytest
 
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
+from scrapebadger._internal.exceptions import ScrapeBadgerError
 
 
 @pytest.fixture
@@ -69,15 +69,17 @@ class TestRetryWarningLogging:
         mock_http = AsyncMock()
         mock_http.request.side_effect = [fail_resp, ok_resp]
 
-        with patch.object(client, "_get_client", return_value=mock_http):
-            with patch("scrapebadger._internal.client.asyncio.sleep"):
-                with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                    result = await client.get("/v1/test")
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            result = await client.get("/v1/test")
 
         assert result == {"ok": True}
         warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]
         assert warning_records, "Expected at least one WARNING log on 503 retry"
-        assert any("scrapebadger" == r.name for r in warning_records)
+        assert any(r.name == "scrapebadger" for r in warning_records)
 
     async def test_warning_message_format_5xx(
         self,
@@ -93,10 +95,12 @@ class TestRetryWarningLogging:
         mock_http = AsyncMock()
         mock_http.request.side_effect = [fail_resp, ok_resp]
 
-        with patch.object(client, "_get_client", return_value=mock_http):
-            with patch("scrapebadger._internal.client.asyncio.sleep"):
-                with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                    await client.get("/v1/test")
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            await client.get("/v1/test")
 
         msgs = [r.message for r in caplog.records if r.levelno == logging.WARNING]
         assert msgs, "Expected warning messages"
@@ -125,10 +129,12 @@ class TestRetryWarningLogging:
             ok_resp,
         ]
 
-        with patch.object(client, "_get_client", return_value=mock_http):
-            with patch("scrapebadger._internal.client.asyncio.sleep"):
-                with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                    result = await client.get("/v1/test")
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            result = await client.get("/v1/test")
 
         assert result == {"ok": True}
         warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]
@@ -150,10 +156,12 @@ class TestRetryWarningLogging:
             ok_resp,
         ]
 
-        with patch.object(client, "_get_client", return_value=mock_http):
-            with patch("scrapebadger._internal.client.asyncio.sleep"):
-                with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                    await client.get("/v1/test")
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            await client.get("/v1/test")
 
         msgs = [r.message for r in caplog.records if r.levelno == logging.WARNING]
         assert msgs
@@ -174,10 +182,12 @@ class TestRetryWarningLogging:
         mock_http = AsyncMock()
         mock_http.request.return_value = fail_resp
 
-        with patch.object(client, "_get_client", return_value=mock_http):
-            with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                with pytest.raises(Exception):
-                    await client.get("/v1/test")
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+            pytest.raises(ScrapeBadgerError),
+        ):
+            await client.get("/v1/test")
 
         warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]
         assert not warning_records, "Should not log warnings for 404"
@@ -229,10 +239,12 @@ class TestRetryWarningLogging:
         mock_http = AsyncMock()
         mock_http.request.side_effect = [fail_resp, ok_resp]
 
-        with patch.object(client, "_get_client", return_value=mock_http):
-            with patch("scrapebadger._internal.client.asyncio.sleep"):
-                with caplog.at_level(logging.WARNING, logger="scrapebadger"):
-                    await client.get_with_headers("/v1/test")
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+            caplog.at_level(logging.WARNING, logger="scrapebadger"),
+        ):
+            await client.get_with_headers("/v1/test")
 
         warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]
         assert warning_records, "get_with_headers should emit warnings on retry"
