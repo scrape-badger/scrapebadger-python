@@ -334,7 +334,7 @@ class TweetsClient:
             )
             ```
         """
-        params: dict = {
+        params: dict[str, Any] = {
             "query": query,
             "query_type": query_type.value,
             "cursor": cursor,
@@ -391,7 +391,7 @@ class TweetsClient:
             ]
             ```
         """
-        params: dict = {"query": query, "query_type": query_type.value}
+        params: dict[str, Any] = {"query": query, "query_type": query_type.value}
         if count is not None:
             params["count"] = count
         async for tweet in paginate(
