@@ -522,9 +522,7 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client._request.return_value = {}
-        result = await stream_client.delete_filter_rule(
-            "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
-        )
+        result = await stream_client.delete_filter_rule("aaaabbbb-cccc-dddd-eeee-ffffffffffff")
         assert result is None
 
     async def test_delete_filter_rule_calls_delete_method(
@@ -547,9 +545,7 @@ class TestStreamClientFilterRules:
             **FILTER_RULE_RESPONSE,
             "status": "paused",
         }
-        rule = await stream_client.pause_filter_rule(
-            "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
-        )
+        rule = await stream_client.pause_filter_rule("aaaabbbb-cccc-dddd-eeee-ffffffffffff")
         assert rule.status == FilterRuleStatus.PAUSED
         body = mock_base_client._request.call_args[1]["json"]
         assert body["status"] == "paused"
@@ -558,9 +554,7 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client._request.return_value = FILTER_RULE_RESPONSE
-        rule = await stream_client.resume_filter_rule(
-            "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
-        )
+        rule = await stream_client.resume_filter_rule("aaaabbbb-cccc-dddd-eeee-ffffffffffff")
         assert rule.status == FilterRuleStatus.ACTIVE
         body = mock_base_client._request.call_args[1]["json"]
         assert body["status"] == "active"
@@ -573,9 +567,7 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.post.return_value = QUERY_VALIDATION_VALID
-        result = await stream_client.validate_filter_rule_query(
-            "#python lang:en -is:retweet"
-        )
+        result = await stream_client.validate_filter_rule_query("#python lang:en -is:retweet")
         assert isinstance(result, FilterRuleQueryValidation)
         assert result.valid is True
         assert result.error is None
@@ -648,9 +640,7 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = FILTER_RULE_DELIVERY_LOG_LIST
-        await stream_client.list_filter_rule_delivery_logs(
-            "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
-        )
+        await stream_client.list_filter_rule_delivery_logs("aaaabbbb-cccc-dddd-eeee-ffffffffffff")
         params = mock_base_client.get.call_args[1]["params"]
         assert "delivery_status" not in params
 
@@ -681,9 +671,7 @@ class TestStreamClientFilterRules:
     ) -> None:
         mock_base_client.get.return_value = PRICING_TIER_LIST
         await stream_client.get_filter_rule_pricing()
-        mock_base_client.get.assert_called_once_with(
-            "/v1/twitter/stream/filter-rules-pricing"
-        )
+        mock_base_client.get.assert_called_once_with("/v1/twitter/stream/filter-rules-pricing")
 
     async def test_get_filter_rule_pricing_empty_tiers(
         self, stream_client: StreamClient, mock_base_client: MagicMock

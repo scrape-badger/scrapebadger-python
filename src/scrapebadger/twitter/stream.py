@@ -127,7 +127,7 @@ def verify_webhook_signature(
     if not signature_header.startswith("sha256="):
         return False
 
-    expected_hex = signature_header[len("sha256="):]
+    expected_hex = signature_header[len("sha256=") :]
     body_bytes = body.encode("utf-8") if isinstance(body, str) else body
     actual_hex = hmac.new(
         secret.encode("utf-8"),

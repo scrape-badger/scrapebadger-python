@@ -197,12 +197,14 @@ class TestRetryWarningLogging:
         config_one_retry: ClientConfig,
     ) -> None:
         """get_with_headers returns a (data, headers) tuple."""
-        resp_headers = httpx.Headers({
-            "X-RateLimit-Limit": "300",
-            "X-RateLimit-Remaining": "250",
-            "X-RateLimit-Reset": "1700000060",
-            "Content-Type": "application/json",
-        })
+        resp_headers = httpx.Headers(
+            {
+                "X-RateLimit-Limit": "300",
+                "X-RateLimit-Remaining": "250",
+                "X-RateLimit-Reset": "1700000060",
+                "Content-Type": "application/json",
+            }
+        )
         ok_resp = MagicMock(spec=httpx.Response)
         ok_resp.status_code = 200
         ok_resp.reason_phrase = "OK"

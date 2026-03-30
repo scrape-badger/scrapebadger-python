@@ -196,9 +196,7 @@ def _extract_throttle_delay(headers: dict[str, str]) -> float | None:
 
     Returns ``None`` when headers are absent or throttling is not required.
     """
-    raw_remaining = headers.get("x-ratelimit-remaining") or headers.get(
-        "X-RateLimit-Remaining"
-    )
+    raw_remaining = headers.get("x-ratelimit-remaining") or headers.get("X-RateLimit-Remaining")
     raw_limit = headers.get("x-ratelimit-limit") or headers.get("X-RateLimit-Limit")
     raw_reset = headers.get("x-ratelimit-reset") or headers.get("X-RateLimit-Reset")
 
@@ -217,9 +215,7 @@ def _extract_throttle_delay(headers: dict[str, str]) -> float | None:
 
 def _maybe_throttle_between_pages(headers: dict[str, str]) -> None:
     """Log a warning if rate-limit throttling will be applied."""
-    raw_remaining = headers.get("x-ratelimit-remaining") or headers.get(
-        "X-RateLimit-Remaining"
-    )
+    raw_remaining = headers.get("x-ratelimit-remaining") or headers.get("X-RateLimit-Remaining")
     raw_limit = headers.get("x-ratelimit-limit") or headers.get("X-RateLimit-Limit")
     raw_reset = headers.get("x-ratelimit-reset") or headers.get("X-RateLimit-Reset")
 

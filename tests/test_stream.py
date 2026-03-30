@@ -695,9 +695,7 @@ class TestConnectContextManager:
         ctx = _FakeWebSocketCtx(ws)
         return ws, ctx
 
-    async def test_connect_yields_tweet_events(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_yields_tweet_events(self, stream_client: StreamClient) -> None:
         connected_msg = {
             "type": "connected",
             "connection_id": "abc-123",
@@ -716,9 +714,7 @@ class TestConnectContextManager:
         assert isinstance(collected[0], ConnectedEvent)
         assert isinstance(collected[1], TweetEvent)
 
-    async def test_connect_auto_responds_to_ping(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_auto_responds_to_ping(self, stream_client: StreamClient) -> None:
         ping_msg = {"type": "ping", "timestamp": "2026-03-03T10:00:00+00:00"}
         raw_messages = [json.dumps(ping_msg)]
         mock_ws, mock_ws_ctx = self._make_ws_ctx(raw_messages)
@@ -734,9 +730,7 @@ class TestConnectContextManager:
         assert isinstance(collected[0], PingEvent)
         mock_ws.send.assert_called_once_with(json.dumps({"type": "pong"}))
 
-    async def test_connect_raises_on_auth_error(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_raises_on_auth_error(self, stream_client: StreamClient) -> None:
         error_msg = {"type": "error", "code": 4001, "message": "Invalid API key"}
         _mock_ws, mock_ws_ctx = self._make_ws_ctx([json.dumps(error_msg)])
 
@@ -855,9 +849,7 @@ class TestConnectContextManager:
         assert any(isinstance(e, TweetEvent) for e in collected)
         assert connect_call_count == 2
 
-    async def test_connect_respects_max_reconnects(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_respects_max_reconnects(self, stream_client: StreamClient) -> None:
         from websockets.exceptions import ConnectionClosed
 
         class _AlwaysFailWs:
@@ -887,9 +879,7 @@ class TestConnectContextManager:
 
         assert "Max reconnects" in str(exc_info.value)
 
-    async def test_connect_ignores_invalid_json(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_ignores_invalid_json(self, stream_client: StreamClient) -> None:
         # Mix invalid JSON with a valid tweet
         raw_messages = ["not-valid-json!!!", json.dumps(TWEET_EVENT_RAW)]
         _mock_ws, mock_ws_ctx = self._make_ws_ctx(raw_messages)
@@ -904,9 +894,7 @@ class TestConnectContextManager:
         assert len(collected) == 1
         assert isinstance(collected[0], TweetEvent)
 
-    async def test_connect_uses_api_key_header(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_uses_api_key_header(self, stream_client: StreamClient) -> None:
         _mock_ws, mock_ws_ctx = self._make_ws_ctx([])
 
         with patch("websockets.connect", return_value=mock_ws_ctx) as mock_connect:
@@ -918,9 +906,7 @@ class TestConnectContextManager:
         assert "additional_headers" in call_kwargs
         assert call_kwargs["additional_headers"]["x-api-key"] == "test_api_key_12345"
 
-    async def test_connect_uses_correct_ws_url(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_uses_correct_ws_url(self, stream_client: StreamClient) -> None:
         _mock_ws, mock_ws_ctx = self._make_ws_ctx([])
 
         with patch("websockets.connect", return_value=mock_ws_ctx) as mock_connect:
@@ -932,9 +918,7 @@ class TestConnectContextManager:
         called_url = mock_connect.call_args[0][0]
         assert called_url == "wss://api.test.scrapebadger.com/v1/twitter/stream"
 
-    async def test_connect_enforces_min_reconnect_delay(
-        self, stream_client: StreamClient
-    ) -> None:
+    async def test_connect_enforces_min_reconnect_delay(self, stream_client: StreamClient) -> None:
         """reconnect_delay_seconds below the floor of 5s should be clamped to 5s."""
         from websockets.exceptions import ConnectionClosed
 
