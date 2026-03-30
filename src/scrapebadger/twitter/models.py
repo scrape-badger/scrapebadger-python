@@ -503,7 +503,7 @@ class User(_BaseModel):
     super_followed_by: bool | None = None
 
     # Verification details
-    verification_info: dict | None = None
+    verification_info: dict[str, Any] | None = None
 
     # Engagement
     pinned_tweet_ids: list[str] | None = None
