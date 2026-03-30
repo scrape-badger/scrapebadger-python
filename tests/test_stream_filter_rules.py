@@ -25,7 +25,6 @@ from scrapebadger.twitter.stream_models import (
     FilterRuleStatus,
 )
 
-
 # ---------------------------------------------------------------------------
 # Shared sample data
 # ---------------------------------------------------------------------------
@@ -290,7 +289,7 @@ class TestFilterRuleStatusEnum:
     def test_status_is_string(self) -> None:
         # StrEnum instances should compare equal to plain strings
         assert FilterRuleStatus.ACTIVE == "active"
-        assert "active" == FilterRuleStatus.ACTIVE
+        assert FilterRuleStatus.ACTIVE == "active"
 
 
 # ===========================================================================

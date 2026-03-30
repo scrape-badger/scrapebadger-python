@@ -8,7 +8,7 @@ All models are immutable (frozen) for safe concurrent use.
 from __future__ import annotations
 
 import sys
-from datetime import datetime
+from datetime import datetime  # noqa: TC003 (Pydantic needs this at runtime)
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -136,7 +136,8 @@ class StreamMonitorList(_BaseModel):
     Example:
         ```python
         result = await client.twitter.stream.list_monitors()
-        print(f"Total: {result.total}, page {result.page} of {result.total // result.page_size + 1}")
+        pages = result.total // result.page_size + 1
+        print(f"Total: {result.total}, page {result.page} of {pages}")
         ```
     """
 

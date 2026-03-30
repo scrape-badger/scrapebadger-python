@@ -41,7 +41,6 @@ from scrapebadger.twitter.stream_models import (
     TweetEvent,
 )
 
-
 # ---------------------------------------------------------------------------
 # Shared sample data
 # ---------------------------------------------------------------------------
@@ -657,7 +656,7 @@ class _FakeWebSocket:
         self._messages = iter(messages)
         self.send = AsyncMock()
 
-    def __aiter__(self) -> "_FakeWebSocket":
+    def __aiter__(self) -> _FakeWebSocket:
         return self
 
     async def __anext__(self) -> str:
@@ -741,11 +740,13 @@ class TestConnectContextManager:
         error_msg = {"type": "error", "code": 4001, "message": "Invalid API key"}
         _mock_ws, mock_ws_ctx = self._make_ws_ctx([json.dumps(error_msg)])
 
-        with patch("websockets.connect", return_value=mock_ws_ctx):
-            with pytest.raises(WebSocketStreamError) as exc_info:
-                async with stream_client.connect() as events:
-                    async for _event in events:
-                        pass
+        with (
+            patch("websockets.connect", return_value=mock_ws_ctx),
+            pytest.raises(WebSocketStreamError) as exc_info,
+        ):
+            async with stream_client.connect() as events:
+                async for _event in events:
+                    pass
 
         assert exc_info.value.code == 4001
 
@@ -755,11 +756,13 @@ class TestConnectContextManager:
         error_msg = {"type": "error", "code": 4003, "message": "Connection limit exceeded"}
         _mock_ws, mock_ws_ctx = self._make_ws_ctx([json.dumps(error_msg)])
 
-        with patch("websockets.connect", return_value=mock_ws_ctx):
-            with pytest.raises(WebSocketStreamError) as exc_info:
-                async with stream_client.connect() as events:
-                    async for _event in events:
-                        pass
+        with (
+            patch("websockets.connect", return_value=mock_ws_ctx),
+            pytest.raises(WebSocketStreamError) as exc_info,
+        ):
+            async with stream_client.connect() as events:
+                async for _event in events:
+                    pass
 
         assert exc_info.value.code == 4003
 
@@ -773,7 +776,7 @@ class TestConnectContextManager:
 
             send = AsyncMock()
 
-            def __aiter__(self) -> "_ClosingWs":
+            def __aiter__(self) -> _ClosingWs:
                 return self
 
             async def __anext__(self) -> str:
@@ -782,11 +785,13 @@ class TestConnectContextManager:
         ws = _ClosingWs()
         ctx = _FakeWebSocketCtx(ws)  # type: ignore[arg-type]
 
-        with patch("websockets.connect", return_value=ctx):
-            with pytest.raises(WebSocketStreamError):
-                async with stream_client.connect(reconnect=False) as events:
-                    async for _event in events:
-                        pass
+        with (
+            patch("websockets.connect", return_value=ctx),
+            pytest.raises(WebSocketStreamError),
+        ):
+            async with stream_client.connect(reconnect=False) as events:
+                async for _event in events:
+                    pass
 
     async def test_connect_reconnects_after_connection_close(
         self, stream_client: StreamClient
@@ -801,7 +806,7 @@ class TestConnectContextManager:
 
             send = AsyncMock()
 
-            def __aiter__(self) -> "_FirstWs":
+            def __aiter__(self) -> _FirstWs:
                 return self
 
             async def __anext__(self) -> str:
@@ -813,7 +818,7 @@ class TestConnectContextManager:
             send = AsyncMock()
             _yielded = False
 
-            def __aiter__(self) -> "_SecondWs":
+            def __aiter__(self) -> _SecondWs:
                 return self
 
             async def __anext__(self) -> str:
@@ -825,26 +830,26 @@ class TestConnectContextManager:
         def _make_ctx(*_args: object, **_kwargs: object) -> _FakeWebSocketCtx:
             nonlocal connect_call_count
             connect_call_count += 1
-            ws: _FakeWebSocket | _FirstWs | _SecondWs
-            if connect_call_count == 1:
-                ws = _FirstWs()
-            else:
-                ws = _SecondWs()
+            ws: _FakeWebSocket | _FirstWs | _SecondWs = (
+                _FirstWs() if connect_call_count == 1 else _SecondWs()
+            )
             return _FakeWebSocketCtx(ws)  # type: ignore[arg-type]
 
-        with patch("websockets.connect", side_effect=_make_ctx):
-            with patch("asyncio.sleep", new=AsyncMock()):
-                async with stream_client.connect(
-                    reconnect=True,
-                    reconnect_delay_seconds=5.0,
-                    max_reconnects=2,
-                ) as events:
-                    collected = []
-                    async for event in events:
-                        collected.append(event)
-                        # Stop once we get the tweet from the second connection
-                        if isinstance(event, TweetEvent):
-                            break
+        with (
+            patch("websockets.connect", side_effect=_make_ctx),
+            patch("asyncio.sleep", new=AsyncMock()),
+        ):
+            async with stream_client.connect(
+                reconnect=True,
+                reconnect_delay_seconds=5.0,
+                max_reconnects=2,
+            ) as events:
+                collected = []
+                async for event in events:
+                    collected.append(event)
+                    # Stop once we get the tweet from the second connection
+                    if isinstance(event, TweetEvent):
+                        break
 
         # After reconnect, TweetEvent should have been received
         assert any(isinstance(e, TweetEvent) for e in collected)
@@ -858,7 +863,7 @@ class TestConnectContextManager:
         class _AlwaysFailWs:
             send = AsyncMock()
 
-            def __aiter__(self) -> "_AlwaysFailWs":
+            def __aiter__(self) -> _AlwaysFailWs:
                 return self
 
             async def __anext__(self) -> str:
@@ -867,16 +872,18 @@ class TestConnectContextManager:
         def _make_ctx(*_args: object, **_kwargs: object) -> _FakeWebSocketCtx:
             return _FakeWebSocketCtx(_AlwaysFailWs())  # type: ignore[arg-type]
 
-        with patch("websockets.connect", side_effect=_make_ctx):
-            with patch("asyncio.sleep", new=AsyncMock()):
-                with pytest.raises(WebSocketStreamError) as exc_info:
-                    async with stream_client.connect(
-                        reconnect=True,
-                        reconnect_delay_seconds=5.0,
-                        max_reconnects=0,
-                    ) as events:
-                        async for _event in events:
-                            pass
+        with (
+            patch("websockets.connect", side_effect=_make_ctx),
+            patch("asyncio.sleep", new=AsyncMock()),
+            pytest.raises(WebSocketStreamError) as exc_info,
+        ):
+            async with stream_client.connect(
+                reconnect=True,
+                reconnect_delay_seconds=5.0,
+                max_reconnects=0,
+            ) as events:
+                async for _event in events:
+                    pass
 
         assert "Max reconnects" in str(exc_info.value)
 
@@ -939,7 +946,7 @@ class TestConnectContextManager:
         class _AlwaysFailWs2:
             send = AsyncMock()
 
-            def __aiter__(self) -> "_AlwaysFailWs2":
+            def __aiter__(self) -> _AlwaysFailWs2:
                 return self
 
             async def __anext__(self) -> str:
@@ -948,16 +955,18 @@ class TestConnectContextManager:
         def _make_ctx(*_args: object, **_kwargs: object) -> _FakeWebSocketCtx:
             return _FakeWebSocketCtx(_AlwaysFailWs2())  # type: ignore[arg-type]
 
-        with patch("websockets.connect", side_effect=_make_ctx):
-            with patch("asyncio.sleep", side_effect=_mock_sleep):
-                with pytest.raises(WebSocketStreamError):
-                    async with stream_client.connect(
-                        reconnect=True,
-                        reconnect_delay_seconds=0.001,  # below floor
-                        max_reconnects=0,  # fail after first reconnect attempt
-                    ) as events:
-                        async for _event in events:
-                            pass
+        with (
+            patch("websockets.connect", side_effect=_make_ctx),
+            patch("asyncio.sleep", side_effect=_mock_sleep),
+            pytest.raises(WebSocketStreamError),
+        ):
+            async with stream_client.connect(
+                reconnect=True,
+                reconnect_delay_seconds=0.001,  # below floor
+                max_reconnects=0,  # fail after first reconnect attempt
+            ) as events:
+                async for _event in events:
+                    pass
 
         # Even though 0.001 was passed, minimum 5s should be enforced
         if sleep_calls:

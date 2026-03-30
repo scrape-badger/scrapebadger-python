@@ -9,8 +9,9 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+from collections.abc import AsyncIterator  # noqa: TC003 (used at runtime by asynccontextmanager)
 from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING, AsyncIterator
+from typing import TYPE_CHECKING
 
 from scrapebadger._internal.exceptions import WebSocketStreamError
 from scrapebadger.twitter.stream_models import (
