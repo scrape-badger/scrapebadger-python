@@ -170,6 +170,9 @@ async def paginate(
         if data is None:
             data = []
 
+        if not data:
+            break
+
         for item in data:
             if max_items is not None and items_yielded >= max_items:
                 return
