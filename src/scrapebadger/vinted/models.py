@@ -202,7 +202,7 @@ class VintedItemDetail(_BaseModel):
     catalog_id: int | None = None
     color1: str | None = None
     seller: VintedSellerSummary | None = None
-    category: str | None = None
+    category: list[str] | str | None = None
     upload_date: str | None = None
     can_buy: bool | None = None
     instant_buy: bool | None = None
