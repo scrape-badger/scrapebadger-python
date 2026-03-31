@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.twitter.client import TwitterClient
+from scrapebadger.vinted.client import VintedClient
 from scrapebadger.web.client import WebClient
 
 if TYPE_CHECKING:
@@ -109,6 +110,7 @@ class ScrapeBadger:
 
         self._base_client = BaseClient(self._config)
         self._twitter: TwitterClient | None = None
+        self._vinted: VintedClient | None = None
         self._web: WebClient | None = None
 
     @property
@@ -144,6 +146,29 @@ class ScrapeBadger:
         if self._twitter is None:
             self._twitter = TwitterClient(self._base_client)
         return self._twitter
+
+    @property
+    def vinted(self) -> VintedClient:
+        """Access Vinted scraping operations.
+
+        Returns:
+            VintedClient providing access to all Vinted endpoints.
+
+        Example:
+            ```python
+            # Search for items
+            results = await client.vinted.search.search("nike air max")
+
+            # Get item details
+            detail = await client.vinted.items.get(123456789)
+
+            # Get user profile
+            profile = await client.vinted.users.get_profile(12345)
+            ```
+        """
+        if self._vinted is None:
+            self._vinted = VintedClient(self._base_client)
+        return self._vinted
 
     async def close(self) -> None:
         """Close the client and release resources.

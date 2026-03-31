@@ -42,17 +42,44 @@ from scrapebadger._internal.exceptions import (
 )
 from scrapebadger._internal.pagination import PaginatedResponse
 from scrapebadger.client import ScrapeBadger
+from scrapebadger.vinted.models import (
+    BrandsResponse,
+    ColorsResponse,
+    ItemDetailResponse,
+    MarketsResponse,
+    SearchResponse,
+    StatusesResponse,
+    UserItemsResponse,
+    UserProfileResponse,
+    VintedBrand,
+    VintedColor,
+    VintedItemDetail,
+    VintedItemSummary,
+    VintedMarket,
+    VintedPagination,
+    VintedPhoto,
+    VintedPrice,
+    VintedSellerSummary,
+    VintedStatus,
+    VintedUserProfile,
+    VintedUserSummary,
+)
 from scrapebadger.web.models import DetectResult, ScrapeResult
 
 __version__ = "0.1.1"
 
 __all__ = [
     "AuthenticationError",
+    # Vinted response envelopes
+    "BrandsResponse",
     # Configuration
     "ClientConfig",
+    "ColorsResponse",
     # Web scraping
     "DetectResult",
     "InsufficientCreditsError",
+    "ItemDetailResponse",
+    "MarketsResponse",
     "NotFoundError",
     # Pagination
     "PaginatedResponse",
@@ -62,8 +89,28 @@ __all__ = [
     # Exceptions
     "ScrapeBadgerError",
     "ScrapeResult",
+    "SearchResponse",
     "ServerError",
+    "StatusesResponse",
+    "UserItemsResponse",
+    "UserProfileResponse",
     "ValidationError",
+    # Vinted reference models
+    "VintedBrand",
+    "VintedColor",
+    # Vinted core models
+    "VintedItemDetail",
+    "VintedItemSummary",
+    "VintedMarket",
+    # Vinted pagination
+    "VintedPagination",
+    # Vinted nested models
+    "VintedPhoto",
+    "VintedPrice",
+    "VintedSellerSummary",
+    "VintedStatus",
+    "VintedUserProfile",
+    "VintedUserSummary",
     # Stream exceptions
     "WebSocketStreamError",
     # Version

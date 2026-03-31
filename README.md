@@ -14,7 +14,7 @@
   <a href="https://mypy-lang.org/"><img src="https://img.shields.io/badge/type%20checked-mypy-blue.svg" alt="Type checked: mypy"></a>
 </p>
 
-The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web scraping APIs for Twitter and more.
+The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web scraping APIs for Twitter, Vinted, and more.
 
 ## Features
 
@@ -23,6 +23,7 @@ The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web
 - **Automatic pagination** - Iterator methods with smart rate limit handling
 - **Resilient retries** - Exponential backoff on transient errors
 - **37+ Twitter endpoints** - Tweets, users, lists, communities, trends, geo, real-time streams
+- **Vinted scraping** - Search items, item details, user profiles, brands, colors, markets
 - **Web scraping** - Anti-bot bypass, JS rendering, and AI data extraction
 
 ## Installation
@@ -83,6 +84,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 |-----|-------------|---------------|
 | **Web Scraping** | Scrape any website with JS rendering, anti-bot bypass, and AI extraction | [Web Scraping Guide](docs/web-scraping.md) |
 | **Twitter** | 37+ endpoints for tweets, users, lists, communities, trends, and real-time streams | [Twitter Guide](docs/twitter.md) |
+| **Vinted** | Search items, item details, user profiles, brands, colors, statuses, and markets | [Vinted Guide](docs/vinted.md) |
 
 ## Error Handling
 
