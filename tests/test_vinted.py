@@ -914,6 +914,8 @@ class TestVintedImports:
     def test_vinted_pagination_importable(self) -> None:
         from scrapebadger.vinted import VintedPagination as _  # noqa: F401
 
-    def test_vinted_top_level_importable(self) -> None:
+    def test_vinted_item_summary_top_level_importable(self) -> None:
         from scrapebadger import VintedItemSummary as _  # noqa: F401
+
+    def test_vinted_price_top_level_importable(self) -> None:
         from scrapebadger import VintedPrice as _  # noqa: F401
