@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-04-11
+
+### Added — Google Scrapingdog parity (refs scrape-badger/scrapebadger#135)
+
+Three new Google product sub-clients and deeper Scholar / Trends / Search surface:
+
+- **`client.google.local`** — Local Pack business listings ranked for a SERP query (`tbm=lcl`). Driven by `q + location/uule`, returns ratings, reviews, addresses, phone numbers, and GPS coordinates. Complementary to the Maps API.
+- **`client.google.shorts`** — Short-form vertical video results (YouTube Shorts, TikTok, Facebook Reels) via Google's Shorts SERP mode (`udm=39`).
+- **`client.google.flights`** — One-way, round-trip, and multi-city flight search with passenger config, cabin class, stops filter, and max-price. Returns `best_flights`, `other_flights`, `price_insights`, and per-offer carbon emissions.
+- **`client.google.scholar.profiles(mauthors, ...)`** — Author profile search by name with `after_author` / `before_author` pagination.
+- **`client.google.scholar.author(author_id, ...)`** — Full author profile (articles, citation stats, co-authors).
+- **`client.google.scholar.author_citation(author_id, ...)`** — Citations-per-year chart for a Scholar author.
+- **`client.google.scholar.cite(q, ...)`** — MLA / APA / Chicago / Harvard / Vancouver citation formats plus export links (BibTeX / RIS / EndNote / RefWorks).
+- **`client.google.trends.autocomplete(q, ...)`** — Categorized Knowledge Graph topic entities (`mid`, `type`, link) for a query prefix. Distinct from Google Search autocomplete.
+- **`client.google.search.search(..., ai_overview=True)`** — Optional flag that chases Google's deferred AI Overview `page_token` with a follow-up fetch and merges the result into `ai_overview`. Adds ~1s and 1 credit only when the SERP actually defers the overview.
+
+The Google product roster is now **19** (was 16).
+
 ## [0.2.0] - 2026-03-05
 
 ### Added

@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
+from scrapebadger.google.client import GoogleClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.web.client import WebClient
@@ -112,6 +113,7 @@ class ScrapeBadger:
         self._twitter: TwitterClient | None = None
         self._vinted: VintedClient | None = None
         self._web: WebClient | None = None
+        self._google: GoogleClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -169,6 +171,33 @@ class ScrapeBadger:
         if self._vinted is None:
             self._vinted = VintedClient(self._base_client)
         return self._vinted
+
+    @property
+    def google(self) -> GoogleClient:
+        """Access Google Scraper API operations.
+
+        Returns:
+            GoogleClient providing access to all 19 Google product APIs.
+
+        Example:
+            ```python
+            # Web search
+            serp = await client.google.search.search("python 3.13")
+
+            # Maps search
+            places = await client.google.maps.search("coffee shops sf")
+
+            # Shopping search + merchant URL enrichment
+            products = await client.google.shopping.search("laptop")
+            enrich = await client.google.shopping.click(
+                title=products["results"][0]["title"],
+                source=products["results"][0]["source"],
+            )
+            ```
+        """
+        if self._google is None:
+            self._google = GoogleClient(self._base_client)
+        return self._google
 
     async def close(self) -> None:
         """Close the client and release resources.

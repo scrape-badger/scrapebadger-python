@@ -42,6 +42,7 @@ from scrapebadger._internal.exceptions import (
 )
 from scrapebadger._internal.pagination import PaginatedResponse
 from scrapebadger.client import ScrapeBadger
+from scrapebadger.google.client import GoogleClient
 from scrapebadger.vinted.models import (
     BrandsResponse,
     ColorsResponse,
@@ -77,6 +78,8 @@ __all__ = [
     "ColorsResponse",
     # Web scraping
     "DetectResult",
+    # Google Scraper
+    "GoogleClient",
     "InsufficientCreditsError",
     "ItemDetailResponse",
     "MarketsResponse",
