@@ -9,18 +9,20 @@ if TYPE_CHECKING:
 
 
 class ShortsClient:
-    """Client for Google Shorts search.
+    """Client for Google Shorts search (``udm=39``).
 
-    Triggers Google's Shorts SERP mode via `udm=39` and returns the
-    short_videos_results carousel — mostly YouTube Shorts but also
-    TikToks, Facebook Reels, and other short-form sources when Google
-    surfaces them.
+    Returns a carousel of short-form videos Google surfaces for a
+    query — YouTube Shorts plus TikToks, Instagram Reels, Facebook
+    Reels, and other platforms. Every tile carries ``title``,
+    ``link``, ``source`` (platform label — ``"YouTube"`` /
+    ``"TikTok"`` / …), ``account_name``, ``thumbnail``, ``image``
+    (inline preview), ``duration``, and ``video_id`` (YouTube only).
 
     Example:
         ```python
         shorts = await client.google.shorts.search("cooking hacks")
-        for video in shorts["short_videos_results"]:
-            print(video["title"], video["source"], video["link"])
+        for v in shorts["short_videos_results"]:
+            print(v["rank"], v["title"], v["source"], v["account_name"])
         ```
     """
 
@@ -34,23 +36,24 @@ class ShortsClient:
         gl: str = "us",
         hl: str = "en",
         domain: str = "google.com",
-        num: int = 20,
+        num: int = 40,
         start: int = 0,
+        safe: str = "off",
+        nfpr: int = 0,
+        tbs: str | None = None,
     ) -> dict[str, Any]:
-        """Return short-form video results from Google Shorts mode.
+        """Return short-form video results from Google's Shorts carousel.
 
         Args:
             q: Search query.
             gl: Country code.
             hl: Language code.
-            domain: Google domain.
-            num: Results per page (1-50).
+            domain: Google domain (``"google.com"`` / ``"google.co.uk"`` / …).
+            num: Max tiles to return (1-60).
             start: Pagination offset.
-
-        Returns:
-            Response with `search_information` and `short_videos_results[]` —
-            each entry includes position, title, link, video_id (YouTube
-            Shorts), thumbnail, source host, and channel/account metadata.
+            safe: ``"off"`` or ``"active"``.
+            nfpr: ``1`` disables auto-correction.
+            tbs: Raw Google ``tbs`` filter (e.g. ``"qdr:d"``).
         """
         params: dict[str, Any] = {
             "q": q,
@@ -59,5 +62,10 @@ class ShortsClient:
             "domain": domain,
             "num": num,
             "start": start,
+            "safe": safe,
         }
+        if nfpr:
+            params["nfpr"] = nfpr
+        if tbs:
+            params["tbs"] = tbs
         return await self._client.get("/v1/google/shorts/search", params=params)

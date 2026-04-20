@@ -11,13 +11,20 @@ if TYPE_CHECKING:
 class ImagesClient:
     """Client for Google Images search.
 
+    Returns up to 100 tiles per page with ``title``, ``source``,
+    ``link`` (referrer page), ``thumbnail``, ``image`` (inline
+    preview), ``original`` (full-resolution URL), ``original_width`` /
+    ``original_height``, ``original_size`` (e.g. ``"635KB"``), plus
+    licensability flags (``is_product``, ``is_licensable``,
+    ``is_video``).
+
     Example:
         ```python
         results = await client.google.images.search(
-            "golden retriever",
-            imgsz="l",
-            imgcolor="color",
+            "golden retriever", imgsz="l", imgcolor="color",
         )
+        for img in results["results"]:
+            print(img["rank"], img["title"], img["original"])
         ```
     """
 
@@ -30,27 +37,39 @@ class ImagesClient:
         *,
         gl: str = "us",
         hl: str = "en",
+        page: int = 0,
+        results: int = 100,
+        safe: str = "off",
         tbs: str | None = None,
         imgsz: str | None = None,
         imgcolor: str | None = None,
         imgtype: str | None = None,
-        safe: str = "off",
-        page: int = 0,
     ) -> dict[str, Any]:
         """Search Google Images.
 
         Args:
             q: Image search query.
-            gl: Country code.
+            gl: Country code (ISO 3166 alpha-2).
             hl: Language code.
-            tbs: Time/filter string (e.g. "qdr:d" past day).
-            imgsz: Image size filter: "l" (large), "m" (medium), "i" (icon), "xXl" (extra large).
-            imgcolor: Image color filter (e.g. "color", "gray", "trans").
-            imgtype: "face", "photo", "clipart", "lineart", "animated".
-            safe: Safe search ("off", "medium", "high").
-            page: Page number.
+            page: Zero-based page index (each page ≈ 100 tiles).
+            results: Max tiles to return (1-500, client-side cap).
+            safe: Safe search ``"off"`` or ``"active"``.
+            tbs: Raw Google tbs filter (e.g. ``"qdr:d"`` for past 24h).
+            imgsz: Size filter: ``"l"`` large, ``"m"`` medium, ``"i"``
+                icon, ``"xXl"`` / ``"xxl"`` / ``"xxxl"`` extra-large.
+            imgcolor: Colour filter (``"color"``, ``"gray"``,
+                ``"transparent"``, ``"red"``, ``"orange"``, …).
+            imgtype: ``"face"``, ``"photo"``, ``"clipart"``,
+                ``"lineart"``, ``"animated"``.
         """
-        params: dict[str, Any] = {"q": q, "gl": gl, "hl": hl, "safe": safe, "page": page}
+        params: dict[str, Any] = {
+            "q": q,
+            "gl": gl,
+            "hl": hl,
+            "safe": safe,
+            "page": page,
+            "results": results,
+        }
         if tbs:
             params["tbs"] = tbs
         if imgsz:

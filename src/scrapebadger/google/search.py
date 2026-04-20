@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 if TYPE_CHECKING:
     from scrapebadger._internal.client import BaseClient
@@ -47,6 +47,7 @@ class SearchClient:
         ibp: str | None = None,
         uds: str | None = None,
         ai_overview: bool = False,
+        mode: Literal["full", "fast"] = "full",
     ) -> dict[str, Any]:
         """Search Google and get a structured SERP response.
 
@@ -74,8 +75,18 @@ class SearchClient:
             uds: Google filter string.
             ai_overview: When True, chase Google's deferred AI Overview
                 page_token with a follow-up fetch and merge the result back
-                into `ai_overview`. Adds ~1s and 1 credit when the SERP
-                actually defers the overview; no-op otherwise.
+                into `ai_overview`. Adds ~1s when the SERP actually defers
+                the overview; no-op otherwise. Credit cost is configured
+                per-endpoint by ScrapeBadger admins — query the public
+                ``/public/pricing`` API for the live rate.
+            mode: ``"full"`` (default) returns the complete SERP with every
+                block — organic, ads, knowledge graph, People Also Ask, AI
+                Overview, local pack, news, related searches, videos.
+                ``"fast"`` (~30-50% faster cold) hits Google's lite
+                ``gbv=1`` endpoint and returns only organic results +
+                related searches. Rich blocks (KG, local, AI Overview, news)
+                are not returned. Auto-upgrades to ``"full"`` when
+                ``ai_overview=True``.
 
         Returns:
             Structured SERP response containing:
@@ -110,4 +121,43 @@ class SearchClient:
         }
         if ai_overview:
             params["ai_overview"] = True
+        if mode != "full":
+            params["mode"] = mode
         return await self._client.get("/v1/google/search", params=params)
+
+    async def light(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        location: str | None = None,
+        safe: str = "off",
+    ) -> dict[str, Any]:
+        """Lightweight Google Search — organic results + related searches only.
+
+        ~40% faster than :meth:`search`. Skips ads, Knowledge Graph,
+        AI Overview, local pack, news, inline videos, and shopping.
+        Use when you only need the 10 blue links. Credit cost is
+        configured per-endpoint by admins — query ``/public/pricing``
+        for the live rate.
+
+        Returns:
+            ``{search_information, organic_results, related_searches,
+            pagination}`` — no ``ai_overview`` / ``knowledge_graph`` /
+            ``ads`` / ``local_results`` / ``news_results`` blocks.
+        """
+        return await self.search(
+            q,
+            gl=gl,
+            hl=hl,
+            num=num,
+            start=start,
+            domain=domain,
+            location=location,
+            safe=safe,
+            mode="fast",
+        )

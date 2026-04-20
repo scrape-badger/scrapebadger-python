@@ -12,7 +12,6 @@ from scrapebadger.google.hotels import HotelsClient
 from scrapebadger.google.images import ImagesClient
 from scrapebadger.google.jobs import JobsClient
 from scrapebadger.google.lens import LensClient
-from scrapebadger.google.local import LocalClient
 from scrapebadger.google.maps import MapsClient
 from scrapebadger.google.news import NewsClient
 from scrapebadger.google.patents import PatentsClient
@@ -98,7 +97,6 @@ class GoogleClient:
         self._finance: FinanceClient | None = None
         self._ai_mode: AiModeClient | None = None
         self._lens: LensClient | None = None
-        self._local: LocalClient | None = None
         self._shorts: ShortsClient | None = None
         self._flights: FlightsClient | None = None
         self._products: ProductsClient | None = None
@@ -207,13 +205,6 @@ class GoogleClient:
         if self._lens is None:
             self._lens = LensClient(self._client)
         return self._lens
-
-    @property
-    def local(self) -> LocalClient:
-        """Google Local Pack — business listings ranked for a SERP query."""
-        if self._local is None:
-            self._local = LocalClient(self._client)
-        return self._local
 
     @property
     def shorts(self) -> ShortsClient:

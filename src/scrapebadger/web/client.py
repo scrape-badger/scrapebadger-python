@@ -69,6 +69,8 @@ class WebClient:
         max_cost: int | None = None,
         ai_extract: bool = False,
         ai_prompt: str | None = None,
+        raw_content: bool = False,
+        skip_bot_detection: bool = False,
     ) -> ScrapeResult:
         """Scrape a web page.
 
@@ -93,6 +95,17 @@ class WebClient:
             max_cost: Maximum credit cost.
             ai_extract: Whether to enable AI data extraction.
             ai_prompt: Prompt for AI extraction.
+            raw_content: When True, the server streams the raw body as
+                text/html with metadata in ``X-Scrape-*`` response headers
+                instead of JSON-wrapping the content. Saves 300-1000 ms on
+                large (>1 MB) pages. Incompatible with ``ai_extract``,
+                ``screenshot``, ``video``.
+            skip_bot_detection: When True, the server skips the generic
+                blocking-page + anti-bot / CAPTCHA regex scans on the
+                response body. Saves ~1.3 s of regex work on large pages.
+                Only safe for origins that don't use consumer WAFs like
+                Cloudflare / DataDome / Akamai / Kasada. Default False —
+                keep enabled for general-purpose scraping.
 
         Returns:
             ScrapeResult with page content and metadata.
@@ -136,6 +149,10 @@ class WebClient:
             body["ai_extract"] = True
         if ai_prompt is not None:
             body["ai_prompt"] = ai_prompt
+        if raw_content:
+            body["raw_content"] = True
+        if skip_bot_detection:
+            body["skip_bot_detection"] = True
 
         response = await self._client.post("/v1/web/scrape", json=body)
         return ScrapeResult.model_validate(response)

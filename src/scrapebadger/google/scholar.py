@@ -9,7 +9,15 @@ if TYPE_CHECKING:
 
 
 class ScholarClient:
-    """Client for Google Scholar search.
+    """Client for Google Scholar search + author depth.
+
+    Search results carry their doc ``id``, ``type`` badge, wrapped
+    ``inline_links`` (versions + cited_by + related), PDF ``resources``,
+    and author objects with ``author_id`` for pipe-through into
+    :meth:`author`. Author profiles return structured ``interests``,
+    articles with per-article ``citation_id`` (for :meth:`cite`) +
+    nested ``cited_by`` blocks, lifetime + since-year citation stats,
+    and co-authors.
 
     Example:
         ```python
@@ -18,6 +26,11 @@ class ScholarClient:
             as_ylo=2020,
             as_yhi=2024,
         )
+        first = papers["scholar_results"][0]
+        # Pipe the first profiled author into the author endpoint:
+        author = first["authors"][0]
+        if author.get("author_id"):
+            profile = await client.google.scholar.author(author["author_id"])
         ```
     """
 
@@ -92,8 +105,14 @@ class ScholarClient:
     ) -> dict[str, Any]:
         """Get a full Google Scholar author profile.
 
-        Returns profile info (name, affiliations, interests), articles list,
-        citation stats (all / since-year), h-index, i10-index, and co-authors.
+        Returns:
+            ``author`` block (name, affiliations, structured
+            ``interests_detailed`` ``[{title, link}]`` plus flat
+            ``interests`` string list, thumbnail, homepage), ``articles``
+            list (with per-article ``citation_id`` for :meth:`cite` and
+            nested ``cited_by{value, link, citation_id}`` blocks),
+            ``stats`` (citations / h-index / i10-index x all-time +
+            since-year), and ``co_authors`` (each with ``author_id``).
 
         Args:
             author_id: Scholar user ID (the `user` query parameter).

@@ -63,7 +63,6 @@ from scrapebadger.google.hotels import HotelsClient
 from scrapebadger.google.images import ImagesClient
 from scrapebadger.google.jobs import JobsClient
 from scrapebadger.google.lens import LensClient
-from scrapebadger.google.local import LocalClient
 from scrapebadger.google.maps import MapsClient
 from scrapebadger.google.news import NewsClient
 from scrapebadger.google.patents import PatentsClient
@@ -85,7 +84,6 @@ __all__ = [
     "ImagesClient",
     "JobsClient",
     "LensClient",
-    "LocalClient",
     "MapsClient",
     "NewsClient",
     "PatentsClient",

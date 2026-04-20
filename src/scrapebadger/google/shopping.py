@@ -1,4 +1,4 @@
-"""Google Shopping client (search, product detail, click enrichment)."""
+"""Google Shopping client (search and product detail)."""
 
 from __future__ import annotations
 
@@ -9,24 +9,22 @@ if TYPE_CHECKING:
 
 
 class ShoppingClient:
-    """Client for Google Shopping endpoints.
+    """Client for Google Shopping search.
 
-    Exposes:
-    - `search`: product listings with prices, ratings, thumbnails, filters
-    - `product`: detailed product + seller list
-    - `click`: per-product merchant URL enrichment (materializes the direct
-       merchant link that Google strips from organic Shopping HTML)
+    Exposes `search`: product listings with prices, ratings, thumbnails,
+    filters, and Google's native ``gpcid`` / ``catalog_id`` /
+    ``headline_offer_docid`` / ``mid`` on every tile. Pipe any tile into
+    :meth:`ProductsClient.detail` for full specs + offers.
 
     Example:
         ```python
         products = await client.google.shopping.search("laptop", max_price=1000)
         first = products["results"][0]
-        # Resolve the direct merchant URL for this product
-        enriched = await client.google.shopping.click(
-            title=first["title"],
-            source=first["source"],
+        detail = await client.google.products.detail(
+            first["gpcid"],
+            q="laptop",
+            include_offers=True,  # merchant URLs come from /async/piu_ps
         )
-        print("Merchant URL:", enriched["merchant_url"])
         ```
     """
 
@@ -38,34 +36,71 @@ class ShoppingClient:
         q: str,
         *,
         gl: str = "us",
+        hl: str = "en",
+        domain: str = "google.com",
+        page: int = 0,
         min_price: int | None = None,
         max_price: int | None = None,
         sort_by: str | None = None,
+        free_shipping: bool = False,
+        on_sale: bool = False,
+        safe: str = "off",
+        nfpr: int = 0,
+        lr: str | None = None,
+        tbs: str | None = None,
+        shoprs: str | None = None,
     ) -> dict[str, Any]:
         """Search Google Shopping for products.
 
         Args:
             q: Product search query.
             gl: Country code.
-            min_price: Minimum price filter.
-            max_price: Maximum price filter.
-            sort_by: One of "price_low", "price_high", "rating", "reviews".
+            hl: Language code.
+            domain: Google domain.
+            page: Zero-based page index (each page ≈ 60 tiles).
+            min_price / max_price: Price filters.
+            sort_by: ``"price_low"`` / ``"price_high"`` / ``"rating"`` /
+                ``"reviews"``.
+            free_shipping: Restrict to free-shipping offers.
+            on_sale: Restrict to on-sale offers.
+            safe: ``"off"`` or ``"active"``.
+            nfpr: ``1`` disables auto-correction.
+            lr: Language restrict (``"lang_en"`` …).
+            tbs: Raw Google ``tbs`` filter string.
+            shoprs: Google internal ``shoprs`` helper token.
 
         Returns:
-            A response with:
-            - `results`: product list (title, price, source, rating, thumbnail,
-              product_id, click_link, ...)
-            - `filters`: quick filters (on sale, free shipping, etc.)
-            - `ads`: sponsored PLA listings
-            - `pagination`
+            Response with ``results`` (title, price.value + extracted_price,
+            source, rating, reviews, thumbnail, product_id, click_link,
+            delivery, on_sale/old_price/tag), ``filters``, ``ads``,
+            ``pagination``.
         """
-        params: dict[str, Any] = {"q": q, "gl": gl}
+        params: dict[str, Any] = {
+            "q": q,
+            "gl": gl,
+            "hl": hl,
+            "domain": domain,
+            "page": page,
+            "safe": safe,
+        }
         if min_price is not None:
             params["min_price"] = min_price
         if max_price is not None:
             params["max_price"] = max_price
         if sort_by:
             params["sort_by"] = sort_by
+        if free_shipping:
+            params["free_shipping"] = "true"
+        if on_sale:
+            params["on_sale"] = "true"
+        if nfpr:
+            params["nfpr"] = nfpr
+        if lr:
+            params["lr"] = lr
+        if tbs:
+            params["tbs"] = tbs
+        if shoprs:
+            params["shoprs"] = shoprs
         return await self._client.get("/v1/google/shopping/search", params=params)
 
     async def product(
@@ -73,63 +108,51 @@ class ShoppingClient:
         product_id: str,
         *,
         gl: str = "us",
+        hl: str = "en",
+        domain: str = "google.com",
     ) -> dict[str, Any]:
-        """Get detailed product information by product ID."""
-        params: dict[str, Any] = {"product_id": product_id, "gl": gl}
+        """Fetch the Google Shopping product detail page.
+
+        Args:
+            product_id: Google Shopping product ID (from search results).
+            gl: Country code.
+            hl: Language code.
+            domain: Google domain.
+        """
+        params: dict[str, Any] = {
+            "product_id": product_id,
+            "gl": gl,
+            "hl": hl,
+            "domain": domain,
+        }
         return await self._client.get("/v1/google/shopping/product", params=params)
 
     async def click(
         self,
-        title: str,
         *,
-        source: str | None = None,
-        q: str | None = None,
+        title: str,
+        source: str,
+        q: str,
         product_id: str | None = None,
-        gl: str = "us",
-        hl: str = "en",
     ) -> dict[str, Any]:
-        """Resolve the real merchant URL for a Shopping product.
+        """Resolve the direct merchant URL for a Shopping product tile.
 
-        Google has removed merchant links from organic Shopping HTML, so
-        this per-product enrichment uses an "I'm Feeling Lucky" redirect
-        (scoped to the card's `source` merchant when known) to return the
-        direct product page URL. Mirrors ScrapingDog's
-        `scrapingdog_immersive_product_link` pattern.
+        Uses Google's "I'm Feeling Lucky" redirect (``btnI=1``) scoped to
+        the card's ``source`` merchant via the ``site:`` operator — so you
+        get the actual merchant product page URL without going through
+        Google's tracking redirect.
 
         Args:
-            title: Exact product title from a search result.
-            source: Merchant source name from the shopping card (e.g.
-                "Walmart", "Best Buy"). When supplied, the lookup is scoped
-                to that merchant via `site:` operator for more accurate
-                matching.
-            q: Original search query (optional, improves disambiguation).
-            product_id: Stable product_id from the search result — echoed
-                back in the response.
-            gl: Country code.
-            hl: Language code.
-
-        Returns:
-            Dict with `product_id`, `title`, `merchant_url`, `merchant_domain`,
-            `source_query`.
-
-        Example:
-            ```python
-            result = await client.google.shopping.click(
-                title='Razer Blade 14" 3K OLED Gaming Laptop',
-                source="Razer.com",
-            )
-            print(result["merchant_url"])
-            # https://www.razer.com/gaming-laptops/razer-blade-14
-            ```
+            title: Product title from the original search result.
+            source: Merchant source name from the search result.
+            q: Original search query (helps Google disambiguate).
+            product_id: Optional product ID for correlation in the response.
         """
-        params: dict[str, Any] = {"title": title, "gl": gl, "hl": hl}
-        if source:
-            params["source"] = source
-        if q:
-            params["q"] = q
-        if product_id:
+        params: dict[str, Any] = {
+            "title": title,
+            "source": source,
+            "q": q,
+        }
+        if product_id is not None:
             params["product_id"] = product_id
-        return await self._client.get(
-            "/v1/google/shopping/product/click",
-            params=params,
-        )
+        return await self._client.get("/v1/google/shopping/product/click", params=params)

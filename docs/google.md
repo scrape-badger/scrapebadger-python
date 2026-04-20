@@ -159,12 +159,12 @@ async with ScrapeBadger(api_key="your-key") as client:
         print(f"{p['title']} — {p['price']['extracted']} from {p['source']} "
               f"({p['rating']}★, {p['reviews']})")
 
-    # Step 2: per-product merchant URL enrichment (1 credit each)
+    # Step 2: per-product merchant URL enrichment (billed per call)
     # Google has removed direct merchant links from organic Shopping HTML.
     # The click endpoint uses an "I'm Feeling Lucky" redirect (scoped to
     # the card's source merchant via the site: operator) to materialize
-    # the real product page URL. Mirrors ScrapingDog's
-    # scrapingdog_immersive_product_link pattern.
+    # the real product page URL. Mirrors 
+    # immersive product link pattern.
     first = products["results"][0]
     enriched = await client.google.shopping.click(
         title=first["title"],
@@ -334,7 +334,7 @@ Google deployed **SearchGuard** in January 2025 — a JavaScript challenge that 
 
 Google has removed direct merchant URLs from organic Shopping HTML — clicking a product card in the real Shopping UI opens a JavaScript modal that only fetches merchant info when you click "Visit site". Capturing that flow in a single synchronous scrape is impractical (~60-90s for 50 products).
 
-Instead, the `shopping/product/click` endpoint exposes per-product merchant URL resolution as an **on-demand call** using Google's "I'm Feeling Lucky" redirect (`btnI=1`), scoped to the card's `source` merchant via a `site:` operator. You only pay for enrichment when you actually need the link (**1 credit per call**).
+Instead, the `shopping/product/click` endpoint exposes per-product merchant URL resolution as an **on-demand call** using Google's "I'm Feeling Lucky" redirect (`btnI=1`), scoped to the card's `source` merchant via a `site:` operator. You only pay for enrichment when you actually need the link — per-call credit cost is configured per-endpoint by admins (query `/public/pricing` for the live rate).
 
 Known source → domain mappings include: Walmart, Best Buy, Amazon, Target, eBay, Newegg, Costco, Home Depot, Lowe's, Staples, Office Depot, Micro Center, Adorama, B&H Photo-Video-Pro Audio, HP, Dell, Lenovo, Apple, Razer, Asus, Acer, HyperX, MSI, Samsung. When the source is not in the map, the endpoint falls back to a bare-title query.
 
