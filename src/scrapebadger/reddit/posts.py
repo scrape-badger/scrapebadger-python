@@ -86,14 +86,13 @@ class PostsClient:
 
     async def get(
         self,
-        subreddit: str,
         post_id: str,
     ) -> PostDetailResponse:
-        """Get a specific Reddit post by subreddit and post ID.
+        """Get a specific Reddit post by post ID.
 
         Args:
-            subreddit: Subreddit name (without r/ prefix).
-            post_id: Post ID (base-36 string, e.g. "abc123").
+            post_id: Post ID (base-36 string, e.g. "abc123"), without the
+                t3_ prefix.
 
         Returns:
             PostDetailResponse with full post data.
@@ -104,17 +103,16 @@ class PostsClient:
 
         Example:
             ```python
-            result = await client.reddit.posts.get("python", "abc123")
+            result = await client.reddit.posts.get("abc123")
             post = result.post
             print(f"{post.title}: {post.score} pts, {post.num_comments} comments")
             ```
         """
-        response = await self._client.get(f"/v1/reddit/posts/{subreddit}/{post_id}")
+        response = await self._client.get(f"/v1/reddit/posts/{post_id}")
         return PostDetailResponse.model_validate(response)
 
     async def comments(
         self,
-        subreddit: str,
         post_id: str,
         *,
         sort: str = "best",
@@ -125,8 +123,8 @@ class PostsClient:
         """Get comments for a Reddit post.
 
         Args:
-            subreddit: Subreddit name (without r/ prefix).
-            post_id: Post ID (base-36 string, e.g. "abc123").
+            post_id: Post ID (base-36 string, e.g. "abc123"), without the
+                t3_ prefix.
             sort: Comment sort order — "best", "top", "new", "controversial",
                 "old", "qa". Defaults to "best".
             limit: Number of top-level comments (1-500). Defaults to 25.
@@ -143,7 +141,6 @@ class PostsClient:
         Example:
             ```python
             result = await client.reddit.posts.comments(
-                "python",
                 "abc123",
                 sort="top",
                 limit=100,
@@ -160,7 +157,7 @@ class PostsClient:
             "after": after,
         }
         response = await self._client.get(
-            f"/v1/reddit/posts/{subreddit}/{post_id}/comments",
+            f"/v1/reddit/posts/{post_id}/comments",
             params=params,
         )
         return PostCommentsResponse.model_validate(response)

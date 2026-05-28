@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.2] - 2026-05-29
+
+### Fixed
+
+- **`client.reddit.posts.get()` and `client.reddit.posts.comments()` were calling the wrong URL** — `/v1/reddit/posts/{subreddit}/{post_id}` (two path segments) instead of the actual API route `/v1/reddit/posts/{post_id}`. Both methods 404'd against the live API in 0.8.0/0.8.1. The `subreddit` positional argument has been **removed** from both methods — call `posts.get(post_id)` and `posts.comments(post_id, ...)`. This is a breaking change for anyone who worked around the bug, but the previous signature never worked against production.
+
 ## [0.8.1] - 2026-05-28
 
 ### Removed

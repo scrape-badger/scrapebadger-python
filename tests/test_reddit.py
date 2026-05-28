@@ -25,7 +25,6 @@ from scrapebadger.reddit.models import (
     RedditAward,
     RedditComment,
     RedditMedia,
-    RedditModerator,
     RedditPost,
     RedditPreviewImage,
     RedditRule,
@@ -35,7 +34,6 @@ from scrapebadger.reddit.models import (
     RedditUserSummary,
     RedditWikiPage,
     SearchPostsResponse,
-    SubredditModeratorResponse,
     SubredditPostsResponse,
     SubredditRulesResponse,
     SubredditsListResponse,
@@ -268,13 +266,6 @@ SAMPLE_TROPHY: dict[str, Any] = {
     "url": None,
 }
 
-SAMPLE_MODERATOR: dict[str, Any] = {
-    "name": "mod1",
-    "id": "t2_mod1",
-    "mod_permissions": ["all"],
-    "date": 1500000000.0,
-}
-
 SEARCH_POSTS_RESPONSE: dict[str, Any] = {
     "posts": [SAMPLE_POST],
     "after": "t3_xyz789",
@@ -345,11 +336,6 @@ SUBREDDITS_LIST_RESPONSE: dict[str, Any] = {
 
 SUBREDDIT_RULES_RESPONSE: dict[str, Any] = {
     "rules": [SAMPLE_RULE],
-    "subreddit": "python",
-}
-
-SUBREDDIT_MODERATOR_RESPONSE: dict[str, Any] = {
-    "moderators": [SAMPLE_MODERATOR],
     "subreddit": "python",
 }
 
@@ -817,26 +803,6 @@ class TestRedditModels:
         with pytest.raises(Exception):  # noqa: B017
             trophy.name = "mutated"  # type: ignore[misc]
 
-    # -- RedditModerator --
-
-    def test_reddit_moderator(self) -> None:
-        mod = RedditModerator.model_validate(SAMPLE_MODERATOR)
-        assert mod.name == "mod1"
-        assert mod.id == "t2_mod1"
-        assert mod.mod_permissions == ["all"]
-        assert mod.date == 1500000000.0
-
-    def test_reddit_moderator_minimal(self) -> None:
-        mod = RedditModerator(name="mod")
-        assert mod.id is None
-        assert mod.mod_permissions == []
-        assert mod.date is None
-
-    def test_reddit_moderator_is_frozen(self) -> None:
-        mod = RedditModerator.model_validate(SAMPLE_MODERATOR)
-        with pytest.raises(Exception):  # noqa: B017
-            mod.name = "mutated"  # type: ignore[misc]
-
     # -- Response envelopes --
 
     def test_search_posts_response(self) -> None:
@@ -910,11 +876,6 @@ class TestRedditModels:
     def test_subreddit_rules_response(self) -> None:
         resp = SubredditRulesResponse.model_validate(SUBREDDIT_RULES_RESPONSE)
         assert len(resp.rules) == 1
-        assert resp.subreddit == "python"
-
-    def test_subreddit_moderator_response(self) -> None:
-        resp = SubredditModeratorResponse.model_validate(SUBREDDIT_MODERATOR_RESPONSE)
-        assert len(resp.moderators) == 1
         assert resp.subreddit == "python"
 
     def test_subreddit_wiki_pages_response(self) -> None:
@@ -1082,26 +1043,26 @@ class TestPostsClient:
 
     async def test_get(self, posts_client: PostsClient, mock_base_client: MagicMock) -> None:
         mock_base_client.get.return_value = POST_DETAIL_RESPONSE
-        result = await posts_client.get("python", "abc123")
+        result = await posts_client.get("abc123")
 
         assert isinstance(result, PostDetailResponse)
         assert result.post is not None
         assert result.post.id == "abc123"
 
         call_args = mock_base_client.get.call_args
-        assert call_args[0][0] == "/v1/reddit/posts/python/abc123"
+        assert call_args[0][0] == "/v1/reddit/posts/abc123"
 
     async def test_comments_default_params(
         self, posts_client: PostsClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = POST_COMMENTS_RESPONSE
-        result = await posts_client.comments("python", "abc123")
+        result = await posts_client.comments("abc123")
 
         assert isinstance(result, PostCommentsResponse)
         assert len(result.comments) == 1
 
         call_args = mock_base_client.get.call_args
-        assert call_args[0][0] == "/v1/reddit/posts/python/abc123/comments"
+        assert call_args[0][0] == "/v1/reddit/posts/abc123/comments"
         params = call_args[1]["params"]
         assert params["sort"] == "best"
         assert params["limit"] == 25
@@ -1110,7 +1071,7 @@ class TestPostsClient:
         self, posts_client: PostsClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = POST_COMMENTS_RESPONSE
-        await posts_client.comments("python", "abc123", sort="top", limit=100, depth=3)
+        await posts_client.comments("abc123", sort="top", limit=100, depth=3)
 
         params = mock_base_client.get.call_args[1]["params"]
         assert params["sort"] == "top"
@@ -1180,16 +1141,6 @@ class TestSubredditsClient:
         assert len(result.rules) == 1
         call_args = mock_base_client.get.call_args
         assert call_args[0][0] == "/v1/reddit/subreddits/python/rules"
-
-    async def test_moderators(
-        self, subreddits_client: SubredditsClient, mock_base_client: MagicMock
-    ) -> None:
-        mock_base_client.get.return_value = SUBREDDIT_MODERATOR_RESPONSE
-        result = await subreddits_client.moderators("python")
-
-        assert isinstance(result, SubredditModeratorResponse)
-        call_args = mock_base_client.get.call_args
-        assert call_args[0][0] == "/v1/reddit/subreddits/python/moderators"
 
     async def test_wiki_pages(
         self, subreddits_client: SubredditsClient, mock_base_client: MagicMock
@@ -1363,9 +1314,6 @@ class TestRedditImports:
 
     def test_reddit_trophy_importable(self) -> None:
         from scrapebadger.reddit import RedditTrophy as _  # noqa: F401
-
-    def test_reddit_moderator_importable(self) -> None:
-        from scrapebadger.reddit import RedditModerator as _  # noqa: F401
 
     def test_reddit_preview_image_importable(self) -> None:
         from scrapebadger.reddit import RedditPreviewImage as _  # noqa: F401
