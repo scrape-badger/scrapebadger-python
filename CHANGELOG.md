@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.3] - 2026-05-29
+
+### Fixed
+
+- **Reddit search & listing methods sent the wrong query-parameter names**, causing a `422 'q' field required` against the live API. The API expects `q` (search query) and `t` (time filter); the SDK was sending `query` and `time_filter`. Fixed across `search.posts`, `search.subreddits`, `search.users`, `search.domain_posts`, `subreddits.posts`, `users.posts`, `users.comments`. The Python keyword arguments are unchanged (`query=`, `time_filter=`) — only the wire params are corrected.
+- **`search.domain_posts()` hit the wrong URL** — `/v1/reddit/search/domain` with `domain` as a query param. The real route is `/v1/reddit/domains/{domain}/posts` (domain is a path segment). Fixed.
+
 ## [0.8.2] - 2026-05-29
 
 ### Fixed

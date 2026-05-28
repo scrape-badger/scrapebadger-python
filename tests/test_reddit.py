@@ -938,9 +938,9 @@ class TestSearchClient:
         call_args = mock_base_client.get.call_args
         assert call_args[0][0] == "/v1/reddit/search/posts"
         params = call_args[1]["params"]
-        assert params["query"] == "python asyncio"
+        assert params["q"] == "python asyncio"
         assert params["sort"] == "relevance"
-        assert params["time_filter"] == "all"
+        assert params["t"] == "all"
         assert params["limit"] == 25
 
     async def test_posts_with_filters(
@@ -959,7 +959,7 @@ class TestSearchClient:
         params = mock_base_client.get.call_args[1]["params"]
         assert params["subreddit"] == "learnpython"
         assert params["sort"] == "new"
-        assert params["time_filter"] == "week"
+        assert params["t"] == "week"
         assert params["limit"] == 50
         assert params["after"] == "t3_abc"
 
@@ -973,7 +973,7 @@ class TestSearchClient:
         call_args = mock_base_client.get.call_args
         assert call_args[0][0] == "/v1/reddit/search/subreddits"
         params = call_args[1]["params"]
-        assert params["query"] == "programming"
+        assert params["q"] == "programming"
         assert params["limit"] == 25
 
     async def test_users_default_params(
@@ -988,7 +988,7 @@ class TestSearchClient:
 
         call_args = mock_base_client.get.call_args
         assert call_args[0][0] == "/v1/reddit/search/users"
-        assert call_args[1]["params"]["query"] == "redditor"
+        assert call_args[1]["params"]["q"] == "redditor"
 
     async def test_domain_posts_default_params(
         self, search_client: SearchClient, mock_base_client: MagicMock
@@ -998,9 +998,8 @@ class TestSearchClient:
 
         assert isinstance(result, SearchPostsResponse)
         call_args = mock_base_client.get.call_args
-        assert call_args[0][0] == "/v1/reddit/search/domain"
+        assert call_args[0][0] == "/v1/reddit/domains/github.com/posts"
         params = call_args[1]["params"]
-        assert params["domain"] == "github.com"
         assert params["sort"] == "relevance"
 
     async def test_posts_returns_search_posts_response(
@@ -1127,7 +1126,7 @@ class TestSubredditsClient:
 
         params = mock_base_client.get.call_args[1]["params"]
         assert params["sort"] == "top"
-        assert params["time_filter"] == "month"
+        assert params["t"] == "month"
         assert params["limit"] == 50
         assert params["after"] == "t3_abc"
 
@@ -1228,7 +1227,7 @@ class TestUsersClient:
 
         params = mock_base_client.get.call_args[1]["params"]
         assert params["sort"] == "top"
-        assert params["time_filter"] == "year"
+        assert params["t"] == "year"
         assert params["limit"] == 10
 
     async def test_comments_default_params(

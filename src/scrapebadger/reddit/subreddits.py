@@ -120,7 +120,7 @@ class SubredditsClient:
         """
         params: dict[str, Any] = {
             "sort": sort,
-            "time_filter": time_filter,
+            "t": time_filter,
             "limit": limit,
             "after": after,
             "before": before,

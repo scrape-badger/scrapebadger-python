@@ -95,10 +95,10 @@ class SearchClient:
             ```
         """
         params: dict[str, Any] = {
-            "query": query,
+            "q": query,
             "subreddit": subreddit,
             "sort": sort,
-            "time_filter": time_filter,
+            "t": time_filter,
             "limit": limit,
             "after": after,
             "before": before,
@@ -134,7 +134,7 @@ class SearchClient:
             ```
         """
         params: dict[str, Any] = {
-            "query": query,
+            "q": query,
             "limit": limit,
             "after": after,
         }
@@ -169,7 +169,7 @@ class SearchClient:
             ```
         """
         params: dict[str, Any] = {
-            "query": query,
+            "q": query,
             "limit": limit,
             "after": after,
         }
@@ -214,11 +214,10 @@ class SearchClient:
             ```
         """
         params: dict[str, Any] = {
-            "domain": domain,
             "sort": sort,
-            "time_filter": time_filter,
+            "t": time_filter,
             "limit": limit,
             "after": after,
         }
-        response = await self._client.get("/v1/reddit/search/domain", params=params)
+        response = await self._client.get(f"/v1/reddit/domains/{domain}/posts", params=params)
         return SearchPostsResponse.model_validate(response)
