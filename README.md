@@ -14,7 +14,7 @@
   <a href="https://mypy-lang.org/"><img src="https://img.shields.io/badge/type%20checked-mypy-blue.svg" alt="Type checked: mypy"></a>
 </p>
 
-The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web scraping APIs for Twitter, Google, Vinted, and more.
+The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web scraping APIs for Twitter, Google, Vinted, Reddit, and more.
 
 ## Features
 
@@ -25,6 +25,7 @@ The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web
 - **37+ Twitter endpoints** - Tweets, users, lists, communities, trends, geo, real-time streams
 - **19 Google product APIs** - Search (with optional deferred AI Overview follow-up), Maps, News, Hotels, Trends (incl. topic autocomplete), Jobs, Shopping (+ merchant URL enrichment), Patents, Scholar (search + profiles + author + author citation + cite formats), Images, Videos, Finance, AI Mode, Lens, **Local Pack**, **Shorts**, **Flights**, Products
 - **Vinted scraping** - Search items, item details, user profiles, brands, colors, markets
+- **Reddit scraping** - Search posts/subreddits/users/domains, subreddit posts, post comments, user profiles, trophies, wiki pages, moderators
 - **Web scraping** - Anti-bot bypass, JS rendering, and AI data extraction
 
 ## Installation
@@ -87,6 +88,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 | **Twitter** | 37+ endpoints for tweets, users, lists, communities, trends, and real-time streams | [Twitter Guide](docs/twitter.md) |
 | **Google** | 19 products — Search, Maps, News, Hotels, Trends, Jobs, Shopping, Patents, Scholar, Images, Videos, Finance, AI Mode, Lens, Autocomplete, Local, Shorts, Flights, Products | [Google Guide](docs/google.md) |
 | **Vinted** | Search items, item details, user profiles, brands, colors, statuses, and markets | [Vinted Guide](docs/vinted.md) |
+| **Reddit** | Search posts, subreddits, users, and domains; fetch post comments, subreddit rules, moderators, wiki pages, user trophies | [Reddit Guide](docs/reddit.md) |
 
 ## Error Handling
 

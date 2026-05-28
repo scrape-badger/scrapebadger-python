@@ -30,16 +30,27 @@ class TrendsClient:
         *,
         geo: str = "",
         date: str = "today 12-m",
+        category: int = 0,
+        gprop: str = "",
     ) -> dict[str, Any]:
         """Interest over time for one or more search terms.
 
         Args:
             q: Up to 5 comma-separated terms.
             geo: Geographic location code (empty = worldwide).
-            date: Time range like "now 1-H", "today 12-m", "all", or
-                custom "YYYY-MM-DD YYYY-MM-DD".
+            date: Time range like ``now 1-H``, ``today 12-m``, ``all``, or
+                custom ``YYYY-MM-DD YYYY-MM-DD``.
+            category: Category filter id (``0`` = all).
+            gprop: Property filter — ``""``, ``images``, ``news``,
+                ``froogle``, or ``youtube``.
         """
-        params: dict[str, Any] = {"q": q, "geo": geo, "date": date}
+        params: dict[str, Any] = {
+            "q": q,
+            "geo": geo,
+            "date": date,
+            "category": category,
+            "gprop": gprop,
+        }
         return await self._client.get("/v1/google/trends/interest", params=params)
 
     async def regions(
@@ -47,9 +58,26 @@ class TrendsClient:
         q: str,
         *,
         geo: str = "",
+        date: str = "today 12-m",
+        resolution: str = "auto",
     ) -> dict[str, Any]:
-        """Interest broken down by region."""
-        params: dict[str, Any] = {"q": q, "geo": geo}
+        """Interest broken down by region for a search term.
+
+        Args:
+            q: Search term.
+            geo: Geographic location (empty = worldwide).
+            date: Time range — same shape as :meth:`interest`.
+            resolution: Region granularity — ``auto`` (default), ``COUNTRY``,
+                ``REGION``, ``DMA`` or ``CITY``. Google has a hierarchy:
+                you can't ask for country-level data inside a specific
+                country, so ``auto`` lets the widget pick.
+        """
+        params: dict[str, Any] = {
+            "q": q,
+            "geo": geo,
+            "date": date,
+            "resolution": resolution,
+        }
         return await self._client.get("/v1/google/trends/regions", params=params)
 
     async def related(
@@ -57,18 +85,33 @@ class TrendsClient:
         q: str,
         *,
         geo: str = "",
+        date: str = "today 12-m",
     ) -> dict[str, Any]:
-        """Related topics and queries for a search term."""
-        params: dict[str, Any] = {"q": q, "geo": geo}
+        """Related topics and queries for a search term.
+
+        Returns both ``related_topics`` (Knowledge Graph entities with
+        ``rising``/``top`` buckets) and ``related_queries`` (string queries
+        with ``rising``/``top`` buckets) in a single response.
+        """
+        params: dict[str, Any] = {"q": q, "geo": geo, "date": date}
         return await self._client.get("/v1/google/trends/related", params=params)
 
     async def trending(
         self,
         *,
         geo: str = "US",
+        hl: str = "en-US",
+        hours: int = 24,
     ) -> dict[str, Any]:
-        """Real-time trending searches for a region (legacy single-param call)."""
-        params: dict[str, Any] = {"geo": geo}
+        """Real-time trending searches via the TrendsUi batchexecute backend.
+
+        Args:
+            geo: Country code (ISO 3166 alpha-2).
+            hl: Language code (e.g. ``en-US``).
+            hours: Look-back window — Google supports ``24`` (default),
+                ``48``, ``168`` (= 1 week).
+        """
+        params: dict[str, Any] = {"geo": geo, "hl": hl, "hours": hours}
         return await self._client.get("/v1/google/trends/trending", params=params)
 
     async def trending_now(

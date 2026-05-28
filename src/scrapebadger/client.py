@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.reddit.client import RedditClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.web.client import WebClient
@@ -114,6 +115,7 @@ class ScrapeBadger:
         self._vinted: VintedClient | None = None
         self._web: WebClient | None = None
         self._google: GoogleClient | None = None
+        self._reddit: RedditClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -171,6 +173,29 @@ class ScrapeBadger:
         if self._vinted is None:
             self._vinted = VintedClient(self._base_client)
         return self._vinted
+
+    @property
+    def reddit(self) -> RedditClient:
+        """Access Reddit scraping operations.
+
+        Returns:
+            RedditClient providing access to all Reddit endpoints.
+
+        Example:
+            ```python
+            # Search posts
+            results = await client.reddit.search.posts("python asyncio")
+
+            # Get subreddit hot posts
+            hot = await client.reddit.subreddits.posts("python", sort="hot")
+
+            # Get user profile
+            profile = await client.reddit.users.get("spez")
+            ```
+        """
+        if self._reddit is None:
+            self._reddit = RedditClient(self._base_client)
+        return self._reddit
 
     @property
     def google(self) -> GoogleClient:

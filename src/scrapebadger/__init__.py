@@ -43,6 +43,36 @@ from scrapebadger._internal.exceptions import (
 from scrapebadger._internal.pagination import PaginatedResponse
 from scrapebadger.client import ScrapeBadger
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.reddit.models import (
+    PostCommentsResponse,
+    PostDetailResponse,
+    PostDuplicatesResponse,
+    RedditComment,
+    RedditModerator,
+    RedditPost,
+    RedditRule,
+    RedditSubreddit,
+    RedditTrophy,
+    RedditUser,
+    RedditWikiPage,
+    SearchPostsResponse,
+    SearchUsersResponse,
+    SubredditDetailResponse,
+    SubredditModeratorResponse,
+    SubredditPostsResponse,
+    SubredditRulesResponse,
+    SubredditsListResponse,
+    SubredditWikiPageResponse,
+    SubredditWikiPagesResponse,
+    TrendingPostsResponse,
+    UserCommentsResponse,
+    UserModeratedResponse,
+    UserPostsResponse,
+    UserTrophiesResponse,
+)
+from scrapebadger.reddit.models import (
+    UserProfileResponse as RedditUserProfileResponse,
+)
 from scrapebadger.vinted.models import (
     BrandsResponse,
     ColorsResponse,
@@ -86,17 +116,45 @@ __all__ = [
     "NotFoundError",
     # Pagination
     "PaginatedResponse",
+    # Reddit response envelopes
+    "PostCommentsResponse",
+    "PostDetailResponse",
+    "PostDuplicatesResponse",
     "RateLimitError",
+    # Reddit core models
+    "RedditComment",
+    "RedditModerator",
+    "RedditPost",
+    "RedditRule",
+    "RedditSubreddit",
+    "RedditTrophy",
+    "RedditUser",
+    "RedditUserProfileResponse",
+    "RedditWikiPage",
     # Main client
     "ScrapeBadger",
     # Exceptions
     "ScrapeBadgerError",
     "ScrapeResult",
+    "SearchPostsResponse",
     "SearchResponse",
+    "SearchUsersResponse",
     "ServerError",
     "StatusesResponse",
+    "SubredditDetailResponse",
+    "SubredditModeratorResponse",
+    "SubredditPostsResponse",
+    "SubredditRulesResponse",
+    "SubredditWikiPageResponse",
+    "SubredditWikiPagesResponse",
+    "SubredditsListResponse",
+    "TrendingPostsResponse",
+    "UserCommentsResponse",
     "UserItemsResponse",
+    "UserModeratedResponse",
+    "UserPostsResponse",
     "UserProfileResponse",
+    "UserTrophiesResponse",
     "ValidationError",
     # Vinted reference models
     "VintedBrand",

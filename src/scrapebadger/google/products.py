@@ -43,12 +43,14 @@ class ProductsClient:
         q: str | None = None,
         gl: str = "us",
         hl: str = "en",
+        domain: str = "google.com",
         catalog_id: str | None = None,
         image_docid: str | None = None,
         headline_offer_docid: str | None = None,
         mid: str | None = None,
         include_offers: bool = False,
         include_variants: bool = False,
+        resolve_deep_urls: bool = False,
     ) -> dict[str, Any]:
         """Get deep product details from Google's immersive product page.
 
@@ -62,6 +64,9 @@ class ProductsClient:
                 alone.
             gl: Country code (ISO 3166 alpha-2).
             hl: Language code.
+            domain: Google domain used to localise the SERP that yields the
+                ``/async/oapv`` session tokens (``google.com`` /
+                ``google.co.uk`` / …).
             catalog_id, image_docid, headline_offer_docid, mid: Extra
                 identifiers Google surfaces on each Shopping tile.
                 Passing them through improves routing accuracy.
@@ -69,6 +74,14 @@ class ProductsClient:
                 the merchant offers list (doubles latency).
             include_variants: When True, also fetches ``/async/toy_v`` for
                 size/colour variants.
+            resolve_deep_urls: Only meaningful with ``include_offers=True``.
+                When True, browser-renders the Shopping SERP so additional
+                merchant deep URLs surface from the rendered HTML. Adds
+                ~5-8 s latency. Best-effort: catalog-feed retailers (DSW,
+                Famous Footwear, etc.) get deep URLs; paid-Shopping-Ads
+                merchants (Zappos, GOAT, Academy, …) still get their
+                homepage because their click-through URLs are signed by
+                Google's aclk redirect and can't be reproduced server-side.
 
         Returns:
             Response with ``title``, ``brand``, ``rating``,
@@ -80,6 +93,7 @@ class ProductsClient:
             "product_id": product_id,
             "gl": gl,
             "hl": hl,
+            "domain": domain,
         }
         if q is not None:
             params["q"] = q
@@ -95,4 +109,6 @@ class ProductsClient:
             params["include_offers"] = "true"
         if include_variants:
             params["include_variants"] = "true"
+        if resolve_deep_urls:
+            params["resolve_deep_urls"] = "true"
         return await self._client.get("/v1/google/products/detail", params=params)
