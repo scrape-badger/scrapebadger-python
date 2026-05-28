@@ -6,7 +6,7 @@ All models are immutable (frozen) and use strict validation for type safety.
 Models are organised into:
 - Nested models: RedditPreviewImage, RedditMedia, RedditAward, RedditUserSummary
 - Core models: RedditPost, RedditComment, RedditSubreddit, RedditUser
-- Reference models: RedditRule, RedditWikiPage, RedditTrophy, RedditModerator
+- Reference models: RedditRule, RedditWikiPage, RedditTrophy
 - Response envelopes: SearchPostsResponse, SubredditPostsResponse, etc.
 """
 
@@ -554,22 +554,6 @@ class RedditTrophy(_BaseModel):
     url: str | None = None
 
 
-class RedditModerator(_BaseModel):
-    """A subreddit moderator entry.
-
-    Attributes:
-        name: Moderator username.
-        id: User fullname.
-        mod_permissions: List of granted moderator permissions.
-        date: UTC epoch timestamp when moderator was added.
-    """
-
-    name: str
-    id: str | None = None
-    mod_permissions: list[str] = Field(default_factory=list)
-    date: float | None = None
-
-
 # =============================================================================
 # Response Envelopes
 # =============================================================================
@@ -754,18 +738,6 @@ class SubredditRulesResponse(_BaseModel):
     """
 
     rules: list[RedditRule] = Field(default_factory=list)
-    subreddit: str = ""
-
-
-class SubredditModeratorResponse(_BaseModel):
-    """Response from the subreddit moderators endpoint.
-
-    Attributes:
-        moderators: List of moderators.
-        subreddit: Subreddit name.
-    """
-
-    moderators: list[RedditModerator] = Field(default_factory=list)
     subreddit: str = ""
 
 

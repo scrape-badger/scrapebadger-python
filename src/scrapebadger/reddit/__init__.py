@@ -32,7 +32,6 @@ from scrapebadger.reddit.models import (
     RedditAward,
     RedditComment,
     RedditMedia,
-    RedditModerator,
     RedditPost,
     RedditPreviewImage,
     RedditRule,
@@ -44,7 +43,6 @@ from scrapebadger.reddit.models import (
     SearchPostsResponse,
     SearchUsersResponse,
     SubredditDetailResponse,
-    SubredditModeratorResponse,
     SubredditPostsResponse,
     SubredditRulesResponse,
     SubredditsListResponse,
@@ -70,7 +68,6 @@ __all__ = [
     # Core models
     "RedditComment",
     "RedditMedia",
-    "RedditModerator",
     "RedditPost",
     "RedditPreviewImage",
     # Reference models
@@ -85,7 +82,6 @@ __all__ = [
     "SearchUsersResponse",
     # Response envelopes — subreddits
     "SubredditDetailResponse",
-    "SubredditModeratorResponse",
     "SubredditPostsResponse",
     "SubredditRulesResponse",
     "SubredditWikiPageResponse",

@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Any
 
 from scrapebadger.reddit.models import (
     SubredditDetailResponse,
-    SubredditModeratorResponse,
     SubredditPostsResponse,
     SubredditRulesResponse,
     SubredditsListResponse,
@@ -154,29 +153,6 @@ class SubredditsClient:
         """
         response = await self._client.get(f"/v1/reddit/subreddits/{subreddit}/rules")
         return SubredditRulesResponse.model_validate(response)
-
-    async def moderators(self, subreddit: str) -> SubredditModeratorResponse:
-        """Get the moderator list for a subreddit.
-
-        Args:
-            subreddit: Subreddit name (without r/ prefix).
-
-        Returns:
-            SubredditModeratorResponse with list of moderators.
-
-        Raises:
-            NotFoundError: If the subreddit doesn't exist.
-            AuthenticationError: If the API key is invalid.
-
-        Example:
-            ```python
-            result = await client.reddit.subreddits.moderators("python")
-            for mod in result.moderators:
-                print(f"  u/{mod.name}: {mod.mod_permissions}")
-            ```
-        """
-        response = await self._client.get(f"/v1/reddit/subreddits/{subreddit}/moderators")
-        return SubredditModeratorResponse.model_validate(response)
 
     async def wiki_pages(self, subreddit: str) -> SubredditWikiPagesResponse:
         """Get the list of wiki page names for a subreddit.

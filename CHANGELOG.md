@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-05-28
+
+### Removed
+
+- **`client.reddit.subreddits.moderators(...)`** — Reddit gated the moderator listing behind authentication in 2024. There is no public path that yields the data. Removed the method along with `RedditModerator` and `SubredditModeratorResponse` types rather than ship a permanently-broken endpoint.
+
+### Fixed
+
+- `client.reddit.search.subreddits(...)` no longer crashes when Reddit returns banned/quarantined subreddits with `null` values for required-typed fields (previously raised a backend 500 / ValidationError).
+
 ## [0.8.0] - 2026-05-28
 
 ### Added
