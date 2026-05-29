@@ -22,16 +22,12 @@ from scrapebadger.reddit.models import (
     PostCommentsResponse,
     PostDetailResponse,
     PostDuplicatesResponse,
-    RedditAward,
     RedditComment,
-    RedditMedia,
     RedditPost,
-    RedditPreviewImage,
     RedditRule,
     RedditSubreddit,
     RedditTrophy,
     RedditUser,
-    RedditUserSummary,
     RedditWikiPage,
     SearchPostsResponse,
     SubredditPostsResponse,
@@ -52,7 +48,8 @@ from scrapebadger.reddit.subreddits import SubredditsClient
 from scrapebadger.reddit.users import UsersClient
 
 # ---------------------------------------------------------------------------
-# Shared sample data — field names match the canonical backend model exactly
+# Shared sample data — field names match the canonical backend model exactly.
+# Only fields available via old.reddit.com HTML/RSS are present (0.9.0+).
 # ---------------------------------------------------------------------------
 
 SAMPLE_POST: dict[str, Any] = {
@@ -66,62 +63,23 @@ SAMPLE_POST: dict[str, Any] = {
     "domain": "self.python",
     "author": "user42",
     "author_fullname": "t2_user42",
-    "author_flair_text": "Python Dev",
-    "author_flair_type": "text",
-    "author_flair_template_id": "aaaaaaaa-0000-0000-0000-000000000000",
     "subreddit": "python",
     "subreddit_id": "t5_2qh0y",
     "subreddit_name_prefixed": "r/python",
     "subreddit_type": "public",
-    "subreddit_subscribers": 1500000,
     "score": 1234,
-    "ups": 1300,
-    "downs": 66,
-    "upvote_ratio": 0.97,
     "num_comments": 56,
     "num_crossposts": 3,
-    "num_duplicates": 2,
-    "view_count": 9876,
     "created_utc": 1700000000.0,
     "created_at": "2023-11-14T22:13:20+00:00",
-    "edited": False,
-    "edited_at": None,
     "is_self": True,
-    "is_video": False,
     "is_gallery": False,
     "is_nsfw": False,
     "is_spoiler": False,
-    "is_locked": False,
     "is_stickied": False,
-    "is_archived": False,
-    "is_pinned": False,
     "is_original_content": True,
-    "is_robot_indexable": True,
-    "is_meta": False,
-    "is_crosspostable": True,
-    "send_replies": True,
     "link_flair_text": "Discussion",
-    "link_flair_background_color": "#ff4500",
-    "link_flair_text_color": "light",
-    "link_flair_template_id": "bbbbbbbb-0000-0000-0000-000000000000",
-    "link_flair_type": "text",
-    "link_flair_css_class": "discussion",
-    "distinguished": None,
-    "thumbnail": "self",
-    "thumbnail_width": 140,
-    "thumbnail_height": 105,
-    "post_hint": None,
-    "preview_images": [{"url": "https://preview.redd.it/img.jpg", "width": 640, "height": 480}],
-    "media": None,
-    "gallery_data": None,
-    "crosspost_parent": None,
-    "suggested_sort": "top",
-    "total_awards": 2,
-    "awards": [{"name": "Helpful", "count": 1, "icon_url": "https://icon.url/helpful.png"}],
     "gilded": 0,
-    "content_categories": None,
-    "removed_by_category": None,
-    "treatment_tags": ["tag_a", "tag_b"],
 }
 
 SAMPLE_COMMENT: dict[str, Any] = {
@@ -131,33 +89,16 @@ SAMPLE_COMMENT: dict[str, Any] = {
     "body_html": "<p>Great post!</p>",
     "author": "commenter1",
     "author_fullname": "t2_commenter1",
-    "author_flair_text": None,
-    "author_flair_type": "text",
     "subreddit": "python",
     "subreddit_id": "t5_2qh0y",
     "subreddit_name_prefixed": "r/python",
-    "subreddit_type": "public",
     "post_id": "abc123",
-    "post_title": "Hello Reddit",
-    "parent_id": "t3_abc123",
     "permalink": "/r/python/comments/abc123/hello_reddit/cmt001/",
     "score": 42,
-    "ups": 45,
-    "downs": 3,
-    "controversiality": 0,
     "depth": 0,
     "created_utc": 1700001000.0,
     "created_at": "2023-11-14T22:30:00+00:00",
-    "edited": False,
-    "edited_at": None,
-    "is_submitter": False,
     "is_stickied": False,
-    "is_locked": False,
-    "is_score_hidden": False,
-    "send_replies": True,
-    "distinguished": None,
-    "total_awards": 0,
-    "gilded": 0,
     "replies": [],
 }
 
@@ -168,87 +109,28 @@ SAMPLE_SUBREDDIT: dict[str, Any] = {
     "display_name_prefixed": "r/python",
     "title": "Python - The programming language",
     "description": "News about the dynamic, interpreted programming language Python",
-    "description_html": "<p>News about the dynamic, interpreted programming language Python</p>",
     "public_description": "Python news",
-    "public_description_html": "<p>Python news</p>",
-    "submit_text": "Submit a post",
-    "submit_text_html": "<p>Submit a post</p>",
-    "header_title": "Python",
     "url": "/r/python/",
-    "type": "public",
-    "submission_type": "any",
-    "subscribers": 1500000,
-    "active_users": 3200,
     "created_utc": 1200000000.0,
     "created_at": "2008-01-11T00:00:00+00:00",
     "is_nsfw": False,
-    "is_quarantined": False,
-    "is_advertiser_friendly": True,
-    "advertiser_category": "Technology",
-    "language": "en",
-    "icon_url": "https://styles.redditmedia.com/icon.png",
-    "header_url": None,
-    "banner_url": None,
-    "banner_background_color": "#ffffff",
-    "primary_color": "#ff4500",
-    "key_color": "#ff4500",
-    "wiki_enabled": True,
-    "allow_images": True,
-    "allow_videos": False,
-    "allow_galleries": True,
-    "allow_polls": False,
-    "allow_discovery": True,
-    "spoilers_enabled": True,
-    "emojis_enabled": False,
-    "free_form_reports": True,
-    "accept_followers": True,
-    "restrict_posting": False,
-    "link_flair_enabled": True,
-    "link_flair_position": "left",
-    "user_flair_enabled": True,
-    "user_flair_position": "right",
-    "comment_score_hide_mins": 60,
-    "should_archive_posts": True,
-    "allowed_media_in_comments": ["gif", "image"],
 }
 
 SAMPLE_USER: dict[str, Any] = {
-    "id": "usr001",
-    "fullname": "t2_usr001",
     "name": "redditor42",
     "display_name_prefixed": "u/redditor42",
-    "icon_url": "https://www.redditstatic.com/avatars/avatar.png",
-    "snoovatar_url": "https://www.redditstatic.com/snoovatar/avatar.png",
-    "banner_url": None,
-    "profile_title": "All about Python",
-    "profile_url": "/user/redditor42/",
-    "description": "Python enthusiast",
     "link_karma": 5000,
     "comment_karma": 12000,
-    "awardee_karma": 100,
-    "awarder_karma": 50,
-    "total_karma": 17150,
+    "total_karma": 17000,
     "created_utc": 1400000000.0,
     "created_at": "2014-05-13T16:53:20+00:00",
-    "has_verified_email": True,
-    "verified": True,
-    "accepts_followers": True,
-    "has_subscribed": False,
-    "is_employee": False,
-    "is_mod": True,
     "is_gold": False,
-    "is_suspended": False,
-    "is_nsfw": False,
-    "pref_show_snoovatar": True,
 }
 
 SAMPLE_RULE: dict[str, Any] = {
+    "priority": 1,
     "short_name": "Be nice",
     "description": "Treat others with respect",
-    "description_html": "<p>Treat others with respect</p>",
-    "kind": "all",
-    "priority": 1,
-    "violation_reason": "Being mean",
 }
 
 SAMPLE_WIKI_PAGE: dict[str, Any] = {
@@ -401,74 +283,6 @@ def users_client(mock_base_client: MagicMock) -> UsersClient:
 class TestRedditModels:
     """Pydantic model construction, validation, and immutability tests."""
 
-    # -- RedditPreviewImage --
-
-    def test_reddit_preview_image(self) -> None:
-        img = RedditPreviewImage(url="https://example.com/img.jpg", width=640, height=480)
-        assert img.url == "https://example.com/img.jpg"
-        assert img.width == 640
-        assert img.height == 480
-
-    def test_reddit_preview_image_is_frozen(self) -> None:
-        img = RedditPreviewImage(url="https://example.com/img.jpg", width=1, height=1)
-        with pytest.raises(Exception):  # noqa: B017
-            img.url = "mutated"  # type: ignore[misc]
-
-    # -- RedditMedia --
-
-    def test_reddit_media_full(self) -> None:
-        media = RedditMedia(
-            type="youtube.com",
-            url="https://youtube.com/watch?v=abc",
-            thumbnail_url="https://img.youtube.com/thumb.jpg",
-            width=1280,
-            height=720,
-        )
-        assert media.type == "youtube.com"
-        assert media.width == 1280
-
-    def test_reddit_media_minimal(self) -> None:
-        media = RedditMedia()
-        assert media.type is None
-        assert media.url is None
-        assert media.width is None
-
-    # -- RedditAward --
-
-    def test_reddit_award_full(self) -> None:
-        award = RedditAward(
-            id="award_helpful",
-            name="Helpful",
-            count=2,
-            icon_url="https://icon.url/helpful.png",
-        )
-        assert award.id == "award_helpful"
-        assert award.count == 2
-
-    def test_reddit_award_minimal(self) -> None:
-        award = RedditAward(name="Gold")
-        assert award.count == 1
-        assert award.id is None
-
-    # -- RedditUserSummary --
-
-    def test_reddit_user_summary_full(self) -> None:
-        summary = RedditUserSummary(
-            name="user42",
-            id="t2_user42",
-            icon_url="https://icon.url/avatar.png",
-            link_karma=100,
-            comment_karma=200,
-            created_utc=1400000000.0,
-        )
-        assert summary.name == "user42"
-        assert summary.link_karma == 100
-
-    def test_reddit_user_summary_minimal(self) -> None:
-        summary = RedditUserSummary(name="user")
-        assert summary.link_karma == 0
-        assert summary.id is None
-
     # -- RedditPost --
 
     def test_reddit_post_full(self) -> None:
@@ -476,46 +290,30 @@ class TestRedditModels:
         assert post.id == "abc123"
         assert post.fullname == "t3_abc123"
         assert post.title == "Hello Reddit"
+        assert post.selftext == "This is the post body"
+        assert post.selftext_html == "<p>This is the post body</p>"
+        assert post.url == "https://www.reddit.com/r/python/comments/abc123/hello_reddit/"
+        assert post.permalink == "/r/python/comments/abc123/hello_reddit/"
+        assert post.domain == "self.python"
         assert post.author == "user42"
         assert post.author_fullname == "t2_user42"
-        assert post.author_flair_text == "Python Dev"
-        assert post.author_flair_type == "text"
-        assert post.author_flair_template_id == "aaaaaaaa-0000-0000-0000-000000000000"
         assert post.subreddit == "python"
+        assert post.subreddit_id == "t5_2qh0y"
         assert post.subreddit_name_prefixed == "r/python"
         assert post.subreddit_type == "public"
-        assert post.subreddit_subscribers == 1500000
         assert post.score == 1234
-        assert post.ups == 1300
-        assert post.downs == 66
-        assert post.upvote_ratio == 0.97
         assert post.num_comments == 56
         assert post.num_crossposts == 3
-        assert post.num_duplicates == 2
-        assert post.view_count == 9876
+        assert post.created_utc == 1700000000.0
         assert post.created_at == "2023-11-14T22:13:20+00:00"
+        assert post.is_self is True
+        assert post.is_gallery is False
         assert post.is_nsfw is False
         assert post.is_spoiler is False
-        assert post.is_locked is False
         assert post.is_stickied is False
-        assert post.is_pinned is False
-        assert post.is_robot_indexable is True
-        assert post.is_meta is False
-        assert post.is_crosspostable is True
-        assert post.send_replies is True
+        assert post.is_original_content is True
         assert post.link_flair_text == "Discussion"
-        assert post.link_flair_text_color == "light"
-        assert post.link_flair_template_id == "bbbbbbbb-0000-0000-0000-000000000000"
-        assert post.link_flair_type == "text"
-        assert post.link_flair_css_class == "discussion"
-        assert post.thumbnail_width == 140
-        assert post.thumbnail_height == 105
-        assert post.suggested_sort == "top"
-        assert post.treatment_tags == ["tag_a", "tag_b"]
-        assert len(post.preview_images) == 1
-        assert post.preview_images[0].width == 640
-        assert len(post.awards) == 1
-        assert post.awards[0].name == "Helpful"
+        assert post.gilded == 0
 
     def test_reddit_post_minimal(self) -> None:
         post = RedditPost(id="x1", title="Test")
@@ -525,21 +323,14 @@ class TestRedditModels:
         assert post.link_flair_text is None
         assert post.fullname == ""
         assert post.num_crossposts == 0
-        assert post.view_count is None
         assert post.created_at is None
-        assert post.is_pinned is False
-        assert post.is_robot_indexable is True
-        assert post.is_meta is False
-        assert post.is_crosspostable is False
-        assert post.send_replies is False
-        assert post.link_flair_text_color is None
-        assert post.link_flair_template_id is None
-        assert post.link_flair_type is None
-        assert post.link_flair_css_class is None
-        assert post.thumbnail_width is None
-        assert post.thumbnail_height is None
-        assert post.suggested_sort is None
-        assert post.treatment_tags == []
+        assert post.is_self is False
+        assert post.is_gallery is False
+        assert post.is_nsfw is False
+        assert post.is_spoiler is False
+        assert post.is_stickied is False
+        assert post.is_original_content is False
+        assert post.gilded == 0
 
     def test_reddit_post_is_frozen(self) -> None:
         post = RedditPost.model_validate(SAMPLE_POST)
@@ -551,17 +342,51 @@ class TestRedditModels:
         post = RedditPost.model_validate(data)
         assert post.id == "abc123"
 
-    def test_reddit_post_preview_images_parsed(self) -> None:
+    def test_reddit_post_removed_fields_absent(self) -> None:
+        """Fields removed in 0.9.0 must not be present on the model."""
         post = RedditPost.model_validate(SAMPLE_POST)
-        img = post.preview_images[0]
-        assert isinstance(img, RedditPreviewImage)
-        assert img.url == "https://preview.redd.it/img.jpg"
-
-    def test_reddit_post_awards_parsed(self) -> None:
-        post = RedditPost.model_validate(SAMPLE_POST)
-        award = post.awards[0]
-        assert isinstance(award, RedditAward)
-        assert award.count == 1
+        for attr in (
+            "ups",
+            "downs",
+            "upvote_ratio",
+            "view_count",
+            "num_duplicates",
+            "edited",
+            "edited_at",
+            "is_video",
+            "is_locked",
+            "is_archived",
+            "is_pinned",
+            "is_robot_indexable",
+            "is_meta",
+            "is_crosspostable",
+            "send_replies",
+            "link_flair_background_color",
+            "link_flair_text_color",
+            "link_flair_template_id",
+            "link_flair_type",
+            "link_flair_css_class",
+            "distinguished",
+            "thumbnail",
+            "thumbnail_width",
+            "thumbnail_height",
+            "post_hint",
+            "preview_images",
+            "media",
+            "gallery_data",
+            "crosspost_parent",
+            "suggested_sort",
+            "total_awards",
+            "awards",
+            "content_categories",
+            "removed_by_category",
+            "treatment_tags",
+            "subreddit_subscribers",
+            "author_flair_text",
+            "author_flair_type",
+            "author_flair_template_id",
+        ):
+            assert not hasattr(post, attr), f"RedditPost should not have field: {attr}"
 
     # -- RedditComment --
 
@@ -571,38 +396,33 @@ class TestRedditModels:
         assert comment.fullname == "t1_cmt001"
         assert comment.author == "commenter1"
         assert comment.author_fullname == "t2_commenter1"
-        assert comment.author_flair_type == "text"
         assert comment.body == "Great post!"
         assert comment.body_html == "<p>Great post!</p>"
         assert comment.subreddit == "python"
         assert comment.subreddit_id == "t5_2qh0y"
         assert comment.subreddit_name_prefixed == "r/python"
-        assert comment.subreddit_type == "public"
+        assert comment.post_id == "abc123"
+        assert comment.permalink == "/r/python/comments/abc123/hello_reddit/cmt001/"
         assert comment.score == 42
-        assert comment.ups == 45
-        assert comment.downs == 3
         assert comment.depth == 0
-        assert comment.parent_id == "t3_abc123"
+        assert comment.created_utc == 1700001000.0
         assert comment.created_at == "2023-11-14T22:30:00+00:00"
-        assert comment.send_replies is True
-        assert comment.is_score_hidden is False
+        assert comment.is_stickied is False
         assert comment.replies == []
 
     def test_reddit_comment_minimal(self) -> None:
         comment = RedditComment(id="c1")
         assert comment.score == 0
-        assert comment.is_submitter is False
-        assert comment.distinguished is None
         assert comment.depth == 0
         assert comment.fullname == ""
         assert comment.body == ""
-        assert comment.author_flair_type is None
+        assert comment.author_fullname is None
         assert comment.subreddit_id is None
         assert comment.subreddit_name_prefixed is None
-        assert comment.subreddit_type is None
+        assert comment.post_id is None
         assert comment.created_at is None
-        assert comment.edited_at is None
-        assert comment.send_replies is False
+        assert comment.is_stickied is False
+        assert comment.replies == []
 
     def test_reddit_comment_is_frozen(self) -> None:
         comment = RedditComment.model_validate(SAMPLE_COMMENT)
@@ -619,6 +439,30 @@ class TestRedditModels:
         assert len(comment.replies) == 1
         assert comment.replies[0].id == "cmt001"
 
+    def test_reddit_comment_removed_fields_absent(self) -> None:
+        """Fields removed in 0.9.0 must not be present on the model."""
+        comment = RedditComment.model_validate(SAMPLE_COMMENT)
+        for attr in (
+            "ups",
+            "downs",
+            "controversiality",
+            "edited",
+            "edited_at",
+            "gilded",
+            "is_locked",
+            "is_score_hidden",
+            "is_submitter",
+            "parent_id",
+            "post_title",
+            "send_replies",
+            "subreddit_type",
+            "total_awards",
+            "distinguished",
+            "author_flair_text",
+            "author_flair_type",
+        ):
+            assert not hasattr(comment, attr), f"RedditComment should not have field: {attr}"
+
     # -- RedditSubreddit --
 
     def test_reddit_subreddit_full(self) -> None:
@@ -627,142 +471,148 @@ class TestRedditModels:
         assert sub.fullname == "t5_2qh0y"
         assert sub.name == "python"
         assert sub.display_name_prefixed == "r/python"
+        assert sub.title == "Python - The programming language"
+        assert sub.description == "News about the dynamic, interpreted programming language Python"
         assert sub.public_description == "Python news"
-        assert sub.public_description_html == "<p>Python news</p>"
-        assert sub.submit_text == "Submit a post"
-        assert sub.submit_text_html == "<p>Submit a post</p>"
-        assert sub.header_title == "Python"
-        assert sub.subscribers == 1500000
-        assert sub.active_users == 3200
+        assert sub.url == "/r/python/"
+        assert sub.created_utc == 1200000000.0
         assert sub.created_at == "2008-01-11T00:00:00+00:00"
         assert sub.is_nsfw is False
-        assert sub.is_advertiser_friendly is True
-        assert sub.advertiser_category == "Technology"
-        assert sub.header_url is None
-        assert sub.banner_background_color == "#ffffff"
-        assert sub.allow_discovery is True
-        assert sub.spoilers_enabled is True
-        assert sub.emojis_enabled is False
-        assert sub.free_form_reports is True
-        assert sub.accept_followers is True
-        assert sub.restrict_posting is False
-        assert sub.link_flair_enabled is True
-        assert sub.link_flair_position == "left"
-        assert sub.user_flair_enabled is True
-        assert sub.user_flair_position == "right"
-        assert sub.comment_score_hide_mins == 60
-        assert sub.should_archive_posts is True
-        assert sub.allowed_media_in_comments == ["gif", "image"]
 
     def test_reddit_subreddit_minimal(self) -> None:
         sub = RedditSubreddit(id="s1", name="test")
-        assert sub.subscribers == 0
         assert sub.is_nsfw is False
-        assert sub.icon_url is None
         assert sub.fullname == ""
         assert sub.display_name_prefixed is None
-        assert sub.public_description_html is None
-        assert sub.submit_text == ""
-        assert sub.submit_text_html is None
-        assert sub.header_title is None
-        assert sub.is_advertiser_friendly is True
-        assert sub.advertiser_category is None
+        assert sub.public_description == ""
+        assert sub.description == ""
         assert sub.created_at is None
-        assert sub.header_url is None
-        assert sub.banner_background_color is None
-        assert sub.allow_discovery is True
-        assert sub.spoilers_enabled is False
-        assert sub.emojis_enabled is False
-        assert sub.free_form_reports is True
-        assert sub.accept_followers is True
-        assert sub.restrict_posting is False
-        assert sub.link_flair_enabled is False
-        assert sub.link_flair_position is None
-        assert sub.user_flair_enabled is False
-        assert sub.user_flair_position is None
-        assert sub.comment_score_hide_mins == 0
-        assert sub.should_archive_posts is False
-        assert sub.allowed_media_in_comments == []
 
     def test_reddit_subreddit_is_frozen(self) -> None:
         sub = RedditSubreddit.model_validate(SAMPLE_SUBREDDIT)
         with pytest.raises(Exception):  # noqa: B017
             sub.name = "mutated"  # type: ignore[misc]
 
+    def test_reddit_subreddit_removed_fields_absent(self) -> None:
+        """Fields removed in 0.9.0 must not be present on the model."""
+        sub = RedditSubreddit.model_validate(SAMPLE_SUBREDDIT)
+        for attr in (
+            "subscribers",
+            "active_users",
+            "description_html",
+            "public_description_html",
+            "submit_text",
+            "submit_text_html",
+            "header_title",
+            "type",
+            "submission_type",
+            "is_quarantined",
+            "is_advertiser_friendly",
+            "advertiser_category",
+            "language",
+            "icon_url",
+            "header_url",
+            "banner_url",
+            "banner_background_color",
+            "primary_color",
+            "key_color",
+            "wiki_enabled",
+            "allow_images",
+            "allow_videos",
+            "allow_galleries",
+            "allow_polls",
+            "allow_discovery",
+            "spoilers_enabled",
+            "emojis_enabled",
+            "free_form_reports",
+            "accept_followers",
+            "restrict_posting",
+            "link_flair_enabled",
+            "link_flair_position",
+            "user_flair_enabled",
+            "user_flair_position",
+            "comment_score_hide_mins",
+            "should_archive_posts",
+            "allowed_media_in_comments",
+        ):
+            assert not hasattr(sub, attr), f"RedditSubreddit should not have field: {attr}"
+
     # -- RedditUser --
 
     def test_reddit_user_full(self) -> None:
         user = RedditUser.model_validate(SAMPLE_USER)
-        assert user.id == "usr001"
-        assert user.fullname == "t2_usr001"
         assert user.name == "redditor42"
         assert user.display_name_prefixed == "u/redditor42"
-        assert user.icon_url == "https://www.redditstatic.com/avatars/avatar.png"
-        assert user.snoovatar_url == "https://www.redditstatic.com/snoovatar/avatar.png"
-        assert user.banner_url is None
-        assert user.profile_title == "All about Python"
-        assert user.profile_url == "/user/redditor42/"
         assert user.link_karma == 5000
         assert user.comment_karma == 12000
-        assert user.awardee_karma == 100
-        assert user.awarder_karma == 50
-        assert user.total_karma == 17150
+        assert user.total_karma == 17000
+        assert user.created_utc == 1400000000.0
         assert user.created_at == "2014-05-13T16:53:20+00:00"
-        assert user.has_verified_email is True
-        assert user.verified is True
-        assert user.accepts_followers is True
-        assert user.has_subscribed is False
-        assert user.is_mod is True
         assert user.is_gold is False
-        assert user.is_suspended is False
-        assert user.pref_show_snoovatar is True
 
     def test_reddit_user_minimal(self) -> None:
-        user = RedditUser(id="u1", name="user")
+        user = RedditUser(name="user")
         assert user.link_karma == 0
         assert user.comment_karma == 0
+        assert user.total_karma == 0
         assert user.is_gold is False
-        assert user.is_mod is False
-        assert user.fullname is None
         assert user.display_name_prefixed is None
-        assert user.snoovatar_url is None
-        assert user.banner_url is None
-        assert user.profile_title is None
-        assert user.profile_url is None
         assert user.created_at is None
-        assert user.verified is False
-        assert user.accepts_followers is False
-        assert user.has_subscribed is False
-        assert user.pref_show_snoovatar is False
 
     def test_reddit_user_is_frozen(self) -> None:
         user = RedditUser.model_validate(SAMPLE_USER)
         with pytest.raises(Exception):  # noqa: B017
             user.name = "mutated"  # type: ignore[misc]
 
+    def test_reddit_user_removed_fields_absent(self) -> None:
+        """Fields removed in 0.9.0 must not be present on the model."""
+        user = RedditUser.model_validate(SAMPLE_USER)
+        for attr in (
+            "id",
+            "fullname",
+            "description",
+            "icon_url",
+            "snoovatar_url",
+            "banner_url",
+            "profile_title",
+            "profile_url",
+            "awardee_karma",
+            "awarder_karma",
+            "has_verified_email",
+            "verified",
+            "accepts_followers",
+            "has_subscribed",
+            "is_employee",
+            "is_mod",
+            "is_suspended",
+            "is_nsfw",
+            "pref_show_snoovatar",
+        ):
+            assert not hasattr(user, attr), f"RedditUser should not have field: {attr}"
+
     # -- RedditRule --
 
     def test_reddit_rule(self) -> None:
         rule = RedditRule.model_validate(SAMPLE_RULE)
+        assert rule.priority == 1
         assert rule.short_name == "Be nice"
         assert rule.description == "Treat others with respect"
-        assert rule.description_html == "<p>Treat others with respect</p>"
-        assert rule.kind == "all"
-        assert rule.priority == 1
-        assert rule.violation_reason == "Being mean"
 
     def test_reddit_rule_minimal(self) -> None:
         rule = RedditRule(short_name="Rule 1")
         assert rule.description == ""
-        assert rule.description_html is None
-        assert rule.kind == "all"
         assert rule.priority == 0
-        assert rule.violation_reason is None
 
     def test_reddit_rule_is_frozen(self) -> None:
         rule = RedditRule.model_validate(SAMPLE_RULE)
         with pytest.raises(Exception):  # noqa: B017
             rule.short_name = "mutated"  # type: ignore[misc]
+
+    def test_reddit_rule_removed_fields_absent(self) -> None:
+        """Fields removed in 0.9.0 must not be present on the model."""
+        rule = RedditRule.model_validate(SAMPLE_RULE)
+        for attr in ("description_html", "kind", "violation_reason"):
+            assert not hasattr(rule, attr), f"RedditRule should not have field: {attr}"
 
     # -- RedditWikiPage --
 
@@ -770,6 +620,7 @@ class TestRedditModels:
         page = RedditWikiPage.model_validate(SAMPLE_WIKI_PAGE)
         assert page.title == "rules"
         assert page.content_md == "# Rules\n\n- Be nice"
+        assert page.content_html == "<h1>Rules</h1><ul><li>Be nice</li></ul>"
         assert page.revision_by == "moderator1"
         assert page.revision_date == 1700000000.0
 
@@ -789,6 +640,7 @@ class TestRedditModels:
     def test_reddit_trophy(self) -> None:
         trophy = RedditTrophy.model_validate(SAMPLE_TROPHY)
         assert trophy.name == "Verified Email"
+        assert trophy.description == "Verified Email"
         assert trophy.icon_url == "https://www.redditstatic.com/awards/trophies/email.png"
         assert trophy.url is None
 
@@ -1314,17 +1166,8 @@ class TestRedditImports:
     def test_reddit_trophy_importable(self) -> None:
         from scrapebadger.reddit import RedditTrophy as _  # noqa: F401
 
-    def test_reddit_preview_image_importable(self) -> None:
-        from scrapebadger.reddit import RedditPreviewImage as _  # noqa: F401
-
-    def test_reddit_media_importable(self) -> None:
-        from scrapebadger.reddit import RedditMedia as _  # noqa: F401
-
-    def test_reddit_award_importable(self) -> None:
-        from scrapebadger.reddit import RedditAward as _  # noqa: F401
-
-    def test_reddit_user_summary_importable(self) -> None:
-        from scrapebadger.reddit import RedditUserSummary as _  # noqa: F401
+    def test_reddit_pagination_importable(self) -> None:
+        from scrapebadger.reddit import RedditPagination as _  # noqa: F401
 
     def test_search_posts_response_importable(self) -> None:
         from scrapebadger.reddit import SearchPostsResponse as _  # noqa: F401
@@ -1346,3 +1189,11 @@ class TestRedditImports:
 
     def test_top_level_reddit_user_importable(self) -> None:
         from scrapebadger import RedditUser as _  # noqa: F401
+
+    def test_removed_models_not_importable(self) -> None:
+        """Helper models deleted in 0.9.0 must not be importable."""
+        import importlib
+
+        models_mod = importlib.import_module("scrapebadger.reddit.models")
+        for name in ("RedditPreviewImage", "RedditMedia", "RedditAward", "RedditUserSummary"):
+            assert not hasattr(models_mod, name), f"{name} should have been removed in 0.9.0"

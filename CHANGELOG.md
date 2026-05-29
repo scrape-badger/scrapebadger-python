@@ -5,6 +5,58 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-05-29
+
+### Changed (Breaking)
+
+- **Reddit response models trimmed to fields available via old.reddit.com HTML/RSS** — after Reddit
+  deprecated the unauthenticated `.json` API, the ScrapeBadger backend switched to scraping
+  `old.reddit.com` HTML and RSS feeds. Fields that Reddit no longer exposes through that source have
+  been removed from all models to keep the SDK types in sync with what the API actually returns.
+  Consuming code that accessed removed fields will receive `AttributeError` at runtime.
+
+  **`RedditPost`** — removed: `ups`, `downs`, `upvote_ratio`, `view_count`, `num_duplicates`,
+  `edited`, `edited_at`, `is_video`, `is_locked`, `is_archived`, `is_pinned`,
+  `is_robot_indexable`, `is_meta`, `is_crosspostable`, `send_replies`,
+  `author_flair_text`, `author_flair_type`, `author_flair_template_id`,
+  `link_flair_background_color`, `link_flair_text_color`, `link_flair_template_id`,
+  `link_flair_type`, `link_flair_css_class`, `distinguished`, `thumbnail`,
+  `thumbnail_width`, `thumbnail_height`, `post_hint`, `preview_images`, `media`,
+  `gallery_data`, `crosspost_parent`, `suggested_sort`, `total_awards`, `awards`,
+  `content_categories`, `removed_by_category`, `treatment_tags`, `subreddit_subscribers`.
+
+  **`RedditComment`** — removed: `ups`, `downs`, `controversiality`, `edited`, `edited_at`,
+  `gilded`, `is_locked`, `is_score_hidden`, `is_submitter`, `parent_id`, `post_title`,
+  `send_replies`, `subreddit_type`, `total_awards`, `distinguished`,
+  `author_flair_text`, `author_flair_type`.
+
+  **`RedditSubreddit`** — removed: `subscribers`, `active_users`, `description_html`,
+  `public_description_html`, `submit_text`, `submit_text_html`, `header_title`, `type`,
+  `submission_type`, `is_quarantined`, `is_advertiser_friendly`, `advertiser_category`,
+  `language`, `icon_url`, `header_url`, `banner_url`, `banner_background_color`,
+  `primary_color`, `key_color`, `wiki_enabled`, `allow_images`, `allow_videos`,
+  `allow_galleries`, `allow_polls`, `allow_discovery`, `spoilers_enabled`,
+  `emojis_enabled`, `free_form_reports`, `accept_followers`, `restrict_posting`,
+  `link_flair_enabled`, `link_flair_position`, `user_flair_enabled`,
+  `user_flair_position`, `comment_score_hide_mins`, `should_archive_posts`,
+  `allowed_media_in_comments`.
+
+  **`RedditUser`** — removed: `id`, `fullname`, `description`, `icon_url`, `snoovatar_url`,
+  `banner_url`, `profile_title`, `profile_url`, `awardee_karma`, `awarder_karma`,
+  `has_verified_email`, `verified`, `accepts_followers`, `has_subscribed`, `is_employee`,
+  `is_mod`, `is_suspended`, `is_nsfw`, `pref_show_snoovatar`.
+
+  **`RedditRule`** — removed: `description_html`, `kind`, `violation_reason`.
+
+- **Helper models deleted** — `RedditPreviewImage`, `RedditMedia`, `RedditAward`, and
+  `RedditUserSummary` are no longer exported (they were only used by removed fields).
+  Remove any imports of these names from consuming code.
+
+### Added
+
+- `RedditPagination` — new standalone pagination model (`after`, `before`, `count`, `limit`)
+  exported from `scrapebadger.reddit`.
+
 ## [0.8.3] - 2026-05-29
 
 ### Fixed
