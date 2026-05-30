@@ -434,9 +434,9 @@ class TestRedditModels:
             "banned_by",
             "mod_note",
         ):
-            assert not hasattr(
-                comment, attr
-            ), f"RedditComment should not expose viewer/mod field: {attr}"
+            assert not hasattr(comment, attr), (
+                f"RedditComment should not expose viewer/mod field: {attr}"
+            )
 
     # -- RedditSubreddit --
 
@@ -481,9 +481,7 @@ class TestRedditModels:
             "user_flair_text",
             "user_sr_theme_enabled",
         ):
-            assert not hasattr(
-                sub, attr
-            ), f"RedditSubreddit should not expose viewer field: {attr}"
+            assert not hasattr(sub, attr), f"RedditSubreddit should not expose viewer field: {attr}"
 
     # -- RedditUser --
 
@@ -523,7 +521,9 @@ class TestRedditModels:
             "pref_show_snoovatar",
             "snoovatar_size",
         ):
-            assert not hasattr(user, attr), f"RedditUser should not expose viewer/pref field: {attr}"
+            assert not hasattr(user, attr), (
+                f"RedditUser should not expose viewer/pref field: {attr}"
+            )
 
     # -- RedditRule --
 
