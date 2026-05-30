@@ -342,51 +342,32 @@ class TestRedditModels:
         post = RedditPost.model_validate(data)
         assert post.id == "abc123"
 
-    def test_reddit_post_removed_fields_absent(self) -> None:
-        """Fields removed in 0.9.0 must not be present on the model."""
+    def test_reddit_post_excluded_fields_absent(self) -> None:
+        """Per-viewer-session and mod-only fields are intentionally NOT exposed.
+
+        Since 0.10.0 the model carries the full .json *content* field set; the
+        only deliberate omissions are fields tied to the scraping account's
+        relationship to the content (viewer-session) or mod-only audit fields.
+        """
         post = RedditPost.model_validate(SAMPLE_POST)
         for attr in (
-            "ups",
-            "downs",
-            "upvote_ratio",
-            "view_count",
-            "num_duplicates",
-            "edited",
-            "edited_at",
-            "is_video",
-            "is_locked",
-            "is_archived",
-            "is_pinned",
-            "is_robot_indexable",
-            "is_meta",
-            "is_crosspostable",
-            "send_replies",
-            "link_flair_background_color",
-            "link_flair_text_color",
-            "link_flair_template_id",
-            "link_flair_type",
-            "link_flair_css_class",
-            "distinguished",
-            "thumbnail",
-            "thumbnail_width",
-            "thumbnail_height",
-            "post_hint",
-            "preview_images",
-            "media",
-            "gallery_data",
-            "crosspost_parent",
-            "suggested_sort",
-            "total_awards",
-            "awards",
-            "content_categories",
-            "removed_by_category",
-            "treatment_tags",
-            "subreddit_subscribers",
-            "author_flair_text",
-            "author_flair_type",
-            "author_flair_template_id",
+            "saved",
+            "likes",
+            "clicked",
+            "visited",
+            "hidden",
+            "user_reports",
+            "mod_reports",
+            "num_reports",
+            "report_reasons",
+            "approved_by",
+            "approved_at_utc",
+            "banned_by",
+            "banned_at_utc",
+            "removed_by",
+            "mod_note",
         ):
-            assert not hasattr(post, attr), f"RedditPost should not have field: {attr}"
+            assert not hasattr(post, attr), f"RedditPost should not expose viewer/mod field: {attr}"
 
     # -- RedditComment --
 
@@ -439,29 +420,23 @@ class TestRedditModels:
         assert len(comment.replies) == 1
         assert comment.replies[0].id == "cmt001"
 
-    def test_reddit_comment_removed_fields_absent(self) -> None:
-        """Fields removed in 0.9.0 must not be present on the model."""
+    def test_reddit_comment_excluded_fields_absent(self) -> None:
+        """Per-viewer-session and mod-only comment fields are intentionally omitted."""
         comment = RedditComment.model_validate(SAMPLE_COMMENT)
         for attr in (
-            "ups",
-            "downs",
-            "controversiality",
-            "edited",
-            "edited_at",
-            "gilded",
-            "is_locked",
-            "is_score_hidden",
-            "is_submitter",
-            "parent_id",
-            "post_title",
-            "send_replies",
-            "subreddit_type",
-            "total_awards",
-            "distinguished",
-            "author_flair_text",
-            "author_flair_type",
+            "saved",
+            "likes",
+            "user_reports",
+            "mod_reports",
+            "num_reports",
+            "report_reasons",
+            "approved_by",
+            "banned_by",
+            "mod_note",
         ):
-            assert not hasattr(comment, attr), f"RedditComment should not have field: {attr}"
+            assert not hasattr(
+                comment, attr
+            ), f"RedditComment should not expose viewer/mod field: {attr}"
 
     # -- RedditSubreddit --
 
@@ -493,49 +468,22 @@ class TestRedditModels:
         with pytest.raises(Exception):  # noqa: B017
             sub.name = "mutated"  # type: ignore[misc]
 
-    def test_reddit_subreddit_removed_fields_absent(self) -> None:
-        """Fields removed in 0.9.0 must not be present on the model."""
+    def test_reddit_subreddit_excluded_fields_absent(self) -> None:
+        """Per-viewer (user_*) subreddit fields are intentionally omitted."""
         sub = RedditSubreddit.model_validate(SAMPLE_SUBREDDIT)
         for attr in (
-            "subscribers",
-            "active_users",
-            "description_html",
-            "public_description_html",
-            "submit_text",
-            "submit_text_html",
-            "header_title",
-            "type",
-            "submission_type",
-            "is_quarantined",
-            "is_advertiser_friendly",
-            "advertiser_category",
-            "language",
-            "icon_url",
-            "header_url",
-            "banner_url",
-            "banner_background_color",
-            "primary_color",
-            "key_color",
-            "wiki_enabled",
-            "allow_images",
-            "allow_videos",
-            "allow_galleries",
-            "allow_polls",
-            "allow_discovery",
-            "spoilers_enabled",
-            "emojis_enabled",
-            "free_form_reports",
-            "accept_followers",
-            "restrict_posting",
-            "link_flair_enabled",
-            "link_flair_position",
-            "user_flair_enabled",
-            "user_flair_position",
-            "comment_score_hide_mins",
-            "should_archive_posts",
-            "allowed_media_in_comments",
+            "user_is_banned",
+            "user_is_contributor",
+            "user_is_moderator",
+            "user_is_subscriber",
+            "user_is_muted",
+            "user_has_favorited",
+            "user_flair_text",
+            "user_sr_theme_enabled",
         ):
-            assert not hasattr(sub, attr), f"RedditSubreddit should not have field: {attr}"
+            assert not hasattr(
+                sub, attr
+            ), f"RedditSubreddit should not expose viewer field: {attr}"
 
     # -- RedditUser --
 
@@ -564,31 +512,18 @@ class TestRedditModels:
         with pytest.raises(Exception):  # noqa: B017
             user.name = "mutated"  # type: ignore[misc]
 
-    def test_reddit_user_removed_fields_absent(self) -> None:
-        """Fields removed in 0.9.0 must not be present on the model."""
+    def test_reddit_user_excluded_fields_absent(self) -> None:
+        """Per-viewer / preference user fields are intentionally omitted."""
         user = RedditUser.model_validate(SAMPLE_USER)
         for attr in (
-            "id",
-            "fullname",
-            "description",
-            "icon_url",
-            "snoovatar_url",
-            "banner_url",
-            "profile_title",
-            "profile_url",
-            "awardee_karma",
-            "awarder_karma",
-            "has_verified_email",
-            "verified",
-            "accepts_followers",
+            "is_blocked",
+            "accept_pms",
+            "accept_chats",
             "has_subscribed",
-            "is_employee",
-            "is_mod",
-            "is_suspended",
-            "is_nsfw",
             "pref_show_snoovatar",
+            "snoovatar_size",
         ):
-            assert not hasattr(user, attr), f"RedditUser should not have field: {attr}"
+            assert not hasattr(user, attr), f"RedditUser should not expose viewer/pref field: {attr}"
 
     # -- RedditRule --
 
@@ -608,11 +543,11 @@ class TestRedditModels:
         with pytest.raises(Exception):  # noqa: B017
             rule.short_name = "mutated"  # type: ignore[misc]
 
-    def test_reddit_rule_removed_fields_absent(self) -> None:
-        """Fields removed in 0.9.0 must not be present on the model."""
+    def test_reddit_rule_full_fields_present(self) -> None:
+        """Since 0.10.0 the rule model carries the full .json field set."""
         rule = RedditRule.model_validate(SAMPLE_RULE)
-        for attr in ("description_html", "kind", "violation_reason"):
-            assert not hasattr(rule, attr), f"RedditRule should not have field: {attr}"
+        for attr in ("description_html", "kind", "violation_reason", "created_utc"):
+            assert hasattr(rule, attr), f"RedditRule should expose field: {attr}"
 
     # -- RedditWikiPage --
 
@@ -1195,5 +1130,7 @@ class TestRedditImports:
         import importlib
 
         models_mod = importlib.import_module("scrapebadger.reddit.models")
-        for name in ("RedditPreviewImage", "RedditMedia", "RedditAward", "RedditUserSummary"):
+        # RedditAward was re-introduced in 0.10.0 (all_awardings coverage); the
+        # other helper models remain removed.
+        for name in ("RedditPreviewImage", "RedditMedia", "RedditUserSummary"):
             assert not hasattr(models_mod, name), f"{name} should have been removed in 0.9.0"
