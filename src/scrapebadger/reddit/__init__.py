@@ -29,13 +29,16 @@ from scrapebadger.reddit.models import (
     PostCommentsResponse,
     PostDetailResponse,
     PostDuplicatesResponse,
+    RedditAward,
     RedditComment,
+    RedditModeratedSubreddit,
     RedditPagination,
     RedditPost,
     RedditRule,
     RedditSubreddit,
     RedditTrophy,
     RedditUser,
+    RedditUserSubreddit,
     RedditWikiPage,
     SearchPostsResponse,
     SearchUsersResponse,
@@ -58,17 +61,20 @@ __all__ = [
     "PostCommentsResponse",
     "PostDetailResponse",
     "PostDuplicatesResponse",
+    # Reference models
+    "RedditAward",
     # Client
     "RedditClient",
     # Core models
     "RedditComment",
+    "RedditModeratedSubreddit",
     "RedditPagination",
     "RedditPost",
-    # Reference models
     "RedditRule",
     "RedditSubreddit",
     "RedditTrophy",
     "RedditUser",
+    "RedditUserSubreddit",
     "RedditWikiPage",
     # Response envelopes — search
     "SearchPostsResponse",
