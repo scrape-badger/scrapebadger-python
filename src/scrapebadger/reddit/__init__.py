@@ -61,6 +61,8 @@ __all__ = [
     "PostCommentsResponse",
     "PostDetailResponse",
     "PostDuplicatesResponse",
+    # Reference models
+    "RedditAward",
     # Client
     "RedditClient",
     # Core models
@@ -68,13 +70,11 @@ __all__ = [
     "RedditModeratedSubreddit",
     "RedditPagination",
     "RedditPost",
-    "RedditUserSubreddit",
-    # Reference models
-    "RedditAward",
     "RedditRule",
     "RedditSubreddit",
     "RedditTrophy",
     "RedditUser",
+    "RedditUserSubreddit",
     "RedditWikiPage",
     # Response envelopes — search
     "SearchPostsResponse",
