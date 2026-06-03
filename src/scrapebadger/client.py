@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
+from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.twitter.client import TwitterClient
@@ -116,6 +117,7 @@ class ScrapeBadger:
         self._web: WebClient | None = None
         self._google: GoogleClient | None = None
         self._reddit: RedditClient | None = None
+        self._amazon: AmazonClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -223,6 +225,32 @@ class ScrapeBadger:
         if self._google is None:
             self._google = GoogleClient(self._base_client)
         return self._google
+
+    @property
+    def amazon(self) -> AmazonClient:
+        """Access Amazon Scraper API operations.
+
+        Returns:
+            AmazonClient providing access to all 14 Amazon endpoints.
+
+        Example:
+            ```python
+            # Search for products
+            results = await client.amazon.search.search("wireless headphones")
+
+            # Get product detail
+            detail = await client.amazon.products.get("B08N5WRWNW")
+
+            # Get bestsellers
+            top = await client.amazon.listings.bestsellers(category="electronics")
+
+            # Get a seller profile
+            seller = await client.amazon.sellers.get("A2L77EE7U53NWQ")
+            ```
+        """
+        if self._amazon is None:
+            self._amazon = AmazonClient(self._base_client)
+        return self._amazon
 
     async def close(self) -> None:
         """Close the client and release resources.

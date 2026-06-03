@@ -41,6 +41,46 @@ from scrapebadger._internal.exceptions import (
     WebSocketStreamError,
 )
 from scrapebadger._internal.pagination import PaginatedResponse
+from scrapebadger.amazon.client import AmazonClient
+from scrapebadger.amazon.models import (
+    AmazonPrice,
+    Bestseller,
+    BestsellersResponse,
+    CategoriesResponse,
+    CategoryResponse,
+    Deal,
+    DealsResponse,
+    MarketInfo,
+    NewReleasesResponse,
+    Offer,
+    OffersResponse,
+    Product,
+    ProductDetailResponse,
+    Review,
+    ReviewsResponse,
+    Seller,
+    SellerFeedbackResponse,
+    SellerProductsResponse,
+    SellerProfileResponse,
+)
+from scrapebadger.amazon.models import (
+    AutocompleteResponse as AmazonAutocompleteResponse,
+)
+from scrapebadger.amazon.models import (
+    CategoryInfo as AmazonCategoryInfo,
+)
+from scrapebadger.amazon.models import (
+    MarketsResponse as AmazonMarketsResponse,
+)
+from scrapebadger.amazon.models import (
+    Pagination as AmazonPagination,
+)
+from scrapebadger.amazon.models import (
+    SearchResponse as AmazonSearchResponse,
+)
+from scrapebadger.amazon.models import (
+    SearchResult as AmazonSearchResult,
+)
 from scrapebadger.client import ScrapeBadger
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.reddit.models import (
@@ -98,29 +138,50 @@ from scrapebadger.vinted.models import (
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
 
-__version__ = "0.1.1"
+__version__ = "0.11.0"
 
 __all__ = [
+    # Amazon
+    "AmazonAutocompleteResponse",
+    "AmazonCategoryInfo",
+    "AmazonClient",
+    "AmazonMarketsResponse",
+    "AmazonPagination",
+    "AmazonPrice",
+    "AmazonSearchResponse",
+    "AmazonSearchResult",
     "AuthenticationError",
+    "Bestseller",
+    "BestsellersResponse",
     # Vinted response envelopes
     "BrandsResponse",
+    "CategoriesResponse",
+    "CategoryResponse",
     # Configuration
     "ClientConfig",
     "ColorsResponse",
+    "Deal",
+    "DealsResponse",
     # Web scraping
     "DetectResult",
     # Google Scraper
     "GoogleClient",
     "InsufficientCreditsError",
     "ItemDetailResponse",
+    "MarketInfo",
     "MarketsResponse",
+    "NewReleasesResponse",
     "NotFoundError",
+    "Offer",
+    "OffersResponse",
     # Pagination
     "PaginatedResponse",
     # Reddit response envelopes
     "PostCommentsResponse",
     "PostDetailResponse",
     "PostDuplicatesResponse",
+    "Product",
+    "ProductDetailResponse",
     "RateLimitError",
     # Reddit core models
     "RedditAward",
@@ -134,6 +195,8 @@ __all__ = [
     "RedditUserProfileResponse",
     "RedditUserSubreddit",
     "RedditWikiPage",
+    "Review",
+    "ReviewsResponse",
     # Main client
     "ScrapeBadger",
     # Exceptions
@@ -142,6 +205,10 @@ __all__ = [
     "SearchPostsResponse",
     "SearchResponse",
     "SearchUsersResponse",
+    "Seller",
+    "SellerFeedbackResponse",
+    "SellerProductsResponse",
+    "SellerProfileResponse",
     "ServerError",
     "StatusesResponse",
     "SubredditDetailResponse",

@@ -89,6 +89,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 | **Google** | 19 products — Search, Maps, News, Hotels, Trends, Jobs, Shopping, Patents, Scholar, Images, Videos, Finance, AI Mode, Lens, Autocomplete, Local, Shorts, Flights, Products | [Google Guide](docs/google.md) |
 | **Vinted** | Search items, item details, user profiles, brands, colors, statuses, and markets | [Vinted Guide](docs/vinted.md) |
 | **Reddit** | Search posts, subreddits, users, and domains; fetch post comments, subreddit rules, moderators, wiki pages, user trophies | [Reddit Guide](docs/reddit.md) |
+| **Amazon** | 14 endpoints — search, autocomplete, product detail, offers, reviews, bestsellers, new releases, deals, category browse, seller profile/products/feedback, markets, categories | [Amazon Guide](docs/amazon.md) |
 
 ## Error Handling
 
