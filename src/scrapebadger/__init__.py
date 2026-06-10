@@ -138,7 +138,7 @@ from scrapebadger.vinted.models import (
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
 
-__version__ = "0.11.0"
+__version__ = "0.12.0"
 
 __all__ = [
     # Amazon
