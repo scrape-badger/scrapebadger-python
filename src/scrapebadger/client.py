@@ -12,6 +12,7 @@ from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.reddit.client import RedditClient
+from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.web.client import WebClient
@@ -118,6 +119,7 @@ class ScrapeBadger:
         self._google: GoogleClient | None = None
         self._reddit: RedditClient | None = None
         self._amazon: AmazonClient | None = None
+        self._tiktok: TikTokClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -251,6 +253,32 @@ class ScrapeBadger:
         if self._amazon is None:
             self._amazon = AmazonClient(self._base_client)
         return self._amazon
+
+    @property
+    def tiktok(self) -> TikTokClient:
+        """Access TikTok Scraper API operations.
+
+        Returns:
+            TikTokClient providing access to all 25 TikTok endpoints.
+
+        Example:
+            ```python
+            # Get a user profile
+            profile = await client.tiktok.users.get_profile("charlidamelio")
+
+            # Get video detail
+            video = await client.tiktok.videos.get_detail("7212345678901234567")
+
+            # Search videos
+            results = await client.tiktok.search.videos("cooking")
+
+            # Trending songs
+            songs = await client.tiktok.trending.songs(region="GB")
+            ```
+        """
+        if self._tiktok is None:
+            self._tiktok = TikTokClient(self._base_client)
+        return self._tiktok
 
     async def close(self) -> None:
         """Close the client and release resources.

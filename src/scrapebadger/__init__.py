@@ -114,6 +114,66 @@ from scrapebadger.reddit.models import (
 from scrapebadger.reddit.models import (
     UserProfileResponse as RedditUserProfileResponse,
 )
+from scrapebadger.tiktok.client import TikTokClient
+from scrapebadger.tiktok.models import (
+    AdLibraryPage,
+    AdLibrarySearchResponse,
+    RegionInfo,
+    TikTokAd,
+    TikTokAdVideo,
+    TikTokAuthor,
+    TikTokComment,
+    TikTokCursorPage,
+    TikTokHashtag,
+    TikTokMusic,
+    TikTokOEmbed,
+    TikTokStats,
+    TikTokTrendingHashtag,
+    TikTokTrendingSong,
+    TikTokUser,
+    TikTokUserStats,
+    TikTokVideo,
+    TikTokVideoMeta,
+)
+from scrapebadger.tiktok.models import (
+    CommentListResponse as TikTokCommentListResponse,
+)
+from scrapebadger.tiktok.models import (
+    HashtagResponse as TikTokHashtagResponse,
+)
+from scrapebadger.tiktok.models import (
+    HashtagSearchResponse as TikTokHashtagSearchResponse,
+)
+from scrapebadger.tiktok.models import (
+    MusicResponse as TikTokMusicResponse,
+)
+from scrapebadger.tiktok.models import (
+    ProfileResponse as TikTokProfileResponse,
+)
+from scrapebadger.tiktok.models import (
+    RegionsResponse as TikTokRegionsResponse,
+)
+from scrapebadger.tiktok.models import (
+    TranscriptResponse as TikTokTranscriptResponse,
+)
+from scrapebadger.tiktok.models import (
+    TrendingHashtagsResponse as TikTokTrendingHashtagsResponse,
+)
+from scrapebadger.tiktok.models import (
+    TrendingSongsResponse as TikTokTrendingSongsResponse,
+)
+from scrapebadger.tiktok.models import (
+    UserListResponse as TikTokUserListResponse,
+)
+from scrapebadger.tiktok.models import (
+    UserSearchResponse as TikTokUserSearchResponse,
+)
+from scrapebadger.tiktok.models import (
+    VideoListResponse as TikTokVideoListResponse,
+)
+from scrapebadger.tiktok.models import (
+    VideoResponse as TikTokVideoResponse,
+)
 from scrapebadger.vinted.models import (
     BrandsResponse,
     ColorsResponse,
@@ -138,9 +198,12 @@ from scrapebadger.vinted.models import (
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
 
-__version__ = "0.12.0"
+__version__ = "0.13.0"
 
 __all__ = [
+    # TikTok core models
+    "AdLibraryPage",
+    "AdLibrarySearchResponse",
     # Amazon
     "AmazonAutocompleteResponse",
     "AmazonCategoryInfo",
@@ -195,6 +258,7 @@ __all__ = [
     "RedditUserProfileResponse",
     "RedditUserSubreddit",
     "RedditWikiPage",
+    "RegionInfo",
     "Review",
     "ReviewsResponse",
     # Main client
@@ -217,6 +281,37 @@ __all__ = [
     "SubredditWikiPageResponse",
     "SubredditWikiPagesResponse",
     "SubredditsListResponse",
+    "TikTokAd",
+    "TikTokAdVideo",
+    "TikTokAuthor",
+    # TikTok client
+    "TikTokClient",
+    "TikTokComment",
+    # TikTok response envelopes
+    "TikTokCommentListResponse",
+    "TikTokCursorPage",
+    "TikTokHashtag",
+    "TikTokHashtagResponse",
+    "TikTokHashtagSearchResponse",
+    "TikTokMusic",
+    "TikTokMusicResponse",
+    "TikTokOEmbed",
+    "TikTokProfileResponse",
+    "TikTokRegionsResponse",
+    "TikTokStats",
+    "TikTokTranscriptResponse",
+    "TikTokTrendingHashtag",
+    "TikTokTrendingHashtagsResponse",
+    "TikTokTrendingSong",
+    "TikTokTrendingSongsResponse",
+    "TikTokUser",
+    "TikTokUserListResponse",
+    "TikTokUserSearchResponse",
+    "TikTokUserStats",
+    "TikTokVideo",
+    "TikTokVideoListResponse",
+    "TikTokVideoMeta",
+    "TikTokVideoResponse",
     "TrendingPostsResponse",
     "UserCommentsResponse",
     "UserItemsResponse",
