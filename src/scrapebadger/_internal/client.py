@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.3.1"
+SDK_VERSION = "0.13.1"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 

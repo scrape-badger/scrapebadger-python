@@ -198,7 +198,7 @@ from scrapebadger.vinted.models import (
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
 
-__version__ = "0.13.0"
+__version__ = "0.13.1"
 
 __all__ = [
     # TikTok core models
