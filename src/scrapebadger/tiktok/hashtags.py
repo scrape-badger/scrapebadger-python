@@ -66,6 +66,7 @@ class HashtagsClient:
         *,
         region: str = "US",
         count: int = 30,
+        cursor: str | None = None,
     ) -> VideoListResponse:
         """Get videos tagged with a TikTok hashtag.
 
@@ -73,10 +74,12 @@ class HashtagsClient:
             name: The hashtag name (without the leading '#').
             region: Content region. Defaults to "US".
             count: Number of videos to return (1-50). Defaults to 30.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Video list response with videos and pagination metadata.
         """
-        params: dict[str, Any] = {"region": region, "count": count}
+        params: dict[str, Any] = {"region": region, "count": count, "cursor": cursor}
         response = await self._client.get(f"/v1/tiktok/hashtags/{name}/videos", params=params)
         return VideoListResponse.model_validate(response)

@@ -84,7 +84,8 @@ class UsersClient:
             username: The TikTok @handle.
             region: Content region. Defaults to "US".
             count: Number of videos to return (1-50). Defaults to 30.
-            cursor: Opaque pagination cursor from a previous page.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Video list response with videos and pagination metadata.

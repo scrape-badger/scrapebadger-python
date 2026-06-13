@@ -48,6 +48,7 @@ class SearchClient:
         *,
         region: str = "US",
         count: int = 20,
+        cursor: str | None = None,
     ) -> VideoListResponse:
         """General TikTok search — video results from the Top feed.
 
@@ -55,11 +56,18 @@ class SearchClient:
             query: Search keyword.
             region: Content region. Defaults to "US".
             count: Number of results to return (1-50). Defaults to 20.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Video list response with results and pagination metadata.
         """
-        params: dict[str, Any] = {"query": query, "region": region, "count": count}
+        params: dict[str, Any] = {
+            "query": query,
+            "region": region,
+            "count": count,
+            "cursor": cursor,
+        }
         response = await self._client.get("/v1/tiktok/search", params=params)
         return VideoListResponse.model_validate(response)
 
@@ -69,6 +77,7 @@ class SearchClient:
         *,
         region: str = "US",
         count: int = 20,
+        cursor: str | None = None,
     ) -> VideoListResponse:
         """Search TikTok videos by keyword.
 
@@ -76,11 +85,18 @@ class SearchClient:
             query: Search keyword.
             region: Content region. Defaults to "US".
             count: Number of results to return (1-50). Defaults to 20.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Video list response with matching videos and pagination metadata.
         """
-        params: dict[str, Any] = {"query": query, "region": region, "count": count}
+        params: dict[str, Any] = {
+            "query": query,
+            "region": region,
+            "count": count,
+            "cursor": cursor,
+        }
         response = await self._client.get("/v1/tiktok/search/videos", params=params)
         return VideoListResponse.model_validate(response)
 
@@ -90,6 +106,7 @@ class SearchClient:
         *,
         region: str = "US",
         count: int = 20,
+        cursor: str | None = None,
     ) -> HashtagSearchResponse:
         """Search TikTok hashtags by keyword.
 
@@ -97,11 +114,18 @@ class SearchClient:
             query: Search keyword.
             region: Content region. Defaults to "US".
             count: Number of results to return (1-50). Defaults to 20.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Hashtag search response with matching hashtags and pagination metadata.
         """
-        params: dict[str, Any] = {"query": query, "region": region, "count": count}
+        params: dict[str, Any] = {
+            "query": query,
+            "region": region,
+            "count": count,
+            "cursor": cursor,
+        }
         response = await self._client.get("/v1/tiktok/search/hashtags", params=params)
         return HashtagSearchResponse.model_validate(response)
 
@@ -111,6 +135,7 @@ class SearchClient:
         *,
         region: str = "US",
         count: int = 20,
+        cursor: str | None = None,
     ) -> UserSearchResponse:
         """Search TikTok users by keyword.
 
@@ -118,10 +143,17 @@ class SearchClient:
             query: Search keyword.
             region: Content region. Defaults to "US".
             count: Number of results to return (1-50). Defaults to 20.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             User search response with matching authors and pagination metadata.
         """
-        params: dict[str, Any] = {"query": query, "region": region, "count": count}
+        params: dict[str, Any] = {
+            "query": query,
+            "region": region,
+            "count": count,
+            "cursor": cursor,
+        }
         response = await self._client.get("/v1/tiktok/search/users", params=params)
         return UserSearchResponse.model_validate(response)

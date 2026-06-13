@@ -80,6 +80,7 @@ class VideosClient:
         *,
         region: str = "US",
         count: int = 20,
+        cursor: str | None = None,
     ) -> CommentListResponse:
         """Get top-level comments on a TikTok video.
 
@@ -87,11 +88,13 @@ class VideosClient:
             video_id: The TikTok video/post id.
             region: Content region. Defaults to "US".
             count: Number of comments to return (1-50). Defaults to 20.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Comment list response with comments and pagination metadata.
         """
-        params: dict[str, Any] = {"region": region, "count": count}
+        params: dict[str, Any] = {"region": region, "count": count, "cursor": cursor}
         response = await self._client.get(f"/v1/tiktok/videos/{video_id}/comments", params=params)
         return CommentListResponse.model_validate(response)
 
@@ -102,6 +105,7 @@ class VideosClient:
         video_id: str,
         region: str = "US",
         count: int = 20,
+        cursor: str | None = None,
     ) -> CommentListResponse:
         """Get replies to a TikTok comment (best-effort).
 
@@ -110,6 +114,8 @@ class VideosClient:
             video_id: The parent video id.
             region: Content region. Defaults to "US".
             count: Number of replies to return (1-50). Defaults to 20.
+            cursor: Pagination cursor from a prior response's pagination.cursor;
+                omit for the first page.
 
         Returns:
             Comment list response with the reply comments and pagination metadata.
@@ -118,6 +124,7 @@ class VideosClient:
             "video_id": video_id,
             "region": region,
             "count": count,
+            "cursor": cursor,
         }
         response = await self._client.get(
             f"/v1/tiktok/comments/{comment_id}/replies", params=params
