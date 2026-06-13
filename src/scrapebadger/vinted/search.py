@@ -58,6 +58,7 @@ class SearchClient:
         color_ids: str | None = None,
         status_ids: str | None = None,
         order: str | None = None,
+        seller_country: str | None = None,
     ) -> SearchResponse:
         """Search for items on Vinted.
 
@@ -72,6 +73,14 @@ class SearchClient:
             color_ids: Comma-separated color IDs to filter by.
             status_ids: Comma-separated status IDs to filter by.
             order: Sort order (e.g. "newest_first", "price_low_to_high").
+            seller_country: Filter results to items whose seller is physically
+                located in one of the given countries. A comma-separated list of
+                ISO-2 country codes (e.g. ``"fr"`` or ``"fr,be"``). Vinted
+                federates cross-border EU listings into each market domain and has
+                no native country filter, so ScrapeBadger applies this filter.
+                When set, each returned item gains a ``seller_country_code`` and
+                the response gains a top-level ``seller_country`` echo.
+                Billing: 1 base credit + 1 credit per uncached seller looked up.
 
         Returns:
             Search response with matching items and pagination metadata.
@@ -92,6 +101,16 @@ class SearchClient:
             print(f"Found {results.pagination.total_entries} items")
             for item in results.items:
                 print(f"  {item.title} - {item.price.amount} {item.price.currency_code}")
+
+            # Filter to sellers physically located in France or Belgium.
+            # Billing: 1 base credit + 1 credit per uncached seller looked up.
+            local = await client.vinted.search.search(
+                "vintage jacket",
+                seller_country="fr,be",
+            )
+            print(f"Applied seller_country filter: {local.seller_country}")
+            for item in local.items:
+                print(f"  {item.title} - seller in {item.seller_country_code}")
             ```
         """
         params: dict[str, Any] = {
@@ -105,6 +124,7 @@ class SearchClient:
             "color_ids": color_ids,
             "status_ids": status_ids,
             "order": order,
+            "seller_country": seller_country,
         }
         response = await self._client.get("/v1/vinted/search", params=params)
         return SearchResponse.model_validate(response)
