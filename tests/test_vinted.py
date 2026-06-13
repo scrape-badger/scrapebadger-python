@@ -470,6 +470,22 @@ class TestVintedModels:
         assert resp.items == []
         assert resp.pagination is None
 
+    def test_search_response_seller_country_default(self) -> None:
+        resp = SearchResponse.model_validate(SEARCH_RESPONSE)
+        assert resp.seller_country is None
+        assert resp.items[0].seller_country_code is None
+
+    def test_search_response_with_seller_country(self) -> None:
+        resp = SearchResponse.model_validate(
+            {
+                "items": [{"id": 1, "seller_country_code": "FR"}],
+                "market": "fr",
+                "seller_country": "fr,be",
+            }
+        )
+        assert resp.seller_country == "fr,be"
+        assert resp.items[0].seller_country_code == "FR"
+
     def test_item_detail_response(self) -> None:
         resp = ItemDetailResponse.model_validate(ITEM_DETAIL_RESPONSE)
         assert resp.item is not None
@@ -610,6 +626,15 @@ class TestSearchClient:
         assert params["status_ids"] == "6"
         assert params["order"] == "newest_first"
 
+    async def test_search_with_seller_country(
+        self, search_client: SearchClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.get.return_value = SEARCH_RESPONSE
+        await search_client.search("jacket", seller_country="fr,be")
+
+        params = mock_base_client.get.call_args[1]["params"]
+        assert params["seller_country"] == "fr,be"
+
     async def test_search_optional_params_default_none(
         self, search_client: SearchClient, mock_base_client: MagicMock
     ) -> None:
@@ -623,6 +648,7 @@ class TestSearchClient:
         assert params["color_ids"] is None
         assert params["status_ids"] is None
         assert params["order"] is None
+        assert params["seller_country"] is None
 
     async def test_search_returns_search_response(
         self, search_client: SearchClient, mock_base_client: MagicMock

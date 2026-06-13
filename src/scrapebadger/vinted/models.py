@@ -134,6 +134,9 @@ class VintedItemSummary(_BaseModel):
         user: Summary of the item owner.
         photo: Main photo.
         photos: All photos attached to the item.
+        seller_country_code: Physical country of the seller as an upper-case
+            ISO-2 code (e.g. "FR"), or None. Populated only when the
+            ``seller_country`` search filter is used.
     """
 
     id: int
@@ -148,6 +151,7 @@ class VintedItemSummary(_BaseModel):
     user: VintedUserSummary | None = None
     photo: VintedPhoto | None = None
     photos: list[VintedPhoto] = Field(default_factory=list)
+    seller_country_code: str | None = None
 
 
 class VintedItemDetail(_BaseModel):
@@ -366,11 +370,15 @@ class SearchResponse(_BaseModel):
         items: List of matching items.
         pagination: Pagination metadata.
         market: Market code used for the search.
+        seller_country: Echo of the normalized ``seller_country`` filter applied
+            to this search (comma-separated ISO-2 codes, e.g. "fr,be"), or None
+            when no filter was used.
     """
 
     items: list[VintedItemSummary] = Field(default_factory=list)
     pagination: VintedPagination | None = None
     market: str = ""
+    seller_country: str | None = None
 
 
 class ItemDetailResponse(_BaseModel):
