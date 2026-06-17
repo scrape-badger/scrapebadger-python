@@ -83,7 +83,11 @@ class FlightsClient:
 
         Returns:
             Response with `best_flights[]`, `other_flights[]`,
-            `price_insights`, `airports[]`, and trip-type metadata.
+            `price_insights`, `airports[]`, a `search_url`, and trip-type
+            metadata. Each offer carries a `booking_url` (deep link that
+            pre-selects the flight) and a `selection_token` for
+            :meth:`booking_options`; each leg carries the flight number,
+            departure/arrival times, airport names, and aircraft.
         """
         params: dict[str, Any] = {
             "departure_id": departure_id,
@@ -105,3 +109,53 @@ class FlightsClient:
         if max_price is not None:
             params["max_price"] = max_price
         return await self._client.get("/v1/google/flights/search", params=params)
+
+    async def booking_options(
+        self,
+        selection_token: str,
+        *,
+        currency: str = "USD",
+        gl: str = "us",
+        hl: str = "en",
+    ) -> dict[str, Any]:
+        """Retrieve the provider booking list for a selected itinerary.
+
+        Given the ``selection_token`` from a :meth:`search` offer (one-way or
+        fully-selected itinerary), returns the airline/OTA providers that can
+        book it. This renders the Google Flights booking page, so it is slower
+        than :meth:`search`. The actual per-provider booking links open from
+        the returned ``booking_url``.
+
+        Args:
+            selection_token: ``selection_token`` from a search offer.
+            currency: ISO-4217 currency code (default "USD").
+            gl: Country code.
+            hl: Language for the returned ``booking_url``.
+
+        Returns:
+            Response with ``booking_options[]`` (each ``book_with``, ``price``,
+            ``currency``, ``type``), a ``booking_url``, and ``currency``.
+
+        Example:
+            ```python
+            flights = await client.google.flights.search(
+                departure_id="CNF", arrival_id="GRU",
+                outbound_date="2026-06-25", trip_type="one_way", currency="BRL",
+            )
+            token = flights["best_flights"][0]["selection_token"]
+            options = await client.google.flights.booking_options(
+                token, currency="BRL", gl="br",
+            )
+            for opt in options["booking_options"]:
+                print(opt["book_with"], opt["price"], opt["currency"])
+            ```
+        """
+        return await self._client.get(
+            "/v1/google/flights/booking_options",
+            params={
+                "selection_token": selection_token,
+                "currency": currency,
+                "gl": gl,
+                "hl": hl,
+            },
+        )

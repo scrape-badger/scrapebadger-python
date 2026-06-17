@@ -193,6 +193,33 @@ class TestHotelsClient:
         assert kwargs["params"]["property_token"] == "PTOKEN"
 
 
+class TestFlightsClient:
+    @pytest.mark.asyncio
+    async def test_search(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
+        await google.flights.search(
+            "CNF",
+            "GRU",
+            "2026-06-25",
+            trip_type="one_way",
+            currency="BRL",
+            gl="br",
+            hl="pt-BR",
+        )
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/flights/search"
+        assert kwargs["params"]["departure_id"] == "CNF"
+        assert kwargs["params"]["trip_type"] == "one_way"
+        assert kwargs["params"]["currency"] == "BRL"
+
+    @pytest.mark.asyncio
+    async def test_booking_options(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
+        await google.flights.booking_options("CBwQAhxx", currency="BRL", gl="br")
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/flights/booking_options"
+        assert kwargs["params"]["selection_token"] == "CBwQAhxx"
+        assert kwargs["params"]["currency"] == "BRL"
+
+
 class TestTrendsClient:
     @pytest.mark.asyncio
     async def test_interest(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
