@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0] - 2026-06-21
+
+### Added
+
+- **eBay API client** (`client.ebay`) covering all 12 endpoints across 18 marketplaces:
+  - `ebay.search.search()` — active-listing keyword search (category, condition, buying_format, price, free-shipping filters)
+  - `ebay.search.completed()` — completed/sold listings (sold-price history)
+  - `ebay.search.autocomplete()` — keyword suggestions
+  - `ebay.items.get_item()` — full listing detail (images, shipping, item specifics, seller, returns)
+  - `ebay.items.get_item_reviews()` — catalog product reviews + rating histogram (optional `product_id`)
+  - `ebay.sellers.get_seller()` / `get_seller_items()` / `get_seller_feedback()`
+  - `ebay.categories.browse_category()` — browse listings within a category
+  - `ebay.reference.list_categories()` / `list_markets()`
+- Frozen, forward-compatible Pydantic models for every eBay response field (exported with an `Ebay`-prefix at the top level, e.g. `EbayItem`, `EbaySearchResult`, `EbaySeller`, `EbayReview`, `EbayPrice`).
+
 ## [0.9.0] - 2026-05-29
 
 ### Changed (Breaking)

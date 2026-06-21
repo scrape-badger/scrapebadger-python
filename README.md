@@ -90,6 +90,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 | **Vinted** | Search items, item details, user profiles, brands, colors, statuses, and markets | [Vinted Guide](docs/vinted.md) |
 | **Reddit** | Search posts, subreddits, users, and domains; fetch post comments, subreddit rules, moderators, wiki pages, user trophies | [Reddit Guide](docs/reddit.md) |
 | **Amazon** | 14 endpoints — search, autocomplete, product detail, offers, reviews, bestsellers, new releases, deals, category browse, seller profile/products/feedback, markets, categories | [Amazon Guide](docs/amazon.md) |
+| **eBay** | 12 endpoints across 18 markets — search, completed/sold search, item detail, item reviews, seller profile/items/feedback, category browse, categories, autocomplete, markets | [eBay Guide](docs/ebay.md) |
 | **TikTok** | 25 endpoints — user profile/videos/followers/following/liked/reposts, video detail/comments/replies/related/transcript/oEmbed, search (general/videos/hashtags/users), music detail/videos, hashtag detail/videos, trending videos/hashtags/songs, ad library, regions | [TikTok Guide](docs/tiktok.md) |
 
 ## Error Handling

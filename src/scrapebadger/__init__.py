@@ -82,6 +82,77 @@ from scrapebadger.amazon.models import (
     SearchResult as AmazonSearchResult,
 )
 from scrapebadger.client import ScrapeBadger
+from scrapebadger.ebay.client import EbayClient
+from scrapebadger.ebay.models import (
+    AutocompleteResponse as EbayAutocompleteResponse,
+)
+from scrapebadger.ebay.models import (
+    AutocompleteSuggestion as EbayAutocompleteSuggestion,
+)
+from scrapebadger.ebay.models import (
+    CategoriesResponse as EbayCategoriesResponse,
+)
+from scrapebadger.ebay.models import (
+    CategoryInfo as EbayCategoryInfo,
+)
+from scrapebadger.ebay.models import (
+    CategoryResponse as EbayCategoryResponse,
+)
+from scrapebadger.ebay.models import (
+    EbayImage,
+    EbayPrice,
+    FeedbackBreakdown,
+    ReturnsPolicy,
+    ShippingOption,
+)
+from scrapebadger.ebay.models import (
+    FeedbackEntry as EbayFeedbackEntry,
+)
+from scrapebadger.ebay.models import (
+    Item as EbayItem,
+)
+from scrapebadger.ebay.models import (
+    ItemDetailResponse as EbayItemDetailResponse,
+)
+from scrapebadger.ebay.models import (
+    ItemSeller as EbayItemSeller,
+)
+from scrapebadger.ebay.models import (
+    MarketInfo as EbayMarketInfo,
+)
+from scrapebadger.ebay.models import (
+    MarketsResponse as EbayMarketsResponse,
+)
+from scrapebadger.ebay.models import (
+    Pagination as EbayPagination,
+)
+from scrapebadger.ebay.models import (
+    RatingHistogram as EbayRatingHistogram,
+)
+from scrapebadger.ebay.models import (
+    Review as EbayReview,
+)
+from scrapebadger.ebay.models import (
+    ReviewsResponse as EbayReviewsResponse,
+)
+from scrapebadger.ebay.models import (
+    SearchResponse as EbaySearchResponse,
+)
+from scrapebadger.ebay.models import (
+    SearchResult as EbaySearchResult,
+)
+from scrapebadger.ebay.models import (
+    Seller as EbaySeller,
+)
+from scrapebadger.ebay.models import (
+    SellerFeedbackResponse as EbaySellerFeedbackResponse,
+)
+from scrapebadger.ebay.models import (
+    SellerItemsResponse as EbaySellerItemsResponse,
+)
+from scrapebadger.ebay.models import (
+    SellerProfileResponse as EbaySellerProfileResponse,
+)
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.reddit.models import (
     PostCommentsResponse,
@@ -198,7 +269,7 @@ from scrapebadger.vinted.models import (
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
 
-__version__ = "0.13.1"
+__version__ = "0.15.0"
 
 __all__ = [
     # TikTok core models
@@ -227,6 +298,34 @@ __all__ = [
     "DealsResponse",
     # Web scraping
     "DetectResult",
+    # eBay response envelopes / models
+    "EbayAutocompleteResponse",
+    "EbayAutocompleteSuggestion",
+    "EbayCategoriesResponse",
+    "EbayCategoryInfo",
+    "EbayCategoryResponse",
+    # eBay client
+    "EbayClient",
+    "EbayFeedbackEntry",
+    # eBay shared models
+    "EbayImage",
+    "EbayItem",
+    "EbayItemDetailResponse",
+    "EbayItemSeller",
+    "EbayMarketInfo",
+    "EbayMarketsResponse",
+    "EbayPagination",
+    "EbayPrice",
+    "EbayRatingHistogram",
+    "EbayReview",
+    "EbayReviewsResponse",
+    "EbaySearchResponse",
+    "EbaySearchResult",
+    "EbaySeller",
+    "EbaySellerFeedbackResponse",
+    "EbaySellerItemsResponse",
+    "EbaySellerProfileResponse",
+    "FeedbackBreakdown",
     # Google Scraper
     "GoogleClient",
     "InsufficientCreditsError",
@@ -259,6 +358,7 @@ __all__ = [
     "RedditUserSubreddit",
     "RedditWikiPage",
     "RegionInfo",
+    "ReturnsPolicy",
     "Review",
     "ReviewsResponse",
     # Main client
@@ -274,6 +374,7 @@ __all__ = [
     "SellerProductsResponse",
     "SellerProfileResponse",
     "ServerError",
+    "ShippingOption",
     "StatusesResponse",
     "SubredditDetailResponse",
     "SubredditPostsResponse",

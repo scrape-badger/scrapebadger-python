@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
+from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.tiktok.client import TikTokClient
@@ -119,6 +120,7 @@ class ScrapeBadger:
         self._google: GoogleClient | None = None
         self._reddit: RedditClient | None = None
         self._amazon: AmazonClient | None = None
+        self._ebay: EbayClient | None = None
         self._tiktok: TikTokClient | None = None
 
     @property
@@ -253,6 +255,32 @@ class ScrapeBadger:
         if self._amazon is None:
             self._amazon = AmazonClient(self._base_client)
         return self._amazon
+
+    @property
+    def ebay(self) -> EbayClient:
+        """Access eBay Scraper API operations.
+
+        Returns:
+            EbayClient providing access to all 12 eBay endpoints.
+
+        Example:
+            ```python
+            # Search for listings
+            results = await client.ebay.search.search("nintendo switch")
+
+            # Get item detail
+            detail = await client.ebay.items.get_item("123456789012")
+
+            # Browse a category
+            cat = await client.ebay.categories.browse_category("9355")
+
+            # Get a seller profile
+            seller = await client.ebay.sellers.get_seller("musicmagpie")
+            ```
+        """
+        if self._ebay is None:
+            self._ebay = EbayClient(self._base_client)
+        return self._ebay
 
     @property
     def tiktok(self) -> TikTokClient:
