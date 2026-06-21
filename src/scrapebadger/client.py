@@ -17,6 +17,7 @@ from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.web.client import WebClient
+from scrapebadger.youtube.client import YoutubeClient
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -121,6 +122,7 @@ class ScrapeBadger:
         self._reddit: RedditClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
+        self._youtube: YoutubeClient | None = None
         self._tiktok: TikTokClient | None = None
 
     @property
@@ -281,6 +283,26 @@ class ScrapeBadger:
         if self._ebay is None:
             self._ebay = EbayClient(self._base_client)
         return self._ebay
+
+    @property
+    def youtube(self) -> YoutubeClient:
+        """Access YouTube Scraper API operations.
+
+        Returns:
+            YoutubeClient providing access to all YouTube endpoints (search,
+            videos, channels, playlists, comments, transcripts, trending,
+            shorts, community, music, reference).
+
+        Example:
+            ```python
+            results = await client.youtube.search.search("lofi hip hop")
+            video = await client.youtube.videos.get_video("dQw4w9WgXcQ")
+            channel = await client.youtube.channels.get_channel("@mkbhd")
+            ```
+        """
+        if self._youtube is None:
+            self._youtube = YoutubeClient(self._base_client)
+        return self._youtube
 
     @property
     def tiktok(self) -> TikTokClient:

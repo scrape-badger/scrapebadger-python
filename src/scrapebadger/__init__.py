@@ -268,8 +268,159 @@ from scrapebadger.vinted.models import (
     VintedUserSummary,
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
+from scrapebadger.youtube.client import YoutubeClient
+from scrapebadger.youtube.models import (
+    AudioTrack as YoutubeAudioTrack,
+)
+from scrapebadger.youtube.models import (
+    AutocompleteResponse as YoutubeAutocompleteResponse,
+)
+from scrapebadger.youtube.models import (
+    BatchResponse as YoutubeBatchResponse,
+)
+from scrapebadger.youtube.models import (
+    CaptionsResponse as YoutubeCaptionsResponse,
+)
+from scrapebadger.youtube.models import (
+    CaptionTrack as YoutubeCaptionTrack,
+)
+from scrapebadger.youtube.models import (
+    CategoriesResponse as YoutubeCategoriesResponse,
+)
+from scrapebadger.youtube.models import (
+    Channel as YoutubeChannel,
+)
+from scrapebadger.youtube.models import (
+    ChannelAbout as YoutubeChannelAbout,
+)
+from scrapebadger.youtube.models import (
+    ChannelLink as YoutubeChannelLink,
+)
+from scrapebadger.youtube.models import (
+    ChannelTabResponse as YoutubeChannelTabResponse,
+)
+from scrapebadger.youtube.models import (
+    ChannelVideosResponse as YoutubeChannelVideosResponse,
+)
+from scrapebadger.youtube.models import (
+    Chapter as YoutubeChapter,
+)
+from scrapebadger.youtube.models import (
+    Comment as YoutubeComment,
+)
+from scrapebadger.youtube.models import (
+    CommentsResponse as YoutubeCommentsResponse,
+)
+from scrapebadger.youtube.models import (
+    CommunityPost as YoutubeCommunityPost,
+)
+from scrapebadger.youtube.models import (
+    CommunityResponse as YoutubeCommunityResponse,
+)
+from scrapebadger.youtube.models import (
+    Format as YoutubeFormat,
+)
+from scrapebadger.youtube.models import (
+    HashtagResponse as YoutubeHashtagResponse,
+)
+from scrapebadger.youtube.models import (
+    HeatMarker as YoutubeHeatMarker,
+)
+from scrapebadger.youtube.models import (
+    HomeResponse as YoutubeHomeResponse,
+)
+from scrapebadger.youtube.models import (
+    LanguagesResponse as YoutubeLanguagesResponse,
+)
+from scrapebadger.youtube.models import (
+    LiveChatMessage as YoutubeLiveChatMessage,
+)
+from scrapebadger.youtube.models import (
+    LiveChatResponse as YoutubeLiveChatResponse,
+)
+from scrapebadger.youtube.models import (
+    LiveStreamingDetails as YoutubeLiveStreamingDetails,
+)
+from scrapebadger.youtube.models import (
+    MarketInfo as YoutubeMarketInfo,
+)
+from scrapebadger.youtube.models import (
+    MarketsResponse as YoutubeMarketsResponse,
+)
+from scrapebadger.youtube.models import (
+    OEmbed as YoutubeOEmbed,
+)
+from scrapebadger.youtube.models import (
+    Playlist as YoutubePlaylist,
+)
+from scrapebadger.youtube.models import (
+    PlaylistItem as YoutubePlaylistItem,
+)
+from scrapebadger.youtube.models import (
+    PlaylistItemsResponse as YoutubePlaylistItemsResponse,
+)
+from scrapebadger.youtube.models import (
+    PollChoice as YoutubePollChoice,
+)
+from scrapebadger.youtube.models import (
+    ReferenceRow as YoutubeReferenceRow,
+)
+from scrapebadger.youtube.models import (
+    RegionRestriction as YoutubeRegionRestriction,
+)
+from scrapebadger.youtube.models import (
+    RegionsResponse as YoutubeRegionsResponse,
+)
+from scrapebadger.youtube.models import (
+    RelatedResponse as YoutubeRelatedResponse,
+)
+from scrapebadger.youtube.models import (
+    RepliesResponse as YoutubeRepliesResponse,
+)
+from scrapebadger.youtube.models import (
+    ResolveResult as YoutubeResolveResult,
+)
+from scrapebadger.youtube.models import (
+    SearchChip as YoutubeSearchChip,
+)
+from scrapebadger.youtube.models import (
+    SearchResponse as YoutubeSearchResponse,
+)
+from scrapebadger.youtube.models import (
+    SearchResult as YoutubeSearchResult,
+)
+from scrapebadger.youtube.models import (
+    ShoppingResult as YoutubeShoppingResult,
+)
+from scrapebadger.youtube.models import (
+    Short as YoutubeShort,
+)
+from scrapebadger.youtube.models import (
+    StreamingData as YoutubeStreamingData,
+)
+from scrapebadger.youtube.models import (
+    SubscriberCount as YoutubeSubscriberCount,
+)
+from scrapebadger.youtube.models import (
+    Thumbnail as YoutubeThumbnail,
+)
+from scrapebadger.youtube.models import (
+    Transcript as YoutubeTranscript,
+)
+from scrapebadger.youtube.models import (
+    TranscriptSegment as YoutubeTranscriptSegment,
+)
+from scrapebadger.youtube.models import (
+    TrendingItem as YoutubeTrendingItem,
+)
+from scrapebadger.youtube.models import (
+    TrendingResponse as YoutubeTrendingResponse,
+)
+from scrapebadger.youtube.models import (
+    Video as YoutubeVideo,
+)
 
-__version__ = "0.15.0"
+__version__ = "0.15.1"
 
 __all__ = [
     # TikTok core models
@@ -439,6 +590,57 @@ __all__ = [
     "VintedUserSummary",
     # Stream exceptions
     "WebSocketStreamError",
+    "YoutubeAudioTrack",
+    "YoutubeAutocompleteResponse",
+    "YoutubeBatchResponse",
+    "YoutubeCaptionTrack",
+    "YoutubeCaptionsResponse",
+    "YoutubeCategoriesResponse",
+    "YoutubeChannel",
+    "YoutubeChannelAbout",
+    "YoutubeChannelLink",
+    "YoutubeChannelTabResponse",
+    "YoutubeChannelVideosResponse",
+    "YoutubeChapter",
+    "YoutubeClient",
+    "YoutubeComment",
+    "YoutubeCommentsResponse",
+    "YoutubeCommunityPost",
+    "YoutubeCommunityResponse",
+    "YoutubeFormat",
+    "YoutubeHashtagResponse",
+    "YoutubeHeatMarker",
+    "YoutubeHomeResponse",
+    "YoutubeLanguagesResponse",
+    "YoutubeLiveChatMessage",
+    "YoutubeLiveChatResponse",
+    "YoutubeLiveStreamingDetails",
+    "YoutubeMarketInfo",
+    "YoutubeMarketsResponse",
+    "YoutubeOEmbed",
+    "YoutubePlaylist",
+    "YoutubePlaylistItem",
+    "YoutubePlaylistItemsResponse",
+    "YoutubePollChoice",
+    "YoutubeReferenceRow",
+    "YoutubeRegionRestriction",
+    "YoutubeRegionsResponse",
+    "YoutubeRelatedResponse",
+    "YoutubeRepliesResponse",
+    "YoutubeResolveResult",
+    "YoutubeSearchChip",
+    "YoutubeSearchResponse",
+    "YoutubeSearchResult",
+    "YoutubeShoppingResult",
+    "YoutubeShort",
+    "YoutubeStreamingData",
+    "YoutubeSubscriberCount",
+    "YoutubeThumbnail",
+    "YoutubeTranscript",
+    "YoutubeTranscriptSegment",
+    "YoutubeTrendingItem",
+    "YoutubeTrendingResponse",
+    "YoutubeVideo",
     # Version
     "__version__",
 ]
