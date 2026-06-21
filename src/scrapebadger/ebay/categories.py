@@ -74,7 +74,5 @@ class CategoriesClient:
             "min_price": min_price,
             "max_price": max_price,
         }
-        response = await self._client.get(
-            f"/v1/ebay/categories/{category_id}/items", params=params
-        )
+        response = await self._client.get(f"/v1/ebay/categories/{category_id}/items", params=params)
         return CategoryResponse.model_validate(response)

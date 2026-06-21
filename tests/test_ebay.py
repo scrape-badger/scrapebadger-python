@@ -592,9 +592,7 @@ class TestSearchClient:
 
 
 class TestItemsClient:
-    async def test_get_item(
-        self, items_client: ItemsClient, mock_base_client: MagicMock
-    ) -> None:
+    async def test_get_item(self, items_client: ItemsClient, mock_base_client: MagicMock) -> None:
         mock_base_client.get.return_value = ITEM_DETAIL_RESPONSE
         result = await items_client.get_item("123456789012", domain="de")
         assert isinstance(result, ItemDetailResponse)
