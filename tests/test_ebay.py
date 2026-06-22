@@ -134,6 +134,39 @@ SAMPLE_ITEM: dict[str, Any] = {
     "scraped_at": "2026-06-03T00:00:00Z",
 }
 
+SAMPLE_AUCTION_BID: dict[str, Any] = {
+    "value": 1430.0,
+    "currency": "USD",
+    "symbol": "$",
+    "raw": "US $1,430.00",
+}
+
+SAMPLE_AUCTION_RESULT: dict[str, Any] = {
+    "position": 1,
+    "item_id": "168461969053",
+    "title": "Vintage Rolex Oysterdate Precision",
+    "price": SAMPLE_AUCTION_BID,
+    "buying_format": "Auction",
+    "is_auction": True,
+    "bids": 19,
+    "current_bid": SAMPLE_AUCTION_BID,
+    "time_left": "12h 5m",
+}
+
+SAMPLE_AUCTION_ITEM: dict[str, Any] = {
+    "item_id": "168461969053",
+    "title": "Vintage Rolex Oysterdate Precision",
+    "price": SAMPLE_AUCTION_BID,
+    "buying_format": "Auction",
+    "is_auction": True,
+    "bids": 19,
+    "current_bid": SAMPLE_AUCTION_BID,
+    "time_left": "12h 5m",
+    "end_time_utc": 1782157851.0,
+    "end_time_at": "2026-06-22T19:50:51Z",
+    "buy_it_now_price": None,
+}
+
 SAMPLE_REVIEW: dict[str, Any] = {
     "title": "Great console",
     "body": "Works perfectly.",
@@ -368,6 +401,34 @@ class TestEbayModels:
         assert item.seller is not None
         assert item.seller.username == "musicmagpie"
         assert item.scraped_utc == 1751500000.0
+
+    def test_search_result_auction(self) -> None:
+        result = SearchResult.model_validate(SAMPLE_AUCTION_RESULT)
+        assert result.is_auction is True
+        assert result.bids == 19
+        assert result.time_left == "12h 5m"
+        assert result.current_bid is not None
+        assert result.current_bid.value == 1430.0
+
+    def test_item_auction(self) -> None:
+        item = Item.model_validate(SAMPLE_AUCTION_ITEM)
+        assert item.is_auction is True
+        assert item.bids == 19
+        assert item.current_bid is not None
+        assert item.current_bid.value == 1430.0
+        assert item.time_left == "12h 5m"
+        assert item.end_time_utc == 1782157851.0
+        assert item.end_time_at == "2026-06-22T19:50:51Z"
+        assert item.buy_it_now_price is None
+
+    def test_item_non_auction_has_no_auction_fields(self) -> None:
+        item = Item.model_validate(SAMPLE_ITEM)
+        assert item.is_auction is False
+        assert item.current_bid is None
+        assert item.end_time_utc is None
+        assert item.end_time_at is None
+        # A fixed-price listing exposes no separate Buy It Now price here.
+        assert item.buy_it_now_price is None
 
     def test_item_minimal(self) -> None:
         item = Item(item_id="X")

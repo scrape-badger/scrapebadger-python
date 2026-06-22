@@ -109,7 +109,8 @@ class SearchResult(_BaseModel):
     buying_format: str | None = None  # "Buy It Now" | "Auction" | "Best Offer"
     is_auction: bool = False
     bids: int | None = None
-    time_left: str | None = None
+    current_bid: EbayPrice | None = None  # auctions: the current high bid (mirrors ``price``)
+    time_left: str | None = None  # relative remaining, e.g. "12h 16m" / "4d 8h"
     shipping: str | None = None
     shipping_cost: EbayPrice | None = None
     free_shipping: bool | None = None
@@ -175,7 +176,11 @@ class Item(_BaseModel):
     buying_format: str | None = None
     is_auction: bool = False
     bids: int | None = None
-    time_left: str | None = None
+    current_bid: EbayPrice | None = None  # auctions: the current high bid (mirrors ``price``)
+    time_left: str | None = None  # relative remaining, e.g. "12h 16m"
+    end_time_utc: float | None = None  # absolute auction end (Unix float)
+    end_time_at: str | None = None  # absolute auction end (ISO-8601 Z)
+    buy_it_now_price: EbayPrice | None = None  # BIN price (fixed-price, or auction-with-BIN)
     best_offer_enabled: bool | None = None
     brand: str | None = None
     mpn: str | None = None

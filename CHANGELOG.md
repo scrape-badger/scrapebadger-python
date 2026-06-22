@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.2] - 2026-06-22
+
+### Added
+
+- **eBay auction data** on the eBay client models:
+  - `SearchResult.current_bid` and `Item.current_bid` — an auction's current high bid (mirrors `price`).
+  - `Item.end_time_utc` / `Item.end_time_at` — the absolute auction end time (Unix float / ISO-8601 Z).
+  - `Item.buy_it_now_price` — the Buy It Now price for fixed-price listings, or an auction that also offers Buy It Now (`None` for pure auctions).
+  - `bids` (bid count) and `time_left` (relative remaining, e.g. `"12h 16m"`) are now reliably populated for auction listings.
+
 ## [0.15.0] - 2026-06-21
 
 ### Added
