@@ -10,6 +10,8 @@ language. Every datetime field ships in BOTH ``*_utc`` (Unix float) and ``*_at``
 
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
 
 # =============================================================================
@@ -185,7 +187,7 @@ class Video(_BaseModel):
     title: str | None = None
     url: str | None = None
     description: str | None = None
-    description_links: list[dict] = Field(default_factory=list)
+    description_links: list[dict[str, Any]] = Field(default_factory=list)
     length_seconds: int | None = None
     duration: str | None = None  # HH:MM:SS
 
@@ -226,7 +228,7 @@ class Video(_BaseModel):
     # Media
     thumbnails: list[Thumbnail] = Field(default_factory=list)
     thumbnail: str | None = None
-    storyboards: dict | None = None
+    storyboards: dict[str, Any] | None = None
     chapters: list[Chapter] = Field(default_factory=list)
     heatmap: list[HeatMarker] = Field(default_factory=list)
 
@@ -266,10 +268,10 @@ class Video(_BaseModel):
 
     # Rich shelves (from next)
     shopping_results: list[ShoppingResult] = Field(default_factory=list)
-    additional_info: list[dict] = Field(default_factory=list)
-    game_info: dict | None = None
-    end_screen_videos: list[dict] = Field(default_factory=list)
-    related_videos: list[dict] = Field(default_factory=list)
+    additional_info: list[dict[str, Any]] = Field(default_factory=list)
+    game_info: dict[str, Any] | None = None
+    end_screen_videos: list[dict[str, Any]] = Field(default_factory=list)
+    related_videos: list[dict[str, Any]] = Field(default_factory=list)
     related_videos_continuation: str | None = None
 
     # Sound (shorts)
@@ -362,7 +364,7 @@ class SearchResponse(_BaseModel):
     did_you_mean: str | None = None
     showing_results_for: str | None = None
     refinements: list[str] = Field(default_factory=list)
-    related_searches: list[dict] = Field(default_factory=list)
+    related_searches: list[dict[str, Any]] = Field(default_factory=list)
     continuation: str | None = None
 
 
@@ -470,8 +472,8 @@ class Channel(_BaseModel):
     tabs: list[str] = Field(default_factory=list)
     available_countries: list[str] = Field(default_factory=list)
 
-    related_channels: list[dict] = Field(default_factory=list)
-    latest_videos: list[dict] = Field(default_factory=list)
+    related_channels: list[dict[str, Any]] = Field(default_factory=list)
+    latest_videos: list[dict[str, Any]] = Field(default_factory=list)
 
     scraped_at: str | None = None
     scraped_utc: float | None = None
@@ -596,7 +598,7 @@ class CommentsResponse(_BaseModel):
     video_id: str | None = None
     comments: list[Comment] = Field(default_factory=list)
     comment_count: int | None = None
-    sorting_tokens: list[dict] = Field(default_factory=list)
+    sorting_tokens: list[dict[str, Any]] = Field(default_factory=list)
     continuation: str | None = None
 
 
@@ -631,8 +633,8 @@ class Transcript(_BaseModel):
     language_name: str | None = None
     type: str | None = None  # asr | manual
     is_translatable: bool | None = None
-    available_transcripts: list[dict] = Field(default_factory=list)
-    translation_languages: list[dict] = Field(default_factory=list)
+    available_transcripts: list[dict[str, Any]] = Field(default_factory=list)
+    translation_languages: list[dict[str, Any]] = Field(default_factory=list)
     segments: list[TranscriptSegment] = Field(default_factory=list)
     full_text: str | None = None
     srt: str | None = None
@@ -654,7 +656,7 @@ class CaptionsResponse(_BaseModel):
 
     video_id: str
     tracks: list[CaptionTrack] = Field(default_factory=list)
-    translation_languages: list[dict] = Field(default_factory=list)
+    translation_languages: list[dict[str, Any]] = Field(default_factory=list)
 
 
 # =============================================================================
@@ -718,7 +720,7 @@ class CommunityPost(_BaseModel):
     post_url: str | None = None
     post_type: str | None = None  # text | poll | image | video | shared
     text: str | None = None
-    text_links: list[dict] = Field(default_factory=list)
+    text_links: list[dict[str, Any]] = Field(default_factory=list)
     channel_id: str | None = None
     channel_name: str | None = None
     channel_url: str | None = None
@@ -731,8 +733,8 @@ class CommunityPost(_BaseModel):
     poll_choices: list[PollChoice] = Field(default_factory=list)
     poll_total_votes: int | None = None
     images: list[Thumbnail] = Field(default_factory=list)
-    attached_video: dict | None = None
-    shared_post: dict | None = None
+    attached_video: dict[str, Any] | None = None
+    shared_post: dict[str, Any] | None = None
     scraped_at: str | None = None
     scraped_utc: float | None = None
 
@@ -783,7 +785,7 @@ class BatchResponse(_BaseModel):
     """Response for POST /videos/batch."""
 
     videos: list[Video] = Field(default_factory=list)
-    errors: list[dict] = Field(default_factory=list)
+    errors: list[dict[str, Any]] = Field(default_factory=list)
     count: int = 0
 
 
