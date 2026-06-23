@@ -420,7 +420,7 @@ from scrapebadger.youtube.models import (
     Video as YoutubeVideo,
 )
 
-__version__ = "0.15.1"
+__version__ = "0.15.2"
 
 __all__ = [
     # TikTok core models
