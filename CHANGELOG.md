@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.3] - 2026-06-30
+
+### Added
+
+- **Google Shopping offers by barcode** — `client.google.shopping.offers(barcode, *, gl=None, hl="en")` calls `GET /v1/google/shopping/offers`. Resolves a product barcode (GTIN-8/UPC-A/EAN-13/GTIN-14) to a product via Google web search, then returns its multi-seller Google Shopping prices (`barcode`, `resolved_query`, `product_title`, `offers`). Costs 14 credits; returns 422 for an invalid barcode and 404 if unresolvable.
+
 ## [0.15.2] - 2026-06-22
 
 ### Added

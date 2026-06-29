@@ -127,6 +127,40 @@ class ShoppingClient:
         }
         return await self._client.get("/v1/google/shopping/product", params=params)
 
+    async def offers(
+        self,
+        barcode: str,
+        *,
+        gl: str | None = None,
+        hl: str = "en",
+    ) -> dict[str, Any]:
+        """Resolve a product barcode to its multi-seller Google Shopping prices.
+
+        Resolves the barcode to a product via Google web search, then returns
+        that product's Google Shopping seller offers. Costs 14 credits.
+
+        Args:
+            barcode: Product barcode — a GTIN-8/UPC-A/EAN-13/GTIN-14.
+            gl: Country code (ISO-3166 alpha-2).
+            hl: Language code.
+
+        Returns:
+            Response with ``barcode``, ``resolved_query``, ``product_title``,
+            and ``offers`` (each with title, source, price.value/currency/
+            extracted, link, rating, ...).
+
+        Raises:
+            Returns a 422 for an invalid/checksum-failing barcode, 404 if the
+            barcode cannot be resolved to a product.
+        """
+        params: dict[str, Any] = {
+            "barcode": barcode,
+            "hl": hl,
+        }
+        if gl is not None:
+            params["gl"] = gl
+        return await self._client.get("/v1/google/shopping/offers", params=params)
+
     async def click(
         self,
         *,
