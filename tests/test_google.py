@@ -260,6 +260,24 @@ class TestShoppingClient:
         assert kwargs["params"]["product_id"] == "abc123"
 
     @pytest.mark.asyncio
+    async def test_offers(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
+        await google.shopping.offers("0190198001751", gl="us")
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/shopping/offers"
+        params = kwargs["params"]
+        assert params["barcode"] == "0190198001751"
+        assert params["gl"] == "us"
+        assert params["hl"] == "en"
+
+    @pytest.mark.asyncio
+    async def test_offers_default_no_gl(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        await google.shopping.offers("0190198001751")
+        _, kwargs = mock_base_client.get.call_args
+        assert "gl" not in kwargs["params"]
+
+    @pytest.mark.asyncio
     async def test_click(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
         await google.shopping.click(
             title='Razer Blade 14"',

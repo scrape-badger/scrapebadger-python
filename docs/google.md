@@ -1,6 +1,6 @@
 # Google API
 
-The ScrapeBadger Google API provides structured JSON access to **16 Google product APIs** across 29 endpoints: Search, Maps, News, Hotels, Trends, Jobs, Shopping, Patents, Scholar, Autocomplete, Images, Videos, Finance, AI Mode, Lens, and immersive Products. All methods are available via `client.google`.
+The ScrapeBadger Google API provides structured JSON access to **16 Google product APIs** across 30 endpoints: Search, Maps, News, Hotels, Trends, Jobs, Shopping, Patents, Scholar, Autocomplete, Images, Videos, Finance, AI Mode, Lens, and immersive Products. All methods are available via `client.google`.
 
 The service handles SearchGuard, proxy rotation, cookie warmup, and IP rotation on 429s automatically — you just call the endpoint.
 
@@ -176,6 +176,13 @@ async with ScrapeBadger(api_key="your-key") as client:
 
     # Get detailed product information + seller list
     detail = await client.google.shopping.product(first["product_id"])
+
+    # Multi-seller prices by barcode (GTIN-8/UPC-A/EAN-13/GTIN-14).
+    # Resolves the barcode to a product, then returns its Shopping offers.
+    offers = await client.google.shopping.offers("0190198001751", gl="us")
+    print(offers["product_title"])
+    for o in offers["offers"]:
+        print(f"{o['source']} — {o['price']['extracted']}")
 ```
 
 ### Patents
@@ -298,6 +305,7 @@ async with ScrapeBadger(api_key="your-key") as client:
 | `shopping` | `search(q, *, gl, min_price, max_price, sort_by)` | Product search |
 | `shopping` | `product(product_id, *, gl)` | Product detail + sellers |
 | `shopping` | `click(title, *, source, q, product_id, gl, hl)` | Merchant URL enrichment |
+| `shopping` | `offers(barcode, *, gl, hl)` | Multi-seller prices by barcode |
 | `patents` | `search(q, *, page, num, sort, inventor, assignee)` | Patent search |
 | `patents` | `detail(patent_id)` | Patent document |
 | `scholar` | `search(q, *, hl, as_ylo, as_yhi, as_sdt, page, num)` | Academic papers |
@@ -318,6 +326,7 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 | `search`, `images`, `videos`, `maps/search`, `shopping/search`, `jobs/search`, `scholar/search`, `patents/search`, `finance/quote`, `trends/*` (except trending) | **2** |
 | `maps/place`, `maps/reviews`, `patents/detail`, `ai-mode/search`, `lens/search`, `hotels/search`, `products/detail` | **3** |
 | `hotels/details`, `shopping/product` | **5** |
+| `shopping/offers` | **14** |
 | `news/*`, `autocomplete`, `trends/trending`, `maps/photos`, `maps/posts`, `shopping/product/click` | **1** |
 | Failed requests | **0** |
 
