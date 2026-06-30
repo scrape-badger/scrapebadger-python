@@ -404,6 +404,36 @@ class TweetsClient:
         ):
             yield tweet
 
+    async def advanced_search(
+        self,
+        query: str,
+        *,
+        query_type: QueryType = QueryType.TOP,
+        count: int | None = None,
+        cursor: str | None = None,
+    ) -> PaginatedResponse[Tweet]:
+        """Alias for :meth:`search`, matching the ``/advanced_search`` endpoint name."""
+        return await self.search(query, query_type=query_type, count=count, cursor=cursor)
+
+    async def advanced_search_all(
+        self,
+        query: str,
+        *,
+        query_type: QueryType = QueryType.TOP,
+        count: int | None = None,
+        max_pages: int | None = None,
+        max_items: int | None = None,
+    ) -> AsyncIterator[Tweet]:
+        """Alias for :meth:`search_all`, matching the ``/advanced_search`` endpoint name."""
+        async for tweet in self.search_all(
+            query,
+            query_type=query_type,
+            count=count,
+            max_pages=max_pages,
+            max_items=max_items,
+        ):
+            yield tweet
+
     async def get_user_tweets(
         self,
         username: str,
