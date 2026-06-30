@@ -179,13 +179,16 @@ async def paginate(
             yield item_parser(item)
             items_yielded += 1
 
-        # Update cursor for next page
-        cursor = response.get("next_cursor")
+        # Advance the cursor for the next page.
+        next_cursor = response.get("next_cursor")
         pages_fetched += 1
 
-        # Check if we've reached the end before potentially sleeping.
-        if not cursor:
+        # Stop at the last page, or if the backend echoes the same cursor it was
+        # given — advancing on a non-advancing cursor would re-fetch the page we
+        # just yielded (the "repeats first page" bug). (SCR-52)
+        if not next_cursor or next_cursor == cursor:
             break
+        cursor = next_cursor
 
         # Rate-limit-aware throttling between pages.
         _maybe_throttle_between_pages(headers)
