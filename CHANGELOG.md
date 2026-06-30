@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.15.4] - 2026-06-30
 
+### Added
+
+- **`client.twitter.tweets.advanced_search()` / `advanced_search_all()`** — aliases for `search()` / `search_all()` that match the `/advanced_search` REST endpoint name, so the endpoint-named call no longer raises `AttributeError`. (SCR-52)
+
 ### Fixed
 
 - **Auto-pagination no longer repeats the first page** (`*_all` iterators, e.g. `client.twitter.tweets.search_all`). The shared `paginate()` helper now stops when the backend returns the same cursor it was given, instead of re-fetching the page it just yielded — previously a non-advancing cursor from the API could cause a repeat-page loop. (SCR-52)
