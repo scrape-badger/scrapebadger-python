@@ -110,6 +110,24 @@ class TestPaginateBasic:
 
         assert results == []
 
+    async def test_echoed_cursor_stops_iteration(self, base_client: BaseClient) -> None:
+        """Stops when the backend echoes the same cursor it was given (SCR-52).
+
+        A non-advancing cursor would otherwise re-fetch the page just yielded,
+        causing the 'repeats first page' loop. Only two pages are mocked, so a
+        third call would raise StopIteration and fail this test.
+        """
+        page1, h1 = _make_page([{"id": "1"}], next_cursor="c")
+        page2, h2 = _make_page([{"id": "2"}], next_cursor="c")  # echoes "c"
+        base_client.get_with_headers = AsyncMock(  # type: ignore[method-assign]
+            side_effect=[(page1, h1), (page2, h2)]
+        )
+
+        results = [item async for item in paginate(base_client, "/v1/test", {}, lambda x: x)]
+
+        assert results == [{"id": "1"}, {"id": "2"}]
+        assert base_client.get_with_headers.call_count == 2
+
     async def test_item_parser_is_applied(self, base_client: BaseClient) -> None:
         """Applies item_parser to each raw dict."""
         page, headers = _make_page([{"value": 1}, {"value": 2}])
