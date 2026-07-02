@@ -154,6 +154,67 @@ from scrapebadger.ebay.models import (
     SellerProfileResponse as EbaySellerProfileResponse,
 )
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.realtor.client import RealtorClient
+from scrapebadger.realtor.models import (
+    Address as RealtorAddress,
+)
+from scrapebadger.realtor.models import (
+    Agent as RealtorAgent,
+)
+from scrapebadger.realtor.models import (
+    AutocompleteResponse as RealtorAutocompleteResponse,
+)
+from scrapebadger.realtor.models import (
+    Coordinate as RealtorCoordinate,
+)
+from scrapebadger.realtor.models import (
+    DetailGroup as RealtorDetailGroup,
+)
+from scrapebadger.realtor.models import (
+    Estimate as RealtorEstimate,
+)
+from scrapebadger.realtor.models import (
+    Flags as RealtorFlags,
+)
+from scrapebadger.realtor.models import (
+    MarketInfo as RealtorMarketInfo,
+)
+from scrapebadger.realtor.models import (
+    MarketsResponse as RealtorMarketsResponse,
+)
+from scrapebadger.realtor.models import (
+    Office as RealtorOffice,
+)
+from scrapebadger.realtor.models import (
+    OpenHouse as RealtorOpenHouse,
+)
+from scrapebadger.realtor.models import (
+    Phone as RealtorPhone,
+)
+from scrapebadger.realtor.models import (
+    Photo as RealtorPhoto,
+)
+from scrapebadger.realtor.models import (
+    PriceEvent as RealtorPriceEvent,
+)
+from scrapebadger.realtor.models import (
+    Property as RealtorProperty,
+)
+from scrapebadger.realtor.models import (
+    PropertyDetail as RealtorPropertyDetail,
+)
+from scrapebadger.realtor.models import (
+    School as RealtorSchool,
+)
+from scrapebadger.realtor.models import (
+    SearchResponse as RealtorSearchResponse,
+)
+from scrapebadger.realtor.models import (
+    Suggestion as RealtorSuggestion,
+)
+from scrapebadger.realtor.models import (
+    TaxRecord as RealtorTaxRecord,
+)
 from scrapebadger.reddit.models import (
     PostCommentsResponse,
     PostDetailResponse,
@@ -420,7 +481,7 @@ from scrapebadger.youtube.models import (
     Video as YoutubeVideo,
 )
 
-__version__ = "0.15.4"
+__version__ = "0.15.5"
 
 __all__ = [
     # TikTok core models
@@ -496,6 +557,28 @@ __all__ = [
     "Product",
     "ProductDetailResponse",
     "RateLimitError",
+    "RealtorAddress",
+    "RealtorAgent",
+    "RealtorAutocompleteResponse",
+    # TikTok client
+    "RealtorClient",
+    "RealtorCoordinate",
+    "RealtorDetailGroup",
+    "RealtorEstimate",
+    "RealtorFlags",
+    "RealtorMarketInfo",
+    "RealtorMarketsResponse",
+    "RealtorOffice",
+    "RealtorOpenHouse",
+    "RealtorPhone",
+    "RealtorPhoto",
+    "RealtorPriceEvent",
+    "RealtorProperty",
+    "RealtorPropertyDetail",
+    "RealtorSchool",
+    "RealtorSearchResponse",
+    "RealtorSuggestion",
+    "RealtorTaxRecord",
     # Reddit core models
     "RedditAward",
     "RedditComment",
@@ -536,7 +619,6 @@ __all__ = [
     "TikTokAd",
     "TikTokAdVideo",
     "TikTokAuthor",
-    # TikTok client
     "TikTokClient",
     "TikTokComment",
     # TikTok response envelopes
