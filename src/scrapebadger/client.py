@@ -12,6 +12,7 @@ from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
@@ -124,6 +125,7 @@ class ScrapeBadger:
         self._ebay: EbayClient | None = None
         self._youtube: YoutubeClient | None = None
         self._tiktok: TikTokClient | None = None
+        self._realtor: RealtorClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -303,6 +305,27 @@ class ScrapeBadger:
         if self._youtube is None:
             self._youtube = YoutubeClient(self._base_client)
         return self._youtube
+
+    @property
+    def realtor(self) -> RealtorClient:
+        """Access Realtor Scraper API operations.
+
+        Returns:
+            RealtorClient providing access to all 4 Realtor endpoints
+            (search, property detail, autocomplete, markets) across
+            realtor.com (US) and realtor.ca (Canada).
+
+        Example:
+            ```python
+            results = await client.realtor.search.search("Austin, TX")
+            detail = await client.realtor.properties.get_property("1234567890")
+            hits = await client.realtor.search.autocomplete("toronto", market="ca")
+            markets = await client.realtor.reference.list_markets()
+            ```
+        """
+        if self._realtor is None:
+            self._realtor = RealtorClient(self._base_client)
+        return self._realtor
 
     @property
     def tiktok(self) -> TikTokClient:

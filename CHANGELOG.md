@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.5] - 2026-07-02
+
+### Added
+
+- **Realtor sub-client** (`client.realtor`) — real-estate listings across realtor.com (US) and realtor.ca (Canada) behind a single `market` parameter. Four endpoints: `search.search()`, `search.autocomplete()`, `properties.get_property()`, `reference.list_markets()`, with fully-typed Pydantic models (`RealtorSearchResponse`, `RealtorPropertyDetail`, etc.). (SCR-98)
+
 ## [0.15.4] - 2026-06-30
 
 ### Added
