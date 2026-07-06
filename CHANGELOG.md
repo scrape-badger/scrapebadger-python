@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.6] - 2026-07-07
+
+### Added
+
+- Add Leboncoin Scraper API client (France) — 10 endpoints: search, ad detail, similar ads, seller profile + listings, markets/regions/departments/categories/location search.
+
 ## [0.15.5] - 2026-07-02
 
 ### Added
