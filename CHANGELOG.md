@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.7] - 2026-07-07
+
+### Added
+
+- **Zillow sub-client** (`client.zillow`) — real-estate listings, property detail, and agent profiles from zillow.com (US + Canadian inventory). Five endpoints: `search.search()`, `search.autocomplete()`, `properties.get_property()`, `agents.get_agent()`, `reference.list_markets()`, with fully-typed maximal-coverage Pydantic models (`ZillowSearchResponse`, `ZillowProperty` incl. nested `home_facts`/`price_history`/`tax_history`/`schools`/`zestimate_history`, `ZillowAgent`, etc.). (SCR-99)
+
 ## [0.15.6] - 2026-07-07
 
 ### Added

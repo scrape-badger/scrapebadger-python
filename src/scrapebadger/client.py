@@ -20,6 +20,7 @@ from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.web.client import WebClient
 from scrapebadger.youtube.client import YoutubeClient
+from scrapebadger.zillow.client import ZillowClient
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -127,6 +128,7 @@ class ScrapeBadger:
         self._youtube: YoutubeClient | None = None
         self._tiktok: TikTokClient | None = None
         self._realtor: RealtorClient | None = None
+        self._zillow: ZillowClient | None = None
         self._leboncoin: LeboncoinClient | None = None
 
     @property
@@ -328,6 +330,28 @@ class ScrapeBadger:
         if self._realtor is None:
             self._realtor = RealtorClient(self._base_client)
         return self._realtor
+
+    @property
+    def zillow(self) -> ZillowClient:
+        """Access Zillow Scraper API operations.
+
+        Returns:
+            ZillowClient providing access to all 5 Zillow endpoints
+            (search, property detail, agent profile, autocomplete, markets)
+            on zillow.com (US + Canadian inventory).
+
+        Example:
+            ```python
+            results = await client.zillow.search.search("Austin, TX")
+            prop = await client.zillow.properties.get_property("2078133351")
+            agent = await client.zillow.agents.get_agent(username="jane-doe")
+            hits = await client.zillow.search.autocomplete("austin")
+            markets = await client.zillow.reference.list_markets()
+            ```
+        """
+        if self._zillow is None:
+            self._zillow = ZillowClient(self._base_client)
+        return self._zillow
 
     @property
     def leboncoin(self) -> LeboncoinClient:

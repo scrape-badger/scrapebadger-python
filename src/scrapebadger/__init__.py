@@ -547,8 +547,99 @@ from scrapebadger.youtube.models import (
 from scrapebadger.youtube.models import (
     Video as YoutubeVideo,
 )
+from scrapebadger.zillow.client import ZillowClient
+from scrapebadger.zillow.models import (
+    Address as ZillowAddress,
+)
+from scrapebadger.zillow.models import (
+    Agent as ZillowAgent,
+)
+from scrapebadger.zillow.models import (
+    AgentAttribution as ZillowAgentAttribution,
+)
+from scrapebadger.zillow.models import (
+    AgentLicense as ZillowAgentLicense,
+)
+from scrapebadger.zillow.models import (
+    AgentResponse as ZillowAgentResponse,
+)
+from scrapebadger.zillow.models import (
+    AgentReview as ZillowAgentReview,
+)
+from scrapebadger.zillow.models import (
+    AutocompleteResponse as ZillowAutocompleteResponse,
+)
+from scrapebadger.zillow.models import (
+    AutocompleteResult as ZillowAutocompleteResult,
+)
+from scrapebadger.zillow.models import (
+    HomeFacts as ZillowHomeFacts,
+)
+from scrapebadger.zillow.models import (
+    LatLong as ZillowLatLong,
+)
+from scrapebadger.zillow.models import (
+    Listing as ZillowListing,
+)
+from scrapebadger.zillow.models import (
+    ListingSubType as ZillowListingSubType,
+)
+from scrapebadger.zillow.models import (
+    MapBounds as ZillowMapBounds,
+)
+from scrapebadger.zillow.models import (
+    MarketInfo as ZillowMarketInfo,
+)
+from scrapebadger.zillow.models import (
+    MarketsResponse as ZillowMarketsResponse,
+)
+from scrapebadger.zillow.models import (
+    MortgageRate as ZillowMortgageRate,
+)
+from scrapebadger.zillow.models import (
+    MortgageRates as ZillowMortgageRates,
+)
+from scrapebadger.zillow.models import (
+    NearbyRegion as ZillowNearbyRegion,
+)
+from scrapebadger.zillow.models import (
+    OpenHouse as ZillowOpenHouse,
+)
+from scrapebadger.zillow.models import (
+    Pagination as ZillowPagination,
+)
+from scrapebadger.zillow.models import (
+    PastSale as ZillowPastSale,
+)
+from scrapebadger.zillow.models import (
+    Photo as ZillowPhoto,
+)
+from scrapebadger.zillow.models import (
+    PriceHistoryEvent as ZillowPriceHistoryEvent,
+)
+from scrapebadger.zillow.models import (
+    Property as ZillowProperty,
+)
+from scrapebadger.zillow.models import (
+    PropertyResponse as ZillowPropertyResponse,
+)
+from scrapebadger.zillow.models import (
+    RegionSelection as ZillowRegionSelection,
+)
+from scrapebadger.zillow.models import (
+    School as ZillowSchool,
+)
+from scrapebadger.zillow.models import (
+    SearchResponse as ZillowSearchResponse,
+)
+from scrapebadger.zillow.models import (
+    TaxHistoryEvent as ZillowTaxHistoryEvent,
+)
+from scrapebadger.zillow.models import (
+    ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
+)
 
-__version__ = "0.15.6"
+__version__ = "0.15.7"
 
 __all__ = [
     # TikTok core models
@@ -814,6 +905,38 @@ __all__ = [
     "YoutubeTrendingItem",
     "YoutubeTrendingResponse",
     "YoutubeVideo",
+    # Zillow
+    "ZillowAddress",
+    "ZillowAgent",
+    "ZillowAgentAttribution",
+    "ZillowAgentLicense",
+    "ZillowAgentResponse",
+    "ZillowAgentReview",
+    "ZillowAutocompleteResponse",
+    "ZillowAutocompleteResult",
+    "ZillowClient",
+    "ZillowHomeFacts",
+    "ZillowLatLong",
+    "ZillowListing",
+    "ZillowListingSubType",
+    "ZillowMapBounds",
+    "ZillowMarketInfo",
+    "ZillowMarketsResponse",
+    "ZillowMortgageRate",
+    "ZillowMortgageRates",
+    "ZillowNearbyRegion",
+    "ZillowOpenHouse",
+    "ZillowPagination",
+    "ZillowPastSale",
+    "ZillowPhoto",
+    "ZillowPriceHistoryEvent",
+    "ZillowProperty",
+    "ZillowPropertyResponse",
+    "ZillowRegionSelection",
+    "ZillowSchool",
+    "ZillowSearchResponse",
+    "ZillowTaxHistoryEvent",
+    "ZillowZestimateHistoryPoint",
     # Version
     "__version__",
 ]
