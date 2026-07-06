@@ -1,0 +1,131 @@
+"""Zillow API client combining all sub-clients.
+
+This module provides the main ZillowClient class that serves as the
+entry point for all Zillow API operations.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from scrapebadger.zillow.agent import AgentClient
+from scrapebadger.zillow.properties import PropertiesClient
+from scrapebadger.zillow.reference import ReferenceClient
+from scrapebadger.zillow.search import SearchClient
+
+if TYPE_CHECKING:
+    from scrapebadger._internal.client import BaseClient
+
+
+class ZillowClient:
+    """Client for all Zillow API operations.
+
+    This class provides access to all Zillow scraping endpoints through
+    organized sub-clients for different resource types. Zillow is a
+    single-domain target (zillow.com) covering US + Canadian inventory.
+
+    Attributes:
+        search: Client for property search and region/address autocomplete.
+        properties: Client for single-property detail.
+        agents: Client for real-estate professional profiles.
+        reference: Client for reference data (markets).
+
+    Example:
+        ```python
+        from scrapebadger import ScrapeBadger
+
+        async with ScrapeBadger(api_key="your-key") as client:
+            # Search for listings
+            results = await client.zillow.search.search("Austin, TX")
+            for listing in results.results:
+                print(listing.address, listing.price)
+
+            # Get property detail
+            prop = await client.zillow.properties.get_property("2078133351")
+            print(prop.bedrooms, prop.bathrooms, prop.living_area)
+
+            # Get an agent profile + their listings
+            agent = await client.zillow.agents.get_agent(username="jane-doe")
+
+            # Region/address autocomplete
+            hits = await client.zillow.search.autocomplete("austin")
+
+            # Get supported markets
+            markets = await client.zillow.reference.list_markets()
+        ```
+
+    Note:
+        This client is not instantiated directly. Instead, access it through
+        the `zillow` property of the main `ScrapeBadger` client.
+    """
+
+    def __init__(self, client: BaseClient) -> None:
+        """Initialize Zillow client with all sub-clients.
+
+        Args:
+            client: The base HTTP client for making API requests.
+        """
+        self._client = client
+
+        # Initialize sub-clients
+        self._search = SearchClient(client)
+        self._properties = PropertiesClient(client)
+        self._agents = AgentClient(client)
+        self._reference = ReferenceClient(client)
+
+    @property
+    def search(self) -> SearchClient:
+        """Access property search and autocomplete endpoints.
+
+        Returns:
+            SearchClient for property search and region/address autocomplete.
+
+        Example:
+            ```python
+            results = await client.zillow.search.search("Miami, FL")
+            hits = await client.zillow.search.autocomplete("miami")
+            ```
+        """
+        return self._search
+
+    @property
+    def properties(self) -> PropertiesClient:
+        """Access the single-property detail endpoint.
+
+        Returns:
+            PropertiesClient for fetching full property detail.
+
+        Example:
+            ```python
+            prop = await client.zillow.properties.get_property("2078133351")
+            ```
+        """
+        return self._properties
+
+    @property
+    def agents(self) -> AgentClient:
+        """Access the agent-profile endpoint.
+
+        Returns:
+            AgentClient for fetching a professional's profile + listings.
+
+        Example:
+            ```python
+            agent = await client.zillow.agents.get_agent(username="jane-doe")
+            ```
+        """
+        return self._agents
+
+    @property
+    def reference(self) -> ReferenceClient:
+        """Access reference data endpoints.
+
+        Returns:
+            ReferenceClient for fetching supported markets.
+
+        Example:
+            ```python
+            markets = await client.zillow.reference.list_markets()
+            ```
+        """
+        return self._reference
