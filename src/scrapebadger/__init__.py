@@ -154,6 +154,73 @@ from scrapebadger.ebay.models import (
     SellerProfileResponse as EbaySellerProfileResponse,
 )
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.leboncoin.client import LeboncoinClient
+from scrapebadger.leboncoin.models import (
+    Ad as LeboncoinAd,
+)
+from scrapebadger.leboncoin.models import (
+    AdResponse as LeboncoinAdResponse,
+)
+from scrapebadger.leboncoin.models import (
+    Attribute as LeboncoinAttribute,
+)
+from scrapebadger.leboncoin.models import (
+    CategoriesResponse as LeboncoinCategoriesResponse,
+)
+from scrapebadger.leboncoin.models import (
+    Category as LeboncoinCategory,
+)
+from scrapebadger.leboncoin.models import (
+    Department as LeboncoinDepartment,
+)
+from scrapebadger.leboncoin.models import (
+    DepartmentsResponse as LeboncoinDepartmentsResponse,
+)
+from scrapebadger.leboncoin.models import (
+    FeedbackScores as LeboncoinFeedbackScores,
+)
+from scrapebadger.leboncoin.models import (
+    Images as LeboncoinImages,
+)
+from scrapebadger.leboncoin.models import (
+    Location as LeboncoinLocation,
+)
+from scrapebadger.leboncoin.models import (
+    LocationSearchResponse as LeboncoinLocationSearchResponse,
+)
+from scrapebadger.leboncoin.models import (
+    LocationSuggestion as LeboncoinLocationSuggestion,
+)
+from scrapebadger.leboncoin.models import (
+    MarketsResponse as LeboncoinMarketsResponse,
+)
+from scrapebadger.leboncoin.models import (
+    Owner as LeboncoinOwner,
+)
+from scrapebadger.leboncoin.models import (
+    Region as LeboncoinRegion,
+)
+from scrapebadger.leboncoin.models import (
+    RegionsResponse as LeboncoinRegionsResponse,
+)
+from scrapebadger.leboncoin.models import (
+    SearchResponse as LeboncoinSearchResponse,
+)
+from scrapebadger.leboncoin.models import (
+    Seller as LeboncoinSeller,
+)
+from scrapebadger.leboncoin.models import (
+    SellerListingsResponse as LeboncoinSellerListingsResponse,
+)
+from scrapebadger.leboncoin.models import (
+    SellerResponse as LeboncoinSellerResponse,
+)
+from scrapebadger.leboncoin.models import (
+    SimilarResponse as LeboncoinSimilarResponse,
+)
+from scrapebadger.leboncoin.models import (
+    StoreRatingReview as LeboncoinStoreRatingReview,
+)
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.realtor.models import (
     Address as RealtorAddress,
@@ -572,7 +639,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.15.6"
+__version__ = "0.15.7"
 
 __all__ = [
     # TikTok core models
@@ -633,6 +700,30 @@ __all__ = [
     "GoogleClient",
     "InsufficientCreditsError",
     "ItemDetailResponse",
+    # Leboncoin
+    "LeboncoinAd",
+    "LeboncoinAdResponse",
+    "LeboncoinAttribute",
+    "LeboncoinCategoriesResponse",
+    "LeboncoinCategory",
+    "LeboncoinClient",
+    "LeboncoinDepartment",
+    "LeboncoinDepartmentsResponse",
+    "LeboncoinFeedbackScores",
+    "LeboncoinImages",
+    "LeboncoinLocation",
+    "LeboncoinLocationSearchResponse",
+    "LeboncoinLocationSuggestion",
+    "LeboncoinMarketsResponse",
+    "LeboncoinOwner",
+    "LeboncoinRegion",
+    "LeboncoinRegionsResponse",
+    "LeboncoinSearchResponse",
+    "LeboncoinSeller",
+    "LeboncoinSellerListingsResponse",
+    "LeboncoinSellerResponse",
+    "LeboncoinSimilarResponse",
+    "LeboncoinStoreRatingReview",
     "MarketInfo",
     "MarketsResponse",
     "NewReleasesResponse",

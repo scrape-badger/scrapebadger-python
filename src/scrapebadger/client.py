@@ -12,6 +12,7 @@ from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.tiktok.client import TikTokClient
@@ -128,6 +129,7 @@ class ScrapeBadger:
         self._tiktok: TikTokClient | None = None
         self._realtor: RealtorClient | None = None
         self._zillow: ZillowClient | None = None
+        self._leboncoin: LeboncoinClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -350,6 +352,34 @@ class ScrapeBadger:
         if self._zillow is None:
             self._zillow = ZillowClient(self._base_client)
         return self._zillow
+
+    @property
+    def leboncoin(self) -> LeboncoinClient:
+        """Access Leboncoin Scraper API operations.
+
+        Returns:
+            LeboncoinClient providing access to all 10 Leboncoin endpoints
+            (search, ad detail, similar ads, seller profile/listings,
+            categories, regions, departments, location search, markets).
+
+        Example:
+            ```python
+            # Search for ads
+            results = await client.leboncoin.search.search("velo")
+
+            # Get ad detail
+            detail = await client.leboncoin.ads.get_ad(2812345678)
+
+            # Get a seller profile
+            seller = await client.leboncoin.sellers.get_seller("12345678")
+
+            # Reference regions
+            regions = await client.leboncoin.reference.list_regions()
+            ```
+        """
+        if self._leboncoin is None:
+            self._leboncoin = LeboncoinClient(self._base_client)
+        return self._leboncoin
 
     @property
     def tiktok(self) -> TikTokClient:
