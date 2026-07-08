@@ -154,6 +154,64 @@ from scrapebadger.ebay.models import (
     SellerProfileResponse as EbaySellerProfileResponse,
 )
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.immobiliare.client import ImmobiliareClient
+from scrapebadger.immobiliare.models import (
+    Agency as ImmobiliareAgency,
+)
+from scrapebadger.immobiliare.models import (
+    AgencyAgent as ImmobiliareAgencyAgent,
+)
+from scrapebadger.immobiliare.models import (
+    AgencyListingsResponse as ImmobiliareAgencyListingsResponse,
+)
+from scrapebadger.immobiliare.models import (
+    AgencyProfile as ImmobiliareAgencyProfile,
+)
+from scrapebadger.immobiliare.models import (
+    Agent as ImmobiliareAgent,
+)
+from scrapebadger.immobiliare.models import (
+    Feature as ImmobiliareFeature,
+)
+from scrapebadger.immobiliare.models import (
+    Listing as ImmobiliareListing,
+)
+from scrapebadger.immobiliare.models import (
+    Location as ImmobiliareLocation,
+)
+from scrapebadger.immobiliare.models import (
+    Market as ImmobiliareMarket,
+)
+from scrapebadger.immobiliare.models import (
+    Photo as ImmobiliarePhoto,
+)
+from scrapebadger.immobiliare.models import (
+    Price as ImmobiliarePrice,
+)
+from scrapebadger.immobiliare.models import (
+    PriceStatsPoint as ImmobiliarePriceStatsPoint,
+)
+from scrapebadger.immobiliare.models import (
+    PriceStatsResponse as ImmobiliarePriceStatsResponse,
+)
+from scrapebadger.immobiliare.models import (
+    PropertyUnit as ImmobiliarePropertyUnit,
+)
+from scrapebadger.immobiliare.models import (
+    ReferenceResponse as ImmobiliareReferenceResponse,
+)
+from scrapebadger.immobiliare.models import (
+    RelatedSearch as ImmobiliareRelatedSearch,
+)
+from scrapebadger.immobiliare.models import (
+    SearchResponse as ImmobiliareSearchResponse,
+)
+from scrapebadger.immobiliare.models import (
+    Suggestion as ImmobiliareSuggestion,
+)
+from scrapebadger.immobiliare.models import (
+    SuggestResponse as ImmobiliareSuggestResponse,
+)
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.leboncoin.models import (
     Ad as LeboncoinAd,
@@ -639,7 +697,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.15.7"
+__version__ = "0.16.0"
 
 __all__ = [
     # TikTok core models
@@ -698,6 +756,27 @@ __all__ = [
     "FeedbackBreakdown",
     # Google Scraper
     "GoogleClient",
+    # Immobiliare
+    "ImmobiliareAgency",
+    "ImmobiliareAgencyAgent",
+    "ImmobiliareAgencyListingsResponse",
+    "ImmobiliareAgencyProfile",
+    "ImmobiliareAgent",
+    "ImmobiliareClient",
+    "ImmobiliareFeature",
+    "ImmobiliareListing",
+    "ImmobiliareLocation",
+    "ImmobiliareMarket",
+    "ImmobiliarePhoto",
+    "ImmobiliarePrice",
+    "ImmobiliarePriceStatsPoint",
+    "ImmobiliarePriceStatsResponse",
+    "ImmobiliarePropertyUnit",
+    "ImmobiliareReferenceResponse",
+    "ImmobiliareRelatedSearch",
+    "ImmobiliareSearchResponse",
+    "ImmobiliareSuggestResponse",
+    "ImmobiliareSuggestion",
     "InsufficientCreditsError",
     "ItemDetailResponse",
     # Leboncoin

@@ -12,6 +12,7 @@ from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
@@ -130,6 +131,7 @@ class ScrapeBadger:
         self._realtor: RealtorClient | None = None
         self._zillow: ZillowClient | None = None
         self._leboncoin: LeboncoinClient | None = None
+        self._immobiliare: ImmobiliareClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -380,6 +382,28 @@ class ScrapeBadger:
         if self._leboncoin is None:
             self._leboncoin = LeboncoinClient(self._base_client)
         return self._leboncoin
+
+    @property
+    def immobiliare(self) -> ImmobiliareClient:
+        """Access Immobiliare Scraper API operations.
+
+        Returns:
+            ImmobiliareClient providing access to all Immobiliare-group
+            endpoints (autocomplete, search, listing detail, agency
+            profile/listings, price stats, markets, reference) across
+            immobiliare.it, indomio.es, indomio.gr, and immotop.lu.
+
+        Example:
+            ```python
+            hits = await client.immobiliare.autocomplete("Milano")
+            results = await client.immobiliare.search(location="Milano")
+            detail = await client.immobiliare.get_listing(123456789)
+            markets = await client.immobiliare.list_markets()
+            ```
+        """
+        if self._immobiliare is None:
+            self._immobiliare = ImmobiliareClient(self._base_client)
+        return self._immobiliare
 
     @property
     def tiktok(self) -> TikTokClient:
