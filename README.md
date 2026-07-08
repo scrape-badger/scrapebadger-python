@@ -94,6 +94,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 | **YouTube** | 39 endpoints — search, autocomplete, video detail/related/comments/replies/transcript/captions/streams/live-chat/batch, channel detail + videos/shorts/streams/playlists/community/about/subscriber-count/in-channel-search/resolve, playlists/items/mixes, trending/hashtag/home, shorts, community post/comments, music search, oembed, categories/languages/regions | [YouTube Guide](docs/youtube.md) |
 | **TikTok** | 25 endpoints — user profile/videos/followers/following/liked/reposts, video detail/comments/replies/related/transcript/oEmbed, search (general/videos/hashtags/users), music detail/videos, hashtag detail/videos, trending videos/hashtags/songs, ad library, regions | [TikTok Guide](docs/tiktok.md) |
 | **Immobiliare** | 8 endpoints across immobiliare.it, indomio.es, indomio.gr, immotop.lu — autocomplete, search, listing detail, agency profile/listings, price stats, markets, reference | [Immobiliare Guide](docs/immobiliare.md) |
+| **LoopNet** | 5 endpoints across loopnet.com/.ca/.co.uk/.fr/.es — commercial-real-estate search (for-lease/for-sale/auctions), listing detail, broker profile, markets, property types | [LoopNet Guide](docs/loopnet.md) |
 
 ## Error Handling
 

@@ -279,6 +279,46 @@ from scrapebadger.leboncoin.models import (
 from scrapebadger.leboncoin.models import (
     StoreRatingReview as LeboncoinStoreRatingReview,
 )
+from scrapebadger.loopnet.client import LoopNetClient
+from scrapebadger.loopnet.models import (
+    Broker as LoopnetBroker,
+)
+from scrapebadger.loopnet.models import (
+    BrokerProfile as LoopnetBrokerProfile,
+)
+from scrapebadger.loopnet.models import (
+    BrokerResponse as LoopnetBrokerResponse,
+)
+from scrapebadger.loopnet.models import (
+    ListingCard as LoopnetListingCard,
+)
+from scrapebadger.loopnet.models import (
+    ListingDetail as LoopnetListingDetail,
+)
+from scrapebadger.loopnet.models import (
+    ListingResponse as LoopnetListingResponse,
+)
+from scrapebadger.loopnet.models import (
+    MarketInfo as LoopnetMarketInfo,
+)
+from scrapebadger.loopnet.models import (
+    MarketsResponse as LoopnetMarketsResponse,
+)
+from scrapebadger.loopnet.models import (
+    Pagination as LoopnetPagination,
+)
+from scrapebadger.loopnet.models import (
+    PropertyTypeInfo as LoopnetPropertyTypeInfo,
+)
+from scrapebadger.loopnet.models import (
+    PropertyTypesResponse as LoopnetPropertyTypesResponse,
+)
+from scrapebadger.loopnet.models import (
+    SearchResponse as LoopnetSearchResponse,
+)
+from scrapebadger.loopnet.models import (
+    Space as LoopnetSpace,
+)
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.realtor.models import (
     Address as RealtorAddress,
@@ -697,7 +737,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.16.0"
+__version__ = "0.17.0"
 
 __all__ = [
     # TikTok core models
@@ -803,6 +843,21 @@ __all__ = [
     "LeboncoinSellerResponse",
     "LeboncoinSimilarResponse",
     "LeboncoinStoreRatingReview",
+    # LoopNet
+    "LoopNetClient",
+    "LoopnetBroker",
+    "LoopnetBrokerProfile",
+    "LoopnetBrokerResponse",
+    "LoopnetListingCard",
+    "LoopnetListingDetail",
+    "LoopnetListingResponse",
+    "LoopnetMarketInfo",
+    "LoopnetMarketsResponse",
+    "LoopnetPagination",
+    "LoopnetPropertyTypeInfo",
+    "LoopnetPropertyTypesResponse",
+    "LoopnetSearchResponse",
+    "LoopnetSpace",
     "MarketInfo",
     "MarketsResponse",
     "NewReleasesResponse",
