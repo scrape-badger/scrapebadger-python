@@ -186,9 +186,7 @@ class ImmobiliareClient:
             ```
         """
         params: dict[str, Any] = {"market": market}
-        response = await self._client.get(
-            f"/v1/immobiliare/listings/{listing_id}", params=params
-        )
+        response = await self._client.get(f"/v1/immobiliare/listings/{listing_id}", params=params)
         return Listing.model_validate(response)
 
     async def get_agency(self, agency_id: int, *, market: str = "it") -> AgencyProfile:
@@ -208,9 +206,7 @@ class ImmobiliareClient:
             ```
         """
         params: dict[str, Any] = {"market": market}
-        response = await self._client.get(
-            f"/v1/immobiliare/agencies/{agency_id}", params=params
-        )
+        response = await self._client.get(f"/v1/immobiliare/agencies/{agency_id}", params=params)
         return AgencyProfile.model_validate(response)
 
     async def get_agency_listings(
@@ -277,9 +273,7 @@ class ImmobiliareClient:
             "city_id": city_id,
             "contract": contract,
         }
-        response = await self._client.get(
-            "/v1/immobiliare/market-insights/prices", params=params
-        )
+        response = await self._client.get("/v1/immobiliare/market-insights/prices", params=params)
         return PriceStatsResponse.model_validate(response)
 
     async def list_markets(self) -> list[Market]:
