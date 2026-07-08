@@ -14,6 +14,7 @@ from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.leboncoin.client import LeboncoinClient
+from scrapebadger.loopnet.client import LoopNetClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.tiktok.client import TikTokClient
@@ -132,6 +133,7 @@ class ScrapeBadger:
         self._zillow: ZillowClient | None = None
         self._leboncoin: LeboncoinClient | None = None
         self._immobiliare: ImmobiliareClient | None = None
+        self._loopnet: LoopNetClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -404,6 +406,27 @@ class ScrapeBadger:
         if self._immobiliare is None:
             self._immobiliare = ImmobiliareClient(self._base_client)
         return self._immobiliare
+
+    @property
+    def loopnet(self) -> LoopNetClient:
+        """Access LoopNet Scraper API operations.
+
+        Returns:
+            LoopNetClient providing access to all LoopNet commercial-real-estate
+            endpoints (search, listing detail, broker profile, markets, property
+            types) across loopnet.com/.ca/.co.uk/.fr/.es (US/CA/UK/FR/ES).
+
+        Example:
+            ```python
+            results = await client.loopnet.search.search("Houston, TX")
+            detail = await client.loopnet.listings.get("12345678")
+            broker = await client.loopnet.brokers.get("jane-doe", "w7x123")
+            markets = await client.loopnet.reference.markets()
+            ```
+        """
+        if self._loopnet is None:
+            self._loopnet = LoopNetClient(self._base_client)
+        return self._loopnet
 
     @property
     def tiktok(self) -> TikTokClient:

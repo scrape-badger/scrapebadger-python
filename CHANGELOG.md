@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0] - 2026-07-08
+
+### Added
+
+- **LoopNet sub-client** (`client.loopnet`) — commercial-real-estate (CoStar) listings, brokers, and reference data across loopnet.com/.ca/.co.uk/.fr/.es (US/CA/UK/FR/ES). Endpoints: `search.search()` (for-lease / for-sale / auctions, all property types, filters, pagination), `listings.get()`, `brokers.get()`, `reference.markets()`, `reference.property_types()`, with fully-typed maximal-coverage Pydantic models (`LoopnetSearchResponse`, `LoopnetListingDetail` incl. offers/facts/brokers/media, `LoopnetBrokerProfile`, `LoopnetListingCard`, etc.). LoopNet is behind Akamai Bot Manager (browser-farm-only) — served via the ScrapeBadger farm. (SCR-102)
+
 ## [0.15.7] - 2026-07-07
 
 ### Added
