@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.15.6"
+SDK_VERSION = "0.16.0"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -254,7 +254,8 @@ class BaseClient:
                     self._handle_error_response(response, data)
 
                 # Check for application-level errors in response
-                if data.get("error"):
+                # (bare JSON array bodies, e.g. /markets, have no .get)
+                if isinstance(data, dict) and data.get("error"):
                     raise ScrapeBadgerError(
                         data["error"],
                         response.status_code,
