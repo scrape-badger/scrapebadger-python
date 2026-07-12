@@ -82,6 +82,31 @@ from scrapebadger.amazon.models import (
     SearchResult as AmazonSearchResult,
 )
 from scrapebadger.client import ScrapeBadger
+from scrapebadger.depop.client import DepopClient
+from scrapebadger.depop.models import (
+    DepopCard,
+)
+from scrapebadger.depop.models import (
+    Market as DepopMarket,
+)
+from scrapebadger.depop.models import (
+    MarketsResponse as DepopMarketsResponse,
+)
+from scrapebadger.depop.models import (
+    ProductDetail as DepopProductDetail,
+)
+from scrapebadger.depop.models import (
+    SearchMeta as DepopSearchMeta,
+)
+from scrapebadger.depop.models import (
+    SearchResponse as DepopSearchResponse,
+)
+from scrapebadger.depop.models import (
+    ShopProfile as DepopShopProfile,
+)
+from scrapebadger.depop.models import (
+    UserProductsResponse as DepopUserProductsResponse,
+)
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.ebay.models import (
     AutocompleteResponse as EbayAutocompleteResponse,
@@ -810,7 +835,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.18.0"
+__version__ = "0.19.0"
 
 __all__ = [
     # TikTok core models
@@ -837,6 +862,16 @@ __all__ = [
     "ColorsResponse",
     "Deal",
     "DealsResponse",
+    # Depop
+    "DepopCard",
+    "DepopClient",
+    "DepopMarket",
+    "DepopMarketsResponse",
+    "DepopProductDetail",
+    "DepopSearchMeta",
+    "DepopSearchResponse",
+    "DepopShopProfile",
+    "DepopUserProductsResponse",
     # Web scraping
     "DetectResult",
     # eBay response envelopes / models

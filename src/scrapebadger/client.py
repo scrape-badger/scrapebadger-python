@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
+from scrapebadger.depop.client import DepopClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
@@ -127,6 +128,7 @@ class ScrapeBadger:
         self._google: GoogleClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
+        self._depop: DepopClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
         self._youtube: YoutubeClient | None = None
@@ -237,6 +239,29 @@ class ScrapeBadger:
         if self._redfin is None:
             self._redfin = RedfinClient(self._base_client)
         return self._redfin
+
+    @property
+    def depop(self) -> DepopClient:
+        """Access Depop Scraper API operations.
+
+        Returns:
+            DepopClient providing access to all Depop endpoints (search,
+            product detail, shop profile, user products, markets). Depop is a
+            second-hand fashion marketplace: one global host (depop.com)
+            localised by market (us, gb [alias uk], au, ie, it, fr, de, es, nl,
+            nz) → country/currency.
+
+        Example:
+            ```python
+            results = await client.depop.search("nike vintage")
+            detail = await client.depop.get_product("some-product-slug")
+            shop = await client.depop.get_user("someseller")
+            markets = await client.depop.list_markets()
+            ```
+        """
+        if self._depop is None:
+            self._depop = DepopClient(self._base_client)
+        return self._depop
 
     @property
     def google(self) -> GoogleClient:
