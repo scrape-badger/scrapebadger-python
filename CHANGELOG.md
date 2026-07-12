@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.0] - 2026-07-12
+
+### Added
+
+- **Redfin client** (`client.redfin`) — Redfin (redfin.com, US) for-sale search, property detail, agent profiles, autocomplete, and markets. Endpoints: `search()`, `get_property()`, `get_agent()`, `autocomplete()`, `list_markets()`, mirroring the Immobiliare flat-client pattern, with fully-typed maximal-coverage Pydantic models (`RedfinSearchResponse`, `RedfinProperty` incl. nested `address`/`price_history`/`tax_history`/`schools`/`amenities`, `RedfinAgent`, etc.). Single market: redfin.com (US, USD, en-US). (SCR-116)
+
 ## [0.17.0] - 2026-07-08
 
 ### Added

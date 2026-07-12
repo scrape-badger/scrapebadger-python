@@ -411,6 +411,79 @@ from scrapebadger.reddit.models import (
 from scrapebadger.reddit.models import (
     UserProfileResponse as RedditUserProfileResponse,
 )
+from scrapebadger.redfin.client import RedfinClient
+from scrapebadger.redfin.models import (
+    Address as RedfinAddress,
+)
+from scrapebadger.redfin.models import (
+    Agent as RedfinAgent,
+)
+from scrapebadger.redfin.models import (
+    AgentResponse as RedfinAgentResponse,
+)
+from scrapebadger.redfin.models import (
+    AgentReview as RedfinAgentReview,
+)
+from scrapebadger.redfin.models import (
+    AmenityGroup as RedfinAmenityGroup,
+)
+from scrapebadger.redfin.models import (
+    AutocompleteResponse as RedfinAutocompleteResponse,
+)
+from scrapebadger.redfin.models import (
+    AutocompleteResult as RedfinAutocompleteResult,
+)
+from scrapebadger.redfin.models import (
+    DataSource as RedfinDataSource,
+)
+from scrapebadger.redfin.models import (
+    LatLong as RedfinLatLong,
+)
+from scrapebadger.redfin.models import (
+    Listing as RedfinListing,
+)
+from scrapebadger.redfin.models import (
+    MapBounds as RedfinMapBounds,
+)
+from scrapebadger.redfin.models import (
+    MarketInfo as RedfinMarketInfo,
+)
+from scrapebadger.redfin.models import (
+    MarketsResponse as RedfinMarketsResponse,
+)
+from scrapebadger.redfin.models import (
+    Pagination as RedfinPagination,
+)
+from scrapebadger.redfin.models import (
+    Photo as RedfinPhoto,
+)
+from scrapebadger.redfin.models import (
+    PriceHistoryEvent as RedfinPriceHistoryEvent,
+)
+from scrapebadger.redfin.models import (
+    Property as RedfinProperty,
+)
+from scrapebadger.redfin.models import (
+    PropertyResponse as RedfinPropertyResponse,
+)
+from scrapebadger.redfin.models import (
+    RegionSelection as RedfinRegionSelection,
+)
+from scrapebadger.redfin.models import (
+    Sash as RedfinSash,
+)
+from scrapebadger.redfin.models import (
+    School as RedfinSchool,
+)
+from scrapebadger.redfin.models import (
+    SearchMedian as RedfinSearchMedian,
+)
+from scrapebadger.redfin.models import (
+    SearchResponse as RedfinSearchResponse,
+)
+from scrapebadger.redfin.models import (
+    TaxHistoryEvent as RedfinTaxHistoryEvent,
+)
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.tiktok.models import (
     AdLibraryPage,
@@ -737,7 +810,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.17.0"
+__version__ = "0.18.0"
 
 __all__ = [
     # TikTok core models
@@ -907,6 +980,32 @@ __all__ = [
     "RedditUserProfileResponse",
     "RedditUserSubreddit",
     "RedditWikiPage",
+    # Redfin
+    "RedfinAddress",
+    "RedfinAgent",
+    "RedfinAgentResponse",
+    "RedfinAgentReview",
+    "RedfinAmenityGroup",
+    "RedfinAutocompleteResponse",
+    "RedfinAutocompleteResult",
+    "RedfinClient",
+    "RedfinDataSource",
+    "RedfinLatLong",
+    "RedfinListing",
+    "RedfinMapBounds",
+    "RedfinMarketInfo",
+    "RedfinMarketsResponse",
+    "RedfinPagination",
+    "RedfinPhoto",
+    "RedfinPriceHistoryEvent",
+    "RedfinProperty",
+    "RedfinPropertyResponse",
+    "RedfinRegionSelection",
+    "RedfinSash",
+    "RedfinSchool",
+    "RedfinSearchMedian",
+    "RedfinSearchResponse",
+    "RedfinTaxHistoryEvent",
     "RegionInfo",
     "ReturnsPolicy",
     "Review",

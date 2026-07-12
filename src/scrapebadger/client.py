@@ -17,6 +17,7 @@ from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.loopnet.client import LoopNetClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
+from scrapebadger.redfin.client import RedfinClient
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
@@ -125,6 +126,7 @@ class ScrapeBadger:
         self._web: WebClient | None = None
         self._google: GoogleClient | None = None
         self._reddit: RedditClient | None = None
+        self._redfin: RedfinClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
         self._youtube: YoutubeClient | None = None
@@ -214,6 +216,27 @@ class ScrapeBadger:
         if self._reddit is None:
             self._reddit = RedditClient(self._base_client)
         return self._reddit
+
+    @property
+    def redfin(self) -> RedfinClient:
+        """Access Redfin Scraper API operations.
+
+        Returns:
+            RedfinClient providing access to all Redfin endpoints (search,
+            property detail, agent profile, autocomplete, markets).
+            Single market: redfin.com (US, USD, en-US).
+
+        Example:
+            ```python
+            results = await client.redfin.search("Austin, TX")
+            detail = await client.redfin.get_property("12345678")
+            agent = await client.redfin.get_agent("jane-doe")
+            markets = await client.redfin.list_markets()
+            ```
+        """
+        if self._redfin is None:
+            self._redfin = RedfinClient(self._base_client)
+        return self._redfin
 
     @property
     def google(self) -> GoogleClient:
