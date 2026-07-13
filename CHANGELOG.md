@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.20.0] - 2026-07-13
+
+### Added
+
+- **LinkedIn client** (`client.linkedin`) — LinkedIn's public, no-auth (logged-out) surface. Endpoints: `jobs_search()`, `get_job()`, `company_jobs()`, `get_company()`, `get_school()`, `get_profile()`, `get_post()`, `get_article()`, `get_course()`, `geo_suggest()`, `health()` under `/v1/linkedin`. Fully-typed Pydantic models (`LinkedInJobsSearchResponse`, `LinkedInJobDetail`, `LinkedInProfile` incl. nested experience/education, `LinkedInCompany`, `LinkedInSchool`, `LinkedInPost`, `LinkedInLearningCourse`, `LinkedInGeoSuggestResponse`). Sourced from the guest Jobs API and public SSR JSON-LD pages; deep logged-in data is auth-gated and out of scope. (SCR-119)
+
 ## [0.18.0] - 2026-07-12
 
 ### Added

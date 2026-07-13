@@ -304,6 +304,34 @@ from scrapebadger.leboncoin.models import (
 from scrapebadger.leboncoin.models import (
     StoreRatingReview as LeboncoinStoreRatingReview,
 )
+from scrapebadger.linkedin.client import LinkedInClient
+from scrapebadger.linkedin.models import (
+    Company as LinkedInCompany,
+)
+from scrapebadger.linkedin.models import (
+    GeoSuggestResponse as LinkedInGeoSuggestResponse,
+)
+from scrapebadger.linkedin.models import (
+    JobCard as LinkedInJobCard,
+)
+from scrapebadger.linkedin.models import (
+    JobDetail as LinkedInJobDetail,
+)
+from scrapebadger.linkedin.models import (
+    JobsSearchResponse as LinkedInJobsSearchResponse,
+)
+from scrapebadger.linkedin.models import (
+    LearningCourse as LinkedInLearningCourse,
+)
+from scrapebadger.linkedin.models import (
+    Post as LinkedInPost,
+)
+from scrapebadger.linkedin.models import (
+    Profile as LinkedInProfile,
+)
+from scrapebadger.linkedin.models import (
+    School as LinkedInSchool,
+)
 from scrapebadger.loopnet.client import LoopNetClient
 from scrapebadger.loopnet.models import (
     Broker as LoopnetBroker,
@@ -835,7 +863,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.19.0"
+__version__ = "0.20.0"
 
 __all__ = [
     # TikTok core models
@@ -951,6 +979,17 @@ __all__ = [
     "LeboncoinSellerResponse",
     "LeboncoinSimilarResponse",
     "LeboncoinStoreRatingReview",
+    # LinkedIn
+    "LinkedInClient",
+    "LinkedInCompany",
+    "LinkedInGeoSuggestResponse",
+    "LinkedInJobCard",
+    "LinkedInJobDetail",
+    "LinkedInJobsSearchResponse",
+    "LinkedInLearningCourse",
+    "LinkedInPost",
+    "LinkedInProfile",
+    "LinkedInSchool",
     # LoopNet
     "LoopNetClient",
     "LoopnetBroker",

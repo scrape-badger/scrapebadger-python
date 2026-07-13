@@ -15,6 +15,7 @@ from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.leboncoin.client import LeboncoinClient
+from scrapebadger.linkedin.client import LinkedInClient
 from scrapebadger.loopnet.client import LoopNetClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
@@ -129,6 +130,7 @@ class ScrapeBadger:
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
         self._depop: DepopClient | None = None
+        self._linkedin: LinkedInClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
         self._youtube: YoutubeClient | None = None
@@ -262,6 +264,29 @@ class ScrapeBadger:
         if self._depop is None:
             self._depop = DepopClient(self._base_client)
         return self._depop
+
+    @property
+    def linkedin(self) -> LinkedInClient:
+        """Access LinkedIn Scraper API operations.
+
+        Returns:
+            LinkedInClient providing access to LinkedIn's public no-auth
+            surface: the guest Jobs API (jobs_search, get_job, company_jobs),
+            public company/school/profile SSR pages, public posts / Pulse
+            articles / Learning courses, and a geo/company id helper. Deep
+            logged-in data is auth-gated and not available.
+
+        Example:
+            ```python
+            jobs = await client.linkedin.jobs_search(keywords="python", location="Berlin")
+            company = await client.linkedin.get_company("microsoft")
+            profile = await client.linkedin.get_profile("williamhgates")
+            geo = await client.linkedin.geo_suggest("London")
+            ```
+        """
+        if self._linkedin is None:
+            self._linkedin = LinkedInClient(self._base_client)
+        return self._linkedin
 
     @property
     def google(self) -> GoogleClient:
