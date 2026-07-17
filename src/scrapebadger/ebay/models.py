@@ -117,6 +117,8 @@ class SearchResult(_BaseModel):
     location: str | None = None
     returns: str | None = None
     sold_count: int | None = None
+    sold_date: str | None = None  # completed cards: sale date as rendered, e.g. "2 Jul 2026"
+    sold_date_at: str | None = None  # ISO "2026-07-02", best-effort (None on non-English markets)
     watchers: int | None = None
     coupon: str | None = None
     rating: float | None = None
