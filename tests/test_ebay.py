@@ -69,6 +69,8 @@ SAMPLE_SEARCH_RESULT: dict[str, Any] = {
     "free_shipping": True,
     "location": "United States",
     "sold_count": 1200,
+    "sold_date": "2 Jul 2026",
+    "sold_date_at": "2026-07-02",
     "watchers": 42,
     "rating": 4.8,
     "ratings_total": 530,
@@ -485,6 +487,8 @@ class TestEbayModels:
         resp = SearchResponse.model_validate(COMPLETED_RESPONSE)
         assert resp.sold is True
         assert len(resp.results) == 1
+        assert resp.results[0].sold_date == "2 Jul 2026"
+        assert resp.results[0].sold_date_at == "2026-07-02"
 
     def test_item_detail_response(self) -> None:
         resp = ItemDetailResponse.model_validate(ITEM_DETAIL_RESPONSE)
@@ -631,6 +635,8 @@ class TestSearchClient:
         result = await search_client.completed("iphone 13", condition="used")
         assert isinstance(result, SearchResponse)
         assert result.sold is True
+        assert result.results[0].sold_date == "2 Jul 2026"
+        assert result.results[0].sold_date_at == "2026-07-02"
         call_args = mock_base_client.get.call_args
         assert call_args[0][0] == "/v1/ebay/completed"
         assert call_args[1]["params"]["condition"] == "used"
