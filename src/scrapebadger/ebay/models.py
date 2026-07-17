@@ -180,8 +180,9 @@ class Item(_BaseModel):
     bids: int | None = None
     current_bid: EbayPrice | None = None  # auctions: the current high bid (mirrors ``price``)
     time_left: str | None = None  # relative remaining, e.g. "12h 16m"
-    end_time_utc: float | None = None  # absolute auction end (Unix float)
-    end_time_at: str | None = None  # absolute auction end (ISO-8601 Z)
+    is_ended: bool = False  # listing has closed (sold / ended), any buying format
+    end_time_utc: float | None = None  # listing end: auction close / sold time (Unix float)
+    end_time_at: str | None = None  # listing end: auction close / sold time (ISO-8601 Z)
     buy_it_now_price: EbayPrice | None = None  # BIN price (fixed-price, or auction-with-BIN)
     best_offer_enabled: bool | None = None
     brand: str | None = None

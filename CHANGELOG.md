@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **eBay completed-search sold dates** — `SearchResult` now exposes `sold_date` (sale date text as rendered by eBay, e.g. "2 Jul 2026"; localized on non-English markets) and `sold_date_at` (best-effort ISO date "2026-07-02", `None` when the market's format isn't English) on `client.ebay` completed/sold result cards. (SCR-122)
+- **eBay item `is_ended`** — `Item` now exposes `is_ended` (`True` when the listing has closed — sold or ended — any buying format, default `False`). `end_time_utc`/`end_time_at` broaden from auction-only to the listing end: auction close or sold time for ended listings of any format; still `None` for active fixed-price listings. (SCR-122)
 
 ## [0.20.0] - 2026-07-13
 

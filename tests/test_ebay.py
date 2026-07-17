@@ -164,6 +164,7 @@ SAMPLE_AUCTION_ITEM: dict[str, Any] = {
     "bids": 19,
     "current_bid": SAMPLE_AUCTION_BID,
     "time_left": "12h 5m",
+    "is_ended": False,
     "end_time_utc": 1782157851.0,
     "end_time_at": "2026-06-22T19:50:51Z",
     "buy_it_now_price": None,
@@ -419,13 +420,19 @@ class TestEbayModels:
         assert item.current_bid is not None
         assert item.current_bid.value == 1430.0
         assert item.time_left == "12h 5m"
+        assert item.is_ended is False
         assert item.end_time_utc == 1782157851.0
         assert item.end_time_at == "2026-06-22T19:50:51Z"
         assert item.buy_it_now_price is None
 
+    def test_item_ended(self) -> None:
+        item = Item.model_validate({**SAMPLE_AUCTION_ITEM, "is_ended": True, "time_left": None})
+        assert item.is_ended is True
+
     def test_item_non_auction_has_no_auction_fields(self) -> None:
         item = Item.model_validate(SAMPLE_ITEM)
         assert item.is_auction is False
+        assert item.is_ended is False
         assert item.current_bid is None
         assert item.end_time_utc is None
         assert item.end_time_at is None
