@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 TripType = Literal["round_trip", "one_way", "multi_city"]
 TravelClass = Literal["economy", "premium_economy", "business", "first"]
 StopsFilter = Literal["any", "nonstop", "one_stop", "two_stops"]
+SortBy = Literal["top", "price"]
 
 
 class FlightsClient:
@@ -60,6 +61,7 @@ class FlightsClient:
         hl: str = "en",
         stops: StopsFilter = "any",
         max_price: int | None = None,
+        sort_by: SortBy = "top",
     ) -> dict[str, Any]:
         """Search Google Flights for available itineraries.
 
@@ -80,6 +82,12 @@ class FlightsClient:
             hl: Language code.
             stops: Max stops filter.
             max_price: Upper price filter.
+            sort_by: "top" (default) returns Google's ~6-8 "best" picks
+                (fast). "price" returns the FULL price-sorted inventory
+                (every carrier, the cheap long-layover fares) plus Google's
+                own price floor, typical range, and price history — slower,
+                and falls back to the "top" set under load. Round-trip
+                initial search only.
 
         Returns:
             Response with `best_flights[]`, `other_flights[]`,
@@ -99,6 +107,7 @@ class FlightsClient:
             "gl": gl,
             "hl": hl,
             "stops": stops,
+            "sort_by": sort_by,
         }
         if return_date is not None:
             params["return_date"] = return_date
