@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] - 2026-07-23
+
+### Added
+
+- **Google Flights `sort_by`** — `client.google.flights.search(..., sort_by="price")` now returns the FULL price-sorted inventory (every carrier, the cheap long-layover fares) plus Google's own price floor, typical range, and price history, instead of only the ~6-8 "best" preview. Default `sort_by="top"` keeps the fast best-picks behaviour. (SCR-123)
+
 ## [0.21.0] - 2026-07-17
 
 ### Added
