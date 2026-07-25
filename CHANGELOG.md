@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.23.0] - 2026-07-25
+
+### Added
+
+- **eBay `pagination.has_more`** — the stop signal for paging through completed/sold listings. `total_pages`/`total_results` are `None` on eBay's sold grid, and past the last page eBay re-serves that page instead of returning empty, so looping "until the results are empty" never terminated. Loop `while r.pagination.has_more` instead; the API now also returns an empty page once you page past the end. The `page` ceiling is raised to 1000 (a broad sold search runs ~133 pages deep at `per_page=240`, ~26k listings). (SCR-124)
+
+### Changed
+
+- **eBay `is_sponsored` is now `bool | None` and always `None`** — previously typed `bool` and reported `True` for 100% of results. eBay renders its "Sponsored" badge into every result card as anti-scraping bait, so promoted placements cannot be distinguished from organic ones in the response. The field reports `None` (unknown) rather than a value that was wrong on every row. (SCR-124)
+
 ## [0.22.0] - 2026-07-23
 
 ### Added
