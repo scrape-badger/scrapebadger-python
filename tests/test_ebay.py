@@ -384,7 +384,9 @@ class TestEbayModels:
         result = SearchResult(position=1, item_id="X")
         assert result.title is None
         assert result.is_auction is False
-        assert result.is_sponsored is False
+        # None, not False: eBay's "Sponsored" badge is present on every card, so
+        # sponsorship is unknowable from the response rather than known-absent.
+        assert result.is_sponsored is None
         assert result.price is None
 
     def test_item_full(self) -> None:
