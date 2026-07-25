@@ -46,6 +46,11 @@ class Pagination(_BaseModel):
     per_page: int | None = None
     total_pages: int | None = None
     total_results: int | None = None
+    #: True while eBay still offers a next page. This is the stop signal for
+    #: bulk extraction: ``total_pages``/``total_results`` are ``None`` on the
+    #: completed/sold grid, and past the last page eBay re-serves that page, so
+    #: looping "until empty" alone never terminates.
+    has_more: bool | None = None
 
 
 class MarketInfo(_BaseModel):
@@ -127,7 +132,10 @@ class SearchResult(_BaseModel):
     seller_feedback_percent: float | None = None
     seller_feedback_score: int | None = None
     program_badge: str | None = None  # e.g. "eBay Refurbished"
-    is_sponsored: bool = False
+    #: Always ``None`` — eBay renders its "Sponsored" badge into every card
+    #: as anti-scraping bait, so promoted placements cannot be distinguished
+    #: from organic results.
+    is_sponsored: bool | None = None
 
 
 # =============================================================================
