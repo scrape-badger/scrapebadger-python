@@ -24,6 +24,7 @@ async with ScrapeBadger(api_key="your-key") as client:
         price_from="20",
         price_to="100",
         brand_ids="53,72",
+        catalog_ids="221",   # Vinted category — the catalog[] value in a category URL
         color_ids="1,2",
         status_ids="6",
         order="newest_first",
