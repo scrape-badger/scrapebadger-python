@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.1] - 2026-08-02
+
+### Added
+
+- **Google Lens `price`** — each visual match now carries `price` as `{value, currency, extracted}` alongside the raw `tag` chip it is parsed from, so a shoppable match gives you a number to compute on instead of a `"$115"` string. `currency` is the symbol Google printed, not an ISO code (`$` is ambiguous between USD/CAD/AUD). `tag` is unchanged. (SCR-150)
+
 ## [0.24.0] - 2026-08-02
 
 ### Added
