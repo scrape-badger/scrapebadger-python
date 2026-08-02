@@ -12,10 +12,11 @@ class LensClient:
     """Client for Google Lens visual search by image URL.
 
     Returns ``lens_results`` (Scrapingdog-parity alias) carrying
-    ``title``, ``source``, ``source_favicon``, ``thumbnail``, ``tag``
-    (price chip when shopping-match), and ``in_stock``, plus
-    ``related_searches`` chips. Legacy ``results`` alias retained for
-    backwards compat.
+    ``title``, ``source``, ``source_favicon``, ``thumbnail``, ``rating``,
+    ``reviews`` and ``in_stock``. Shoppable matches also carry ``price``
+    (``{value, currency, extracted}``) plus the raw ``tag`` chip it is
+    parsed from. ``related_searches`` chips come alongside. Legacy
+    ``results`` alias retained for backwards compat.
 
     Example:
         ```python
@@ -24,7 +25,8 @@ class LensClient:
             product=True,  # bias towards shoppable matches
         )
         for match in results["lens_results"]:
-            print(match["title"], match.get("tag"))
+            price = match.get("price") or {}
+            print(match["title"], price.get("value"), price.get("currency"))
         ```
     """
 
