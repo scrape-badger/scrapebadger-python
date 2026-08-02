@@ -127,8 +127,16 @@ class VintedItemSummary(_BaseModel):
         price: Item price.
         brand_title: Brand name.
         size_title: Size label.
-        status: Item condition status.
+        status: Item condition status, localized to the market.
         url: URL to the item page.
+        path: Path portion of the item URL.
+        service_fee: Buyer-protection fee as a decimal string, in
+            ``price.currency_code``.
+        total_item_price: Price + buyer protection as a decimal string, in
+            ``price.currency_code``.
+        is_visible: Whether the listing is publicly visible.
+        promoted: Whether the listing is a promoted/bumped placement.
+        content_source: Vinted's own label for where the result came from.
         favourite_count: Number of users who favourited this item.
         view_count: Number of views.
         user: Summary of the item owner.
@@ -146,6 +154,12 @@ class VintedItemSummary(_BaseModel):
     size_title: str | None = None
     status: str | None = None
     url: str | None = None
+    path: str | None = None
+    service_fee: str | None = None
+    total_item_price: str | None = None
+    is_visible: bool | None = None
+    promoted: bool | None = None
+    content_source: str | None = None
     favourite_count: int = 0
     view_count: int = 0
     user: VintedUserSummary | None = None
@@ -173,13 +187,19 @@ class VintedItemDetail(_BaseModel):
         photo: Main photo.
         photos: All photos attached to the item.
         description: Full item description.
-        catalog_id: Catalog/category identifier.
-        color1: Primary color name.
+        catalog_id: Catalog/category identifier — the value to pass as
+            ``catalog_ids`` when searching.
+        color1: Primary color name, localized.
+        color2: Secondary color name.
         seller: Extended seller information.
-        category: Category name.
-        upload_date: When the item was uploaded (ISO format).
+        category: Category breadcrumb, root first, localized to the market.
+        upload_date: Vinted's relative "listed" label, localized (e.g.
+            "Il y a une semaine") — not an ISO timestamp.
         can_buy: Whether the item can be purchased.
         instant_buy: Whether instant buy is enabled.
+        can_bundle: Whether the seller accepts bundles.
+        can_reserve: Whether the item can be reserved.
+        is_favourite: Whether the item is favourited.
         is_closed: Whether the listing is closed.
         is_reserved: Whether the item is reserved.
         is_hidden: Whether the item is hidden.
@@ -195,6 +215,11 @@ class VintedItemDetail(_BaseModel):
     size_title: str | None = None
     status: str | None = None
     url: str | None = None
+    path: str | None = None
+    service_fee: str | None = None
+    total_item_price: str | None = None
+    is_visible: bool | None = None
+    promoted: bool | None = None
     favourite_count: int = 0
     view_count: int = 0
     user: VintedUserSummary | None = None
@@ -205,6 +230,7 @@ class VintedItemDetail(_BaseModel):
     description: str | None = None
     catalog_id: int | None = None
     color1: str | None = None
+    color2: str | None = None
     seller: VintedSellerSummary | None = None
     category: list[str] | str | None = None
     upload_date: str | None = None
@@ -213,6 +239,9 @@ class VintedItemDetail(_BaseModel):
     is_closed: bool | None = None
     is_reserved: bool | None = None
     is_hidden: bool | None = None
+    can_bundle: bool | None = None
+    can_reserve: bool | None = None
+    is_favourite: bool | None = None
     size_id: int | None = None
     status_id: int | None = None
     brand_id: int | None = None

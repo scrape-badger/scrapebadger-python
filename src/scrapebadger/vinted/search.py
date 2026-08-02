@@ -55,6 +55,7 @@ class SearchClient:
         price_from: str | None = None,
         price_to: str | None = None,
         brand_ids: str | None = None,
+        catalog_ids: str | None = None,
         color_ids: str | None = None,
         status_ids: str | None = None,
         order: str | None = None,
@@ -70,6 +71,12 @@ class SearchClient:
             price_from: Minimum price filter.
             price_to: Maximum price filter.
             brand_ids: Comma-separated brand IDs to filter by.
+            catalog_ids: Comma-separated Vinted catalog (category) IDs to
+                restrict the search to (e.g. ``"221"`` or ``"221,1242"``).
+                Vinted applies this before the search runs, and sub-categories
+                are included. A catalog ID is the ``catalog[]`` value in a
+                Vinted category URL (vinted.fr/catalog?catalog[]=221); IDs are
+                per market.
             color_ids: Comma-separated color IDs to filter by.
             status_ids: Comma-separated status IDs to filter by.
             order: Sort order (e.g. "newest_first", "price_low_to_high").
@@ -80,7 +87,8 @@ class SearchClient:
                 no native country filter, so ScrapeBadger applies this filter.
                 When set, each returned item gains a ``seller_country_code`` and
                 the response gains a top-level ``seller_country`` echo.
-                Billing: 1 base credit + 1 credit per uncached seller looked up.
+                Billing: a search is a flat 5 credits whatever filters you
+                pass; seller lookups are not billed on top.
 
         Returns:
             Search response with matching items and pagination metadata.
@@ -102,8 +110,10 @@ class SearchClient:
             for item in results.items:
                 print(f"  {item.title} - {item.price.amount} {item.price.currency_code}")
 
+            # Restrict to a Vinted category (women's T-shirts on vinted.fr).
+            tshirts = await client.vinted.search.search("nike", catalog_ids="221")
+
             # Filter to sellers physically located in France or Belgium.
-            # Billing: 1 base credit + 1 credit per uncached seller looked up.
             local = await client.vinted.search.search(
                 "vintage jacket",
                 seller_country="fr,be",
@@ -121,6 +131,7 @@ class SearchClient:
             "price_from": price_from,
             "price_to": price_to,
             "brand_ids": brand_ids,
+            "catalog_ids": catalog_ids,
             "color_ids": color_ids,
             "status_ids": status_ids,
             "order": order,

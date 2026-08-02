@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.0] - 2026-08-02
+
+### Added
+
+- **Vinted `catalog_ids` search filter** — `client.vinted.search.search("nike", catalog_ids="221")` restricts a search to one or more Vinted categories. Vinted applies it *before* the search runs (sub-categories included), so you get whole pages of in-category results instead of filtering them out client-side. A catalog ID is the `catalog[]` value in a Vinted category URL (`vinted.fr/catalog?catalog[]=221`); IDs are per market. (SCR-159)
+- **Vinted item fields the SDK was dropping** — `VintedItemSummary` and `VintedItemDetail` now model `path`, `service_fee`, `total_item_price`, `is_visible` and `promoted` (plus `content_source` on the summary, and `color2` / `can_bundle` / `can_reserve` / `is_favourite` on the detail). The API had always returned these; the models used `extra="ignore"`, so they were silently discarded. (SCR-159)
+
+### Changed
+
+- **Vinted `service_fee` / `total_item_price` are plain decimal strings** — on search results they used to come back as a stringified Python dict (`"{'amount': '0.75', 'currency_code': 'EUR'}"`) that no client could parse; the item endpoint already returned `"0.75"`. Both now return the amount alone, in `price.currency_code`. (SCR-159)
+- **Vinted `VintedItemDetail.category` documented as a breadcrumb list** — it is the category path, root first, localized to the market; `upload_date` is Vinted's relative "listed" label, not an ISO timestamp. (SCR-159)
+- **Corrected Vinted search billing docs** — a search is a flat 5 credits whatever filters you pass. `seller_country` seller lookups were never billed on top, despite the old "1 credit + 1 per uncached seller" note. (SCR-159)
+
 ## [0.23.0] - 2026-07-25
 
 ### Added
