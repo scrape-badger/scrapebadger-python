@@ -16,6 +16,15 @@ class ScrapeResult(BaseModel):
     url: str = ""
     status_code: int = 0
     content: str | None = None
+    content_base64: str | None = None
+    """Base64 body for a binary target (image/PDF/archive). Set instead of
+    ``content``, which is None there — binary bytes have no text form."""
+    is_binary: bool = False
+    content_type: str | None = None
+    content_bytes: bytes | None = None
+    """Undecoded response body. Only set when ``raw_content=True`` — that mode
+    returns the body itself rather than a JSON envelope. Write it straight to a
+    file; do not decode it, the payload may be an image or a PDF."""
     format: str = "html"
     engine_used: str | None = None
     credits_used: int = 0

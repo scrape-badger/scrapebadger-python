@@ -243,3 +243,73 @@ class TestWebClient:
         call_kwargs = mock_base_client.post.call_args
         body = call_kwargs.kwargs.get("json") or call_kwargs[1].get("json")
         assert body["session_id"] == "sess-abc"
+
+
+class TestRawContent:
+    """`raw_content=True` returns a non-JSON body.
+
+    The transport's `response.json()` fell back to `{}` on a parse failure, so
+    every raw scrape silently produced an empty ScrapeResult and no error. These
+    pin the raw path, including that binary payloads are never decoded.
+    """
+
+    @pytest.fixture()
+    def mock_base_client(self) -> AsyncMock:
+        return AsyncMock()
+
+    @pytest.fixture()
+    def web_client(self, mock_base_client: AsyncMock) -> WebClient:
+        from scrapebadger.web.client import WebClient as _WebClient
+
+        return _WebClient(mock_base_client)
+
+    async def test_binary_body_is_returned_undecoded(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        png = b"\x89PNG\r\n\x1a\n" + bytes(range(256))
+        mock_base_client.post_raw.return_value = (
+            png,
+            {
+                "Content-Type": "image/png",
+                "X-Scrape-Status-Code": "200",
+                "X-Credits-Used": "2",
+                "X-Scrape-Engine": "httpcloak",
+            },
+            200,
+        )
+
+        result = await web_client.scrape("https://x.com/a.png", raw_content=True)
+
+        assert result.content_bytes == png, "bytes must survive untouched"
+        assert result.content is None, "decoding an image is the bug we are fixing"
+        assert result.is_binary is True
+        assert result.content_type == "image/png"
+        assert result.credits_used == 2
+        assert result.engine_used == "httpcloak"
+        # The JSON path must not have been used at all.
+        mock_base_client.post.assert_not_called()
+
+    async def test_text_body_is_decoded(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        mock_base_client.post_raw.return_value = (
+            b"<html>hi</html>",
+            {"Content-Type": "text/html; charset=utf-8", "X-Scrape-Status-Code": "200"},
+            200,
+        )
+
+        result = await web_client.scrape("https://x.com", raw_content=True)
+
+        assert result.content == "<html>hi</html>"
+        assert result.content_bytes == b"<html>hi</html>"
+        assert result.is_binary is False
+
+    async def test_without_raw_content_the_json_path_is_used(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        mock_base_client.post.return_value = {"success": True, "content": "<html/>"}
+
+        result = await web_client.scrape("https://x.com")
+
+        assert result.content == "<html/>"
+        mock_base_client.post_raw.assert_not_called()

@@ -95,11 +95,13 @@ class WebClient:
             max_cost: Maximum credit cost.
             ai_extract: Whether to enable AI data extraction.
             ai_prompt: Prompt for AI extraction.
-            raw_content: When True, the server streams the raw body as
-                text/html with metadata in ``X-Scrape-*`` response headers
-                instead of JSON-wrapping the content. Saves 300-1000 ms on
-                large (>1 MB) pages. Incompatible with ``ai_extract``,
-                ``screenshot``, ``video``.
+            raw_content: When True, the server returns the body itself
+                rather than a JSON envelope, with metadata in ``X-Scrape-*``
+                response headers. The body lands in ``ScrapeResult.content_bytes``
+                (and in ``content`` too when it is text). Saves 300-1000 ms on
+                large (>1 MB) pages, and is the cheapest way to download a
+                binary file — no base64 expansion. Incompatible with
+                ``ai_extract``, ``screenshot``, ``video``.
             skip_bot_detection: When True, the server skips the generic
                 blocking-page + anti-bot / CAPTCHA regex scans on the
                 response body. Saves ~1.3 s of regex work on large pages.
@@ -154,8 +156,56 @@ class WebClient:
         if skip_bot_detection:
             body["skip_bot_detection"] = True
 
+        if raw_content:
+            return await self._scrape_raw(body)
+
         response = await self._client.post("/v1/web/scrape", json=body)
         return ScrapeResult.model_validate(response)
+
+    async def _scrape_raw(self, body: dict[str, Any]) -> ScrapeResult:
+        """Run a ``raw_content`` scrape, whose response is not JSON.
+
+        The normal path calls ``response.json()`` and falls back to ``{}``, so
+        every ``raw_content=True`` scrape used to return an empty ScrapeResult
+        with no error at all. Read the body as bytes and rebuild the metadata
+        from the ``X-Scrape-*`` headers the server sends in this mode.
+        """
+        payload, headers, status_code = await self._client.post_raw(
+            "/v1/web/scrape", json=body
+        )
+        lower = {k.lower(): v for k, v in headers.items()}
+
+        def _int(name: str) -> int:
+            try:
+                return int(lower.get(name, "0"))
+            except (TypeError, ValueError):
+                return 0
+
+        content_type = lower.get("content-type", "")
+        media_type = content_type.split(";", 1)[0].strip().lower()
+        # Only decode when the payload is genuinely text — decoding an image or
+        # a PDF is the very corruption this mode exists to avoid.
+        is_text = media_type.startswith("text/") or media_type in {
+            "application/json",
+            "application/xml",
+            "image/svg+xml",
+        }
+
+        return ScrapeResult(
+            success=lower.get("x-scrape-success", "1") == "1",
+            url=lower.get("x-scrape-url", str(body.get("url", ""))),
+            status_code=_int("x-scrape-status-code") or status_code,
+            content=payload.decode("utf-8", errors="replace") if is_text else None,
+            content_bytes=payload,
+            is_binary=not is_text,
+            content_type=media_type or None,
+            format=lower.get("x-scrape-format", "html"),
+            engine_used=lower.get("x-scrape-engine"),
+            credits_used=_int("x-credits-used"),
+            duration_ms=_int("x-scrape-duration-ms"),
+            retries_used=_int("x-scrape-retries"),
+            content_length=_int("x-scrape-content-length") or len(payload),
+        )
 
     async def extract(
         self,
