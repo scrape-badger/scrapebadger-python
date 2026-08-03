@@ -359,6 +359,37 @@ class BaseClient:
         """
         return await self._request_with_retry("GET", path, params=params)
 
+    async def post_raw(
+        self,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> tuple[bytes, dict[str, str], int]:
+        """POST and return the undecoded response body.
+
+        For endpoints that answer with something other than JSON — currently
+        ``/v1/web/scrape`` with ``raw_content: true``, which streams the scraped
+        body itself. The normal path calls ``response.json()`` and falls back to
+        ``{}``, so a raw response came back as an empty result with no error.
+
+        Returns ``(body_bytes, headers, status_code)``. Bytes, not text: the
+        body may be an image or a PDF, and decoding it would corrupt it.
+
+        Raises:
+            ScrapeBadgerError: For API errors.
+        """
+        response = await self._execute_request("POST", path, params=params, json=json)
+
+        if response.status_code >= 400:
+            try:
+                data: dict[str, Any] = response.json()
+            except Exception:
+                data = {}
+            self._handle_error_response(response, data)
+
+        return response.content, dict(response.headers), response.status_code
+
     async def post(
         self,
         path: str,

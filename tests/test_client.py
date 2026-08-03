@@ -79,3 +79,55 @@ class TestScrapeBadgerClient:
         await client.close()
         # Should not raise when called multiple times
         await client.close()
+
+
+class TestPostRaw:
+    """`post_raw` exists because `response.json()` cannot read a raw body.
+
+    `/v1/web/scrape` with `raw_content: true` answers with the scraped body
+    itself. The JSON path fell back to `{}` on a parse failure, so those scrapes
+    returned an empty result and no error.
+    """
+
+    async def test_returns_undecoded_bytes_and_headers(self, api_key: str) -> None:
+        import httpx
+
+        from scrapebadger._internal.client import BaseClient
+        from scrapebadger._internal.config import ClientConfig
+
+        png = b"\x89PNG\r\n\x1a\n\x00\xff\xfe"
+
+        def handler(request: httpx.Request) -> httpx.Response:
+            return httpx.Response(
+                200, content=png, headers={"Content-Type": "image/png", "X-Credits-Used": "2"}
+            )
+
+        client = BaseClient(ClientConfig(api_key=api_key))
+        client._client = httpx.AsyncClient(
+            transport=httpx.MockTransport(handler), base_url="https://api.test"
+        )
+
+        body, headers, status = await client.post_raw("/v1/web/scrape", json={"url": "x"})
+
+        assert body == png, "bytes must not be decoded"
+        assert status == 200
+        assert headers["content-type"] == "image/png"
+        assert headers["x-credits-used"] == "2"
+
+    async def test_error_status_still_raises(self, api_key: str) -> None:
+        import httpx
+
+        from scrapebadger import ScrapeBadgerError
+        from scrapebadger._internal.client import BaseClient
+        from scrapebadger._internal.config import ClientConfig
+
+        def handler(request: httpx.Request) -> httpx.Response:
+            return httpx.Response(402, json={"detail": "Out of credits"})
+
+        client = BaseClient(ClientConfig(api_key=api_key))
+        client._client = httpx.AsyncClient(
+            transport=httpx.MockTransport(handler), base_url="https://api.test"
+        )
+
+        with pytest.raises(ScrapeBadgerError):
+            await client.post_raw("/v1/web/scrape", json={"url": "x"})
