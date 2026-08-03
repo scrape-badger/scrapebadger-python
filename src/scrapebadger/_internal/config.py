@@ -28,7 +28,8 @@ class ClientConfig:
         timeout: Request timeout in seconds. Defaults to 300s (5 minutes).
         connect_timeout: Connection timeout in seconds. Defaults to 10s.
         max_retries: Maximum number of retries for failed requests. Defaults to 10.
-        retry_on_status: HTTP status codes that trigger a retry.
+        retry_on_status: HTTP status codes that trigger a retry. Defaults to the
+            transient server-side codes (500, 502, 503, 504).
         headers: Additional headers to include in all requests.
 
     Example:
@@ -50,7 +51,9 @@ class ClientConfig:
     timeout: float = DEFAULT_TIMEOUT
     connect_timeout: float = DEFAULT_CONNECT_TIMEOUT
     max_retries: int = 10
-    retry_on_status: tuple[int, ...] = (502, 503, 504)
+    # 500 belongs here with the gateway codes: a transient upstream 500 is no more
+    # permanent than a 502, and leaving it out kills long paginated runs outright.
+    retry_on_status: tuple[int, ...] = (500, 502, 503, 504)
     headers: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self) -> None:

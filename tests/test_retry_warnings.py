@@ -192,6 +192,118 @@ class TestRetryWarningLogging:
         warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]
         assert not warning_records, "Should not log warnings for 404"
 
+    async def test_500_is_retried(
+        self,
+        config_one_retry: ClientConfig,
+    ) -> None:
+        """A transient 500 is retried rather than raising immediately.
+
+        Regression: 500 was missing from retry_on_status, so a single transient
+        500 mid-pagination killed long-running scrapes outright.
+        """
+        fail_resp = self._make_response(500, "Internal Server Error")
+        ok_resp = self._make_response(200)
+        ok_resp.json.return_value = {"ok": True}
+
+        client = BaseClient(config_one_retry)
+        mock_http = AsyncMock()
+        mock_http.request.side_effect = [fail_resp, ok_resp]
+
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+        ):
+            result = await client.get("/v1/test")
+
+        assert result == {"ok": True}
+        assert mock_http.request.call_count == 2
+
+    async def test_502_then_500_recovers(self) -> None:
+        """The real-world 502 → 500 → 200 sequence survives.
+
+        This is the exact sequence that failed two Apify runs: the 502 retried,
+        the retry came back 500, and 500 was not retryable.
+        """
+        client = BaseClient(ClientConfig(api_key="test_key", max_retries=5))
+        ok_resp = self._make_response(200)
+        ok_resp.json.return_value = {"ok": True}
+
+        mock_http = AsyncMock()
+        mock_http.request.side_effect = [
+            self._make_response(502, "Bad Gateway"),
+            self._make_response(500, "Internal Server Error"),
+            ok_resp,
+        ]
+
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+        ):
+            result = await client.get("/v1/test")
+
+        assert result == {"ok": True}
+        assert mock_http.request.call_count == 3
+
+    @pytest.mark.parametrize(
+        "exc",
+        [
+            httpx.ConnectTimeout("timed out"),
+            httpx.PoolTimeout("pool exhausted"),
+            httpx.ReadTimeout("read timed out"),
+            httpx.ConnectError("connection refused"),
+            httpx.RemoteProtocolError("server disconnected"),
+            httpx.ProxyError("proxy failed"),
+        ],
+        ids=lambda e: type(e).__name__,
+    )
+    async def test_transport_errors_are_retried(
+        self,
+        config_one_retry: ClientConfig,
+        exc: Exception,
+    ) -> None:
+        """Every transient transport failure is retried, not just the original three."""
+        ok_resp = self._make_response(200)
+        ok_resp.json.return_value = {"ok": True}
+
+        client = BaseClient(config_one_retry)
+        mock_http = AsyncMock()
+        mock_http.request.side_effect = [exc, ok_resp]
+
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            patch("scrapebadger._internal.client.asyncio.sleep"),
+        ):
+            result = await client.get("/v1/test")
+
+        assert result == {"ok": True}
+        assert mock_http.request.call_count == 2
+
+    @pytest.mark.parametrize(
+        "exc",
+        [
+            httpx.UnsupportedProtocol("unsupported scheme"),
+            httpx.LocalProtocolError("malformed request"),
+        ],
+        ids=lambda e: type(e).__name__,
+    )
+    async def test_caller_errors_are_not_retried(
+        self,
+        config_one_retry: ClientConfig,
+        exc: Exception,
+    ) -> None:
+        """Config/caller mistakes fail fast instead of burning the retry budget."""
+        client = BaseClient(config_one_retry)
+        mock_http = AsyncMock()
+        mock_http.request.side_effect = exc
+
+        with (
+            patch.object(client, "_get_client", return_value=mock_http),
+            pytest.raises(type(exc)),
+        ):
+            await client.get("/v1/test")
+
+        assert mock_http.request.call_count == 1
+
     async def test_get_with_headers_returns_data_and_headers(
         self,
         config_one_retry: ClientConfig,
