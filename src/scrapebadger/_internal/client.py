@@ -20,6 +20,17 @@ from scrapebadger._internal.exceptions import (
 
 logger = logging.getLogger("scrapebadger")
 
+# Transport-level failures worth retrying: timeouts (connect/read/write/pool),
+# network errors, a server dropping a pooled connection mid-request, and proxy
+# hiccups. Deliberately excludes UnsupportedProtocol and LocalProtocolError —
+# those are caller/config mistakes that no amount of retrying will fix.
+RETRYABLE_TRANSPORT_ERRORS = (
+    httpx.TimeoutException,
+    httpx.NetworkError,
+    httpx.RemoteProtocolError,
+    httpx.ProxyError,
+)
+
 if TYPE_CHECKING:
     from collections.abc import Mapping
     from types import TracebackType
@@ -29,7 +40,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.24.1"
+SDK_VERSION = "0.24.2"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -264,7 +275,7 @@ class BaseClient:
 
                 return data, headers
 
-            except (httpx.ConnectError, httpx.ReadTimeout, httpx.WriteTimeout) as e:
+            except RETRYABLE_TRANSPORT_ERRORS as e:
                 last_exception = e
                 if attempt < self._config.max_retries:
                     delay = 2**attempt

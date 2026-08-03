@@ -156,7 +156,7 @@ config = ClientConfig(
     timeout=300.0,
     connect_timeout=10.0,
     max_retries=10,
-    retry_on_status=(502, 503, 504),
+    retry_on_status=(500, 502, 503, 504),
     headers={"X-Custom-Header": "value"},
 )
 
@@ -165,8 +165,10 @@ client = ScrapeBadger(config=config)
 
 ### Retry Behavior
 
-The SDK automatically retries requests that fail with 502, 503, or 504 status codes
-using exponential backoff (1s, 2s, 4s, 8s, ...). Each retry logs a warning:
+The SDK automatically retries requests that fail with 500, 502, 503, or 504 status
+codes, as well as transport-level failures (timeouts, network errors, dropped
+connections), using exponential backoff (1s, 2s, 4s, 8s, ...). Each retry logs a
+warning:
 
 ```
 ⚠ 503 Service Unavailable — retrying in 4s (attempt 3/10)

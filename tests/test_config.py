@@ -26,7 +26,7 @@ class TestClientConfig:
         assert config.timeout == DEFAULT_TIMEOUT
         assert config.connect_timeout == DEFAULT_CONNECT_TIMEOUT
         assert config.max_retries == 10
-        assert config.retry_on_status == (502, 503, 504)
+        assert config.retry_on_status == (500, 502, 503, 504)
         assert config.headers == {}
 
     def test_custom_values(self, api_key: str) -> None:

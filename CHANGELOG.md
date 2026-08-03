@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.24.2] - 2026-08-03
+
+### Fixed
+
+- **A transient `500` no longer kills a long-running job.** `500` was missing from the default `retry_on_status`, so while a `502` was retried, a `500` raised `ServerError` on the spot and burned the remaining 9 retries. Real-world sequences look like `502 → 500 → 200`; the middle hop ended runs that were thousands of pages deep. The default is now `(500, 502, 503, 504)`. Override `retry_on_status` on `ClientConfig` if you want the old behaviour.
+- **Retry every transient transport failure, not just three of them.** The retry path caught only `ConnectError`, `ReadTimeout` and `WriteTimeout`, so a `ConnectTimeout`, `PoolTimeout`, `ProxyError`, or a server dropping a pooled connection (`RemoteProtocolError`) failed immediately — the last of which is common on long-lived connection pools. `UnsupportedProtocol` and `LocalProtocolError` are still raised straight away: they are caller/config mistakes that no retry can fix.
+
 ## [0.24.1] - 2026-08-02
 
 ### Added
