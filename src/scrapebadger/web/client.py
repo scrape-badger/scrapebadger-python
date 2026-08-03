@@ -170,9 +170,7 @@ class WebClient:
         with no error at all. Read the body as bytes and rebuild the metadata
         from the ``X-Scrape-*`` headers the server sends in this mode.
         """
-        payload, headers, status_code = await self._client.post_raw(
-            "/v1/web/scrape", json=body
-        )
+        payload, headers, status_code = await self._client.post_raw("/v1/web/scrape", json=body)
         lower = {k.lower(): v for k, v in headers.items()}
 
         def _int(name: str) -> int:
