@@ -81,6 +81,28 @@ from scrapebadger.amazon.models import (
 from scrapebadger.amazon.models import (
     SearchResult as AmazonSearchResult,
 )
+from scrapebadger.chatgpt.client import ChatGPTClient
+from scrapebadger.chatgpt.models import (
+    AskResponse as ChatGPTAskResponse,
+)
+from scrapebadger.chatgpt.models import (
+    BrandVisibilityResponse as ChatGPTBrandVisibilityResponse,
+)
+from scrapebadger.chatgpt.models import (
+    ChatGPTModel,
+)
+from scrapebadger.chatgpt.models import (
+    Citation as ChatGPTCitation,
+)
+from scrapebadger.chatgpt.models import (
+    CompetitorMention as ChatGPTCompetitorMention,
+)
+from scrapebadger.chatgpt.models import (
+    ModelsResponse as ChatGPTModelsResponse,
+)
+from scrapebadger.chatgpt.models import (
+    SearchResult as ChatGPTSearchResult,
+)
 from scrapebadger.client import ScrapeBadger
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.depop.models import (
@@ -885,6 +907,15 @@ __all__ = [
     "BrandsResponse",
     "CategoriesResponse",
     "CategoryResponse",
+    # ChatGPT
+    "ChatGPTAskResponse",
+    "ChatGPTBrandVisibilityResponse",
+    "ChatGPTCitation",
+    "ChatGPTClient",
+    "ChatGPTCompetitorMention",
+    "ChatGPTModel",
+    "ChatGPTModelsResponse",
+    "ChatGPTSearchResult",
     # Configuration
     "ClientConfig",
     "ColorsResponse",

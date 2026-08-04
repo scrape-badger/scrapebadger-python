@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
+from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
@@ -140,6 +141,7 @@ class ScrapeBadger:
         self._leboncoin: LeboncoinClient | None = None
         self._immobiliare: ImmobiliareClient | None = None
         self._loopnet: LoopNetClient | None = None
+        self._chatgpt: ChatGPTClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -500,6 +502,33 @@ class ScrapeBadger:
         if self._loopnet is None:
             self._loopnet = LoopNetClient(self._base_client)
         return self._loopnet
+
+    @property
+    def chatgpt(self) -> ChatGPTClient:
+        """Access ChatGPT Scraper API operations.
+
+        Prompts the real chatgpt.com — not the OpenAI API — anonymously, and
+        returns the answer as structured JSON including the web sources
+        ChatGPT cited.
+
+        Returns:
+            ChatGPTClient providing access to ask, brand-visibility, and
+            reference endpoints.
+
+        Example:
+            ```python
+            result = await client.chatgpt.ask.ask("best running shoes 2026")
+            brand = await client.chatgpt.brand.visibility(
+                "best web scraping API",
+                brand="ScrapeBadger",
+                competitors=["Bright Data"],
+            )
+            models = await client.chatgpt.reference.models()
+            ```
+        """
+        if self._chatgpt is None:
+            self._chatgpt = ChatGPTClient(self._base_client)
+        return self._chatgpt
 
     @property
     def tiktok(self) -> TikTokClient:

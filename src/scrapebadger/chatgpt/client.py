@@ -1,0 +1,115 @@
+"""ChatGPT API client combining all sub-clients.
+
+This module provides the main ChatGPTClient class that serves as the
+entry point for all ChatGPT API operations.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from scrapebadger.chatgpt.ask import AskClient
+from scrapebadger.chatgpt.brand import BrandClient
+from scrapebadger.chatgpt.reference import ReferenceClient
+
+if TYPE_CHECKING:
+    from scrapebadger._internal.client import BaseClient
+
+
+class ChatGPTClient:
+    """Client for all ChatGPT API operations.
+
+    Sends prompts to the real chatgpt.com — not the OpenAI API — anonymously,
+    and returns the answer as structured JSON including the web sources
+    ChatGPT cited.
+
+    Attributes:
+        ask: Client for asking ChatGPT a question.
+        brand: Client for AEO/GEO brand-visibility analysis.
+        reference: Client for reference data (available models).
+
+    Example:
+        ```python
+        from scrapebadger import ScrapeBadger
+
+        async with ScrapeBadger(api_key="your-key") as client:
+            # Ask a question
+            result = await client.chatgpt.ask.ask("best running shoes 2026")
+            print(result.answer)
+
+            # Brand visibility
+            brand = await client.chatgpt.brand.visibility(
+                "best web scraping API",
+                brand="ScrapeBadger",
+                competitors=["Bright Data"],
+            )
+            print(brand.share_of_voice_pct)
+
+            # Available models
+            models = await client.chatgpt.reference.models()
+            for model in models.models:
+                print(model.slug)
+        ```
+
+    Note:
+        This client is not instantiated directly. Instead, access it through
+        the `chatgpt` property of the main `ScrapeBadger` client.
+    """
+
+    def __init__(self, client: BaseClient) -> None:
+        """Initialize ChatGPT client with all sub-clients.
+
+        Args:
+            client: The base HTTP client for making API requests.
+        """
+        self._client = client
+
+        # Initialize sub-clients
+        self._ask = AskClient(client)
+        self._brand = BrandClient(client)
+        self._reference = ReferenceClient(client)
+
+    @property
+    def ask(self) -> AskClient:
+        """Access the ask endpoint.
+
+        Returns:
+            AskClient for sending prompts to ChatGPT.
+
+        Example:
+            ```python
+            result = await client.chatgpt.ask.ask("what is a badger?")
+            ```
+        """
+        return self._ask
+
+    @property
+    def brand(self) -> BrandClient:
+        """Access the brand-visibility endpoint.
+
+        Returns:
+            BrandClient for AEO/GEO brand analysis.
+
+        Example:
+            ```python
+            result = await client.chatgpt.brand.visibility(
+                "best CRM for startups",
+                brand="Acme",
+            )
+            ```
+        """
+        return self._brand
+
+    @property
+    def reference(self) -> ReferenceClient:
+        """Access reference data endpoints.
+
+        Returns:
+            ReferenceClient for the list of available models.
+
+        Example:
+            ```python
+            models = await client.chatgpt.reference.models()
+            ```
+        """
+        return self._reference
