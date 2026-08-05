@@ -126,6 +126,7 @@ class AskResponse(_BaseModel):
     citations: list[Citation] = Field(default_factory=list)
     search_results: list[SearchResult] = Field(default_factory=list)
     source_domains: list[str] = Field(default_factory=list)
+    truncated: bool = False
     web_search_triggered: bool = False
     reference_tokens: list[str] = Field(default_factory=list)
     model: str | None = None
