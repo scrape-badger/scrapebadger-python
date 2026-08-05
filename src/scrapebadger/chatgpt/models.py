@@ -108,7 +108,8 @@ class AskResponse(_BaseModel):
         search_results: The full retrieved set, cited or not.
         source_domains: Distinct domains across the sources.
         web_search_triggered: Whether ChatGPT ACTUALLY browsed the web.
-        reference_tokens: Raw reference markers (e.g. "turn0search1").
+        search_queries: list[str] = Field(default_factory=list)
+    reference_tokens: Raw reference markers (e.g. "turn0search1").
         model: Model slug that answered (e.g. "gpt-5-5").
         conversation_id: ChatGPT conversation identifier.
         message_id: ChatGPT message identifier.
