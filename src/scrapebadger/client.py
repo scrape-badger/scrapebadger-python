@@ -16,6 +16,7 @@ from scrapebadger.depop.client import DepopClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
+from scrapebadger.instagram.client import InstagramClient
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.linkedin.client import LinkedInClient
 from scrapebadger.loopnet.client import LoopNetClient
@@ -144,6 +145,7 @@ class ScrapeBadger:
         self._immobiliare: ImmobiliareClient | None = None
         self._loopnet: LoopNetClient | None = None
         self._chatgpt: ChatGPTClient | None = None
+        self._instagram: InstagramClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -242,6 +244,29 @@ class ScrapeBadger:
         if self._apartments is None:
             self._apartments = ApartmentsClient(self._base_client)
         return self._apartments
+
+    @property
+    def instagram(self) -> InstagramClient:
+        """Access Instagram scraping operations.
+
+        Returns:
+            InstagramClient providing access to all Instagram endpoints.
+
+        Example:
+            ```python
+            # Get a user profile
+            profile = await client.instagram.users.get("instagram")
+
+            # Get a user's posts
+            posts = await client.instagram.users.posts("instagram", amount=12)
+
+            # Get media comments
+            comments = await client.instagram.media.comments("C1abcdEfGhI")
+            ```
+        """
+        if self._instagram is None:
+            self._instagram = InstagramClient(self._base_client)
+        return self._instagram
 
     @property
     def redfin(self) -> RedfinClient:

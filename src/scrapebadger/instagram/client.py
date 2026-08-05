@@ -1,0 +1,86 @@
+"""Instagram API client combining all sub-clients."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from scrapebadger.instagram.media import MediaClient
+from scrapebadger.instagram.reference import (
+    AudioClient,
+    HashtagsClient,
+    LocationsClient,
+)
+from scrapebadger.instagram.search import SearchClient
+from scrapebadger.instagram.users import UsersClient
+
+if TYPE_CHECKING:
+    from scrapebadger._internal.client import BaseClient
+
+
+class InstagramClient:
+    """Client for all Instagram API operations.
+
+    Attributes:
+        users: Profiles, posts, reels, followers, stories, highlights.
+        media: Media details, comments, replies, likers, oEmbed.
+        search: Users, hashtags, places, top, reels, music, autocomplete.
+        hashtags: Hashtag info and its top/recent/reels feeds.
+        locations: Location info, top/recent feeds, and location search.
+        audio: Audio info, its media, and trending audio.
+
+    Example:
+        ```python
+        from scrapebadger import ScrapeBadger
+
+        async with ScrapeBadger(api_key="your-key") as client:
+            profile = await client.instagram.users.get("instagram")
+            print(f"@{profile.username}: {profile.follower_count:,} followers")
+
+            posts = await client.instagram.users.posts("instagram", amount=12)
+            for media in posts.items:
+                print(media.code, media.like_count)
+        ```
+
+    Note:
+        Access this client through the ``instagram`` property of the main
+        ``ScrapeBadger`` client rather than instantiating it directly.
+    """
+
+    def __init__(self, client: BaseClient) -> None:
+        self._client = client
+        self._users = UsersClient(client)
+        self._media = MediaClient(client)
+        self._search = SearchClient(client)
+        self._hashtags = HashtagsClient(client)
+        self._locations = LocationsClient(client)
+        self._audio = AudioClient(client)
+
+    @property
+    def users(self) -> UsersClient:
+        """Access user endpoints."""
+        return self._users
+
+    @property
+    def media(self) -> MediaClient:
+        """Access media endpoints."""
+        return self._media
+
+    @property
+    def search(self) -> SearchClient:
+        """Access search endpoints."""
+        return self._search
+
+    @property
+    def hashtags(self) -> HashtagsClient:
+        """Access hashtag endpoints."""
+        return self._hashtags
+
+    @property
+    def locations(self) -> LocationsClient:
+        """Access location endpoints."""
+        return self._locations
+
+    @property
+    def audio(self) -> AudioClient:
+        """Access audio endpoints."""
+        return self._audio

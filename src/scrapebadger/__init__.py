@@ -266,6 +266,46 @@ from scrapebadger.immobiliare.models import (
 from scrapebadger.immobiliare.models import (
     SuggestResponse as ImmobiliareSuggestResponse,
 )
+from scrapebadger.instagram.client import InstagramClient
+from scrapebadger.instagram.models import (
+    Audio as InstagramAudio,
+)
+from scrapebadger.instagram.models import (
+    BioLink as InstagramBioLink,
+)
+from scrapebadger.instagram.models import (
+    Comment as InstagramComment,
+)
+from scrapebadger.instagram.models import (
+    Hashtag as InstagramHashtag,
+)
+from scrapebadger.instagram.models import (
+    Highlight as InstagramHighlight,
+)
+from scrapebadger.instagram.models import (
+    Location as InstagramLocation,
+)
+from scrapebadger.instagram.models import (
+    Media as InstagramMedia,
+)
+from scrapebadger.instagram.models import (
+    Oembed as InstagramOembed,
+)
+from scrapebadger.instagram.models import (
+    Paginated as InstagramPaginated,
+)
+from scrapebadger.instagram.models import (
+    Resource as InstagramResource,
+)
+from scrapebadger.instagram.models import (
+    User as InstagramUser,
+)
+from scrapebadger.instagram.models import (
+    UserAbout as InstagramUserAbout,
+)
+from scrapebadger.instagram.models import (
+    UserShort as InstagramUserShort,
+)
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.leboncoin.models import (
     Ad as LeboncoinAd,
@@ -892,7 +932,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.27.1"
+__version__ = "0.28.0"
 
 __all__ = [
     # TikTok core models
@@ -998,6 +1038,21 @@ __all__ = [
     "ImmobiliareSearchResponse",
     "ImmobiliareSuggestResponse",
     "ImmobiliareSuggestion",
+    # Instagram
+    "InstagramAudio",
+    "InstagramBioLink",
+    "InstagramClient",
+    "InstagramComment",
+    "InstagramHashtag",
+    "InstagramHighlight",
+    "InstagramLocation",
+    "InstagramMedia",
+    "InstagramOembed",
+    "InstagramPaginated",
+    "InstagramResource",
+    "InstagramUser",
+    "InstagramUserAbout",
+    "InstagramUserShort",
     "InsufficientCreditsError",
     "ItemDetailResponse",
     # Leboncoin
