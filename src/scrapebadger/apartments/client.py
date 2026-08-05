@@ -1,0 +1,110 @@
+"""Apartments.com API client.
+
+Endpoints: ``search`` (rental listings by location, 40 cards a page) and
+``get_property`` (one property with full per-unit pricing and availability,
+by URL or by slug + id). All methods are async and return typed Pydantic
+models. Single market: apartments.com (US, USD, en-US).
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+from scrapebadger.apartments.models import Property, SearchResponse
+
+if TYPE_CHECKING:
+    from scrapebadger._internal.client import BaseClient
+
+
+class ApartmentsClient:
+    """Client for all Apartments.com API operations.
+
+    Example:
+        ```python
+        from scrapebadger import ScrapeBadger
+
+        async with ScrapeBadger(api_key="your-key") as client:
+            # Search a location
+            page = await client.apartments.search("kansas-city-mo", beds=1)
+            print(f"{page.total_results} rentals")
+
+            # Drill into one card for unit-level pricing
+            prop = await client.apartments.get_property(page.results[0].url)
+            for unit in prop.units:
+                print(unit.unit_number, unit.rent, unit.available_text)
+        ```
+    """
+
+    def __init__(self, client: BaseClient) -> None:
+        self._client = client
+
+    async def search(
+        self,
+        location: str,
+        *,
+        page: int = 1,
+        beds: int | None = None,
+        min_price: int | None = None,
+        max_price: int | None = None,
+    ) -> SearchResponse:
+        """Search rental listings in a location.
+
+        Args:
+            location: apartments.com location slug — ``"kansas-city-mo"``,
+                ``"new-york-ny"``, or a ZIP like ``"64108"``.
+            page: 1-28. Each page holds up to 40 property cards.
+            beds: ``0`` for studios, ``1``-``4`` for bedroom counts.
+            min_price: Minimum monthly rent in USD.
+            max_price: Maximum monthly rent in USD.
+
+        Returns:
+            SearchResponse with up to 40 cards plus the site's own total.
+
+        Note:
+            Cards are summaries with a rent/bed rollup. For per-unit rent and
+            availability, pass a card's ``url`` to :meth:`get_property`.
+        """
+        params: dict[str, Any] = {"location": location, "page": page}
+        if beds is not None:
+            params["beds"] = beds
+        if min_price is not None:
+            params["min_price"] = min_price
+        if max_price is not None:
+            params["max_price"] = max_price
+        response = await self._client.get("/v1/apartments/search", params=params)
+        return SearchResponse.model_validate(response)
+
+    async def get_property(
+        self,
+        url: str | None = None,
+        *,
+        slug: str | None = None,
+        property_id: str | None = None,
+    ) -> Property:
+        """Get one property with floor plans and per-unit inventory.
+
+        Args:
+            url: Full property URL, e.g.
+                ``"https://www.apartments.com/urbane-kansas-city-mo/wcd6e5k/"``.
+            slug: SEO slug, e.g. ``"urbane-kansas-city-mo"`` (with property_id).
+            property_id: 7-character listing key, e.g. ``"wcd6e5k"``.
+
+        Returns:
+            Property with ``floor_plans`` and a flattened ``units`` list.
+
+        Raises:
+            ValueError: If neither ``url`` nor both ``slug`` and
+                ``property_id`` are supplied.
+
+        Note:
+            Use ``unit.rent`` (the advertised price), not ``unit.max_term_rent``
+            — the latter is the site's raw ``data-maxrent``, roughly double the
+            advertised rent.
+        """
+        if url:
+            response = await self._client.get("/v1/apartments/property", params={"url": url})
+        elif slug and property_id:
+            response = await self._client.get(f"/v1/apartments/properties/{slug}/{property_id}")
+        else:
+            raise ValueError("Provide either url, or both slug and property_id")
+        return Property.model_validate(response)

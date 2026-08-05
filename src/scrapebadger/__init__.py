@@ -81,6 +81,12 @@ from scrapebadger.amazon.models import (
 from scrapebadger.amazon.models import (
     SearchResult as AmazonSearchResult,
 )
+from scrapebadger.apartments import ApartmentsClient
+from scrapebadger.apartments.models import FloorPlan as ApartmentsFloorPlan
+from scrapebadger.apartments.models import Property as ApartmentsProperty
+from scrapebadger.apartments.models import SearchResponse as ApartmentsSearchResponse
+from scrapebadger.apartments.models import SearchResult as ApartmentsSearchResult
+from scrapebadger.apartments.models import Unit as ApartmentsUnit
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.chatgpt.models import (
     AskResponse as ChatGPTAskResponse,
@@ -885,7 +891,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.26.1"
+__version__ = "0.27.0"
 
 __all__ = [
     # TikTok core models
@@ -900,6 +906,12 @@ __all__ = [
     "AmazonPrice",
     "AmazonSearchResponse",
     "AmazonSearchResult",
+    "ApartmentsClient",
+    "ApartmentsFloorPlan",
+    "ApartmentsProperty",
+    "ApartmentsSearchResponse",
+    "ApartmentsSearchResult",
+    "ApartmentsUnit",
     "AuthenticationError",
     "Bestseller",
     "BestsellersResponse",

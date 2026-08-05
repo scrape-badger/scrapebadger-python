@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
+from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.ebay.client import EbayClient
@@ -130,6 +131,7 @@ class ScrapeBadger:
         self._google: GoogleClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
+        self._apartments: ApartmentsClient | None = None
         self._depop: DepopClient | None = None
         self._linkedin: LinkedInClient | None = None
         self._amazon: AmazonClient | None = None
@@ -222,6 +224,24 @@ class ScrapeBadger:
         if self._reddit is None:
             self._reddit = RedditClient(self._base_client)
         return self._reddit
+
+    @property
+    def apartments(self) -> ApartmentsClient:
+        """Access Apartments.com Scraper API operations.
+
+        Returns:
+            ApartmentsClient providing search and property detail with
+            unit-level pricing. Single market: apartments.com (US, USD, en-US).
+
+        Example:
+            ```python
+            page = await client.apartments.search("kansas-city-mo", beds=1)
+            prop = await client.apartments.get_property(page.results[0].url)
+            ```
+        """
+        if self._apartments is None:
+            self._apartments = ApartmentsClient(self._base_client)
+        return self._apartments
 
     @property
     def redfin(self) -> RedfinClient:
