@@ -84,6 +84,7 @@ from scrapebadger.amazon.models import (
 from scrapebadger.apartments import ApartmentsClient
 from scrapebadger.apartments.models import FloorPlan as ApartmentsFloorPlan
 from scrapebadger.apartments.models import Property as ApartmentsProperty
+from scrapebadger.apartments.models import School as ApartmentsSchool
 from scrapebadger.apartments.models import SearchResponse as ApartmentsSearchResponse
 from scrapebadger.apartments.models import SearchResult as ApartmentsSearchResult
 from scrapebadger.apartments.models import Unit as ApartmentsUnit
@@ -891,7 +892,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.27.0"
+__version__ = "0.27.1"
 
 __all__ = [
     # TikTok core models
@@ -909,6 +910,7 @@ __all__ = [
     "ApartmentsClient",
     "ApartmentsFloorPlan",
     "ApartmentsProperty",
+    "ApartmentsSchool",
     "ApartmentsSearchResponse",
     "ApartmentsSearchResult",
     "ApartmentsUnit",

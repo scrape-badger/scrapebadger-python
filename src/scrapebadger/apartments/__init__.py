@@ -20,6 +20,7 @@ from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.apartments.models import (
     FloorPlan,
     Property,
+    School,
     SearchResponse,
     SearchResult,
     Unit,
@@ -29,6 +30,7 @@ __all__ = [
     "ApartmentsClient",
     "FloorPlan",
     "Property",
+    "School",
     "SearchResponse",
     "SearchResult",
     "Unit",

@@ -70,6 +70,27 @@ apartments.com is fully server-rendered. If you call the general Web Scraping
 API against it directly, do **not** pass `render_js=True` — it forces the slow
 browser path (100+ seconds) and can exceed the CDN timeout with a 524.
 
+
+## Schools
+
+```python
+prop = await client.apartments.get_property(url)
+for s in prop.schools:
+    print(s.name, s.rating, s.grades, s.student_count, s.proximity)
+```
+
+Data comes from GreatSchools, as rendered on the property page.
+
+`rating` is out of 10 and is **`None` for unrated schools** — apartments.com
+shows no badge for those. It is never `0`; a 0 would mean 'rated zero', which
+is a different claim.
+
+`proximity` is `"Attendance Zone"` (the property is zoned for that school) or
+`"Nearby"`. `is_private` reflects the Public/Private split on the page.
+
+The section also lists nearby colleges and universities; those are not returned
+as schools.
+
 ## Cost
 
 5 credits per search page and per property.

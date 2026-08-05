@@ -70,6 +70,23 @@ class FloorPlan(_BaseModel):
     units_available: int = 0
 
 
+class School(_BaseModel):
+    """A school from the property's Schools section (GreatSchools data)."""
+
+    name: str | None = None
+    type_text: str | None = None
+    is_private: bool = False
+    grades: str | None = None
+    student_count: int | None = None
+    #: "Attendance Zone" (the property is zoned for it) or "Nearby".
+    proximity: str | None = None
+    #: GreatSchools rating out of 10. **None means UNRATED**, not zero — the
+    #: site renders no badge for those schools.
+    rating: int | None = None
+    rating_scale: int = 10
+    url: str | None = None
+
+
 class Property(_BaseModel):
     """An apartments.com property (a complex, not a single home)."""
 
@@ -92,6 +109,7 @@ class Property(_BaseModel):
     amenities: list[str] = Field(default_factory=list)
     office_hours: list[str] = Field(default_factory=list)
     photos: list[str] = Field(default_factory=list)
+    schools: list[School] = Field(default_factory=list)
     floor_plans: list[FloorPlan] = Field(default_factory=list)
     #: Every unit across every floor plan, flattened.
     units: list[Unit] = Field(default_factory=list)
