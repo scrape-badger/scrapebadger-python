@@ -39,7 +39,10 @@ class SearchClient:
         self._client = client
 
     async def users(self, query: str) -> Paginated[UserShort]:
-        """Search accounts by name/username."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Search accounts by name/username.
+        """
         return await self._search("users", query, UserShort)
 
     async def hashtags(self, query: str) -> Paginated[Hashtag]:
@@ -47,15 +50,24 @@ class SearchClient:
         return await self._search("hashtags", query, Hashtag)
 
     async def places(self, query: str) -> Paginated[Location]:
-        """Search places/locations."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Search places/locations.
+        """
         return await self._search("places", query, Location)
 
     async def reels(self, query: str) -> Paginated[Media]:
-        """Search reels."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Search reels.
+        """
         return await self._search("reels", query, Media)
 
     async def music(self, query: str) -> Paginated[Audio]:
-        """Search music/audio tracks."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Search music/audio tracks.
+        """
         return await self._search("music", query, Audio)
 
     async def top(self, query: str) -> dict[str, Any]:
@@ -68,7 +80,10 @@ class SearchClient:
         return await self._client.get("/v1/instagram/search/top", params=params)
 
     async def autocomplete(self, query: str) -> dict[str, Any]:
-        """Get typeahead/autocomplete suggestions (mixed entity types)."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get typeahead/autocomplete suggestions (mixed entity types).
+        """
         params: dict[str, Any] = {"query": query}
         return await self._client.get("/v1/instagram/search/autocomplete", params=params)
 

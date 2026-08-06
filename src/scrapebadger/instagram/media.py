@@ -65,7 +65,10 @@ class MediaClient:
         return Paginated[Comment].model_validate(response)
 
     async def likers(self, code: str) -> Paginated[UserShort]:
-        """Get the users who liked a media."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get the users who liked a media.
+        """
         response = await self._client.get(f"/v1/instagram/media/{code}/likers")
         return Paginated[UserShort].model_validate(response)
 
@@ -77,7 +80,10 @@ class MediaClient:
         amount: int = 20,
         cursor: str | None = None,
     ) -> Paginated[Comment]:
-        """Get replies to a comment."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get replies to a comment.
+        """
         params: dict[str, Any] = {"amount": amount, "cursor": cursor}
         response = await self._client.get(
             f"/v1/instagram/media/{code}/comments/{comment_id}/replies", params=params
