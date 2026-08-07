@@ -506,6 +506,7 @@ class SearchItem(_BaseModel):
     is_preowned: bool | None = None
     snap_eligible: bool | None = None
     position: int | None = None
+    stack_position: int | None = None
     product_location: str | None = None
     additional_offer_count: int | None = None
 
