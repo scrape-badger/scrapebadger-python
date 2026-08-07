@@ -26,6 +26,7 @@ from scrapebadger.redfin.client import RedfinClient
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
+from scrapebadger.walmart.client import WalmartClient
 from scrapebadger.web.client import WebClient
 from scrapebadger.youtube.client import YoutubeClient
 from scrapebadger.zillow.client import ZillowClient
@@ -146,6 +147,7 @@ class ScrapeBadger:
         self._loopnet: LoopNetClient | None = None
         self._chatgpt: ChatGPTClient | None = None
         self._instagram: InstagramClient | None = None
+        self._walmart: WalmartClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -413,6 +415,33 @@ class ScrapeBadger:
         if self._ebay is None:
             self._ebay = EbayClient(self._base_client)
         return self._ebay
+
+    @property
+    def walmart(self) -> WalmartClient:
+        """Access Walmart Scraper API operations.
+
+        Returns:
+            WalmartClient providing access to all 11 Walmart endpoints.
+            US-only: walmart.com is the single supported market.
+
+        Example:
+            ```python
+            # Search
+            results = await client.walmart.search.search("laptop")
+
+            # Product detail
+            product = await client.walmart.products.get_product("5689919121")
+
+            # Seller profile
+            seller = await client.walmart.sellers.get_seller("101040442")
+
+            # Store detail
+            store = await client.walmart.stores.get_store("100")
+            ```
+        """
+        if self._walmart is None:
+            self._walmart = WalmartClient(self._base_client)
+        return self._walmart
 
     @property
     def youtube(self) -> YoutubeClient:

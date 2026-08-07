@@ -688,6 +688,112 @@ from scrapebadger.vinted.models import (
     VintedUserProfile,
     VintedUserSummary,
 )
+from scrapebadger.walmart.client import WalmartClient
+from scrapebadger.walmart.models import (
+    AutocompleteResponse as WalmartAutocompleteResponse,
+)
+from scrapebadger.walmart.models import (
+    Badge as WalmartBadge,
+)
+from scrapebadger.walmart.models import (
+    Breadcrumb as WalmartBreadcrumb,
+)
+from scrapebadger.walmart.models import (
+    ConditionOffer as WalmartConditionOffer,
+)
+from scrapebadger.walmart.models import (
+    EmbeddedSeller as WalmartEmbeddedSeller,
+)
+from scrapebadger.walmart.models import (
+    FulfillmentOption as WalmartFulfillmentOption,
+)
+from scrapebadger.walmart.models import (
+    FulfillmentSummary as WalmartFulfillmentSummary,
+)
+from scrapebadger.walmart.models import (
+    Image as WalmartImage,
+)
+from scrapebadger.walmart.models import (
+    LocationContext as WalmartLocationContext,
+)
+from scrapebadger.walmart.models import (
+    Market as WalmartMarket,
+)
+from scrapebadger.walmart.models import (
+    MarketsResponse as WalmartMarketsResponse,
+)
+from scrapebadger.walmart.models import (
+    NameValue as WalmartNameValue,
+)
+from scrapebadger.walmart.models import (
+    NutritionFacts as WalmartNutritionFacts,
+)
+from scrapebadger.walmart.models import (
+    Price as WalmartPrice,
+)
+from scrapebadger.walmart.models import (
+    PriceInfo as WalmartPriceInfo,
+)
+from scrapebadger.walmart.models import (
+    PriceRange as WalmartPriceRange,
+)
+from scrapebadger.walmart.models import (
+    Product as WalmartProduct,
+)
+from scrapebadger.walmart.models import (
+    Promotion as WalmartPromotion,
+)
+from scrapebadger.walmart.models import (
+    RatingDistribution as WalmartRatingDistribution,
+)
+from scrapebadger.walmart.models import (
+    ReturnPolicy as WalmartReturnPolicy,
+)
+from scrapebadger.walmart.models import (
+    Review as WalmartReview,
+)
+from scrapebadger.walmart.models import (
+    ReviewsResponse as WalmartReviewsResponse,
+)
+from scrapebadger.walmart.models import (
+    SearchItem as WalmartSearchItem,
+)
+from scrapebadger.walmart.models import (
+    SearchResponse as WalmartSearchResponse,
+)
+from scrapebadger.walmart.models import (
+    Seller as WalmartSeller,
+)
+from scrapebadger.walmart.models import (
+    SellerResponse as WalmartSellerResponse,
+)
+from scrapebadger.walmart.models import (
+    SpecificationGroup as WalmartSpecificationGroup,
+)
+from scrapebadger.walmart.models import (
+    Store as WalmartStore,
+)
+from scrapebadger.walmart.models import (
+    StoreHours as WalmartStoreHours,
+)
+from scrapebadger.walmart.models import (
+    StoreResponse as WalmartStoreResponse,
+)
+from scrapebadger.walmart.models import (
+    StoreService as WalmartStoreService,
+)
+from scrapebadger.walmart.models import (
+    Suggestion as WalmartSuggestion,
+)
+from scrapebadger.walmart.models import (
+    Variant as WalmartVariant,
+)
+from scrapebadger.walmart.models import (
+    Video as WalmartVideo,
+)
+from scrapebadger.walmart.models import (
+    Warranty as WalmartWarranty,
+)
 from scrapebadger.web.models import DetectResult, ScrapeResult
 from scrapebadger.youtube.client import YoutubeClient
 from scrapebadger.youtube.models import (
@@ -932,7 +1038,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.29.0"
+__version__ = "0.30.0"
 
 __all__ = [
     # TikTok core models
@@ -1259,6 +1365,43 @@ __all__ = [
     "VintedStatus",
     "VintedUserProfile",
     "VintedUserSummary",
+    # Walmart
+    "WalmartAutocompleteResponse",
+    "WalmartBadge",
+    "WalmartBreadcrumb",
+    "WalmartClient",
+    "WalmartConditionOffer",
+    "WalmartEmbeddedSeller",
+    "WalmartFulfillmentOption",
+    "WalmartFulfillmentSummary",
+    "WalmartImage",
+    "WalmartLocationContext",
+    "WalmartMarket",
+    "WalmartMarketsResponse",
+    "WalmartNameValue",
+    "WalmartNutritionFacts",
+    "WalmartPrice",
+    "WalmartPriceInfo",
+    "WalmartPriceRange",
+    "WalmartProduct",
+    "WalmartPromotion",
+    "WalmartRatingDistribution",
+    "WalmartReturnPolicy",
+    "WalmartReview",
+    "WalmartReviewsResponse",
+    "WalmartSearchItem",
+    "WalmartSearchResponse",
+    "WalmartSeller",
+    "WalmartSellerResponse",
+    "WalmartSpecificationGroup",
+    "WalmartStore",
+    "WalmartStoreHours",
+    "WalmartStoreResponse",
+    "WalmartStoreService",
+    "WalmartSuggestion",
+    "WalmartVariant",
+    "WalmartVideo",
+    "WalmartWarranty",
     # Stream exceptions
     "WebSocketStreamError",
     "YoutubeAudioTrack",
