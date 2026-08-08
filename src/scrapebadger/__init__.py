@@ -862,6 +862,49 @@ from scrapebadger.walmart.models import (
     Warranty as WalmartWarranty,
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
+from scrapebadger.yandex.client import YandexClient
+from scrapebadger.yandex.models import (
+    Image as YandexImage,
+)
+from scrapebadger.yandex.models import (
+    ImageResult as YandexImageResult,
+)
+from scrapebadger.yandex.models import (
+    ImagesResponse as YandexImagesResponse,
+)
+from scrapebadger.yandex.models import (
+    Market as YandexMarket,
+)
+from scrapebadger.yandex.models import (
+    MarketsResponse as YandexMarketsResponse,
+)
+from scrapebadger.yandex.models import (
+    OrganicResult as YandexOrganicResult,
+)
+from scrapebadger.yandex.models import (
+    OtherSize as YandexOtherSize,
+)
+from scrapebadger.yandex.models import (
+    Pagination as YandexPagination,
+)
+from scrapebadger.yandex.models import (
+    ReverseImageResponse as YandexReverseImageResponse,
+)
+from scrapebadger.yandex.models import (
+    ReverseSite as YandexReverseSite,
+)
+from scrapebadger.yandex.models import (
+    SearchResponse as YandexSearchResponse,
+)
+from scrapebadger.yandex.models import (
+    SimilarImage as YandexSimilarImage,
+)
+from scrapebadger.yandex.models import (
+    Sitelink as YandexSitelink,
+)
+from scrapebadger.yandex.models import (
+    Tag as YandexTag,
+)
 from scrapebadger.youtube.client import YoutubeClient
 from scrapebadger.youtube.models import (
     AudioTrack as YoutubeAudioTrack,
@@ -1105,7 +1148,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.32.0"
+__version__ = "0.33.0"
 
 __all__ = [
     # TikTok core models
@@ -1513,6 +1556,22 @@ __all__ = [
     "WalmartWarranty",
     # Stream exceptions
     "WebSocketStreamError",
+    # Yandex
+    "YandexClient",
+    "YandexImage",
+    "YandexImageResult",
+    "YandexImagesResponse",
+    "YandexMarket",
+    "YandexMarketsResponse",
+    "YandexOrganicResult",
+    "YandexOtherSize",
+    "YandexPagination",
+    "YandexReverseImageResponse",
+    "YandexReverseSite",
+    "YandexSearchResponse",
+    "YandexSimilarImage",
+    "YandexSitelink",
+    "YandexTag",
     "YoutubeAudioTrack",
     "YoutubeAutocompleteResponse",
     "YoutubeBatchResponse",

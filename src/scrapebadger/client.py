@@ -31,6 +31,7 @@ from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.walmart.client import WalmartClient
 from scrapebadger.web.client import WebClient
+from scrapebadger.yandex.client import YandexClient
 from scrapebadger.youtube.client import YoutubeClient
 from scrapebadger.zillow.client import ZillowClient
 
@@ -154,6 +155,7 @@ class ScrapeBadger:
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
         self._bing: BingClient | None = None
+        self._yandex: YandexClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -533,6 +535,36 @@ class ScrapeBadger:
         if self._bing is None:
             self._bing = BingClient(self._base_client)
         return self._bing
+
+    @property
+    def yandex(self) -> YandexClient:
+        """Access Yandex Scraper API operations.
+
+        Returns:
+            YandexClient providing access to all 4 Yandex endpoints — web
+            search, image search, reverse-image (CBIR) search, and the
+            supported market list (tr/com/ru/by/kz/uz).
+
+        Example:
+            ```python
+            # Web search
+            results = await client.yandex.search.search("python asyncio")
+
+            # Images
+            images = await client.yandex.images.search("golden retriever")
+
+            # Reverse image
+            reverse = await client.yandex.images.reverse(
+                "https://example.com/photo.jpg"
+            )
+
+            # Markets
+            markets = await client.yandex.reference.markets()
+            ```
+        """
+        if self._yandex is None:
+            self._yandex = YandexClient(self._base_client)
+        return self._yandex
 
     @property
     def youtube(self) -> YoutubeClient:
