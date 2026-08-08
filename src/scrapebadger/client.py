@@ -11,8 +11,11 @@ from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.apartments.client import ApartmentsClient
+from scrapebadger.baidu.client import BaiduClient
+from scrapebadger.bing.client import BingClient
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
+from scrapebadger.duckduckgo.client import DuckDuckGoClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
@@ -148,6 +151,9 @@ class ScrapeBadger:
         self._chatgpt: ChatGPTClient | None = None
         self._instagram: InstagramClient | None = None
         self._walmart: WalmartClient | None = None
+        self._duckduckgo: DuckDuckGoClient | None = None
+        self._baidu: BaiduClient | None = None
+        self._bing: BingClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -442,6 +448,91 @@ class ScrapeBadger:
         if self._walmart is None:
             self._walmart = WalmartClient(self._base_client)
         return self._walmart
+
+    @property
+    def duckduckgo(self) -> DuckDuckGoClient:
+        """Access DuckDuckGo Search API operations.
+
+        Returns:
+            DuckDuckGoClient providing access to all 7 DuckDuckGo endpoints —
+            web search, images, news, videos, autocomplete, instant answers,
+            and the supported region list.
+
+        Example:
+            ```python
+            # Web search
+            results = await client.duckduckgo.search.search("python asyncio")
+
+            # Images
+            images = await client.duckduckgo.media.images("golden retriever")
+
+            # Instant answer
+            answer = await client.duckduckgo.reference.instant("pi")
+
+            # Regions
+            regions = await client.duckduckgo.reference.regions()
+            ```
+        """
+        if self._duckduckgo is None:
+            self._duckduckgo = DuckDuckGoClient(self._base_client)
+        return self._duckduckgo
+
+    @property
+    def baidu(self) -> BaiduClient:
+        """Access Baidu Scraper API operations.
+
+        Returns:
+            BaiduClient providing access to the Baidu web SERP, news vertical,
+            image search and search-box autocomplete. Results carry the real
+            target URL, not just Baidu's tracking redirect.
+
+        Example:
+            ```python
+            # Web search
+            results = await client.baidu.search("咖啡机")
+
+            # News, most recent first
+            news = await client.baidu.news("人工智能", sort="time")
+
+            # Images
+            images = await client.baidu.images("猫")
+
+            # Search-box suggestions
+            suggestions = await client.baidu.autocomplete("咖啡")
+            ```
+        """
+        if self._baidu is None:
+            self._baidu = BaiduClient(self._base_client)
+        return self._baidu
+
+    @property
+    def bing(self) -> BingClient:
+        """Access Bing Scraper API operations.
+
+        Returns:
+            BingClient providing access to the Bing web SERP, image search,
+            video search, news vertical, search-box autocomplete and the
+            supported-market list.
+
+        Example:
+            ```python
+            # Web search
+            results = await client.bing.search.search("coffee machine")
+
+            # Images and videos
+            images = await client.bing.media.images("cats")
+            videos = await client.bing.media.videos("cats")
+
+            # News
+            news = await client.bing.news.news("ai", freshness="day")
+
+            # Markets
+            markets = await client.bing.reference.markets()
+            ```
+        """
+        if self._bing is None:
+            self._bing = BingClient(self._base_client)
+        return self._bing
 
     @property
     def youtube(self) -> YoutubeClient:

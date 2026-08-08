@@ -88,6 +88,30 @@ from scrapebadger.apartments.models import School as ApartmentsSchool
 from scrapebadger.apartments.models import SearchResponse as ApartmentsSearchResponse
 from scrapebadger.apartments.models import SearchResult as ApartmentsSearchResult
 from scrapebadger.apartments.models import Unit as ApartmentsUnit
+from scrapebadger.baidu.client import BaiduClient
+from scrapebadger.baidu.models import AutocompleteResponse as BaiduAutocompleteResponse
+from scrapebadger.baidu.models import ImageResult as BaiduImageResult
+from scrapebadger.baidu.models import ImagesResponse as BaiduImagesResponse
+from scrapebadger.baidu.models import NewsResponse as BaiduNewsResponse
+from scrapebadger.baidu.models import NewsResult as BaiduNewsResult
+from scrapebadger.baidu.models import OrganicResult as BaiduOrganicResult
+from scrapebadger.baidu.models import RelatedSearch as BaiduRelatedSearch
+from scrapebadger.baidu.models import SearchResponse as BaiduSearchResponse
+from scrapebadger.baidu.models import Suggestion as BaiduSuggestion
+from scrapebadger.bing.client import BingClient
+from scrapebadger.bing.models import Ad as BingAd
+from scrapebadger.bing.models import AutocompleteResponse as BingAutocompleteResponse
+from scrapebadger.bing.models import DeepLink as BingDeepLink
+from scrapebadger.bing.models import ImageResult as BingImageResult
+from scrapebadger.bing.models import ImagesResponse as BingImagesResponse
+from scrapebadger.bing.models import Market as BingMarket
+from scrapebadger.bing.models import MarketsResponse as BingMarketsResponse
+from scrapebadger.bing.models import NewsArticle as BingNewsArticle
+from scrapebadger.bing.models import NewsResponse as BingNewsResponse
+from scrapebadger.bing.models import OrganicResult as BingOrganicResult
+from scrapebadger.bing.models import SearchResponse as BingSearchResponse
+from scrapebadger.bing.models import VideoResult as BingVideoResult
+from scrapebadger.bing.models import VideosResponse as BingVideosResponse
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.chatgpt.models import (
     AskResponse as ChatGPTAskResponse,
@@ -135,6 +159,49 @@ from scrapebadger.depop.models import (
 )
 from scrapebadger.depop.models import (
     UserProductsResponse as DepopUserProductsResponse,
+)
+from scrapebadger.duckduckgo.client import DuckDuckGoClient
+from scrapebadger.duckduckgo.models import (
+    AbstractBox as DuckDuckGoAbstractBox,
+)
+from scrapebadger.duckduckgo.models import (
+    AutocompleteResponse as DuckDuckGoAutocompleteResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    ImageResponse as DuckDuckGoImageResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    ImageResult as DuckDuckGoImageResult,
+)
+from scrapebadger.duckduckgo.models import (
+    InstantAnswerResponse as DuckDuckGoInstantAnswerResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    InstantAnswerTopic as DuckDuckGoInstantAnswerTopic,
+)
+from scrapebadger.duckduckgo.models import (
+    NewsResponse as DuckDuckGoNewsResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    NewsResult as DuckDuckGoNewsResult,
+)
+from scrapebadger.duckduckgo.models import (
+    Region as DuckDuckGoRegion,
+)
+from scrapebadger.duckduckgo.models import (
+    RegionsResponse as DuckDuckGoRegionsResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    SearchResponse as DuckDuckGoSearchResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    SearchResult as DuckDuckGoSearchResult,
+)
+from scrapebadger.duckduckgo.models import (
+    VideoResponse as DuckDuckGoVideoResponse,
+)
+from scrapebadger.duckduckgo.models import (
+    VideoResult as DuckDuckGoVideoResult,
 )
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.ebay.models import (
@@ -1038,7 +1105,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.30.0"
+__version__ = "0.31.0"
 
 __all__ = [
     # TikTok core models
@@ -1061,8 +1128,34 @@ __all__ = [
     "ApartmentsSearchResult",
     "ApartmentsUnit",
     "AuthenticationError",
+    # Baidu
+    "BaiduAutocompleteResponse",
+    "BaiduClient",
+    "BaiduImageResult",
+    "BaiduImagesResponse",
+    "BaiduNewsResponse",
+    "BaiduNewsResult",
+    "BaiduOrganicResult",
+    "BaiduRelatedSearch",
+    "BaiduSearchResponse",
+    "BaiduSuggestion",
     "Bestseller",
     "BestsellersResponse",
+    # Bing
+    "BingAd",
+    "BingAutocompleteResponse",
+    "BingClient",
+    "BingDeepLink",
+    "BingImageResult",
+    "BingImagesResponse",
+    "BingMarket",
+    "BingMarketsResponse",
+    "BingNewsArticle",
+    "BingNewsResponse",
+    "BingOrganicResult",
+    "BingSearchResponse",
+    "BingVideoResult",
+    "BingVideosResponse",
     # Vinted response envelopes
     "BrandsResponse",
     "CategoriesResponse",
@@ -1093,6 +1186,22 @@ __all__ = [
     "DepopUserProductsResponse",
     # Web scraping
     "DetectResult",
+    # DuckDuckGo
+    "DuckDuckGoAbstractBox",
+    "DuckDuckGoAutocompleteResponse",
+    "DuckDuckGoClient",
+    "DuckDuckGoImageResponse",
+    "DuckDuckGoImageResult",
+    "DuckDuckGoInstantAnswerResponse",
+    "DuckDuckGoInstantAnswerTopic",
+    "DuckDuckGoNewsResponse",
+    "DuckDuckGoNewsResult",
+    "DuckDuckGoRegion",
+    "DuckDuckGoRegionsResponse",
+    "DuckDuckGoSearchResponse",
+    "DuckDuckGoSearchResult",
+    "DuckDuckGoVideoResponse",
+    "DuckDuckGoVideoResult",
     # eBay response envelopes / models
     "EbayAutocompleteResponse",
     "EbayAutocompleteSuggestion",
