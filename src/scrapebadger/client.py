@@ -31,6 +31,7 @@ from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
 from scrapebadger.walmart.client import WalmartClient
 from scrapebadger.web.client import WebClient
+from scrapebadger.yahoo.client import YahooClient
 from scrapebadger.yandex.client import YandexClient
 from scrapebadger.youtube.client import YoutubeClient
 from scrapebadger.zillow.client import ZillowClient
@@ -155,6 +156,7 @@ class ScrapeBadger:
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
         self._bing: BingClient | None = None
+        self._yahoo: YahooClient | None = None
         self._yandex: YandexClient | None = None
 
     @property
@@ -535,6 +537,35 @@ class ScrapeBadger:
         if self._bing is None:
             self._bing = BingClient(self._base_client)
         return self._bing
+
+    @property
+    def yahoo(self) -> YahooClient:
+        """Access Yahoo Scraper API operations.
+
+        Returns:
+            YahooClient providing access to the Yahoo web SERP, image search,
+            video search, news vertical, search-box autocomplete and the
+            supported-market list.
+
+        Example:
+            ```python
+            # Web search
+            results = await client.yahoo.search.search("coffee machine")
+
+            # Images and videos
+            images = await client.yahoo.media.images("cats")
+            videos = await client.yahoo.media.videos("cats")
+
+            # News
+            news = await client.yahoo.news.news("ai")
+
+            # Markets
+            markets = await client.yahoo.reference.markets()
+            ```
+        """
+        if self._yahoo is None:
+            self._yahoo = YahooClient(self._base_client)
+        return self._yahoo
 
     @property
     def yandex(self) -> YandexClient:

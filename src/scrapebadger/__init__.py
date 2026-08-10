@@ -862,6 +862,19 @@ from scrapebadger.walmart.models import (
     Warranty as WalmartWarranty,
 )
 from scrapebadger.web.models import DetectResult, ScrapeResult
+from scrapebadger.yahoo.client import YahooClient
+from scrapebadger.yahoo.models import Ad as YahooAd
+from scrapebadger.yahoo.models import AutocompleteResponse as YahooAutocompleteResponse
+from scrapebadger.yahoo.models import ImageResult as YahooImageResult
+from scrapebadger.yahoo.models import ImagesResponse as YahooImagesResponse
+from scrapebadger.yahoo.models import Market as YahooMarket
+from scrapebadger.yahoo.models import MarketsResponse as YahooMarketsResponse
+from scrapebadger.yahoo.models import NewsArticle as YahooNewsArticle
+from scrapebadger.yahoo.models import NewsResponse as YahooNewsResponse
+from scrapebadger.yahoo.models import OrganicResult as YahooOrganicResult
+from scrapebadger.yahoo.models import SearchResponse as YahooSearchResponse
+from scrapebadger.yahoo.models import VideoResult as YahooVideoResult
+from scrapebadger.yahoo.models import VideosResponse as YahooVideosResponse
 from scrapebadger.yandex.client import YandexClient
 from scrapebadger.yandex.models import (
     Image as YandexImage,
@@ -1148,7 +1161,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.33.1"
+__version__ = "0.34.0"
 
 __all__ = [
     # TikTok core models
@@ -1556,6 +1569,20 @@ __all__ = [
     "WalmartWarranty",
     # Stream exceptions
     "WebSocketStreamError",
+    # Yahoo
+    "YahooAd",
+    "YahooAutocompleteResponse",
+    "YahooClient",
+    "YahooImageResult",
+    "YahooImagesResponse",
+    "YahooMarket",
+    "YahooMarketsResponse",
+    "YahooNewsArticle",
+    "YahooNewsResponse",
+    "YahooOrganicResult",
+    "YahooSearchResponse",
+    "YahooVideoResult",
+    "YahooVideosResponse",
     # Yandex
     "YandexClient",
     "YandexImage",

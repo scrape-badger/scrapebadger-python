@@ -101,6 +101,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 | **Baidu** | 4 endpoints — web search (language + date filters), news vertical, image search, autocomplete. Results carry the **real target URL**, not just Baidu's tracking redirect | [Baidu Docs](https://docs.scrapebadger.com/baidu/overview) |
 | **Bing** | 6 endpoints — web search (with ads + related searches), image search, video search, news vertical, autocomplete, markets | [Bing Docs](https://docs.scrapebadger.com/bing/overview) |
 | **DuckDuckGo** | 7 endpoints — web search (with abstract box), image/news/video search, autocomplete, instant answers, regions | [DuckDuckGo Docs](https://docs.scrapebadger.com/duckduckgo/overview) |
+| **Yahoo** | 6 endpoints across 35 markets — web search (with ads + related searches), image search, video search, news vertical, autocomplete, markets | [Yahoo Docs](https://docs.scrapebadger.com/yahoo/overview) |
 | **Yandex** | 4 endpoints across 6 markets (tr/com/ru/by/kz/uz) — web search (organic + ads + sitelinks + inline media), image search, reverse-image (CBIR) search, markets | [Yandex Docs](https://docs.scrapebadger.com/yandex/overview) |
 | **ChatGPT** | Prompt the real chatgpt.com anonymously — structured answer with citations anchored to character offsets, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [ChatGPT Guide](docs/chatgpt.md) |
 

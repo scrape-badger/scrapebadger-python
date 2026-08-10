@@ -752,7 +752,11 @@ wheels = [
 
 [[package]]
 name = "scrapebadger"
+<<<<<<< HEAD
 version = "0.33.1"
+=======
+version = "0.34.0"
+>>>>>>> bb2832d (feat(yahoo): add Yahoo Search API client (SCR-215))
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
