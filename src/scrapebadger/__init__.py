@@ -274,6 +274,22 @@ from scrapebadger.ebay.models import (
 from scrapebadger.ebay.models import (
     SellerProfileResponse as EbaySellerProfileResponse,
 )
+from scrapebadger.gemini.client import GeminiClient
+from scrapebadger.gemini.models import (
+    AskResponse as GeminiAskResponse,
+)
+from scrapebadger.gemini.models import (
+    BrandVisibilityResponse as GeminiBrandVisibilityResponse,
+)
+from scrapebadger.gemini.models import (
+    Citation as GeminiCitation,
+)
+from scrapebadger.gemini.models import (
+    CompetitorMention as GeminiCompetitorMention,
+)
+from scrapebadger.gemini.models import (
+    SearchResult as GeminiSearchResult,
+)
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.immobiliare.models import (
@@ -1286,6 +1302,13 @@ __all__ = [
     "EbaySellerItemsResponse",
     "EbaySellerProfileResponse",
     "FeedbackBreakdown",
+    # Gemini
+    "GeminiAskResponse",
+    "GeminiBrandVisibilityResponse",
+    "GeminiCitation",
+    "GeminiClient",
+    "GeminiCompetitorMention",
+    "GeminiSearchResult",
     # Google Scraper
     "GoogleClient",
     # Immobiliare
