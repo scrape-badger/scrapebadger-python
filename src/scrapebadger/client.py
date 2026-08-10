@@ -17,6 +17,7 @@ from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.duckduckgo.client import DuckDuckGoClient
 from scrapebadger.ebay.client import EbayClient
+from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.instagram.client import InstagramClient
@@ -151,6 +152,7 @@ class ScrapeBadger:
         self._immobiliare: ImmobiliareClient | None = None
         self._loopnet: LoopNetClient | None = None
         self._chatgpt: ChatGPTClient | None = None
+        self._gemini: GeminiClient | None = None
         self._instagram: InstagramClient | None = None
         self._walmart: WalmartClient | None = None
         self._duckduckgo: DuckDuckGoClient | None = None
@@ -757,6 +759,32 @@ class ScrapeBadger:
         if self._chatgpt is None:
             self._chatgpt = ChatGPTClient(self._base_client)
         return self._chatgpt
+
+    @property
+    def gemini(self) -> GeminiClient:
+        """Access Gemini Scraper API operations.
+
+        Prompts the real gemini.google.com — not the Gemini API — anonymously,
+        and returns the answer as structured JSON including the web sources
+        Gemini cited.
+
+        Returns:
+            GeminiClient providing access to ask and brand-visibility
+            endpoints.
+
+        Example:
+            ```python
+            result = await client.gemini.ask.ask("best running shoes 2026")
+            brand = await client.gemini.brand.visibility(
+                "best web scraping API",
+                brand="ScrapeBadger",
+                competitors=["Bright Data"],
+            )
+            ```
+        """
+        if self._gemini is None:
+            self._gemini = GeminiClient(self._base_client)
+        return self._gemini
 
     @property
     def tiktok(self) -> TikTokClient:

@@ -1,0 +1,93 @@
+"""Gemini API client combining all sub-clients.
+
+This module provides the main GeminiClient class that serves as the
+entry point for all Gemini API operations.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from scrapebadger.gemini.ask import AskClient
+from scrapebadger.gemini.brand import BrandClient
+
+if TYPE_CHECKING:
+    from scrapebadger._internal.client import BaseClient
+
+
+class GeminiClient:
+    """Client for all Gemini API operations.
+
+    Sends prompts to the real gemini.google.com — not the Gemini API —
+    anonymously, and returns the answer as structured JSON including the web
+    sources Gemini cited.
+
+    Attributes:
+        ask: Client for asking Gemini a question.
+        brand: Client for AEO/GEO brand-visibility analysis.
+
+    Example:
+        ```python
+        from scrapebadger import ScrapeBadger
+
+        async with ScrapeBadger(api_key="your-key") as client:
+            # Ask a question
+            result = await client.gemini.ask.ask("best running shoes 2026")
+            print(result.answer)
+
+            # Brand visibility
+            brand = await client.gemini.brand.visibility(
+                "best web scraping API",
+                brand="ScrapeBadger",
+                competitors=["Bright Data"],
+            )
+            print(brand.share_of_voice_pct)
+        ```
+
+    Note:
+        This client is not instantiated directly. Instead, access it through
+        the `gemini` property of the main `ScrapeBadger` client.
+    """
+
+    def __init__(self, client: BaseClient) -> None:
+        """Initialize Gemini client with all sub-clients.
+
+        Args:
+            client: The base HTTP client for making API requests.
+        """
+        self._client = client
+
+        # Initialize sub-clients
+        self._ask = AskClient(client)
+        self._brand = BrandClient(client)
+
+    @property
+    def ask(self) -> AskClient:
+        """Access the ask endpoint.
+
+        Returns:
+            AskClient for sending prompts to Gemini.
+
+        Example:
+            ```python
+            result = await client.gemini.ask.ask("what is a badger?")
+            ```
+        """
+        return self._ask
+
+    @property
+    def brand(self) -> BrandClient:
+        """Access the brand-visibility endpoint.
+
+        Returns:
+            BrandClient for AEO/GEO brand analysis.
+
+        Example:
+            ```python
+            result = await client.gemini.brand.visibility(
+                "best CRM for startups",
+                brand="Acme",
+            )
+            ```
+        """
+        return self._brand
