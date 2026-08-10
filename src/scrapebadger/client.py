@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
+from scrapebadger.account.client import AccountClient
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.baidu.client import BaiduClient
@@ -17,13 +18,16 @@ from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.duckduckgo.client import DuckDuckGoClient
 from scrapebadger.ebay.client import EbayClient
+from scrapebadger.facebook.client import FacebookClient
 from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.idealista.client import IdealistaClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.instagram.client import InstagramClient
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.linkedin.client import LinkedInClient
 from scrapebadger.loopnet.client import LoopNetClient
+from scrapebadger.perplexity.client import PerplexityClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.redfin.client import RedfinClient
@@ -137,13 +141,16 @@ class ScrapeBadger:
         self._vinted: VintedClient | None = None
         self._web: WebClient | None = None
         self._google: GoogleClient | None = None
+        self._idealista: IdealistaClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
         self._apartments: ApartmentsClient | None = None
         self._depop: DepopClient | None = None
         self._linkedin: LinkedInClient | None = None
+        self._account: AccountClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
+        self._facebook: FacebookClient | None = None
         self._youtube: YoutubeClient | None = None
         self._tiktok: TikTokClient | None = None
         self._realtor: RealtorClient | None = None
@@ -151,6 +158,7 @@ class ScrapeBadger:
         self._leboncoin: LeboncoinClient | None = None
         self._immobiliare: ImmobiliareClient | None = None
         self._loopnet: LoopNetClient | None = None
+        self._perplexity: PerplexityClient | None = None
         self._chatgpt: ChatGPTClient | None = None
         self._gemini: GeminiClient | None = None
         self._instagram: InstagramClient | None = None
@@ -847,3 +855,31 @@ class ScrapeBadger:
     def __repr__(self) -> str:
         """Return string representation."""
         return f"ScrapeBadger(base_url={self._config.base_url!r})"
+
+    @property
+    def account(self) -> AccountClient:
+        """Access Account API operations. (Generated from the OpenAPI spec.)"""
+        if self._account is None:
+            self._account = AccountClient(self._base_client)
+        return self._account
+
+    @property
+    def facebook(self) -> FacebookClient:
+        """Access Facebook API operations. (Generated from the OpenAPI spec.)"""
+        if self._facebook is None:
+            self._facebook = FacebookClient(self._base_client)
+        return self._facebook
+
+    @property
+    def idealista(self) -> IdealistaClient:
+        """Access Idealista API operations. (Generated from the OpenAPI spec.)"""
+        if self._idealista is None:
+            self._idealista = IdealistaClient(self._base_client)
+        return self._idealista
+
+    @property
+    def perplexity(self) -> PerplexityClient:
+        """Access Perplexity API operations. (Generated from the OpenAPI spec.)"""
+        if self._perplexity is None:
+            self._perplexity = PerplexityClient(self._base_client)
+        return self._perplexity
