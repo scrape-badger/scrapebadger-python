@@ -81,6 +81,7 @@ class ProductDetail(_BaseModel):
     price: str | None
     currency: str | None
     availability: str | None
+    dispatch_time: str | None = None
     seller_username: str | None
     images: list[str] = Field(default_factory=list)
     url: str
