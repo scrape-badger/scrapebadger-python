@@ -88,6 +88,24 @@ from scrapebadger.apartments.models import School as ApartmentsSchool
 from scrapebadger.apartments.models import SearchResponse as ApartmentsSearchResponse
 from scrapebadger.apartments.models import SearchResult as ApartmentsSearchResult
 from scrapebadger.apartments.models import Unit as ApartmentsUnit
+from scrapebadger.app_store.client import AppStoreClient
+from scrapebadger.app_store.models import App as AppStoreApp
+from scrapebadger.app_store.models import AppExtras as AppStoreAppExtras
+from scrapebadger.app_store.models import ChartEntry as AppStoreChartEntry
+from scrapebadger.app_store.models import ChartsResponse as AppStoreChartsResponse
+from scrapebadger.app_store.models import Developer as AppStoreDeveloper
+from scrapebadger.app_store.models import DeveloperResponse as AppStoreDeveloperResponse
+from scrapebadger.app_store.models import Genre as AppStoreGenre
+from scrapebadger.app_store.models import GenresResponse as AppStoreGenresResponse
+from scrapebadger.app_store.models import InAppPurchase as AppStoreInAppPurchase
+from scrapebadger.app_store.models import Market as AppStoreMarket
+from scrapebadger.app_store.models import MarketsResponse as AppStoreMarketsResponse
+from scrapebadger.app_store.models import PrivacyType as AppStorePrivacyType
+from scrapebadger.app_store.models import RatingHistogram as AppStoreRatingHistogram
+from scrapebadger.app_store.models import Review as AppStoreReview
+from scrapebadger.app_store.models import ReviewsResponse as AppStoreReviewsResponse
+from scrapebadger.app_store.models import Screenshot as AppStoreScreenshot
+from scrapebadger.app_store.models import SearchResponse as AppStoreSearchResponse
 from scrapebadger.baidu.client import BaiduClient
 from scrapebadger.baidu.models import AutocompleteResponse as BaiduAutocompleteResponse
 from scrapebadger.baidu.models import ImageResult as BaiduImageResult
@@ -291,6 +309,46 @@ from scrapebadger.gemini.models import (
     SearchResult as GeminiSearchResult,
 )
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.google_ads.client import GoogleAdsClient
+from scrapebadger.google_ads.models import AdCreative as GoogleAdsCreative
+from scrapebadger.google_ads.models import AdCreativeResponse as GoogleAdsCreativeResponse
+from scrapebadger.google_ads.models import AdsSearchResponse as GoogleAdsSearchResponse
+from scrapebadger.google_ads.models import AdvertiserAdMix as GoogleAdsAdvertiserAdMix
+from scrapebadger.google_ads.models import AdvertiserResponse as GoogleAdsAdvertiserResponse
+from scrapebadger.google_ads.models import (
+    AdvertiserSpendPoint as GoogleAdsAdvertiserSpendPoint,
+)
+from scrapebadger.google_ads.models import (
+    AdvertisersResponse as GoogleAdsAdvertisersResponse,
+)
+from scrapebadger.google_ads.models import (
+    AdvertiserSuggestion as GoogleAdsAdvertiserSuggestion,
+)
+from scrapebadger.google_ads.models import AppliedFilters as GoogleAdsAppliedFilters
+from scrapebadger.google_ads.models import CreativeVariation as GoogleAdsCreativeVariation
+from scrapebadger.google_ads.models import (
+    PoliticalDisclosure as GoogleAdsPoliticalDisclosure,
+)
+from scrapebadger.google_ads.models import (
+    PoliticalRegionSpend as GoogleAdsPoliticalRegionSpend,
+)
+from scrapebadger.google_play.client import GooglePlayClient
+from scrapebadger.google_play.models import App as GooglePlayApp
+from scrapebadger.google_play.models import AppCard as GooglePlayAppCard
+from scrapebadger.google_play.models import AppListResponse as GooglePlayAppListResponse
+from scrapebadger.google_play.models import CategoriesResponse as GooglePlayCategoriesResponse
+from scrapebadger.google_play.models import Category as GooglePlayCategory
+from scrapebadger.google_play.models import ChartRank as GooglePlayChartRank
+from scrapebadger.google_play.models import DataSafetySection as GooglePlayDataSafetySection
+from scrapebadger.google_play.models import Developer as GooglePlayDeveloper
+from scrapebadger.google_play.models import Market as GooglePlayMarket
+from scrapebadger.google_play.models import MarketsResponse as GooglePlayMarketsResponse
+from scrapebadger.google_play.models import PermissionGroup as GooglePlayPermissionGroup
+from scrapebadger.google_play.models import PermissionsResponse as GooglePlayPermissionsResponse
+from scrapebadger.google_play.models import Price as GooglePlayPrice
+from scrapebadger.google_play.models import RatingHistogram as GooglePlayRatingHistogram
+from scrapebadger.google_play.models import Review as GooglePlayReview
+from scrapebadger.google_play.models import ReviewsResponse as GooglePlayReviewsResponse
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.immobiliare.models import (
     Agency as ImmobiliareAgency,
@@ -1199,6 +1257,25 @@ __all__ = [
     "ApartmentsSearchResponse",
     "ApartmentsSearchResult",
     "ApartmentsUnit",
+    # Apple App Store
+    "AppStoreApp",
+    "AppStoreAppExtras",
+    "AppStoreChartEntry",
+    "AppStoreChartsResponse",
+    "AppStoreClient",
+    "AppStoreDeveloper",
+    "AppStoreDeveloperResponse",
+    "AppStoreGenre",
+    "AppStoreGenresResponse",
+    "AppStoreInAppPurchase",
+    "AppStoreMarket",
+    "AppStoreMarketsResponse",
+    "AppStorePrivacyType",
+    "AppStoreRatingHistogram",
+    "AppStoreReview",
+    "AppStoreReviewsResponse",
+    "AppStoreScreenshot",
+    "AppStoreSearchResponse",
     "AuthenticationError",
     # Baidu
     "BaiduAutocompleteResponse",
@@ -1309,8 +1386,40 @@ __all__ = [
     "GeminiClient",
     "GeminiCompetitorMention",
     "GeminiSearchResult",
+    # Google Ads Transparency Center
+    "GoogleAdsAdvertiserAdMix",
+    "GoogleAdsAdvertiserResponse",
+    "GoogleAdsAdvertiserSpendPoint",
+    "GoogleAdsAdvertiserSuggestion",
+    "GoogleAdsAdvertisersResponse",
+    "GoogleAdsAppliedFilters",
+    "GoogleAdsClient",
+    "GoogleAdsCreative",
+    "GoogleAdsCreativeResponse",
+    "GoogleAdsCreativeVariation",
+    "GoogleAdsPoliticalDisclosure",
+    "GoogleAdsPoliticalRegionSpend",
+    "GoogleAdsSearchResponse",
     # Google Scraper
     "GoogleClient",
+    # Google Play Store
+    "GooglePlayApp",
+    "GooglePlayAppCard",
+    "GooglePlayAppListResponse",
+    "GooglePlayCategoriesResponse",
+    "GooglePlayCategory",
+    "GooglePlayChartRank",
+    "GooglePlayClient",
+    "GooglePlayDataSafetySection",
+    "GooglePlayDeveloper",
+    "GooglePlayMarket",
+    "GooglePlayMarketsResponse",
+    "GooglePlayPermissionGroup",
+    "GooglePlayPermissionsResponse",
+    "GooglePlayPrice",
+    "GooglePlayRatingHistogram",
+    "GooglePlayReview",
+    "GooglePlayReviewsResponse",
     # Immobiliare
     "ImmobiliareAgency",
     "ImmobiliareAgencyAgent",

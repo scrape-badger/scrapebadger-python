@@ -11,6 +11,7 @@ from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.apartments.client import ApartmentsClient
+from scrapebadger.app_store.client import AppStoreClient
 from scrapebadger.baidu.client import BaiduClient
 from scrapebadger.bing.client import BingClient
 from scrapebadger.chatgpt.client import ChatGPTClient
@@ -19,6 +20,8 @@ from scrapebadger.duckduckgo.client import DuckDuckGoClient
 from scrapebadger.ebay.client import EbayClient
 from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.google_ads.client import GoogleAdsClient
+from scrapebadger.google_play.client import GooglePlayClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.instagram.client import InstagramClient
 from scrapebadger.leboncoin.client import LeboncoinClient
@@ -160,6 +163,9 @@ class ScrapeBadger:
         self._bing: BingClient | None = None
         self._yahoo: YahooClient | None = None
         self._yandex: YandexClient | None = None
+        self._google_play: GooglePlayClient | None = None
+        self._app_store: AppStoreClient | None = None
+        self._google_ads: GoogleAdsClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -811,6 +817,78 @@ class ScrapeBadger:
         if self._tiktok is None:
             self._tiktok = TikTokClient(self._base_client)
         return self._tiktok
+
+    @property
+    def google_play(self) -> GooglePlayClient:
+        """Access Google Play Store Scraper API operations.
+
+        Returns:
+            GooglePlayClient providing search, full app detail, reviews,
+            permissions, similar apps, developer catalogues, category browse,
+            top charts, categories and markets. Play is one global host
+            localised by two independent parameters: `country` (`gl` — pricing,
+            availability, chart ranking) and `lang` (`hl` — description and
+            review language).
+
+        Example:
+            ```python
+            results = await client.google_play.search("puzzle")
+            app = await client.google_play.get_app("com.whatsapp")
+            reviews = await client.google_play.get_reviews("com.whatsapp")
+            markets = await client.google_play.list_markets()
+            ```
+        """
+        if self._google_play is None:
+            self._google_play = GooglePlayClient(self._base_client)
+        return self._google_play
+
+    @property
+    def app_store(self) -> AppStoreClient:
+        """Access Apple App Store Scraper API operations.
+
+        Returns:
+            AppStoreClient providing search, full app detail (iTunes lookup
+            merged with best-effort storefront enrichment), reviews, developer
+            profile and catalogue, top charts, genres and markets. Everything
+            is storefront-scoped — the `us` and `de` feeds for one app are
+            different data sets, not translations.
+
+        Example:
+            ```python
+            results = await client.app_store.search("slack")
+            app = await client.app_store.get_app("618783545")
+            chart = await client.app_store.charts(type="top-free")
+            genres = await client.app_store.list_genres()
+            ```
+        """
+        if self._app_store is None:
+            self._app_store = AppStoreClient(self._base_client)
+        return self._app_store
+
+    @property
+    def google_ads(self) -> GoogleAdsClient:
+        """Access Google Ads Transparency Center API operations.
+
+        Returns:
+            GoogleAdsClient providing creative search, single-creative detail,
+            advertiser autocomplete and advertiser spend disclosure. Every
+            response reports which requested filters were actually honoured
+            upstream under `filters_applied`.
+
+        Example:
+            ```python
+            found = await client.google_ads.search_advertisers("tesla.com")
+            ads = await client.google_ads.search_ads(
+                advertiser_id=found.advertisers[0].advertiser_id
+            )
+            profile = await client.google_ads.get_advertiser(
+                found.advertisers[0].advertiser_id
+            )
+            ```
+        """
+        if self._google_ads is None:
+            self._google_ads = GoogleAdsClient(self._base_client)
+        return self._google_ads
 
     async def close(self) -> None:
         """Close the client and release resources.
