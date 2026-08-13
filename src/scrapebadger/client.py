@@ -10,8 +10,10 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.account.client import AccountClient
+from scrapebadger.airbnb.client import AirbnbClient
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.apartments.client import ApartmentsClient
+from scrapebadger.app_store.client import AppStoreClient
 from scrapebadger.baidu.client import BaiduClient
 from scrapebadger.bing.client import BingClient
 from scrapebadger.chatgpt.client import ChatGPTClient
@@ -21,6 +23,7 @@ from scrapebadger.ebay.client import EbayClient
 from scrapebadger.facebook.client import FacebookClient
 from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.google_play.client import GooglePlayClient
 from scrapebadger.idealista.client import IdealistaClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.instagram.client import InstagramClient
@@ -141,13 +144,16 @@ class ScrapeBadger:
         self._vinted: VintedClient | None = None
         self._web: WebClient | None = None
         self._google: GoogleClient | None = None
+        self._google_play: GooglePlayClient | None = None
         self._idealista: IdealistaClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
         self._apartments: ApartmentsClient | None = None
+        self._app_store: AppStoreClient | None = None
         self._depop: DepopClient | None = None
         self._linkedin: LinkedInClient | None = None
         self._account: AccountClient | None = None
+        self._airbnb: AirbnbClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
         self._facebook: FacebookClient | None = None
@@ -883,3 +889,24 @@ class ScrapeBadger:
         if self._perplexity is None:
             self._perplexity = PerplexityClient(self._base_client)
         return self._perplexity
+
+    @property
+    def airbnb(self) -> AirbnbClient:
+        """Access Airbnb API operations. (Generated from the OpenAPI spec.)"""
+        if self._airbnb is None:
+            self._airbnb = AirbnbClient(self._base_client)
+        return self._airbnb
+
+    @property
+    def app_store(self) -> AppStoreClient:
+        """Access App_Store API operations. (Generated from the OpenAPI spec.)"""
+        if self._app_store is None:
+            self._app_store = AppStoreClient(self._base_client)
+        return self._app_store
+
+    @property
+    def google_play(self) -> GooglePlayClient:
+        """Access Google_Play API operations. (Generated from the OpenAPI spec.)"""
+        if self._google_play is None:
+            self._google_play = GooglePlayClient(self._base_client)
+        return self._google_play
