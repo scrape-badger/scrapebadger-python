@@ -691,8 +691,16 @@ from scrapebadger.redfin.models import (
 )
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.tiktok.models import (
+    AdAdvertiser,
+    AdDetailResponse,
     AdLibraryPage,
     AdLibrarySearchResponse,
+    AdTargeting,
+    AdTargetingBreakdown,
+    AdTargetingLocation,
+    AdTargetingRegion,
+    AdvertiserSearchResponse,
+    AdvertiserSuggestion,
     RegionInfo,
     TikTokAd,
     TikTokAdVideo,
@@ -1181,8 +1189,16 @@ __version__ = "0.36.0"
 
 __all__ = [
     # TikTok core models
+    "AdAdvertiser",
+    "AdDetailResponse",
     "AdLibraryPage",
     "AdLibrarySearchResponse",
+    "AdTargeting",
+    "AdTargetingBreakdown",
+    "AdTargetingLocation",
+    "AdTargetingRegion",
+    "AdvertiserSearchResponse",
+    "AdvertiserSuggestion",
     # Amazon
     "AmazonAutocompleteResponse",
     "AmazonCategoryInfo",
