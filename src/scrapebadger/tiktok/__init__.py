@@ -26,8 +26,16 @@ Example:
 
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.tiktok.models import (
+    AdAdvertiser,
+    AdDetailResponse,
     AdLibraryPage,
     AdLibrarySearchResponse,
+    AdTargeting,
+    AdTargetingBreakdown,
+    AdTargetingLocation,
+    AdTargetingRegion,
+    AdvertiserSearchResponse,
+    AdvertiserSuggestion,
     CommentListResponse,
     HashtagResponse,
     HashtagSearchResponse,
@@ -68,8 +76,16 @@ from scrapebadger.tiktok.models import (
 
 __all__ = [
     # Ad library
+    "AdAdvertiser",
+    "AdDetailResponse",
     "AdLibraryPage",
     "AdLibrarySearchResponse",
+    "AdTargeting",
+    "AdTargetingBreakdown",
+    "AdTargetingLocation",
+    "AdTargetingRegion",
+    "AdvertiserSearchResponse",
+    "AdvertiserSuggestion",
     # Response envelopes
     "CommentListResponse",
     "HashtagResponse",

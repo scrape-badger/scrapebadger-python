@@ -13,6 +13,8 @@ Conventions (matching the backend):
 
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
 
 # =============================================================================
@@ -577,6 +579,17 @@ class TikTokAd(_BaseModel):
     first_shown_date: int | None = None  # epoch ms
     last_shown_date: int | None = None  # epoch ms
     videos: list[TikTokAdVideo] = Field(default_factory=list)
+    title: str | None = None  # ad caption / creative title
+    estimated_audience: str | None = None  # e.g. "10K-100K"
+    impression: int | None = None
+    spent: str | None = None  # spend bracket when disclosed (often empty)
+    advertising_objective: str | None = None  # e.g. "Reach", "Traffic"
+    call_to_action: str | None = None  # e.g. "Learn more" (populated on detail)
+    external_url: str | None = None  # ad landing page (populated on detail)
+    show_mode: int | None = None
+    sor_audit_status: str | None = None
+    rejection_info: dict[str, Any] | None = None
+    image_urls: list[str] = Field(default_factory=list)
 
 
 class AdLibraryPage(_BaseModel):
@@ -593,6 +606,88 @@ class AdLibrarySearchResponse(_BaseModel):
 
     ads: list[TikTokAd] = Field(default_factory=list)
     pagination: AdLibraryPage
+    region: str
+
+
+class AdAdvertiser(_BaseModel):
+    """The advertiser behind an ad (from the ad-detail response)."""
+
+    name: str | None = None
+    adv_biz_ids: str | None = None  # advertiser business id — feeds ads/search?advertiser_id=
+    registry_location: str | None = None
+    sponsor: str | None = None
+    tt_user: dict[str, Any] | None = None  # linked TikTok account, when disclosed
+
+
+class AdTargetingBreakdown(_BaseModel):
+    """One age/gender impression bucket within a region."""
+
+    age: str | None = None
+    gender: str | None = None
+    impressions: str | None = None  # bracketed range, e.g. "0-1K", "2K"
+
+
+class AdTargetingRegion(_BaseModel):
+    """Per-region impression totals with age/gender breakdowns."""
+
+    region: str | None = None
+    impressions: str | None = None
+    breakdowns: list[AdTargetingBreakdown] = Field(default_factory=list)
+
+
+class AdTargetingLocation(_BaseModel):
+    """Location targeting + the only place real impression numbers live."""
+
+    total_region: int | None = None
+    total_impressions: str | None = None
+    data: list[AdTargetingRegion] = Field(default_factory=list)
+
+
+class AdTargeting(_BaseModel):
+    """Targeting + impression breakdown disclosed for an ad (EU-DSA)."""
+
+    location: AdTargetingLocation | None = None
+    # age/gender come back as per-region flag dicts (dynamic bucket keys).
+    age: list[dict[str, Any]] = Field(default_factory=list)
+    gender: list[dict[str, Any]] = Field(default_factory=list)
+    target_audience_size: str | None = None
+    audience: str | None = None
+    interest: str | None = None  # comma-joined string, e.g. "Home Design, Education"
+    video_interactions: str | None = None
+    creator_interactions: str | None = None
+    countries: list[str] = Field(default_factory=list)
+    cities: list[str] = Field(default_factory=list)
+    provinces: list[str] = Field(default_factory=list)
+    languages: list[str] = Field(default_factory=list)
+    device_models: list[str] = Field(default_factory=list)
+    operating_systems: list[str] = Field(default_factory=list)
+    high_spending_power: str | None = None
+    audience_exclude: str | None = None
+
+
+class AdDetailResponse(_BaseModel):
+    """A single ad's advertiser, creatives, and targeting/impression breakdown."""
+
+    ad: TikTokAd
+    advertiser: AdAdvertiser
+    targeting: AdTargeting
+    display_mode: str | None = None
+    region: str
+
+
+class AdvertiserSuggestion(_BaseModel):
+    """One advertiser match from the advertiser lookup."""
+
+    name: str | None = None
+    id: str | None = None  # advertiser business id (upstream field: ``ids``)
+
+
+class AdvertiserSearchResponse(_BaseModel):
+    """Response wrapper for an advertiser name lookup."""
+
+    advertisers: list[AdvertiserSuggestion] = Field(default_factory=list)
+    keywords: list[str] = Field(default_factory=list)  # ad_keyword suggestions, when present
+    query: str
     region: str
 
 
