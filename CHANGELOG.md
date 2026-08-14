@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.37.0] - 2026-08-14
+
+### Added
+- Spec-generated additions on the v1 surface (zero breaking changes): Facebook Ad Library advertiser page search (`facebook.search_advertiser_pages`) and page info/transparency (`facebook.get_advertiser_page_info`), the `app_store` and `google_play` namespaces, Google ads-transparency operations, TikTok Ad Library detail/advertiser search, and other newly added API operations. Generated methods return raw dicts until typed models land.
+
 ## [0.36.0] - 2026-08-11
 
 ### Added
