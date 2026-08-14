@@ -14,6 +14,24 @@ class FacebookClient:
     def __init__(self, client: BaseClient) -> None:
         self._client = client
 
+    async def search_advertiser_pages(self, *, query: str, country: str = "US") -> dict[str, Any]:
+        """Search advertiser pages.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {k: v for k, v in {"query": query, "country": country}.items() if v is not None}
+        return await self._client.get("/v1/facebook/ads/pages/search", params=params)
+
+    async def get_advertiser_page_info(
+        self, page_id: str, *, country: str = "US"
+    ) -> dict[str, Any]:
+        """Get advertiser page info.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {k: v for k, v in {"country": country}.items() if v is not None}
+        return await self._client.get(f"/v1/facebook/ads/pages/{page_id}", params=params)
+
     async def search_the_ad_library(
         self,
         *,
@@ -40,12 +58,13 @@ class FacebookClient:
         }
         return await self._client.get("/v1/facebook/ads/search", params=params)
 
-    async def get_an_ad(self, ad_archive_id: str) -> dict[str, Any]:
+    async def get_an_ad(self, ad_archive_id: str, *, country: str = "US") -> dict[str, Any]:
         """Get an ad.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
-        return await self._client.get(f"/v1/facebook/ads/{ad_archive_id}")
+        params = {k: v for k, v in {"country": country}.items() if v is not None}
+        return await self._client.get(f"/v1/facebook/ads/{ad_archive_id}", params=params)
 
     async def get_group_detail(self, group_id: str) -> dict[str, Any]:
         """Get group detail.
