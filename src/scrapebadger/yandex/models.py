@@ -56,7 +56,9 @@ class Pagination(_BaseModel):
 
     current: int | None = None
     next_url: str | None = None
-    other_pages: list[dict[str, Any]] = Field(default_factory=list)
+    # Yandex returns this as an object keyed by page number ({"1": url, …}),
+    # not an array. Keep the list form too so older cached responses still load.
+    other_pages: dict[str, Any] | list[dict[str, Any]] = Field(default_factory=dict)
 
 
 class SearchResponse(_BaseModel):

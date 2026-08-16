@@ -105,8 +105,12 @@ class NewsResult(_BaseModel):
     source: str | None = None
     image: str | None = None
     relative_time: str | None = None
-    date_utc: str | None = None
-    date_at: int | None = None
+    # The DuckDuckGo endpoint sends these the other way round from the rest of
+    # the API — `date_utc` is a Unix epoch and `date_at` an ISO-8601 string.
+    # Accept either shape so the model keeps parsing if the scraper is ever
+    # brought in line with the house convention.
+    date_utc: int | str | None = None
+    date_at: str | int | None = None
     syndicate: str | None = None
 
 
