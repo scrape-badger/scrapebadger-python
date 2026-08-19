@@ -16,6 +16,7 @@ from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.app_store.client import AppStoreClient
 from scrapebadger.baidu.client import BaiduClient
 from scrapebadger.bing.client import BingClient
+from scrapebadger.booking.client import BookingClient
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.duckduckgo.client import DuckDuckGoClient
@@ -172,6 +173,7 @@ class ScrapeBadger:
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
         self._bing: BingClient | None = None
+        self._booking: BookingClient | None = None
         self._yahoo: YahooClient | None = None
         self._yandex: YandexClient | None = None
 
@@ -910,3 +912,10 @@ class ScrapeBadger:
         if self._google_play is None:
             self._google_play = GooglePlayClient(self._base_client)
         return self._google_play
+
+    @property
+    def booking(self) -> BookingClient:
+        """Access Booking API operations. (Generated from the OpenAPI spec.)"""
+        if self._booking is None:
+            self._booking = BookingClient(self._base_client)
+        return self._booking
