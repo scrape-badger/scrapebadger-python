@@ -15,7 +15,7 @@ import sys
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 if sys.version_info >= (3, 11):
     from enum import StrEnum
@@ -90,6 +90,25 @@ class _BaseModel(BaseModel):
         extra="ignore",
         str_strip_whitespace=True,
     )
+
+    @field_validator("id", "user_id", "rest_id", mode="before", check_fields=False)
+    @classmethod
+    def _id_as_string(cls, value: Any) -> Any:
+        """Accept a snowflake id whether X sends it quoted or bare.
+
+        X's own payloads are inconsistent: most endpoints return `id` as a
+        string, but `latest_followers` and `latest_following` return it as a
+        JSON number. Both are the same id, so coerce rather than reject —
+        every call to those two endpoints raised ValidationError otherwise.
+
+        Numbers only. A dict or list here is a real shape change and should
+        still fail loudly.
+        """
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, int):
+            return str(value)
+        return value
 
 
 # =============================================================================
