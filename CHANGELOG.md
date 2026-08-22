@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.39.0] - 2026-08-23
+
+### Added
+- **`gallery_images` on `RedditPost`** — multi-image gallery posts now expose
+  every image at full source resolution, in the order the poster arranged them.
+  Previously a gallery returned only `is_gallery: true`, a ~140px `thumbnail`,
+  and a `url` pointing at `reddit.com/gallery/<id>` — the images themselves were
+  unreachable. Populated on every post-returning endpoint: `posts.get`,
+  `search.posts`, subreddit/user/domain listings, trending and duplicates.
+- New `RedditGalleryImage` model — `media_id`, `url`, `width`, `height`,
+  `mime_type`, and `mp4_url` for animated items (whose `url` is the `.gif`).
+  Exported from both `scrapebadger` and `scrapebadger.reddit`.
+
 ## [0.38.0] - 2026-08-19
 
 ### Added
