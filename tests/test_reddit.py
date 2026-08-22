@@ -1134,3 +1134,57 @@ class TestRedditImports:
         # other helper models remain removed.
         for name in ("RedditPreviewImage", "RedditMedia", "RedditUserSummary"):
             assert not hasattr(models_mod, name), f"{name} should have been removed in 0.9.0"
+
+
+GALLERY_POST: dict[str, Any] = {
+    "id": "1vbjcq5",
+    "fullname": "t3_1vbjcq5",
+    "title": "[hyprland] The best rice you'll see this year",
+    "url": "https://www.reddit.com/gallery/1vbjcq5",
+    "permalink": "/r/unixporn/comments/1vbjcq5/",
+    "is_gallery": True,
+    "gallery_images": [
+        {
+            "media_id": "uaq38k4ojigh1",
+            "url": "https://preview.redd.it/uaq38k4ojigh1.jpg?width=4712&format=pjpg",
+            "width": 4712,
+            "height": 2668,
+            "mime_type": "image/jpg",
+        },
+        {
+            "media_id": "anim1",
+            "url": "https://i.redd.it/anim1.gif",
+            "width": 520,
+            "height": 292,
+            "mime_type": "image/gif",
+            "mp4_url": "https://preview.redd.it/anim1.gif?format=mp4",
+        },
+    ],
+}
+
+
+class TestRedditGalleryImages:
+    """Gallery images on RedditPost (SB-001052)."""
+
+    def test_gallery_images_parse_in_order(self) -> None:
+        post = RedditPost.model_validate(GALLERY_POST)
+        assert post.is_gallery is True
+        assert [i.media_id for i in post.gallery_images] == ["uaq38k4ojigh1", "anim1"]
+        assert post.gallery_images[0].width == 4712
+        assert post.gallery_images[0].height == 2668
+        assert post.gallery_images[0].mime_type == "image/jpg"
+        assert post.gallery_images[0].mp4_url is None
+        assert post.gallery_images[1].mp4_url == "https://preview.redd.it/anim1.gif?format=mp4"
+
+    def test_gallery_images_default_empty_for_ordinary_posts(self) -> None:
+        post = RedditPost.model_validate(SAMPLE_POST)
+        assert post.gallery_images == []
+
+    def test_gallery_image_is_frozen(self) -> None:
+        post = RedditPost.model_validate(GALLERY_POST)
+        with pytest.raises(Exception):  # noqa: B017
+            post.gallery_images[0].url = "https://evil.example/x.jpg"  # type: ignore[misc]
+
+    def test_gallery_image_importable(self) -> None:
+        from scrapebadger import RedditGalleryImage as _TopLevel  # noqa: F401
+        from scrapebadger.reddit import RedditGalleryImage as _SubPkg  # noqa: F401
