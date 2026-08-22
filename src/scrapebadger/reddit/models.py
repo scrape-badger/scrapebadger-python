@@ -55,6 +55,19 @@ class RedditAward(_BaseModel):
     award_type: str | None = None
 
 
+class RedditGalleryImage(_BaseModel):
+    """One image of a multi-image gallery post, at full source resolution."""
+
+    media_id: str
+    url: str
+    width: int | None = None
+    height: int | None = None
+    mime_type: str | None = None
+    # Animated ("image/gif") items only: `url` is the .gif, this is the mp4
+    # Reddit transcodes for playback. Still images leave it null.
+    mp4_url: str | None = None
+
+
 # =============================================================================
 # Core Models
 # =============================================================================
@@ -150,6 +163,9 @@ class RedditPost(_BaseModel):
     media_embed: dict[str, Any] | None = None
     secure_media: dict[str, Any] | None = None
     secure_media_embed: dict[str, Any] | None = None
+    # Gallery posts (`is_gallery`): the images, in the order the poster set.
+    # Empty for every other kind of post.
+    gallery_images: list[RedditGalleryImage] = Field(default_factory=list)
     # Awards
     all_awardings: list[RedditAward] = Field(default_factory=list)
     gildings: dict[str, Any] = Field(default_factory=dict)

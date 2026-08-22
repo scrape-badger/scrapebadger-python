@@ -591,6 +591,7 @@ from scrapebadger.reddit.models import (
     PostDuplicatesResponse,
     RedditAward,
     RedditComment,
+    RedditGalleryImage,
     RedditModeratedSubreddit,
     RedditPost,
     RedditRule,
@@ -1455,6 +1456,7 @@ __all__ = [
     # Reddit core models
     "RedditAward",
     "RedditComment",
+    "RedditGalleryImage",
     "RedditModeratedSubreddit",
     "RedditPost",
     "RedditRule",
