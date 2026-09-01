@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.40.0] - 2026-09-02
+
+### Added
+- **`catalog_id` on `google.shopping.offers`** — look up multi-seller Google
+  Shopping offers by Google's own Shopping catalog id (the `catalog_id` on every
+  `shopping.search` tile, or `prds=catalogid:<id>` in a Google Shopping URL) as
+  an alternative to `barcode`. The response carries `catalog_id` and
+  `total_offers`; `barcode` is now optional (exactly one of the two is required).
+
 ## [0.39.0] - 2026-08-23
 
 ### Added
