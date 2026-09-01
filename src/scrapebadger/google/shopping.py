@@ -129,34 +129,41 @@ class ShoppingClient:
 
     async def offers(
         self,
-        barcode: str,
+        barcode: str | None = None,
         *,
         gl: str | None = None,
         hl: str = "en",
+        catalog_id: str | None = None,
     ) -> dict[str, Any]:
-        """Resolve a product barcode to its multi-seller Google Shopping prices.
+        """Multi-seller Google Shopping prices for a product by barcode or catalog id.
 
-        Resolves the barcode to a product via Google web search, then returns
-        that product's Google Shopping seller offers. Costs 14 credits.
+        Pass either ``barcode`` (resolved to a product via Google web search
+        first) or ``catalog_id`` (Google Shopping ``catalogid`` — the
+        ``catalog_id`` on ``shopping.search`` tiles or ``prds=catalogid:…`` in
+        a Google Shopping URL; sellers read straight off Google's product
+        page). Costs 14 credits.
 
         Args:
             barcode: Product barcode — a GTIN-8/UPC-A/EAN-13/GTIN-14.
             gl: Country code (ISO-3166 alpha-2).
             hl: Language code.
+            catalog_id: Google Shopping catalog id. Exactly one of
+                ``barcode`` / ``catalog_id`` is required.
 
         Returns:
-            Response with ``barcode``, ``resolved_query``, ``product_title``,
-            and ``offers`` (each with title, source, price.value/currency/
-            extracted, link, rating, ...).
+            Response with ``barcode`` or ``catalog_id`` (+ ``total_offers``),
+            ``resolved_query``, ``product_title``, and ``offers`` (each with
+            title, source, price.value/currency/extracted, link, delivery, ...).
 
         Raises:
-            Returns a 422 for an invalid/checksum-failing barcode, 404 if the
-            barcode cannot be resolved to a product.
+            Returns a 400 unless exactly one identifier is passed, 422 for an
+            invalid/checksum-failing barcode, 404 if nothing resolves.
         """
-        params: dict[str, Any] = {
-            "barcode": barcode,
-            "hl": hl,
-        }
+        params: dict[str, Any] = {"hl": hl}
+        if barcode is not None:
+            params["barcode"] = barcode
+        if catalog_id is not None:
+            params["catalog_id"] = catalog_id
         if gl is not None:
             params["gl"] = gl
         return await self._client.get("/v1/google/shopping/offers", params=params)

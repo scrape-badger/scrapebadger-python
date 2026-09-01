@@ -268,6 +268,19 @@ class TestShoppingClient:
         assert params["barcode"] == "0190198001751"
         assert params["gl"] == "us"
         assert params["hl"] == "en"
+        assert "catalog_id" not in params
+
+    @pytest.mark.asyncio
+    async def test_offers_by_catalog_id(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        await google.shopping.offers(catalog_id="762120719996356571", gl="de", hl="de")
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/shopping/offers"
+        params = kwargs["params"]
+        assert params["catalog_id"] == "762120719996356571"
+        assert "barcode" not in params
+        assert (params["gl"], params["hl"]) == ("de", "de")
 
     @pytest.mark.asyncio
     async def test_offers_default_no_gl(
