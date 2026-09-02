@@ -27,7 +27,10 @@ class HashtagsClient:
         self._client = client
 
     async def get(self, tag: str) -> Hashtag:
-        """Get a hashtag's info (media count, cover)."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get a hashtag's info (media count, cover).
+        """
         response = await self._client.get(f"/v1/instagram/hashtags/{tag}")
         return Hashtag.model_validate(response)
 
@@ -43,7 +46,10 @@ class HashtagsClient:
     async def recent(
         self, tag: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Get the most recent media for a hashtag."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get the most recent media for a hashtag.
+        """
         return await _media(self._client, f"/v1/instagram/hashtags/{tag}/recent", amount, cursor)
 
     async def reels(

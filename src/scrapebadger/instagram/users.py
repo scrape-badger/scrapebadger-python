@@ -60,7 +60,10 @@ class UsersClient:
         return UserAbout.model_validate(response)
 
     async def related(self, username: str) -> Paginated[UserShort]:
-        """Get accounts related/suggested for a user."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get accounts related/suggested for a user.
+        """
         response = await self._client.get(f"/v1/instagram/users/{username}/related")
         return Paginated[UserShort].model_validate(response)
 
