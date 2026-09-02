@@ -43,6 +43,15 @@ class ScrapeResult(BaseModel):
     ai_extraction: dict[str, Any] | str | list[Any] | None = None
     ai_model: str | None = None
     ai_error: str | None = None
+    wait_for_found: bool | None = None
+    """Whether the ``wait_for`` selector appeared within ``wait_timeout``. None
+    when no ``wait_for`` was requested. A miss never arrives as a success — the
+    API answers ``422 wait_for_timeout`` and nothing is charged."""
+    js_scenario_report: list[dict[str, Any]] | None = None
+    """One entry per executed ``js_scenario`` step, in order: ``step``,
+    ``action``, ``selector``, ``ok``, ``error``, ``url`` (the page URL right
+    after the step). Execution stops at the first failed step; a failed step is
+    a free ``422 js_scenario_failed``. None when no scenario ran."""
 
 
 class DetectResult(BaseModel):

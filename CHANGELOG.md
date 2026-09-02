@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.41.0] - 2026-09-02
+
+### Added
+- **`wait_for_found` and `js_scenario_report` on `ScrapeResult`** — whether the
+  `wait_for` selector appeared, and a per-step trace of the `js_scenario`
+  (`step`, `action`, `selector`, `ok`, `error`, `url`) so a flow that does not
+  end where you expected can be read step by step.
+
+### Changed
+- `web.scrape()`: a `js_scenario` now runs **before** `wait_for`, and a missed
+  `wait_for` or a failed scenario step is a free `422` (`wait_for_timeout` /
+  `js_scenario_failed`) instead of a billed copy of the page you started on.
+  Scenario steps use `action` (`click`, `fill`, `scroll`, `wait`, `evaluate`).
+
 ## [0.40.1] - 2026-09-02
 
 ### Changed
