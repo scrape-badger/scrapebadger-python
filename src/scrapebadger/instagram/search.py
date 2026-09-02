@@ -46,7 +46,10 @@ class SearchClient:
         return await self._search("users", query, UserShort)
 
     async def hashtags(self, query: str) -> Paginated[Hashtag]:
-        """Search hashtags."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Search hashtags.
+        """
         return await self._search("hashtags", query, Hashtag)
 
     async def places(self, query: str) -> Paginated[Location]:
@@ -71,7 +74,9 @@ class SearchClient:
         return await self._search("music", query, Audio)
 
     async def top(self, query: str) -> dict[str, Any]:
-        """Get blended "top" results (users, hashtags, and places).
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get blended "top" results (users, hashtags, and places).
 
         Returns the raw envelope — the top tab mixes entity types, so it is
         surfaced as-is rather than a single typed list.

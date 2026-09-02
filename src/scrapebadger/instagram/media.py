@@ -48,7 +48,10 @@ class MediaClient:
         return Media.model_validate(response)
 
     async def oembed(self, code: str) -> Oembed:
-        """Get oEmbed metadata for a media permalink."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get oEmbed metadata for a media permalink.
+        """
         response = await self._client.get(f"/v1/instagram/media/{code}/oembed")
         return Oembed.model_validate(response)
 
@@ -91,7 +94,10 @@ class MediaClient:
         return Paginated[Comment].model_validate(response)
 
     async def comment_likers(self, code: str, comment_id: str) -> Paginated[UserShort]:
-        """Get the users who liked a comment."""
+        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+
+        Get the users who liked a comment.
+        """
         response = await self._client.get(
             f"/v1/instagram/media/{code}/comments/{comment_id}/likers"
         )
