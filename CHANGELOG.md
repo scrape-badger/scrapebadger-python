@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.40.1] - 2026-09-02
+
+### Changed
+- **Instagram: seven more methods flagged temporarily unavailable** —
+  `users.related`, `media.oembed`, `media.comment_likers`, `hashtags.get`,
+  `hashtags.recent`, `search.hashtags` and `search.top` need the authenticated
+  Instagram tier, which is offline; they return `503 temporarily_unavailable`
+  (not billed) until it is back. Their docstrings now say so, matching the rest
+  of the gated set. No signature changes. (SCR-42, support SB-001065)
+
 ## [0.40.0] - 2026-09-02
 
 ### Added
