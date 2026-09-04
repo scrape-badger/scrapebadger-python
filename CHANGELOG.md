@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.43.0] - 2026-09-04
+
+### Added
+
+- **Image input on `chatgpt.ask.ask` and `gemini.ask.ask`** — pass `image_url`
+  and the model looks at the picture and answers about it (JPEG, PNG, GIF,
+  WEBP, BMP; up to 5 MB). An image ask is slower than a text one — allow
+  90-150 s. Requested in SB-001078.
+- **`images` on both ask responses** (`MediaItem[]`) — the pictures the answer
+  itself displayed, with favicon-sized assets excluded.
+
+### Note
+
+Neither endpoint will GENERATE an image. Anonymous `chatgpt.com` and
+`gemini.google.com` both gate image generation behind a login, so `images` is
+only ever what the answer showed, never something the model drew.
+
 ## [0.42.0] - 2026-09-04
 
 ### Added

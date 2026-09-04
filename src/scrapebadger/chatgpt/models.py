@@ -97,6 +97,21 @@ class SearchResult(_BaseModel):
 # =============================================================================
 
 
+class MediaItem(_BaseModel):
+    """An image the answer itself displayed.
+
+    Never a GENERATED image — anonymous chatgpt.com gates image generation
+    behind a login, so this is only ever a picture the answer showed.
+
+    Attributes:
+        url: Image URL.
+        title: Alt text, when one was supplied.
+    """
+
+    url: str
+    title: str | None = None
+
+
 class AskResponse(_BaseModel):
     """A ChatGPT answer with its sources.
 
@@ -107,6 +122,8 @@ class AskResponse(_BaseModel):
         citations: Sources ChatGPT actually referenced.
         search_results: The full retrieved set, cited or not.
         source_domains: Distinct domains across the sources.
+        images: Images the answer displayed. Never generated — anonymous
+            chatgpt.com will not draw one.
         web_search_triggered: Whether ChatGPT ACTUALLY browsed the web.
         search_queries: list[str] = Field(default_factory=list)
     reference_tokens: Raw reference markers (e.g. "turn0search1").
@@ -127,6 +144,7 @@ class AskResponse(_BaseModel):
     citations: list[Citation] = Field(default_factory=list)
     search_results: list[SearchResult] = Field(default_factory=list)
     source_domains: list[str] = Field(default_factory=list)
+    images: list[MediaItem] = Field(default_factory=list)
     truncated: bool = False
     web_search_triggered: bool = False
     reference_tokens: list[str] = Field(default_factory=list)

@@ -43,6 +43,7 @@ class AskClient:
         *,
         country: str = "US",
         web_search: WebSearchMode = "auto",
+        image_url: str | None = None,
     ) -> AskResponse:
         """Ask ChatGPT a question and get the answer with its sources.
 
@@ -53,6 +54,11 @@ class AskClient:
             country: ISO-3166 alpha-2 egress country. Defaults to "US".
             web_search: Whether ChatGPT should browse — "auto", "force", or
                 "off". Defaults to "auto".
+            image_url: Public http(s) URL of an image to attach. ChatGPT looks
+                at the picture and answers about it (JPEG/PNG/GIF/WEBP/BMP, up
+                to 5 MB). An image ask takes noticeably longer — allow 90-150s.
+                It will NOT generate an image: anonymous chatgpt.com gates that
+                behind a login.
 
         Returns:
             The answer, its citations, and the full retrieved search set.
@@ -69,12 +75,12 @@ class AskClient:
                 print(f"{'*' if source.cited else ' '} {source.url}")
             ```
         """
-        response = await self._client.get(
-            "/v1/chatgpt/ask",
-            params={
-                "prompt": prompt,
-                "country": country,
-                "web_search": web_search,
-            },
-        )
+        params: dict[str, object] = {
+            "prompt": prompt,
+            "country": country,
+            "web_search": web_search,
+        }
+        if image_url is not None:
+            params["image_url"] = image_url
+        response = await self._client.get("/v1/chatgpt/ask", params=params)
         return AskResponse.model_validate(response)
