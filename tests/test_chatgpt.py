@@ -233,3 +233,39 @@ def test_citation_offsets_index_the_untouched_answer() -> None:
     answer = "  padded answer  "
     parsed = AskResponse.model_validate({**ASK_RESPONSE, "answer": answer})
     assert parsed.answer == answer
+
+
+@pytest.mark.asyncio
+async def test_ask_omits_image_url_when_not_given(
+    chatgpt: ChatGPTClient, mock_base_client: MagicMock
+) -> None:
+    """An existing call must be byte-identical on the wire."""
+    mock_base_client.get.return_value = ASK_RESPONSE
+
+    await chatgpt.ask.ask("best running shoes 2026")
+
+    _, kwargs = mock_base_client.get.await_args
+    assert "image_url" not in kwargs["params"]
+
+
+@pytest.mark.asyncio
+async def test_ask_sends_image_url_when_given(
+    chatgpt: ChatGPTClient, mock_base_client: MagicMock
+) -> None:
+    mock_base_client.get.return_value = ASK_RESPONSE
+
+    await chatgpt.ask.ask("what is in this photo?", image_url="https://example.com/a.png")
+
+    _, kwargs = mock_base_client.get.await_args
+    assert kwargs["params"]["image_url"] == "https://example.com/a.png"
+
+
+def test_ask_response_parses_images() -> None:
+    """`images` is what the answer DISPLAYED — ChatGPT never generates one."""
+    parsed = AskResponse.model_validate(
+        {**ASK_RESPONSE, "images": [{"url": "https://cdn.example/a.jpg", "title": "a shoe"}]}
+    )
+    assert [i.url for i in parsed.images] == ["https://cdn.example/a.jpg"]
+    assert parsed.images[0].title == "a shoe"
+    # Absent on an older payload, and that is not an error.
+    assert AskResponse.model_validate(ASK_RESPONSE).images == []
