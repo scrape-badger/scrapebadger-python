@@ -25,7 +25,7 @@ class EbayClient:
     organized sub-clients for different resource types.
 
     Attributes:
-        search: Client for active/completed search and autocomplete.
+        search: Client for active/visual/completed search and autocomplete.
         items: Client for item detail and item reviews.
         sellers: Client for seller profile, items, and feedback.
         categories: Client for category browse.
