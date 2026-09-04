@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.42.0] - 2026-09-04
+
+### Added
+- **`ebay.search.search_by_image()`** — eBay's own visual search, the one behind
+  the camera icon in eBay's search bar. Give it a picture as `image_url` (a
+  public http(s) URL) or `image_base64` (JPEG or PNG, up to 10 MB decoded; a
+  `data:image/jpeg;base64,...` URL is accepted too) and get back the same
+  `SearchResponse` that `search()` returns, with `query` set to `None`. Takes
+  the usual SRP filters — `domain`, `category_id`, `page`, `per_page`,
+  `condition`, `buying_format`, `min_price`, `max_price`, `free_shipping`,
+  `location`, `language`. Costs 10 credits (two eBay fetches: the upload, then
+  the results page). Passing neither or both images raises `ValueError` locally
+  rather than costing a round trip.
+
+  There is deliberately no `sort_by`: eBay ignores sorting on a visual results
+  page, and a parameter that silently does nothing is worse than no parameter.
+
 ## [0.41.0] - 2026-09-02
 
 ### Added

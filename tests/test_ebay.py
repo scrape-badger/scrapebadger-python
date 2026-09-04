@@ -241,6 +241,13 @@ SEARCH_RESPONSE: dict[str, Any] = {
     "scraped_at": "2026-06-03T00:00:00Z",
 }
 
+IMAGE_SEARCH_RESPONSE: dict[str, Any] = {
+    "query": None,
+    "domain": "com",
+    "results": [SAMPLE_SEARCH_RESULT],
+    "pagination": SAMPLE_PAGINATION,
+}
+
 COMPLETED_RESPONSE: dict[str, Any] = {
     "query": "nintendo switch",
     "domain": "com",
@@ -636,6 +643,70 @@ class TestSearchClient:
         assert params["min_price"] == 100
         assert params["max_price"] == 500
         assert params["free_shipping"] is True
+
+    async def test_search_by_image_url(
+        self, search_client: SearchClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.post.return_value = IMAGE_SEARCH_RESPONSE
+        result = await search_client.search_by_image(image_url="https://example.com/sneaker.jpg")
+
+        assert isinstance(result, SearchResponse)
+        # A visual search has no keywords.
+        assert result.query is None
+        assert result.results[0].item_id == "123456789012"
+        call_args = mock_base_client.post.call_args
+        assert call_args[0][0] == "/v1/ebay/search/by-image"
+        body = call_args[1]["json"]
+        assert body["image_url"] == "https://example.com/sneaker.jpg"
+        assert body["domain"] == "com"
+        assert body["page"] == 1
+        # Unset optionals are stripped, not sent as nulls.
+        assert "image_base64" not in body
+        assert "category_id" not in body
+
+    async def test_search_by_image_base64_with_filters(
+        self, search_client: SearchClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.post.return_value = IMAGE_SEARCH_RESPONSE
+        await search_client.search_by_image(
+            image_base64="iVBORw0KGgo=",
+            domain="co.uk",
+            category_id="177",
+            page=2,
+            per_page=120,
+            condition="used",
+            buying_format="auction",
+            min_price=100,
+            max_price=500,
+            free_shipping=True,
+            location="worldwide",
+            language="english",
+        )
+        body = mock_base_client.post.call_args[1]["json"]
+        assert body["image_base64"] == "iVBORw0KGgo="
+        assert "image_url" not in body
+        assert body["domain"] == "co.uk"
+        assert body["category_id"] == "177"
+        assert body["page"] == 2
+        assert body["per_page"] == 120
+        assert body["condition"] == "used"
+        assert body["buying_format"] == "auction"
+        assert body["min_price"] == 100
+        assert body["max_price"] == 500
+        assert body["free_shipping"] is True
+        assert body["location"] == "worldwide"
+        assert body["language"] == "english"
+        # eBay ignores sorting on a visual results page — no sort_by exists.
+        assert "sort_by" not in body
+
+    async def test_search_by_image_requires_exactly_one_image(
+        self, search_client: SearchClient, mock_base_client: MagicMock
+    ) -> None:
+        with pytest.raises(ValueError, match="exactly one"):
+            await search_client.search_by_image()
+        with pytest.raises(ValueError, match="exactly one"):
+            await search_client.search_by_image(image_url="https://x/y.jpg", image_base64="abc")
+        mock_base_client.post.assert_not_called()
 
     async def test_completed(
         self, search_client: SearchClient, mock_base_client: MagicMock
