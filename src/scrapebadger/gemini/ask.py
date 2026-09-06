@@ -52,11 +52,13 @@ class AskClient:
             country: ISO-3166 alpha-2 egress country. Defaults to "US".
             web_search: Whether Gemini should ground the answer with a web
                 search — "auto", "force", or "off". Defaults to "auto".
-            image_url: Public http(s) URL of an image to attach. Gemini looks
-                at the picture and answers about it (JPEG/PNG/GIF/WEBP/BMP, up
-                to 5 MB). An image ask takes noticeably longer — allow 90-150s.
-                It will NOT generate an image: anonymous gemini.google.com
-                gates that behind a login.
+            image_url: NOT SUPPORTED — returns 422 and is never billed.
+                Signed-out Gemini accepts the upload and then refuses to answer
+                about it (PERMISSION_DENIED from its own generate call), so the
+                API fails fast rather than charging for a request that cannot
+                succeed. Use ``chatgpt.ask`` for image input. Gemini will not
+                generate an image either: anonymous gemini.google.com gates that
+                behind a login.
 
         Returns:
             The answer, its citations, and the full retrieved search set.
