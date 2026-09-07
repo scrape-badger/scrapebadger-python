@@ -2,15 +2,19 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
-from unittest.mock import AsyncMock, MagicMock, patch
+from email.utils import formatdate
+from unittest.mock import AsyncMock, MagicMock, call, patch
 
 import httpx
 import pytest
+import respx
 
+from scrapebadger import ScrapeBadger
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
-from scrapebadger._internal.exceptions import ScrapeBadgerError
+from scrapebadger._internal.exceptions import RateLimitError, ScrapeBadgerError, ServerError
 
 
 @pytest.fixture
@@ -41,6 +45,147 @@ class TestDefaultMaxRetries:
         """with_overrides can still change max_retries explicitly."""
         new_cfg = config_default.with_overrides(max_retries=3)
         assert new_cfg.max_retries == 3
+
+
+class TestRetryAfter:
+    """Retry server capacity errors without ignoring the server's waiting period."""
+
+    @pytest.mark.parametrize(
+        ("value", "expected"),
+        [
+            ("5", 5),
+            ("0", 1),
+            (" 5 ", 5),
+            (formatdate(1_800_000_005, usegmt=True), 5),
+            ("Fri Jan 15 08:00:05 2027", 5),
+            (formatdate(1_799_999_999, usegmt=True), 1),
+            (None, 1),
+            ("", 1),
+            ("invalid", 1),
+            ("-5", 1),
+            ("1.5", 1),
+            ("NaN", 1),
+            ("Infinity", 1),
+            pytest.param("9" * 400, 1, id="overflow"),
+        ],
+    )
+    async def test_ai_mode_retry_after(
+        self, respx_mock: respx.MockRouter, value: str | None, expected: int
+    ) -> None:
+        route = respx_mock.get("https://sdk.test/v1/google/ai-mode/search").mock(
+            side_effect=[
+                httpx.Response(503, headers={"Retry-After": value} if value is not None else {}),
+                httpx.Response(200, json={"markdown": "A complete AI Mode answer"}),
+            ]
+        )
+        with (
+            patch("scrapebadger._internal.client.asyncio.sleep") as sleep,
+            patch("scrapebadger._internal.client.time.time", return_value=1_800_000_000.25),
+        ):
+            async with ScrapeBadger(
+                api_key="test_key", base_url="https://sdk.test", max_retries=1
+            ) as client:
+                answer = await client.google.ai_mode.search("Why is the sky blue?")
+
+        assert answer == {"markdown": "A complete AI Mode answer"}
+        assert route.call_count == 2
+        sleep.assert_awaited_once_with(expected)
+
+    @pytest.mark.parametrize("value", ["5", formatdate(1_800_000_005, usegmt=True), "invalid"])
+    def test_ai_mode_from_synchronous_program(
+        self, respx_mock: respx.MockRouter, value: str
+    ) -> None:
+        """The SDK is async-only; synchronous programs enter through asyncio.run()."""
+        route = respx_mock.get("https://sdk.test/v1/google/ai-mode/search").mock(
+            side_effect=[
+                httpx.Response(503, headers={"Retry-After": value}),
+                httpx.Response(200, json={"markdown": "Answer"}),
+            ]
+        )
+
+        async def search() -> str:
+            async with ScrapeBadger(
+                api_key="test_key", base_url="https://sdk.test", max_retries=1
+            ) as client:
+                answer = await client.google.ai_mode.search("Why is the sky blue?")
+                return str(answer["markdown"])
+
+        with (
+            patch("scrapebadger._internal.client.asyncio.sleep") as sleep,
+            patch("scrapebadger._internal.client.time.time", return_value=1_800_000_000),
+        ):
+            assert asyncio.run(search()) == "Answer"
+
+        sleep.assert_awaited_once_with(1 if value == "invalid" else 5)
+        assert route.call_count == 2
+
+    @pytest.mark.parametrize("status", [500, 502, 503, 504])
+    @pytest.mark.parametrize("method", ["get", "get_with_headers", "post"])
+    async def test_shared_retry_path(
+        self, config_one_retry: ClientConfig, method: str, status: int
+    ) -> None:
+        async with BaseClient(config_one_retry) as client:
+            with (
+                patch.object(
+                    client,
+                    "_execute_request",
+                    side_effect=[
+                        httpx.Response(status, headers={"Retry-After": "5"}),
+                        httpx.Response(200, json={"ok": True}),
+                    ],
+                ) as request,
+                patch("scrapebadger._internal.client.asyncio.sleep") as sleep,
+            ):
+                result = await getattr(client, method)("/v1/test")
+        assert (result[0] if method == "get_with_headers" else result) == {"ok": True}
+        assert request.await_count == 2
+        sleep.assert_awaited_once_with(5)
+
+    async def test_retry_limit_and_backoff_are_preserved(self) -> None:
+        async with BaseClient(ClientConfig(api_key="test_key", max_retries=5)) as client:
+            with (
+                patch.object(
+                    client,
+                    "_execute_request",
+                    side_effect=[
+                        httpx.Response(503, headers={"Retry-After": "5"}),
+                        httpx.Response(503, headers={"Retry-After": "invalid"}),
+                        httpx.ConnectTimeout("timeout"),
+                        httpx.Response(503, headers={"Retry-After": "5"}),
+                        httpx.ConnectTimeout("timeout"),
+                        httpx.Response(503, headers={"Retry-After": "5"}),
+                    ],
+                ) as request,
+                patch("scrapebadger._internal.client.asyncio.sleep") as sleep,
+                pytest.raises(ServerError) as error,
+            ):
+                await client.get("/v1/test")
+        assert error.value.status_code == 503
+        assert request.await_count == 6
+        assert sleep.await_args_list == [call(5), call(2), call(4), call(8), call(16)]
+
+    @pytest.mark.parametrize(
+        ("value", "expected"),
+        [("5", 5), ("0", 0), (formatdate(1_800_000_005, usegmt=True), 5), ("invalid", 60)],
+    )
+    async def test_429_keeps_rate_limit_error_without_automatic_retry(
+        self, config_one_retry: ClientConfig, value: str, expected: int
+    ) -> None:
+        async with BaseClient(config_one_retry) as client:
+            with (
+                patch.object(
+                    client,
+                    "_execute_request",
+                    return_value=httpx.Response(429, headers={"Retry-After": value}),
+                ) as request,
+                patch("scrapebadger._internal.client.asyncio.sleep") as sleep,
+                patch("scrapebadger._internal.client.time.time", return_value=1_800_000_000),
+                pytest.raises(RateLimitError) as error,
+            ):
+                await client.get("/v1/test")
+        assert error.value.retry_after == expected
+        assert request.await_count == 1
+        sleep.assert_not_awaited()
 
 
 class TestRetryWarningLogging:

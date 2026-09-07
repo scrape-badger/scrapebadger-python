@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.43.2] - 2026-09-07
+
+### Fixed
+
+- Retryable HTTP errors (including AI Mode capacity `503`s) now honor
+  `Retry-After` seconds or HTTP-dates without shortening exponential backoff.
+  Missing or invalid headers retain backoff; transport retries and retry
+  limits are unchanged.
+- HTTP-date or malformed `Retry-After` headers on `429` responses no longer
+  raise `ValueError` instead of `RateLimitError`. Invalid values retain the
+  existing 60-second metadata fallback; `429` is still not retried by default.
+- Align the exported SDK version and User-Agent with the package version.
+
 ## [0.43.0] - 2026-09-04
 
 ### Added
