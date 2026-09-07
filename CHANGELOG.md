@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.47.1 — 2026-09-15
+
+- **Retried HTTP errors honor `Retry-After`.** A retryable status (the AI Mode and SERP capacity `503` included) now waits for the server's `Retry-After` — delay-seconds or an HTTP-date, including the obsolete asctime form read as UTC — without shortening the existing exponential backoff, retry limits or status policy. `429` still raises `RateLimitError` with the parsed delay; a malformed header falls back to the previous behaviour.
+
 ## 0.47.0 — 2026-09-15
 
 - Search Vinted by image URL or base64 photo, with market, category, brand and price filters.

@@ -4,6 +4,10 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import math
+import time
+from datetime import timezone
+from email.utils import parsedate_to_datetime
 from typing import TYPE_CHECKING, Any, TypeVar
 
 import httpx
@@ -40,8 +44,27 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.47.0"
+SDK_VERSION = "0.47.1"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
+
+
+def _retry_after_seconds(response: httpx.Response, default: int) -> int:
+    """Read delay-seconds or an HTTP-date; malformed headers use the caller's fallback."""
+    value = response.headers.get("Retry-After", "").strip()
+    try:
+        if value.isascii() and value.isdecimal():
+            delay = int(value)
+        else:
+            retry_at = parsedate_to_datetime(value)
+            # The obsolete asctime HTTP-date form has no explicit timezone.
+            if retry_at.tzinfo is None:
+                retry_at = retry_at.replace(tzinfo=timezone.utc)
+            delay = max(0, math.ceil(retry_at.timestamp() - time.time()))
+        if math.isfinite(delay):
+            return delay
+    except (OverflowError, TypeError, ValueError):
+        pass
+    return default
 
 
 class BaseClient:
@@ -164,7 +187,7 @@ class BaseClient:
                 limit=data.get("limit"),
                 remaining=data.get("remaining"),
                 reset_at=data.get("reset_at"),
-                retry_after=int(response.headers.get("Retry-After", 60)),
+                retry_after=_retry_after_seconds(response, default=60),
                 tier=data.get("tier"),
             )
 
@@ -250,7 +273,7 @@ class BaseClient:
 
                     # Retry on configured status codes
                     if attempt < self._config.max_retries:
-                        delay = 2**attempt
+                        delay = max(2**attempt, _retry_after_seconds(response, default=0))
                         logger.warning(
                             "⚠ %s %s — retrying in %ss (attempt %d/%d)",
                             response.status_code,
