@@ -142,6 +142,7 @@ class FacebookClient:
         sort_by: str | None = None,
         item_condition: str | None = None,
         delivery_method: str | None = None,
+        radius: str | None = None,
         after: str | None = None,
     ) -> dict[str, Any]:
         """Search Marketplace.
@@ -159,6 +160,7 @@ class FacebookClient:
                 "sort_by": sort_by,
                 "item_condition": item_condition,
                 "delivery_method": delivery_method,
+                "radius": radius,
                 "after": after,
             }.items()
             if v is not None
@@ -180,21 +182,29 @@ class FacebookClient:
         params = {k: v for k, v in {"after": after}.items() if v is not None}
         return await self._client.get(f"/v1/facebook/pages/{identifier}/posts", params=params)
 
-    async def get_post_detail(self, post_id: str) -> dict[str, Any]:
+    async def get_post_detail(self, post_id: str, *, url: str | None = None) -> dict[str, Any]:
         """Get post detail.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
-        return await self._client.get(f"/v1/facebook/posts/{post_id}")
+        params = {k: v for k, v in {"url": url}.items() if v is not None}
+        return await self._client.get(f"/v1/facebook/posts/{post_id}", params=params)
 
     async def get_post_comments(
-        self, post_id: str, *, after: str | None = None, sort: str = "relevance"
+        self,
+        post_id: str,
+        *,
+        url: str | None = None,
+        after: str | None = None,
+        sort: str = "relevance",
     ) -> dict[str, Any]:
         """Get post comments.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
-        params = {k: v for k, v in {"after": after, "sort": sort}.items() if v is not None}
+        params = {
+            k: v for k, v in {"url": url, "after": after, "sort": sort}.items() if v is not None
+        }
         return await self._client.get(f"/v1/facebook/posts/{post_id}/comments", params=params)
 
     async def get_profile_detail(self, identifier: str) -> dict[str, Any]:
