@@ -26,7 +26,7 @@ class ZillowClient:
 
     Attributes:
         search: Client for property search and region/address autocomplete.
-        properties: Client for single-property detail.
+        properties: Client for single-property and multifamily-building detail.
         agents: Client for real-estate professional profiles.
         reference: Client for reference data (markets).
 
@@ -43,6 +43,12 @@ class ZillowClient:
             # Get property detail
             prop = await client.zillow.properties.get_property("2078133351")
             print(prop.bedrooms, prop.bathrooms, prop.living_area)
+
+            # Get a multifamily building with per-unit pricing
+            b = await client.zillow.properties.get_building(
+                "https://www.zillow.com/apartments/kansas-city-mo/brookside-51/CkBJqt/"
+            )
+            print(b.name, b.rent_min, b.rent_max, len(b.units))
 
             # Get an agent profile + their listings
             agent = await client.zillow.agents.get_agent(username="jane-doe")
@@ -90,14 +96,15 @@ class ZillowClient:
 
     @property
     def properties(self) -> PropertiesClient:
-        """Access the single-property detail endpoint.
+        """Access the property- and building-detail endpoints.
 
         Returns:
-            PropertiesClient for fetching full property detail.
+            PropertiesClient for fetching full property or building detail.
 
         Example:
             ```python
             prop = await client.zillow.properties.get_property("2078133351")
+            b = await client.zillow.properties.get_building(building_url)
             ```
         """
         return self._properties

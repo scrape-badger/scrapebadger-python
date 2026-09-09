@@ -34,6 +34,10 @@ from scrapebadger.zillow.models import (
     AgentReview,
     AutocompleteResponse,
     AutocompleteResult,
+    Building,
+    BuildingFloorPlan,
+    BuildingResponse,
+    BuildingUnit,
     HomeFacts,
     LatLong,
     Listing,
@@ -55,6 +59,7 @@ from scrapebadger.zillow.models import (
     School,
     SearchResponse,
     TaxHistoryEvent,
+    UnitSummary,
     ZestimateHistoryPoint,
 )
 
@@ -67,6 +72,10 @@ __all__ = [
     "AgentReview",
     "AutocompleteResponse",
     "AutocompleteResult",
+    "Building",
+    "BuildingFloorPlan",
+    "BuildingResponse",
+    "BuildingUnit",
     "HomeFacts",
     "LatLong",
     "Listing",
@@ -88,6 +97,7 @@ __all__ = [
     "School",
     "SearchResponse",
     "TaxHistoryEvent",
+    "UnitSummary",
     "ZestimateHistoryPoint",
     "ZillowClient",
 ]

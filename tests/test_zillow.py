@@ -18,6 +18,7 @@ from scrapebadger.zillow.client import ZillowClient
 from scrapebadger.zillow.models import (
     Agent,
     AutocompleteResponse,
+    Building,
     MarketInfo,
     MarketsResponse,
     Property,
@@ -91,6 +92,26 @@ class TestRouting:
         out = await SearchClient(http).autocomplete("austin")
         assert http.get.call_args[0][0] == "/v1/zillow/autocomplete"
         assert isinstance(out, AutocompleteResponse)
+
+    @pytest.mark.asyncio
+    async def test_building_routes(self) -> None:
+        http = MagicMock()
+        http.get = AsyncMock(
+            return_value={
+                "building": {
+                    "name": "Brookside 51",
+                    "rent_min": 2015,
+                    "units": [{"unit_number": "Unit 243", "beds": 1, "sqft": 795, "price": 2015}],
+                }
+            }
+        )
+        url = "https://www.zillow.com/apartments/kansas-city-mo/brookside-51/CkBJqt/"
+        out = await PropertiesClient(http).get_building(url)
+        assert http.get.call_args[0][0] == "/v1/zillow/building"
+        assert http.get.call_args[1]["params"] == {"url": url}
+        assert isinstance(out, Building)
+        assert out.name == "Brookside 51"
+        assert out.units[0].price == 2015
 
     @pytest.mark.asyncio
     async def test_property_routes(self) -> None:

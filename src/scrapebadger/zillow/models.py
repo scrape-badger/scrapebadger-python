@@ -103,6 +103,19 @@ class MarketInfo(_BaseModel):
 # =============================================================================
 
 
+class UnitSummary(_BaseModel):
+    """A building card's per-bedroom rent rollup.
+
+    Kept as rendered text ("$2,015+") because a card advertises a starting
+    price with a qualifier, not a resolvable single number.
+    """
+
+    beds: str | None = None
+    price_text: str | None = None
+    price_min: int | None = None
+    room_for_rent: bool | None = None
+
+
 class Listing(_BaseModel):
     """One Zillow search card (search / agent listings).
 
@@ -171,6 +184,14 @@ class Listing(_BaseModel):
     open_house_start: str | None = None
     open_house_end: str | None = None
     photos: list[str] = Field(default_factory=list)
+    # Multi-unit rental buildings. A building card has no single price — its
+    # inventory is a per-bedroom rollup — so ``price`` is the cheapest
+    # advertised unit and these carry the rest.
+    is_building: bool | None = None
+    building_name: str | None = None
+    lot_id: str | None = None
+    units_available: int | None = None
+    unit_summaries: list[UnitSummary] = Field(default_factory=list)
 
 
 # =============================================================================
@@ -706,10 +727,130 @@ class SearchResponse(_BaseModel):
     scraped_at: str | None = None
 
 
+class BuildingUnit(_BaseModel):
+    """One rentable unit inside a multifamily floor plan.
+
+    ``price`` is the total monthly leasing price Zillow advertises; ``base_rent``
+    excludes the mandatory monthly fees, which are carried separately. Which of
+    the two the building headlines is ``list_price_includes_required_fees``.
+    """
+
+    unit_number: str | None = None
+    zpid: str | None = None
+    beds: float | None = None
+    baths: float | None = None
+    sqft: int | None = None
+    price: int | None = None
+    base_rent: int | None = None
+    required_monthly_fee_min: int | None = None
+    required_monthly_fee_max: int | None = None
+    list_price_includes_required_fees: bool | None = None
+    available_from_utc: float | None = None
+    available_from_at: str | None = None
+    allowed_pets: list[str] = Field(default_factory=list)
+
+
+class BuildingFloorPlan(_BaseModel):
+    """A floor-plan model, which groups one or more units of the same layout."""
+
+    name: str | None = None
+    beds: float | None = None
+    baths: float | None = None
+    sqft: int | None = None
+    price_min: int | None = None
+    price_max: int | None = None
+    base_rent_min: int | None = None
+    base_rent_max: int | None = None
+    required_monthly_fee_min: int | None = None
+    required_monthly_fee_max: int | None = None
+    available_from_utc: float | None = None
+    available_from_at: str | None = None
+    lease_term: str | None = None
+    description: str | None = None
+    photos: list[str] = Field(default_factory=list)
+    units: list[BuildingUnit] = Field(default_factory=list)
+    units_available: int = 0
+
+
+class Building(_BaseModel):
+    """A Zillow multifamily building (an apartment community, not a home).
+
+    Zillow serves multi-unit rentals on ``/apartments/...`` and ``/b/...``
+    pages, which the property endpoint cannot read.
+    """
+
+    url: str | None = None
+    lot_id: str | None = None
+    zpid: str | None = None
+    name: str | None = None
+    building_type: str | None = None  # FOR_RENT
+    home_types: list[str] = Field(default_factory=list)
+    provider_listing_id: str | None = None
+
+    street_address: str | None = None
+    full_address: str | None = None
+    city: str | None = None
+    state: str | None = None
+    zipcode: str | None = None
+    county: str | None = None
+    country: str | None = None
+    neighborhood: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    time_zone: str | None = None
+
+    phone: str | None = None
+    contact_name: str | None = None
+    rental_applications_accepted: str | None = None
+
+    currency: str | None = None
+    rent_min: int | None = None
+    rent_max: int | None = None
+    base_rent_min: int | None = None
+    base_rent_max: int | None = None
+    list_price_includes_required_fees: bool | None = None
+    units_available: int | None = None
+    unit_count: int | None = None
+
+    description: str | None = None
+    building_details: list[str] = Field(default_factory=list)
+    amenities: list[str] = Field(default_factory=list)
+    unit_features: list[str] = Field(default_factory=list)
+    policies: list[str] = Field(default_factory=list)
+    special_features: list[str] = Field(default_factory=list)
+    special_offers: list[str] = Field(default_factory=list)
+    office_hours: list[str] = Field(default_factory=list)
+    allowed_pets: list[str] = Field(default_factory=list)
+
+    walk_score: int | None = None
+    transit_score: int | None = None
+    bike_score: int | None = None
+
+    is_waitlisted: bool | None = None
+    is_low_income: bool | None = None
+    is_senior_housing: bool | None = None
+    is_student_housing: bool | None = None
+
+    floor_plans: list[BuildingFloorPlan] = Field(default_factory=list)
+    #: Every unit across every floor plan — the shape most rent-comp callers want.
+    units: list[BuildingUnit] = Field(default_factory=list)
+    schools: list[School] = Field(default_factory=list)
+    photos: list[Photo] = Field(default_factory=list)
+
+    scraped_utc: float | None = None
+    scraped_at: str | None = None
+
+
 class PropertyResponse(_BaseModel):
     """Response for /property/{zpid}."""
 
     property: Property
+
+
+class BuildingResponse(_BaseModel):
+    """Response for /building."""
+
+    building: Building
 
 
 class AgentResponse(_BaseModel):

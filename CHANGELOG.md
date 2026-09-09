@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.44.0] - 2026-09-09
+
+### Added
+
+- **`zillow.properties.get_building(url)`** — Zillow's for-rent inventory is
+  mostly apartment communities served on `/apartments/...` and `/b/...` pages,
+  which `get_property` cannot read (it now raises a clear 400 pointing here).
+  Returns floor plans and every available unit with rent, base rent, required
+  monthly fees, sqft, beds/baths and move-in date, plus amenities, unit
+  features, policies, special offers, office hours, pet policy, schools,
+  photos and walk/transit/bike scores. Requested in SB-001087.
+- **`Building`, `BuildingFloorPlan`, `BuildingUnit`, `BuildingResponse`,
+  `UnitSummary`** models.
+- **Building fields on `Listing`** — `is_building`, `building_name`, `lot_id`,
+  `units_available`, `unit_summaries[]`. Building search cards now also carry a
+  `price`/`price_raw`: only paid cards expose a base-rent range, so the rest
+  fall back to the per-bedroom rollup (they were previously priceless).
+
 ## [0.43.0] - 2026-09-04
 
 ### Added
