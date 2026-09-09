@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.45.0] - 2026-09-10
+
+### Added
+
+- **`facebook.get_post_detail(post_id, url=...)` and
+  `facebook.get_post_comments(post_id, url=...)`** — a Facebook post URL comes
+  in several shapes (`/reel/`, `permalink.php`, `{page}/posts/{pfbid}`), and
+  `url` overrides `post_id` for all of them. The parameter has always worked on
+  the API; it was missing from the SDK. Reported in SB-001096.
+- **`facebook.search_marketplace(..., radius=...)`** — search radius around the
+  location, in km (miles in the US). Honoured on search; ignored on category
+  browse.
+- **`zillow.get_multifamily_building(url=...)`** — the untyped facade twin of
+  `zillow.properties.get_building` added in 0.44.0.
+- **TikTok Shop** — `tiktok.tiktok_shop_root_categories`,
+  `tiktok_shop_category_subcategories_top_products`,
+  `tiktok_shop_product_detail`, `tiktok_shop_product_reviews`,
+  `search_tiktok_shop_products` and `tiktok_shop_store_products`.
+
+### Fixed
+
+- Nothing in the SDK, but worth knowing if you use the Facebook endpoints: the
+  page/profile feed served **one post per call** with an empty page 2, post
+  detail 404'd every URL shape, and comment threads always came back empty.
+  All four are fixed on the API side (SB-001096) — no SDK change was needed.
+
 ## [0.44.0] - 2026-09-09
 
 ### Added
