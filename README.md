@@ -177,8 +177,11 @@ client = ScrapeBadger(config=config)
 
 The SDK automatically retries requests that fail with 500, 502, 503, or 504 status
 codes, as well as transport-level failures (timeouts, network errors, dropped
-connections), using exponential backoff (1s, 2s, 4s, 8s, ...). Each retry logs a
-warning:
+connections), using exponential backoff (1s, 2s, 4s, 8s, ...). Retryable HTTP
+responses with a valid `Retry-After` header wait at least that long, whether
+given as seconds or an HTTP-date, without shortening exponential backoff.
+Missing or invalid headers keep the backoff, and `max_retries` still limits
+retry attempts. Each retry logs a warning:
 
 ```
 ⚠ 503 Service Unavailable — retrying in 4s (attempt 3/10)
