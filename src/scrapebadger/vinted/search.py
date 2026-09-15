@@ -60,6 +60,10 @@ class SearchClient:
         status_ids: str | None = None,
         order: str | None = None,
         seller_country: str | None = None,
+        size_ids: str | None = None,
+        material_ids: str | None = None,
+        time: int | None = None,
+        search_session_id: str | None = None,
     ) -> SearchResponse:
         """Search for items on Vinted.
 
@@ -136,6 +140,10 @@ class SearchClient:
             "status_ids": status_ids,
             "order": order,
             "seller_country": seller_country,
+            "size_ids": size_ids,
+            "material_ids": material_ids,
+            "time": time,
+            "search_session_id": search_session_id,
         }
         response = await self._client.get("/v1/vinted/search", params=params)
         return SearchResponse.model_validate(response)

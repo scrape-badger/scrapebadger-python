@@ -945,3 +945,27 @@ class TestVintedImports:
 
     def test_vinted_price_top_level_importable(self) -> None:
         from scrapebadger import VintedPrice as _  # noqa: F401
+
+
+@pytest.mark.asyncio
+async def test_mobile_reads_and_search_pagination_wire_contract():
+    transport = AsyncMock()
+    transport.post.return_value = {"data": {"items": []}}
+    transport.get.return_value = {"items": [], "pagination": {"time": 123}, "market": "fr"}
+    client = VintedClient(transport)
+    payload = {"market": "fr", "parameters": {"catalog_id": "1242", "attributes": []}}
+    await client.read_vinted_mobile_data("sold-comparables", payload=payload)
+    transport.post.assert_awaited_once_with(
+        "/v1/vinted/mobile/sold-comparables", params=None, json=payload
+    )
+    result = await client.search.search(
+        "nike", size_ids="206", material_ids="43", time=123, search_session_id="test"
+    )
+    sent = transport.get.call_args.kwargs["params"]
+    assert (sent["size_ids"], sent["material_ids"], sent["time"], sent["search_session_id"]) == (
+        "206",
+        "43",
+        123,
+        "test",
+    )
+    assert result.pagination.time == 123

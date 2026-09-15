@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.46.0 — 2026-09-15
+
+- Discover and call 76 public Vinted mobile reads, including pricing and sold comparables.
+- Add size/material filters, pagination continuation and display labels to Vinted models.
+
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

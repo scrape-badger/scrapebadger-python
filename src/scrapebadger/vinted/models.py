@@ -150,6 +150,8 @@ class VintedItemSummary(_BaseModel):
     id: int
     title: str = ""
     price: VintedPrice | None = None
+    display_title: str | None = None
+    display_subtitle: str | None = None
     brand_title: str | None = None
     size_title: str | None = None
     status: str | None = None
@@ -211,6 +213,8 @@ class VintedItemDetail(_BaseModel):
     id: int
     title: str = ""
     price: VintedPrice | None = None
+    display_title: str | None = None
+    display_subtitle: str | None = None
     brand_title: str | None = None
     size_title: str | None = None
     status: str | None = None
@@ -385,6 +389,7 @@ class VintedPagination(_BaseModel):
     total_pages: int = 1
     total_entries: int = 0
     per_page: int = 20
+    time: int | None = None
 
 
 # =============================================================================
