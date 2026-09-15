@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.47.0 — 2026-09-15
+
+- Search Vinted by image URL or base64 photo, with market, category, brand and price filters.
+
 ## 0.46.0 — 2026-09-15
 
 - Discover and call 76 public Vinted mobile reads, including pricing and sold comparables.
