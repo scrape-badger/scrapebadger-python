@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.49.0 — 2026-09-19
+
+- **Vinted image search results carry `similarity_score`.** Visual similarity to the query image on a 0–1 scale, where the query image's own listing scores `1.0`. Populated only by `search_by_image`, and only on the calls where Vinted returns a ranking; `None` otherwise. A `None` is not a weak match — the result set is identical either way — so treat it as "no score available", not as a low score.
+
 ## 0.48.0 — 2026-09-18
 
 - **`vinted.reference.brands` now requires `keyword`.** `GET /v1/vinted/brands` answers `422` without one, so the parameter was never optional — a call that omitted it type-checked and then failed at runtime. Calls that pass a keyword are unaffected.
