@@ -56,7 +56,7 @@ class ReferenceClient:
 
     async def brands(
         self,
-        keyword: str | None = None,
+        keyword: str,
         *,
         market: str = "fr",
         per_page: int = 20,
@@ -64,7 +64,8 @@ class ReferenceClient:
         """Search for Vinted brands.
 
         Args:
-            keyword: Optional search keyword to filter brands.
+            keyword: Search keyword to filter brands. Required — the API
+                answers 422 without it, so this was never optional.
             market: Vinted market code (e.g. "fr", "de"). Defaults to "fr".
             per_page: Number of brands per page. Defaults to 20.
 
