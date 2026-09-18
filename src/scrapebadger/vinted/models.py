@@ -145,6 +145,10 @@ class VintedItemSummary(_BaseModel):
         seller_country_code: Physical country of the seller as an upper-case
             ISO-2 code (e.g. "FR"), or None. Populated only when the
             ``seller_country`` search filter is used.
+        similarity_score: Visual similarity to the query image, 0-1, where the
+            query image's own listing scores 1.0. Populated only by
+            ``search_by_image``, and only on the calls where Vinted returns a
+            ranking; None otherwise. A None says nothing about the item.
     """
 
     id: int
@@ -168,6 +172,7 @@ class VintedItemSummary(_BaseModel):
     photo: VintedPhoto | None = None
     photos: list[VintedPhoto] = Field(default_factory=list)
     seller_country_code: str | None = None
+    similarity_score: float | None = None
 
 
 class VintedItemDetail(_BaseModel):
