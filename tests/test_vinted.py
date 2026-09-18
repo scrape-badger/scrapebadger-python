@@ -781,11 +781,24 @@ class TestReferenceClient:
 
     # -- brands --
 
+    async def test_brands_requires_a_keyword(
+        self, reference_client: ReferenceClient, mock_base_client: MagicMock
+    ) -> None:
+        """The API answers 422 without one, so `keyword` was never optional.
+
+        This test previously called `brands()` with no keyword and asserted
+        `params["keyword"] is None` — the mock never made the request, so the
+        suite happily encoded a call that fails against the real API.
+        """
+        with pytest.raises(TypeError):
+            await reference_client.brands()  # type: ignore[call-arg]
+        mock_base_client.get.assert_not_called()
+
     async def test_brands_default_params(
         self, reference_client: ReferenceClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = BRANDS_RESPONSE
-        result = await reference_client.brands()
+        result = await reference_client.brands("nike")
 
         assert isinstance(result, BrandsResponse)
         assert len(result.brands) == 1
@@ -794,7 +807,7 @@ class TestReferenceClient:
         call_args = mock_base_client.get.call_args
         assert call_args[0][0] == "/v1/vinted/brands"
         params = call_args[1]["params"]
-        assert params["keyword"] is None
+        assert params["keyword"] == "nike"
         assert params["market"] == "fr"
         assert params["per_page"] == 20
 
