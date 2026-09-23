@@ -145,10 +145,13 @@ class VintedItemSummary(_BaseModel):
         seller_country_code: Physical country of the seller as an upper-case
             ISO-2 code (e.g. "FR"), or None. Populated only when the
             ``seller_country`` search filter is used.
-        similarity_score: Visual similarity to the query image, 0-1, where the
-            query image's own listing scores 1.0. Populated only by
-            ``search_by_image``, and only on the calls where Vinted returns a
-            ranking; None otherwise. A None says nothing about the item.
+        similarity_score: Visual similarity to the query image, on Vinted's own
+            unbounded scale — it read 0-1 in Sep 2026 and ~36-44 since, and can
+            change again without notice. Ordinal only: rank against the other
+            items in the same response, never against a fixed threshold and
+            never across responses. Populated only by ``search_by_image``, and
+            only on the calls where Vinted returns a ranking; None otherwise.
+            A None says nothing about the item.
     """
 
     id: int
@@ -201,7 +204,13 @@ class VintedItemDetail(_BaseModel):
         seller: Extended seller information.
         category: Category breadcrumb, root first, localized to the market.
         upload_date: Vinted's relative "listed" label, localized (e.g.
-            "Il y a une semaine") — not an ISO timestamp.
+            "Il y a une semaine") — not an ISO timestamp. Some markets render
+            it without a number at all ("godziny"), so it cannot be parsed
+            into a date; use ``uploaded_at``.
+        uploaded_at: Approximate absolute upload time, ISO 8601 UTC (e.g.
+            "2026-09-23T11:28:44Z"), derived from the earliest photo Vinted
+            timestamps. A lower bound on age — replacing a photo after listing
+            moves it forward. Item detail only; search carries no timestamps.
         can_buy: Whether the item can be purchased.
         instant_buy: Whether instant buy is enabled.
         can_bundle: Whether the seller accepts bundles.
@@ -243,6 +252,7 @@ class VintedItemDetail(_BaseModel):
     seller: VintedSellerSummary | None = None
     category: list[str] | str | None = None
     upload_date: str | None = None
+    uploaded_at: str | None = None
     can_buy: bool | None = None
     instant_buy: bool | None = None
     is_closed: bool | None = None

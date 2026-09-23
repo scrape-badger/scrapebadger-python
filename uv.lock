@@ -930,7 +930,7 @@ wheels = [
 
 [[package]]
 name = "scrapebadger"
-version = "0.47.0"
+version = "0.50.0"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
