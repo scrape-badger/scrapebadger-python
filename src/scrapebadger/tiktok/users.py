@@ -109,18 +109,22 @@ class UsersClient:
         *,
         region: str = "US",
         count: int = 30,
+        cursor: str | None = None,
     ) -> UserListResponse:
         """Get a TikTok user's followers (best-effort; often guest-gated).
 
         Args:
             username: The TikTok @handle.
             region: Content region. Defaults to "US".
+            cursor: Opaque continuation cursor; expires after 15 minutes.
             count: Number of followers to return (1-50). Defaults to 30.
 
         Returns:
             User list response with author summaries and pagination metadata.
         """
         params: dict[str, Any] = {"region": region, "count": count}
+        if cursor is not None:
+            params["cursor"] = cursor
         response = await self._client.get(f"/v1/tiktok/users/{username}/followers", params=params)
         return UserListResponse.model_validate(response)
 
@@ -130,18 +134,22 @@ class UsersClient:
         *,
         region: str = "US",
         count: int = 30,
+        cursor: str | None = None,
     ) -> UserListResponse:
         """Get accounts a TikTok user follows (best-effort).
 
         Args:
             username: The TikTok @handle.
             region: Content region. Defaults to "US".
+            cursor: Opaque continuation cursor; expires after 15 minutes.
             count: Number of accounts to return (1-50). Defaults to 30.
 
         Returns:
             User list response with author summaries and pagination metadata.
         """
         params: dict[str, Any] = {"region": region, "count": count}
+        if cursor is not None:
+            params["cursor"] = cursor
         response = await self._client.get(f"/v1/tiktok/users/{username}/following", params=params)
         return UserListResponse.model_validate(response)
 
@@ -151,18 +159,22 @@ class UsersClient:
         *,
         region: str = "US",
         count: int = 30,
+        cursor: str | None = None,
     ) -> VideoListResponse:
         """Get a TikTok user's liked videos (only if their Liked tab is public).
 
         Args:
             username: The TikTok @handle.
             region: Content region. Defaults to "US".
+            cursor: Opaque continuation cursor; expires after 15 minutes.
             count: Number of videos to return (1-50). Defaults to 30.
 
         Returns:
             Video list response with videos and pagination metadata.
         """
         params: dict[str, Any] = {"region": region, "count": count}
+        if cursor is not None:
+            params["cursor"] = cursor
         response = await self._client.get(f"/v1/tiktok/users/{username}/liked", params=params)
         return VideoListResponse.model_validate(response)
 
@@ -172,17 +184,21 @@ class UsersClient:
         *,
         region: str = "US",
         count: int = 30,
+        cursor: str | None = None,
     ) -> VideoListResponse:
         """Get videos a TikTok user has reposted.
 
         Args:
             username: The TikTok @handle.
             region: Content region. Defaults to "US".
+            cursor: Opaque continuation cursor; expires after 15 minutes.
             count: Number of videos to return (1-50). Defaults to 30.
 
         Returns:
             Video list response with videos and pagination metadata.
         """
         params: dict[str, Any] = {"region": region, "count": count}
+        if cursor is not None:
+            params["cursor"] = cursor
         response = await self._client.get(f"/v1/tiktok/users/{username}/reposts", params=params)
         return VideoListResponse.model_validate(response)

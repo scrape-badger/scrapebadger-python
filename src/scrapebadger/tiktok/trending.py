@@ -27,7 +27,7 @@ class TrendingClient:
             for v in videos.videos:
                 print(v.description)
 
-            songs = await client.tiktok.trending.songs(region="GB")
+            songs = await client.tiktok.trending.songs(region="US")
             for s in songs.songs:
                 print(f"{s.rank}. {s.title}")
         ```
@@ -64,20 +64,22 @@ class TrendingClient:
         self,
         *,
         region: str = "US",
-        period: int = 7,
+        period: int | None = None,
         count: int = 20,
     ) -> TrendingHashtagsResponse:
         """Get trending hashtags (mobile Discover surface).
 
         Args:
             region: Content region. Defaults to "US".
-            period: Trailing window in days. Defaults to 7.
+            period: Unsupported historical filter; leave unset.
             count: Number of hashtags to return (1-50). Defaults to 20.
 
         Returns:
             Trending hashtags response with ranked hashtags.
         """
-        params: dict[str, Any] = {"region": region, "period": period, "count": count}
+        params: dict[str, Any] = {"region": region, "count": count}
+        if period is not None:
+            params["period"] = period
         response = await self._client.get("/v1/tiktok/trending/hashtags", params=params)
         return TrendingHashtagsResponse.model_validate(response)
 
@@ -85,19 +87,21 @@ class TrendingClient:
         self,
         *,
         region: str = "US",
-        period: int = 7,
+        period: int | None = None,
         count: int = 20,
     ) -> TrendingSongsResponse:
         """Get trending songs/sounds (mobile hot-music feed — ranked by usage).
 
         Args:
             region: Content region. Defaults to "US".
-            period: Trailing window in days. Defaults to 7.
+            period: Unsupported historical filter; leave unset.
             count: Number of songs to return (1-50). Defaults to 20.
 
         Returns:
             Trending songs response with ranked songs.
         """
-        params: dict[str, Any] = {"region": region, "period": period, "count": count}
+        params: dict[str, Any] = {"region": region, "count": count}
+        if period is not None:
+            params["period"] = period
         response = await self._client.get("/v1/tiktok/trending/songs", params=params)
         return TrendingSongsResponse.model_validate(response)
