@@ -137,18 +137,22 @@ class VideosClient:
         *,
         region: str = "US",
         count: int = 16,
+        cursor: str | None = None,
     ) -> VideoListResponse:
         """Get TikTok's related videos for a given video.
 
         Args:
             video_id: The TikTok video/post id.
             region: Content region. Defaults to "US".
+            cursor: Opaque continuation cursor; expires after 15 minutes.
             count: Number of related videos to return (1-50). Defaults to 16.
 
         Returns:
             Video list response with related videos and pagination metadata.
         """
         params: dict[str, Any] = {"region": region, "count": count}
+        if cursor is not None:
+            params["cursor"] = cursor
         response = await self._client.get(f"/v1/tiktok/videos/{video_id}/related", params=params)
         return VideoListResponse.model_validate(response)
 
