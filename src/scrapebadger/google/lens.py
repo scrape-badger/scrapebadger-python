@@ -58,11 +58,22 @@ class LensClient:
                 ``hl``. When supplied, takes precedence.
             gl: Native country code (default ``"us"``).
             hl: Native language code (default ``"en"``).
-            product: When True, bias Google towards shoppable product
-                matches.
-            visual_matches: Include the visual-matches carousel
-                (default True — matches Scrapingdog's default bucket).
-            exact_matches: Restrict to exact-match results only.
+            product: NOT YET SUPPORTED. Accepted for API compatibility
+                and echoed in the response's ``warnings`` list; it does
+                not change the results.
+            visual_matches: Visual matches are the only surface this
+                endpoint serves, so they are always returned. ``False``
+                is echoed in ``warnings``.
+            exact_matches: NOT YET SUPPORTED. Accepted for API
+                compatibility and echoed in ``warnings``. Google renders
+                its Exact-matches tab client-side and ScrapeBadger cannot
+                reach it yet, so the response is the full match grid —
+                it CONTAINS the pages hosting the same image, but Google
+                does not label which ones those are.
+
+        The response carries a ``warnings`` list naming every parameter
+        that could not be applied. Check it rather than assuming a filter
+        took effect.
         """
         params: dict[str, Any] = {"url": url, "gl": gl, "hl": hl}
         if query:
