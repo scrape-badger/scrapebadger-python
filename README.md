@@ -66,7 +66,7 @@ asyncio.run(main())
 
 ## Authentication
 
-Get your API key from [scrapebadger.com](https://scrapebadger.com) and pass it to the client:
+Get your API key from [scrapebadger.com](https://scrapebadger.com/auth/signup?utm_source=python-sdk&utm_medium=referral) and pass it to the client:
 
 ```python
 from scrapebadger import ScrapeBadger
