@@ -107,6 +107,7 @@ class TikTokVideoMeta(_BaseModel):
     play_addr: str | None = None
     download_addr: str | None = None
     download_no_watermark_addr: str | None = None
+    media_headers: dict[str, str] | None = None  # Required CDN headers from video detail
     has_watermark: bool | None = None
     volume_loudness: float | None = None
     volume_peak: float | None = None
