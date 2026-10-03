@@ -225,6 +225,25 @@ class TikTokClient:
         params = {k: v for k, v in {"region": region}.items() if v is not None}
         return await self._client.get(f"/v1/tiktok/ads/{ad_id}", params=params)
 
+    async def best_selling_tiktok_shop_products(
+        self, *, region: str = "US", category_id: str | None = None, pages: int = 2, limit: int = 20
+    ) -> dict[str, Any]:
+        """Best-selling TikTok Shop products.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {
+            k: v
+            for k, v in {
+                "region": region,
+                "category_id": category_id,
+                "pages": pages,
+                "limit": limit,
+            }.items()
+            if v is not None
+        }
+        return await self._client.get("/v1/tiktok/shop/bestsellers", params=params)
+
     async def tiktok_shop_root_categories(self, *, region: str = "US") -> dict[str, Any]:
         """TikTok Shop root categories.
 
@@ -242,6 +261,45 @@ class TikTokClient:
         """
         params = {k: v for k, v in {"region": region}.items() if v is not None}
         return await self._client.get(f"/v1/tiktok/shop/categories/{category_id}", params=params)
+
+    async def tiktok_shop_category_products(
+        self,
+        category_id: str,
+        *,
+        region: str = "US",
+        count: int = 20,
+        exclude_product_ids: list | None = None,
+    ) -> dict[str, Any]:
+        """TikTok Shop category products.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {
+            k: v
+            for k, v in {
+                "region": region,
+                "count": count,
+                "exclude_product_ids": exclude_product_ids,
+            }.items()
+            if v is not None
+        }
+        return await self._client.get(
+            f"/v1/tiktok/shop/categories/{category_id}/products", params=params
+        )
+
+    async def tiktok_shop_regional_mall_feed(
+        self, *, region: str = "US", tab_id: int = 0, page_token: str | None = None
+    ) -> dict[str, Any]:
+        """TikTok Shop regional mall feed.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {
+            k: v
+            for k, v in {"region": region, "tab_id": tab_id, "page_token": page_token}.items()
+            if v is not None
+        }
+        return await self._client.get("/v1/tiktok/shop/mall", params=params)
 
     async def tiktok_shop_product_detail(
         self, product_id: str, *, region: str = "US"
@@ -286,15 +344,47 @@ class TikTokClient:
             f"/v1/tiktok/shop/products/{product_id}/reviews", params=params
         )
 
+    async def tiktok_shop_theme_ranking(
+        self,
+        rank_id: str,
+        *,
+        region: str = "US",
+        rank_type: int = 1,
+        cursor: int = 0,
+        count: int = 20,
+    ) -> dict[str, Any]:
+        """TikTok Shop theme ranking.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {
+            k: v
+            for k, v in {
+                "region": region,
+                "rank_type": rank_type,
+                "cursor": cursor,
+                "count": count,
+            }.items()
+            if v is not None
+        }
+        return await self._client.get(f"/v1/tiktok/shop/rankings/{rank_id}", params=params)
+
     async def search_tiktok_shop_products(
-        self, *, q: str, region: str = "US", offset: int = 0
+        self, *, q: str, region: str = "US", page_token: str | None = None, offset: int = 0
     ) -> dict[str, Any]:
         """Search TikTok Shop products.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
         params = {
-            k: v for k, v in {"q": q, "region": region, "offset": offset}.items() if v is not None
+            k: v
+            for k, v in {
+                "q": q,
+                "region": region,
+                "page_token": page_token,
+                "offset": offset,
+            }.items()
+            if v is not None
         }
         return await self._client.get("/v1/tiktok/shop/search", params=params)
 
