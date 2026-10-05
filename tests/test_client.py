@@ -131,3 +131,37 @@ class TestPostRaw:
 
         with pytest.raises(ScrapeBadgerError):
             await client.post_raw("/v1/web/scrape", json={"url": "x"})
+
+
+class TestPermissionDenied:
+    """403 insufficient_scope from a key restricted to other APIs."""
+
+    async def test_insufficient_scope_raises_permission_denied(self, api_key: str) -> None:
+        import httpx
+
+        from scrapebadger import PermissionDeniedError, ScrapeBadgerError
+        from scrapebadger._internal.client import BaseClient
+        from scrapebadger._internal.config import ClientConfig
+
+        body = {
+            "detail": "This API key does not have permission to use the Twitter / X API.",
+            "error": "insufficient_scope",
+            "required_scope": "twitter",
+            "allowed_scopes": ["google", "amazon"],
+        }
+
+        def handler(request: httpx.Request) -> httpx.Response:
+            return httpx.Response(403, json=body)
+
+        client = BaseClient(ClientConfig(api_key=api_key))
+        client._client = httpx.AsyncClient(
+            transport=httpx.MockTransport(handler), base_url="https://api.test"
+        )
+
+        with pytest.raises(PermissionDeniedError) as exc:
+            await client.get("/v1/twitter/users/x/by_username")
+        assert exc.value.status_code == 403
+        assert exc.value.required_scope == "twitter"
+        assert exc.value.allowed_scopes == ["google", "amazon"]
+        assert "Twitter / X" in str(exc.value)
+        assert isinstance(exc.value, ScrapeBadgerError)

@@ -16,6 +16,7 @@ from scrapebadger._internal.exceptions import (
     AuthenticationError,
     InsufficientCreditsError,
     NotFoundError,
+    PermissionDeniedError,
     RateLimitError,
     ScrapeBadgerError,
     ServerError,
@@ -151,6 +152,8 @@ class BaseClient:
         Raises:
             AuthenticationError: For 401 responses.
             InsufficientCreditsError: For 402 responses.
+            PermissionDeniedError: For 403 responses from a key restricted
+                away from the API it called.
             NotFoundError: For 404 responses.
             ValidationError: For 422 responses.
             RateLimitError: For 429 responses.
@@ -172,6 +175,9 @@ class BaseClient:
 
         if status_code == 402:
             raise InsufficientCreditsError(message, status_code, data)
+
+        if status_code == 403 and data.get("error") == "insufficient_scope":
+            raise PermissionDeniedError(message, status_code, data)
 
         if status_code == 404:
             raise NotFoundError(message, status_code, data)

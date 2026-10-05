@@ -34,6 +34,7 @@ from scrapebadger._internal.exceptions import (
     AuthenticationError,
     InsufficientCreditsError,
     NotFoundError,
+    PermissionDeniedError,
     RateLimitError,
     ScrapeBadgerError,
     ServerError,
@@ -1186,7 +1187,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.51.1"
+__version__ = "0.52.0"
 
 __all__ = [
     # TikTok core models
@@ -1424,6 +1425,7 @@ __all__ = [
     "OffersResponse",
     # Pagination
     "PaginatedResponse",
+    "PermissionDeniedError",
     # Reddit response envelopes
     "PostCommentsResponse",
     "PostDetailResponse",
