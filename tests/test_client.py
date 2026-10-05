@@ -165,3 +165,27 @@ class TestPermissionDenied:
         assert exc.value.allowed_scopes == ["google", "amazon"]
         assert "Twitter / X" in str(exc.value)
         assert isinstance(exc.value, ScrapeBadgerError)
+
+
+class TestIPNotAllowed:
+    async def test_ip_not_allowed_raises_ip_error(self, api_key: str) -> None:
+        import httpx
+
+        from scrapebadger import IPNotAllowedError, PermissionDeniedError
+        from scrapebadger._internal.client import BaseClient
+        from scrapebadger._internal.config import ClientConfig
+
+        body = {
+            "detail": "This request came from 203.0.113.9, which is not on its allowlist.",
+            "error": "ip_not_allowed",
+            "client_ip": "203.0.113.9",
+        }
+        client = BaseClient(ClientConfig(api_key=api_key))
+        client._client = httpx.AsyncClient(
+            transport=httpx.MockTransport(lambda r: httpx.Response(403, json=body)),
+            base_url="https://api.test",
+        )
+        with pytest.raises(IPNotAllowedError) as exc:
+            await client.get("/v1/google/search")
+        assert exc.value.client_ip == "203.0.113.9"
+        assert isinstance(exc.value, PermissionDeniedError)

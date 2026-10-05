@@ -15,6 +15,7 @@ import httpx
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
     InsufficientCreditsError,
+    IPNotAllowedError,
     NotFoundError,
     PermissionDeniedError,
     RateLimitError,
@@ -175,6 +176,9 @@ class BaseClient:
 
         if status_code == 402:
             raise InsufficientCreditsError(message, status_code, data)
+
+        if status_code == 403 and data.get("error") == "ip_not_allowed":
+            raise IPNotAllowedError(message, status_code, data)
 
         if status_code == 403 and data.get("error") == "insufficient_scope":
             raise PermissionDeniedError(message, status_code, data)

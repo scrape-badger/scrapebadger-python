@@ -5,6 +5,7 @@ from scrapebadger._internal.config import ClientConfig
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
     InsufficientCreditsError,
+    IPNotAllowedError,
     NotFoundError,
     PermissionDeniedError,
     RateLimitError,
@@ -18,6 +19,7 @@ __all__ = [
     "AuthenticationError",
     "BaseClient",
     "ClientConfig",
+    "IPNotAllowedError",
     "InsufficientCreditsError",
     "NotFoundError",
     "PaginatedResponse",

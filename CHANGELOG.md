@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.53.0 — 2026-10-05
+
+- **`IPNotAllowedError` for keys restricted to IP addresses.** API keys can now be limited to IP addresses and CIDR ranges in the dashboard; a request from anywhere else answers `403` with `error: "ip_not_allowed"` (not charged). The SDK raises `IPNotAllowedError`, carrying `client_ip` — the address ScrapeBadger saw. It subclasses `PermissionDeniedError`, so existing handlers still catch it.
+
 ## 0.52.0 — 2026-10-05
 
 - **`PermissionDeniedError` for keys restricted to specific APIs.** API keys can now be limited to chosen APIs in the dashboard; calling any other API answers `403` with `error: "insufficient_scope"` (and charges nothing). The SDK raises `PermissionDeniedError` for it, carrying `required_scope` and `allowed_scopes`. It subclasses `ScrapeBadgerError`, so existing `except ScrapeBadgerError` handlers still catch it.

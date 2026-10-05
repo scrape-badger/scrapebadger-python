@@ -33,6 +33,7 @@ from scrapebadger._internal.config import ClientConfig
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
     InsufficientCreditsError,
+    IPNotAllowedError,
     NotFoundError,
     PermissionDeniedError,
     RateLimitError,
@@ -1187,7 +1188,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.52.0"
+__version__ = "0.53.0"
 
 __all__ = [
     # TikTok core models
@@ -1329,6 +1330,7 @@ __all__ = [
     "GeminiSearchResult",
     # Google Scraper
     "GoogleClient",
+    "IPNotAllowedError",
     # Immobiliare
     "ImmobiliareAgency",
     "ImmobiliareAgencyAgent",
