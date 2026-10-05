@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.52.0 — 2026-10-05
+
+- **`PermissionDeniedError` for keys restricted to specific APIs.** API keys can now be limited to chosen APIs in the dashboard; calling any other API answers `403` with `error: "insufficient_scope"` (and charges nothing). The SDK raises `PermissionDeniedError` for it, carrying `required_scope` and `allowed_scopes`. It subclasses `ScrapeBadgerError`, so existing `except ScrapeBadgerError` handlers still catch it.
+
 ## 0.49.0 — 2026-09-19
 
 - **Vinted image search results carry `similarity_score`.** Visual similarity to the query image on a 0–1 scale, where the query image's own listing scores `1.0`. Populated only by `search_by_image`, and only on the calls where Vinted returns a ranking; `None` otherwise. A `None` is not a weak match — the result set is identical either way — so treat it as "no score available", not as a low score.

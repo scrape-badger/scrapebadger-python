@@ -77,6 +77,37 @@ class AuthenticationError(ScrapeBadgerError):
         super().__init__(message, status_code, response_data)
 
 
+class PermissionDeniedError(ScrapeBadgerError):
+    """Raised when the API key is not permitted to call this API (403).
+
+    API keys can be restricted to specific APIs in the dashboard. Calling
+    any other API returns ``403`` with ``error: "insufficient_scope"``;
+    no credits are charged.
+
+    Attributes:
+        required_scope: The API the request needed, e.g. ``"twitter"``.
+        allowed_scopes: The APIs this key may call.
+
+    Example:
+        ```python
+        try:
+            await client.twitter.users.get_by_username("elonmusk")
+        except PermissionDeniedError as e:
+            print(f"Key lacks {e.required_scope}; allowed: {e.allowed_scopes}")
+        ```
+    """
+
+    def __init__(
+        self,
+        message: str = "This API key is not permitted to call this API",
+        status_code: int = 403,
+        response_data: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(message, status_code, response_data)
+        self.required_scope: str | None = self.response_data.get("required_scope")
+        self.allowed_scopes: list[str] = list(self.response_data.get("allowed_scopes") or [])
+
+
 class RateLimitError(ScrapeBadgerError):
     """Raised when rate limit is exceeded.
 
