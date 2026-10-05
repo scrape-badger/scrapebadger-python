@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.54.0 — 2026-10-05
+
+- **Reddit posts carry a full-resolution `preview_image`.** `thumbnail` is a signed ~140px crop that cannot be resized (changing `width`/`height` breaks the signature). Posts now also return `preview_image`, `preview_image_width` and `preview_image_height`: Reddit's original-size preview. For link posts it is the only full-size image; for native video it is the poster frame. `None`/`null` when Reddit has no preview (most text posts).
+
 ## 0.53.0 — 2026-10-05
 
 - **`IPNotAllowedError` for keys restricted to IP addresses.** API keys can now be limited to IP addresses and CIDR ranges in the dashboard; a request from anywhere else answers `403` with `error: "ip_not_allowed"` (not charged). The SDK raises `IPNotAllowedError`, carrying `client_ip` — the address ScrapeBadger saw. It subclasses `PermissionDeniedError`, so existing handlers still catch it.

@@ -159,6 +159,11 @@ class RedditPost(_BaseModel):
     thumbnail: str | None = None
     thumbnail_width: int | None = None
     thumbnail_height: int | None = None
+    # Full-resolution original behind the ~140px thumbnail — the only
+    # full-size image a link post has; the poster frame for video.
+    preview_image: str | None = None
+    preview_image_width: int | None = None
+    preview_image_height: int | None = None
     media: dict[str, Any] | None = None
     media_embed: dict[str, Any] | None = None
     secure_media: dict[str, Any] | None = None
