@@ -58,17 +58,19 @@ class LensClient:
                 ``hl``. When supplied, takes precedence.
             gl: Native country code (default ``"us"``).
             hl: Native language code (default ``"en"``).
-            product: NOT YET SUPPORTED. Accepted for API compatibility
-                and echoed in the response's ``warnings`` list; it does
-                not change the results.
+            product: Return only the tiles Google marked as buyable —
+                those carrying a price chip and stock status — drawn from
+                the same grid with no extra request. When the image has
+                no shoppable matches the full grid is returned and
+                ``warnings`` says so.
             visual_matches: Visual matches are the only surface this
                 endpoint serves, so they are always returned. ``False``
                 is echoed in ``warnings``.
             exact_matches: Return just the pages hosting this image,
                 each flagged ``exact_match``, instead of the broad visual
                 grid — what a copyright or provenance check needs. Google
-                exposes this set for most images but not all (6-7 of 10
-                in our sampling); when it is unavailable the full grid is
+                exposes this set for most images but not all (8 of 10 in
+                our sampling); when it is unavailable the full grid is
                 returned and ``warnings`` says the filter was not
                 applied, so you never have to guess which you got.
 
