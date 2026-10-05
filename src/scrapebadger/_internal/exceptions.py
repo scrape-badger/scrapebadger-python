@@ -108,6 +108,25 @@ class PermissionDeniedError(ScrapeBadgerError):
         self.allowed_scopes: list[str] = list(self.response_data.get("allowed_scopes") or [])
 
 
+class IPNotAllowedError(PermissionDeniedError):
+    """Raised when the API key is restricted to IP addresses and this request
+    came from another one (403, ``error: "ip_not_allowed"``). Not charged.
+
+    Attributes:
+        client_ip: The address the request came from, as ScrapeBadger saw it
+            (None when it was relayed, e.g. through the hosted MCP server).
+    """
+
+    def __init__(
+        self,
+        message: str = "This API key may not be used from this IP address",
+        status_code: int = 403,
+        response_data: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(message, status_code, response_data)
+        self.client_ip: str | None = self.response_data.get("client_ip")
+
+
 class RateLimitError(ScrapeBadgerError):
     """Raised when rate limit is exceeded.
 
