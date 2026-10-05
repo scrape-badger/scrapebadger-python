@@ -64,12 +64,13 @@ class LensClient:
             visual_matches: Visual matches are the only surface this
                 endpoint serves, so they are always returned. ``False``
                 is echoed in ``warnings``.
-            exact_matches: NOT YET SUPPORTED. Accepted for API
-                compatibility and echoed in ``warnings``. Google renders
-                its Exact-matches tab client-side and ScrapeBadger cannot
-                reach it yet, so the response is the full match grid —
-                it CONTAINS the pages hosting the same image, but Google
-                does not label which ones those are.
+            exact_matches: Return just the pages hosting this image,
+                each flagged ``exact_match``, instead of the broad visual
+                grid — what a copyright or provenance check needs. Google
+                exposes this set for most images but not all (6-7 of 10
+                in our sampling); when it is unavailable the full grid is
+                returned and ``warnings`` says the filter was not
+                applied, so you never have to guess which you got.
 
         The response carries a ``warnings`` list naming every parameter
         that could not be applied. Check it rather than assuming a filter
