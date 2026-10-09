@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.55.0 — 2026-10-09
+
+- **Naver API — 55 endpoints via `client.naver`.** A full handwritten client for Korea's dominant portal and commerce platform, organised into six sub-clients: `search` (integrated SERP, autocomplete, local, and the news/blog/cafe/kin/image/video/clip/web verticals), `places` (detail, reviews, photos), `shopping` (bestsellers, keyword & brand rankings, insight, categories, finder & catalog search, filters, deals, verticals, price comparison, plus Shopping Live under `shopping.live` — broadcasts, channels, shortclips), `stores` (SmartStore / Brand profile, categories, products, bestsellers), `products` (detail, review summary, paginated reviews, Q&A, variant-group graph, group review summary) and `reviews` (commerce review detail, video in-key, SSR queries).
+
 ## 0.54.0 — 2026-10-05
 
 - **Reddit posts carry a full-resolution `preview_image`.** `thumbnail` is a signed ~140px crop that cannot be resized (changing `width`/`height` breaks the signature). Posts now also return `preview_image`, `preview_image_width` and `preview_image_height`: Reddit's original-size preview. For link posts it is the only full-size image; for native video it is the poster frame. `None`/`null` when Reddit has no preview (most text posts).

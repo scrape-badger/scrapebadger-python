@@ -103,6 +103,7 @@ export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 | **DuckDuckGo** | 7 endpoints — web search (with abstract box), image/news/video search, autocomplete, instant answers, regions | [DuckDuckGo Docs](https://docs.scrapebadger.com/duckduckgo/overview) |
 | **Yahoo** | 6 endpoints across 35 markets — web search (with ads + related searches), image search, video search, news vertical, autocomplete, markets | [Yahoo Docs](https://docs.scrapebadger.com/yahoo/overview) |
 | **Yandex** | 4 endpoints across 6 markets (tr/com/ru/by/kz/uz) — web search (organic + ads + sitelinks + inline media), image search, reverse-image (CBIR) search, markets | [Yandex Docs](https://docs.scrapebadger.com/yandex/overview) |
+| **Naver** | 55 endpoints — integrated & vertical search (news, blog, cafe, kin, image, video, clip, web), autocomplete, local & Place detail/reviews/photos, Shopping rankings/insight/finder & catalog search/price comparison, SmartStore & Brand stores, commerce products with reviews & Q&A, and Shopping Live | [Naver Docs](https://docs.scrapebadger.com/naver/overview) |
 | **ChatGPT** | Prompt the real chatgpt.com anonymously — structured answer with citations anchored to character offsets, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [ChatGPT Guide](docs/chatgpt.md) |
 | **Gemini** | Prompt the real gemini.google.com anonymously — structured answer with cited web sources, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [Gemini Docs](https://docs.scrapebadger.com/gemini/overview) |
 

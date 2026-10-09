@@ -31,6 +31,7 @@ from scrapebadger.instagram.client import InstagramClient
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.linkedin.client import LinkedInClient
 from scrapebadger.loopnet.client import LoopNetClient
+from scrapebadger.naver.client import NaverClient
 from scrapebadger.perplexity.client import PerplexityClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
@@ -176,6 +177,7 @@ class ScrapeBadger:
         self._booking: BookingClient | None = None
         self._yahoo: YahooClient | None = None
         self._yandex: YandexClient | None = None
+        self._naver: NaverClient | None = None
 
     @property
     def config(self) -> ClientConfig:
@@ -919,3 +921,24 @@ class ScrapeBadger:
         if self._booking is None:
             self._booking = BookingClient(self._base_client)
         return self._booking
+
+    @property
+    def naver(self) -> NaverClient:
+        """Access Naver scraping operations.
+
+        Returns:
+            NaverClient providing integrated and vertical search, Place
+            detail/reviews/photos, Shopping rankings and finder/catalog search,
+            SmartStore / Brand stores, commerce products with reviews and Q&A,
+            and Shopping Live.
+
+        Example:
+            ```python
+            results = await client.naver.search.search("커피머신")
+            place = await client.naver.places.get("1234567890")
+            top = await client.naver.shopping.bestsellers()
+            ```
+        """
+        if self._naver is None:
+            self._naver = NaverClient(self._base_client)
+        return self._naver
