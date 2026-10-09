@@ -526,6 +526,7 @@ from scrapebadger.loopnet.models import (
 from scrapebadger.loopnet.models import (
     Space as LoopnetSpace,
 )
+from scrapebadger.naver.client import NaverClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.realtor.models import (
     Address as RealtorAddress,
@@ -1188,7 +1189,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.54.0"
+__version__ = "0.55.0"
 
 __all__ = [
     # TikTok core models
@@ -1421,6 +1422,7 @@ __all__ = [
     "LoopnetSpace",
     "MarketInfo",
     "MarketsResponse",
+    "NaverClient",
     "NewReleasesResponse",
     "NotFoundError",
     "Offer",
