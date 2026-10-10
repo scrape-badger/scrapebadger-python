@@ -21,6 +21,7 @@ Provides access to all 19 Google product APIs:
 - Google Shorts (short-form vertical video results)
 - Google Flights (one-way / round-trip / multi-city)
 - Google Products (immersive product detail)
+- Google Ads Transparency Center (creatives, advertisers, disclosed spend)
 
 Example:
     ```python
@@ -54,6 +55,7 @@ Example:
     ```
 """
 
+from scrapebadger.google.ads import AdsClient
 from scrapebadger.google.ai_mode import AiModeClient
 from scrapebadger.google.autocomplete import AutocompleteClient
 from scrapebadger.google.client import GoogleClient
@@ -75,6 +77,7 @@ from scrapebadger.google.trends import TrendsClient
 from scrapebadger.google.videos import VideosClient
 
 __all__ = [
+    "AdsClient",
     "AiModeClient",
     "AutocompleteClient",
     "FinanceClient",

@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Any
+import base64
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+if TYPE_CHECKING:
+    import os
 
 
 class ScrapeResult(BaseModel):
@@ -65,5 +70,57 @@ class DetectResult(BaseModel):
     is_blocked: bool = False
     blocking_type: str | None = None
     recommendation: str | None = None
+    credits_used: int = 0
+    duration_ms: int = 0
+
+
+class ScreenshotResult(BaseModel):
+    """Result from a screenshot request."""
+
+    model_config = ConfigDict(frozen=True)
+
+    success: bool = True
+    url: str = ""
+    status_code: int = 0
+    content_type: str = "image/png"
+    screenshot: str = ""
+    """The PNG, base64-encoded (no ``data:`` prefix). ``png`` decodes it and
+    ``save()`` writes it to a file."""
+    engine_used: str | None = None
+    credits_used: int = 0
+    duration_ms: int = 0
+
+    @property
+    def png(self) -> bytes:
+        """The screenshot as raw PNG bytes."""
+        return base64.b64decode(self.screenshot)
+
+    def save(self, path: str | os.PathLike[str]) -> Path:
+        """Write the PNG to ``path`` and return it as a ``Path``."""
+        target = Path(path)
+        target.write_bytes(self.png)
+        return target
+
+
+class ExtractResult(BaseModel):
+    """Result from a structured-data extraction request."""
+
+    model_config = ConfigDict(frozen=True)
+
+    success: bool = True
+    url: str = ""
+    status_code: int = 0
+    data: dict[str, Any] | None = None
+    """One key per ``extract_rules`` field: the first match as a string, a list
+    with ``all: True``, or None when nothing matched. None when no
+    ``extract_rules`` were given."""
+    ai_extraction: dict[str, Any] | str | list[Any] | None = None
+    """The AI's JSON answer to ``ai_extract_rules`` / ``ai_query``. None when no
+    AI was requested."""
+    ai_model: str | None = None
+    ai_error: str | None = None
+    """Why AI extraction failed, when it did. Selector results in ``data`` are
+    still returned."""
+    engine_used: str | None = None
     credits_used: int = 0
     duration_ms: int = 0

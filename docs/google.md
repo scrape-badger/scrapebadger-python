@@ -259,6 +259,29 @@ async with ScrapeBadger(api_key="your-key") as client:
     product = await client.google.products.detail("1234567890")
 ```
 
+### Ads Transparency Center
+
+```python
+async with ScrapeBadger(api_key="your-key") as client:
+    # Free-text ad search is domain-based: resolve a brand name to IDs first.
+    found = await client.google.ads.search_advertisers("rufwear", fuzzy=True)
+    for row in found["advertisers"]:
+        print(row["name"], row["advertiser_id"], row["similarity"], row["matched_query"])
+
+    advertiser_id = found["advertisers"][0]["advertiser_id"]
+    ads = await client.google.ads.search(advertiser_id=advertiser_id, format="VIDEO")
+    first = ads["creatives"][0]
+    creative = await client.google.ads.creative(advertiser_id, first["creative_id"])
+
+    # Disclosed spend, ad-format mix and per-day spend for one region
+    spend = await client.google.ads.advertiser(advertiser_id, region="US")
+```
+
+`search_advertisers` returns up to `num=3000` advertisers in one call (they do
+not page) plus up to `num_domains=100` domain rows, which page with
+`next_page_token` → `cursor`. `fuzzy=True` also finds misspellings and
+look-alikes and lists the `variants` it searched.
+
 ## API Reference
 
 ### Sub-clients
@@ -281,6 +304,7 @@ async with ScrapeBadger(api_key="your-key") as client:
 | `client.google.ai_mode` | Generative AI answers (udm=50) |
 | `client.google.lens` | Visual image search by URL |
 | `client.google.products` | Immersive product detail |
+| `client.google.ads` | Ads Transparency Center: creatives, advertisers, spend |
 
 ### Methods
 
@@ -316,6 +340,10 @@ async with ScrapeBadger(api_key="your-key") as client:
 | `ai_mode` | `search(q, *, gl, hl)` | AI-generated answer |
 | `lens` | `search(url, *, gl, hl)` | Visual search by URL |
 | `products` | `detail(product_id, *, gl, hl)` | Immersive product |
+| `ads` | `search(query, *, advertiser_id, region, format, start_date, end_date, num, cursor)` | Ad creatives |
+| `ads` | `search_advertisers(query, *, num, num_domains, country, fuzzy, cursor)` | Advertiser IDs by name or domain |
+| `ads` | `advertiser(advertiser_id, *, region, start_date, end_date)` | Disclosed spend and ad mix |
+| `ads` | `creative(advertiser_id, creative_id, *, region, political)` | One creative with variations |
 
 All methods are async and return `dict[str, Any]` responses matching the documented JSON shapes.
 
@@ -325,7 +353,9 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 |---|---|
 | `search`, `images`, `videos`, `maps/search`, `shopping/search`, `jobs/search`, `scholar/search`, `patents/search`, `finance/quote`, `trends/*` (except trending) | **2** |
 | `maps/place`, `maps/reviews`, `patents/detail`, `ai-mode/search`, `lens/search`, `hotels/search`, `products/detail` | **3** |
-| `hotels/details`, `shopping/product` | **5** |
+| `hotels/details`, `shopping/product`, `ads/advertisers`, `ads/advertiser`, `ads/creative` | **5** |
+| `ads/search` | **10** |
+| `ads/advertisers` with `fuzzy=true` | **15** |
 | `shopping/offers` | **14** |
 | `news/*`, `autocomplete`, `trends/trending`, `maps/photos`, `maps/posts`, `shopping/product/click` | **1** |
 | Failed requests | **0** |
