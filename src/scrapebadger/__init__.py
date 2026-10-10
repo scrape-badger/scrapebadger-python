@@ -889,7 +889,7 @@ from scrapebadger.walmart.models import (
 from scrapebadger.walmart.models import (
     Warranty as WalmartWarranty,
 )
-from scrapebadger.web.models import DetectResult, ScrapeResult
+from scrapebadger.web.models import DetectResult, ExtractResult, ScrapeResult, ScreenshotResult
 from scrapebadger.yahoo.client import YahooClient
 from scrapebadger.yahoo.models import Ad as YahooAd
 from scrapebadger.yahoo.models import AutocompleteResponse as YahooAutocompleteResponse
@@ -1189,7 +1189,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.55.0"
+__version__ = "0.56.0"
 
 __all__ = [
     # TikTok core models
@@ -1321,6 +1321,7 @@ __all__ = [
     "EbaySellerFeedbackResponse",
     "EbaySellerItemsResponse",
     "EbaySellerProfileResponse",
+    "ExtractResult",
     "FeedbackBreakdown",
     # Gemini
     "GeminiAskResponse",
@@ -1507,6 +1508,7 @@ __all__ = [
     # Exceptions
     "ScrapeBadgerError",
     "ScrapeResult",
+    "ScreenshotResult",
     "SearchPostsResponse",
     "SearchResponse",
     "SearchUsersResponse",

@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import base64
 from typing import TYPE_CHECKING
 from unittest.mock import AsyncMock
 
 import pytest
 
-from scrapebadger.web.models import DetectResult, ScrapeResult
+from scrapebadger.web.models import DetectResult, ExtractResult, ScrapeResult, ScreenshotResult
 
 if TYPE_CHECKING:
     from scrapebadger.web.client import WebClient
@@ -243,6 +244,191 @@ class TestWebClient:
         call_kwargs = mock_base_client.post.call_args
         body = call_kwargs.kwargs.get("json") or call_kwargs[1].get("json")
         assert body["session_id"] == "sess-abc"
+
+    @pytest.mark.asyncio
+    async def test_scrape_screenshot_full_page_and_window(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        mock_base_client.post.return_value = {"success": True, "url": "https://x.com"}
+        await web_client.scrape(
+            "https://x.com",
+            screenshot=True,
+            screenshot_full_page=True,
+            window_width=1280,
+            window_height=720,
+        )
+        body = mock_base_client.post.call_args.kwargs["json"]
+        assert body["screenshot"] is True
+        assert body["screenshot_full_page"] is True
+        assert body["window_width"] == 1280
+        assert body["window_height"] == 720
+
+    @pytest.mark.asyncio
+    async def test_scrape_omits_unset_window_options(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        mock_base_client.post.return_value = {"success": True}
+        await web_client.scrape("https://x.com")
+        mock_base_client.post.assert_called_once_with(
+            "/v1/web/scrape", json={"url": "https://x.com"}
+        )
+
+
+PNG = b"\x89PNG\r\n\x1a\n" + bytes(range(16))
+
+
+class TestScreenshot:
+    @pytest.fixture()
+    def mock_base_client(self) -> AsyncMock:
+        client = AsyncMock()
+        client.post.return_value = {
+            "success": True,
+            "url": "https://www.example.com/",
+            "status_code": 200,
+            "content_type": "image/png",
+            "screenshot": base64.b64encode(PNG).decode(),
+            "engine_used": "cloakbrowser",
+            "credits_used": 6,
+            "duration_ms": 4210,
+        }
+        return client
+
+    @pytest.fixture()
+    def web_client(self, mock_base_client: AsyncMock) -> WebClient:
+        from scrapebadger.web.client import WebClient as _WebClient
+
+        return _WebClient(mock_base_client)
+
+    async def test_defaults_send_only_the_url(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        result = await web_client.screenshot("https://example.com")
+
+        assert isinstance(result, ScreenshotResult)
+        assert result.credits_used == 6
+        mock_base_client.post.assert_called_once_with(
+            "/v1/web/screenshot", json={"url": "https://example.com"}
+        )
+
+    async def test_options_map_to_the_request_body(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        await web_client.screenshot(
+            "https://example.com",
+            full_page=True,
+            width=1280,
+            height=800,
+            wait_for="#main",
+            country="DE",
+            proxy_tier="premium",
+        )
+
+        assert mock_base_client.post.call_args.kwargs["json"] == {
+            "url": "https://example.com",
+            "full_page": True,
+            "width": 1280,
+            "height": 800,
+            "wait_for": "#main",
+            "country": "DE",
+            "proxy_tier": "premium",
+        }
+
+    async def test_png_decodes_and_save_writes_the_file(
+        self, web_client: WebClient, tmp_path
+    ) -> None:
+        result = await web_client.screenshot("https://example.com")
+
+        assert result.png == PNG
+        saved = result.save(tmp_path / "page.png")
+        assert saved.read_bytes() == PNG
+
+
+class TestExtractData:
+    @pytest.fixture()
+    def mock_base_client(self) -> AsyncMock:
+        client = AsyncMock()
+        client.post.return_value = {
+            "success": True,
+            "url": "https://news.ycombinator.com/",
+            "status_code": 200,
+            "data": {"top_story": "Hello", "links": ["https://a", "https://b"]},
+            "ai_extraction": None,
+            "ai_model": None,
+            "ai_error": None,
+            "engine_used": "http",
+            "credits_used": 2,
+            "duration_ms": 1384,
+        }
+        return client
+
+    @pytest.fixture()
+    def web_client(self, mock_base_client: AsyncMock) -> WebClient:
+        from scrapebadger.web.client import WebClient as _WebClient
+
+        return _WebClient(mock_base_client)
+
+    async def test_selector_rules_go_to_the_extract_endpoint(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        rules = {
+            "top_story": ".titleline a",
+            "links": {"selector": ".titleline a::attr(href)", "all": True},
+        }
+        result = await web_client.extract_data("https://news.ycombinator.com", extract_rules=rules)
+
+        assert isinstance(result, ExtractResult)
+        assert result.data == {"top_story": "Hello", "links": ["https://a", "https://b"]}
+        assert result.ai_extraction is None
+        mock_base_client.post.assert_called_once_with(
+            "/v1/web/extract",
+            json={"url": "https://news.ycombinator.com", "extract_rules": rules},
+        )
+
+    async def test_ai_options_map_to_the_request_body(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        await web_client.extract_data(
+            "https://example.com",
+            ai_extract_rules={"price": "the product price"},
+            ai_query="Is it in stock?",
+            render_js=True,
+            wait_for=".price",
+            country="US",
+            proxy_tier="ultra",
+        )
+
+        assert mock_base_client.post.call_args.kwargs["json"] == {
+            "url": "https://example.com",
+            "ai_extract_rules": {"price": "the product price"},
+            "ai_query": "Is it in stock?",
+            "render_js": True,
+            "wait_for": ".price",
+            "country": "US",
+            "proxy_tier": "ultra",
+        }
+
+    async def test_nothing_to_extract_raises_before_any_request(
+        self, web_client: WebClient, mock_base_client: AsyncMock
+    ) -> None:
+        with pytest.raises(ValueError, match="at least one of"):
+            await web_client.extract_data("https://example.com")
+        mock_base_client.post.assert_not_called()
+
+
+class TestBatchDeprecated:
+    """Batch was never built: the API answers 501. The methods stay, but warn."""
+
+    async def test_submit_and_status_warn(self) -> None:
+        from scrapebadger.web.client import WebClient as _WebClient
+
+        base = AsyncMock()
+        web = _WebClient(base)
+
+        with pytest.warns(DeprecationWarning, match="concurrent"):
+            await web.submit_batch_scraping_job(payload={"urls": ["https://x.com"]})
+        with pytest.warns(DeprecationWarning, match="concurrent"):
+            await web.get_batch_job_status("job-1")
+        base.get.assert_called_once_with("/v1/web/batch/job-1")
 
 
 class TestRawContent:

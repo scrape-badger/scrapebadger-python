@@ -10,6 +10,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
+from scrapebadger.google.ads import AdsClient
 from scrapebadger.google.ai_mode import AiModeClient
 from scrapebadger.google.autocomplete import AutocompleteClient
 from scrapebadger.google.client import GoogleClient
@@ -60,6 +61,7 @@ class TestGoogleClientWiring:
         assert isinstance(google.ai_mode, AiModeClient)
         assert isinstance(google.lens, LensClient)
         assert isinstance(google.products, ProductsClient)
+        assert isinstance(google.ads, AdsClient)
 
     def test_sub_clients_cached(self, google: GoogleClient) -> None:
         assert google.search is google.search
@@ -324,6 +326,99 @@ class TestPatentsClient:
         assert kwargs["params"]["patent_id"] == "US10123456B2"
 
 
+class TestAdsClient:
+    @pytest.mark.asyncio
+    async def test_search_defaults(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
+        await google.ads.search("tesla.com")
+        mock_base_client.get.assert_called_once_with(
+            "/v1/google/ads/search", params={"region": "US", "num": 40, "query": "tesla.com"}
+        )
+
+    @pytest.mark.asyncio
+    async def test_search_forwards_filters(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        await google.ads.search(
+            advertiser_id="AR01614014350098432001",
+            region="anywhere",
+            platform="YOUTUBE",
+            format="VIDEO",
+            start_date="2026-01-01",
+            end_date="2026-02-01",
+            political=True,
+            num=100,
+            cursor="tok",
+        )
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/ads/search"
+        assert kwargs["params"] == {
+            "region": "anywhere",
+            "num": 100,
+            "advertiser_id": "AR01614014350098432001",
+            "platform": "YOUTUBE",
+            "format": "VIDEO",
+            "start_date": "2026-01-01",
+            "end_date": "2026-02-01",
+            "political": True,
+            "cursor": "tok",
+        }
+
+    @pytest.mark.asyncio
+    async def test_search_advertisers(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        await google.ads.search_advertisers("rufwear", num=3000, num_domains=0, fuzzy=True)
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/ads/advertisers"
+        assert kwargs["params"] == {
+            "query": "rufwear",
+            "num": 3000,
+            "num_domains": 0,
+            "region": "US",
+            "fuzzy": True,
+        }
+
+    @pytest.mark.asyncio
+    async def test_search_advertisers_country_and_cursor(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        await google.ads.search_advertisers("nike", country="DE", cursor="next")
+        params = mock_base_client.get.call_args.kwargs["params"]
+        assert params["country"] == "DE"
+        assert params["cursor"] == "next"
+        assert "fuzzy" not in params
+
+    @pytest.mark.asyncio
+    async def test_advertiser(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
+        await google.ads.advertiser(
+            "AR01614014350098432001", region="GB", start_date="2026-09-01", end_date="2026-09-30"
+        )
+        mock_base_client.get.assert_called_once_with(
+            "/v1/google/ads/advertiser",
+            params={
+                "advertiser_id": "AR01614014350098432001",
+                "region": "GB",
+                "start_date": "2026-09-01",
+                "end_date": "2026-09-30",
+            },
+        )
+
+    @pytest.mark.asyncio
+    async def test_creative(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
+        await google.ads.creative(
+            "AR01614014350098432001", "CR10484731423840108545", political=True
+        )
+        mock_base_client.get.assert_called_once_with(
+            "/v1/google/ads/creative",
+            params={
+                "advertiser_id": "AR01614014350098432001",
+                "creative_id": "CR10484731423840108545",
+                "region": "US",
+                "political": True,
+            },
+        )
+
+
 class TestOtherClients:
     @pytest.mark.asyncio
     async def test_scholar(self, google: GoogleClient, mock_base_client: MagicMock) -> None:
@@ -386,6 +481,7 @@ class TestOtherClients:
 class TestImportability:
     def test_public_imports(self) -> None:
         from scrapebadger.google import (
+            AdsClient,
             AiModeClient,
             AutocompleteClient,
             FinanceClient,
@@ -408,6 +504,7 @@ class TestImportability:
         assert all(
             cls.__name__.endswith("Client")
             for cls in (
+                AdsClient,
                 AiModeClient,
                 AutocompleteClient,
                 FinanceClient,

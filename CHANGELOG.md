@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.56.0 — 2026-10-10
+
+- **`web.screenshot()` — a PNG of any page.** `POST /v1/web/screenshot` renders the URL in the browser engine and returns the PNG base64-encoded in `ScreenshotResult.screenshot`; `.png` decodes it and `.save(path)` writes the file. Options: `full_page`, `width` (320–3840), `height` (240–4320), `wait_for`, `country`, `proxy_tier`. A page that loads without a screenshot is a `502` and costs nothing.
+- **`web.extract_data()` — CSS/XPath selectors and AI extraction by field.** `POST /v1/web/extract` takes `extract_rules` (field → selector, or `{selector, type, all, output}`), `ai_extract_rules` (field → description) and `ai_query`, and returns `ExtractResult` with selector results in `data` and the AI answer in `ai_extraction`. Broken selectors are a free `422`. The existing `web.extract(url, prompt)` is unchanged.
+- **`web.scrape()` viewport options:** `screenshot_full_page` (with `screenshot=True`, capture the whole scrollable page instead of the viewport), `window_width` and `window_height`.
+- **Google Ads Transparency Center via `client.google.ads`:** `search` (creatives by advertiser ID or domain, with format and date filters), `search_advertisers` (name or domain → advertiser IDs; up to `num=3000` advertisers and `num_domains=100` domain rows; `fuzzy=True` also finds misspelled and look-alike advertisers and adds per-row `similarity` / `matched_query`, plus `variants` / `variants_failed`), `advertiser` (disclosed spend, ad mix, per-day spend) and `creative` (one creative with every variation and optional political disclosure).
+- **Deprecated: `web.submit_batch_scraping_job()` and `web.get_batch_job_status()`.** Batch jobs were never available — the API answers `501` (not billed). Both now emit a `DeprecationWarning`; send concurrent `scrape()` calls instead.
+- The `User-Agent` reports the real SDK version again (it was stuck at `0.47.1`).
+
 ## 0.55.0 — 2026-10-09
 
 - **Naver API — 55 endpoints via `client.naver`.** A full handwritten client for Korea's dominant portal and commerce platform, organised into six sub-clients: `search` (integrated SERP, autocomplete, local, and the news/blog/cafe/kin/image/video/clip/web verticals), `places` (detail, reviews, photos), `shopping` (bestsellers, keyword & brand rankings, insight, categories, finder & catalog search, filters, deals, verticals, price comparison, plus Shopping Live under `shopping.live` — broadcasts, channels, shortclips), `stores` (SmartStore / Brand profile, categories, products, bestsellers), `products` (detail, review summary, paginated reviews, Q&A, variant-group graph, group review summary) and `reviews` (commerce review detail, video in-key, SSR queries).
