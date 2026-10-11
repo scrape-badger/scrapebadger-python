@@ -293,6 +293,70 @@ from scrapebadger.gemini.models import (
     SearchResult as GeminiSearchResult,
 )
 from scrapebadger.google.client import GoogleClient
+from scrapebadger.gumtree.client import GumtreeClient
+from scrapebadger.gumtree.models import (
+    Attribute as GumtreeAttribute,
+)
+from scrapebadger.gumtree.models import (
+    AutocompleteResponse as GumtreeAutocompleteResponse,
+)
+from scrapebadger.gumtree.models import (
+    Breadcrumb as GumtreeBreadcrumb,
+)
+from scrapebadger.gumtree.models import (
+    CategoryFacet as GumtreeCategoryFacet,
+)
+from scrapebadger.gumtree.models import (
+    CategoryRef as GumtreeCategoryRef,
+)
+from scrapebadger.gumtree.models import (
+    FilterOption as GumtreeFilterOption,
+)
+from scrapebadger.gumtree.models import (
+    FiltersResponse as GumtreeFiltersResponse,
+)
+from scrapebadger.gumtree.models import (
+    ListingDetail as GumtreeListingDetail,
+)
+from scrapebadger.gumtree.models import (
+    ListingSummary as GumtreeListingSummary,
+)
+from scrapebadger.gumtree.models import (
+    LocationAutocompleteResponse as GumtreeLocationAutocompleteResponse,
+)
+from scrapebadger.gumtree.models import (
+    LocationSuggestion as GumtreeLocationSuggestion,
+)
+from scrapebadger.gumtree.models import (
+    SearchFilter as GumtreeSearchFilter,
+)
+from scrapebadger.gumtree.models import (
+    SearchResponse as GumtreeSearchResponse,
+)
+from scrapebadger.gumtree.models import (
+    Seller as GumtreeSeller,
+)
+from scrapebadger.gumtree.models import (
+    SellerListingsResponse as GumtreeSellerListingsResponse,
+)
+from scrapebadger.gumtree.models import (
+    SellerRating as GumtreeSellerRating,
+)
+from scrapebadger.gumtree.models import (
+    SellerVerification as GumtreeSellerVerification,
+)
+from scrapebadger.gumtree.models import (
+    SortOption as GumtreeSortOption,
+)
+from scrapebadger.gumtree.models import (
+    Suggestion as GumtreeSuggestion,
+)
+from scrapebadger.gumtree.models import (
+    TreeNode as GumtreeTreeNode,
+)
+from scrapebadger.gumtree.models import (
+    TreeResponse as GumtreeTreeResponse,
+)
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.immobiliare.models import (
     Agency as ImmobiliareAgency,
@@ -1408,6 +1472,29 @@ __all__ = [
     "GeminiSearchResult",
     # Google Scraper
     "GoogleClient",
+    # Gumtree
+    "GumtreeAttribute",
+    "GumtreeAutocompleteResponse",
+    "GumtreeBreadcrumb",
+    "GumtreeCategoryFacet",
+    "GumtreeCategoryRef",
+    "GumtreeClient",
+    "GumtreeFilterOption",
+    "GumtreeFiltersResponse",
+    "GumtreeListingDetail",
+    "GumtreeListingSummary",
+    "GumtreeLocationAutocompleteResponse",
+    "GumtreeLocationSuggestion",
+    "GumtreeSearchFilter",
+    "GumtreeSearchResponse",
+    "GumtreeSeller",
+    "GumtreeSellerListingsResponse",
+    "GumtreeSellerRating",
+    "GumtreeSellerVerification",
+    "GumtreeSortOption",
+    "GumtreeSuggestion",
+    "GumtreeTreeNode",
+    "GumtreeTreeResponse",
     "IPNotAllowedError",
     # Immobiliare
     "ImmobiliareAgency",
