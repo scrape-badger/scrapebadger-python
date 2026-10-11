@@ -39,6 +39,7 @@ from scrapebadger.redfin.client import RedfinClient
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
+from scrapebadger.wallapop.client import WallapopClient
 from scrapebadger.walmart.client import WalmartClient
 from scrapebadger.web.client import WebClient
 from scrapebadger.yahoo.client import YahooClient
@@ -153,6 +154,7 @@ class ScrapeBadger:
         self._apartments: ApartmentsClient | None = None
         self._app_store: AppStoreClient | None = None
         self._depop: DepopClient | None = None
+        self._wallapop: WallapopClient | None = None
         self._linkedin: LinkedInClient | None = None
         self._account: AccountClient | None = None
         self._airbnb: AirbnbClient | None = None
@@ -343,6 +345,29 @@ class ScrapeBadger:
         if self._depop is None:
             self._depop = DepopClient(self._base_client)
         return self._depop
+
+    @property
+    def wallapop(self) -> WallapopClient:
+        """Access Wallapop Scraper API operations.
+
+        Returns:
+            WallapopClient providing access to all Wallapop endpoints (search,
+            listing detail, user profile, user listings, user reviews,
+            autocomplete, categories, search filters and filter options,
+            markets). Wallapop is a second-hand marketplace for Spain, Italy
+            and Portugal, selected by market (es, it, pt).
+
+        Example:
+            ```python
+            results = await client.wallapop.search("iphone 14", max_price=400)
+            item = await client.wallapop.get_item("nzxeknm5x562")
+            user = await client.wallapop.get_user("alexc-25115753")
+            markets = await client.wallapop.list_markets()
+            ```
+        """
+        if self._wallapop is None:
+            self._wallapop = WallapopClient(self._base_client)
+        return self._wallapop
 
     @property
     def linkedin(self) -> LinkedInClient:
