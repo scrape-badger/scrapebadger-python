@@ -25,6 +25,7 @@ from scrapebadger.facebook.client import FacebookClient
 from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.google_play.client import GooglePlayClient
+from scrapebadger.gumtree.client import GumtreeClient
 from scrapebadger.idealista.client import IdealistaClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
 from scrapebadger.instagram.client import InstagramClient
@@ -173,6 +174,7 @@ class ScrapeBadger:
         self._gemini: GeminiClient | None = None
         self._instagram: InstagramClient | None = None
         self._walmart: WalmartClient | None = None
+        self._gumtree: GumtreeClient | None = None
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
         self._bing: BingClient | None = None
@@ -497,6 +499,30 @@ class ScrapeBadger:
         if self._walmart is None:
             self._walmart = WalmartClient(self._base_client)
         return self._walmart
+
+    @property
+    def gumtree(self) -> GumtreeClient:
+        """Access Gumtree Scraper API operations.
+
+        Returns:
+            GumtreeClient providing access to all 8 Gumtree endpoints.
+            UK-only: gumtree.com is the single supported market.
+
+        Example:
+            ```python
+            # Search
+            results = await client.gumtree.search("mountain bike", category="bicycles")
+
+            # Listing detail
+            detail = await client.gumtree.get_listing("1803293391")
+
+            # The seller's other listings
+            others = await client.gumtree.get_seller_listings("1803293391")
+            ```
+        """
+        if self._gumtree is None:
+            self._gumtree = GumtreeClient(self._base_client)
+        return self._gumtree
 
     @property
     def duckduckgo(self) -> DuckDuckGoClient:

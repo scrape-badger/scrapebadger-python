@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.59.0 — 2026-10-12
+
+- **Gumtree API — 8 endpoints via `client.gumtree`.** UK classifieds (gumtree.com): `search` (keywords, `category` slug, `location` slug/town/postcode with a `distance` radius in miles, `min_price`/`max_price` in GBP, `sort`, `seller_type`, `urgent_only`, `with_photos`, category-specific `filters="key:value,..."`, `page` 1–50), `search_filters` (a category's filters, sort orders and radius options with live counts), `get_listing` (description, every attribute incl. full vehicle spec and history-check flags, images, location, seller with rating, verification and masked phone, similar listings), `get_seller_listings`, `autocomplete`, `location_autocomplete`, `list_locations` and `list_categories`. Dates come as both Unix `*_utc` and ISO 8601 `*_at`. Models are exported top-level with a `Gumtree` prefix (e.g. `GumtreeListingDetail`).
+
 ## 0.58.0 — 2026-10-11
 
 - **Wallapop API — 10 endpoints via `client.wallapop`.** A typed client for the Spanish, Italian and Portuguese second-hand marketplace (`market`: `es`, `it`, `pt`): `search` (40 listings per page with Wallapop's own filters — location and radius, category, price, condition, brand, model, colour, listing age, shipping, warranty, refurbished, and the cars filters year, km, gearbox and horsepower; cursor pagination via `next_page`), `get_item`, `get_user`, `get_user_items`, `get_user_reviews`, `autocomplete`, `list_categories`, `list_filters`, `list_filter_options` and `list_markets`. Boolean filters are only sent when `True`. Models are exported top-level with a `Wallapop` prefix (`WallapopSearchResponse`, `WallapopItemDetail`, `WallapopUserProfile`, ...).

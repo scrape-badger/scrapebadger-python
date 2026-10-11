@@ -1,0 +1,1660 @@
+{
+  "GET /v1/gumtree/search?category=cars": {
+    "query": null,
+    "category": "cars",
+    "category_name": "Cars",
+    "category_id": 9311,
+    "location": "uk",
+    "location_name": "United Kingdom",
+    "distance": null,
+    "sort": "relevance",
+    "page": 1,
+    "total_pages": 50,
+    "total_results": 139812,
+    "result_count": 30,
+    "listings": [
+      {
+        "id": "1803479690",
+        "title": "Mitsubishi, OUTLANDER, Estate, 2015, Other, 1998 (cc), 5 doors",
+        "url": "https://www.gumtree.com/p/mitsubishi/mitsubishi-outlander-estate-2015-other-1998-cc-5-doors/1803479690",
+        "description": "MITSUBISHI OUTLANDER PHEV GX4\nH (DK15ZMU)\n2015 Petrol 2.0L Automatic 5 doors Est\nate\nNice family car.. driving is really amazing.fully serviced and changed new tyres all papers included test drive welcome. Any questions please feel free to ask .no o",
+        "price": 4500.0,
+        "price_text": "£4,500.00",
+        "price_frequency": null,
+        "currency": "GBP",
+        "location": "London",
+        "location_id": "10000344",
+        "postcode": "NW107JD",
+        "latitude": 51.530848,
+        "longitude": -0.282636,
+        "distance_text": "88 miles",
+        "distance_miles": 88.0,
+        "category_id": 10316,
+        "category_name": "Mitsubishi",
+        "category_ids": [
+          2551,
+          9311,
+          10316
+        ],
+        "image_url": "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/ff96d1746579438497_035587c5abe9/86",
+        "image_urls": [
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/ff96d1746579438497_035587c5abe9/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/3cd6027b8751409394_89ae7d1dba43/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/06022b4a1bfd4bd899_83fa550b2606/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/12142a17dcf348359e_4b8089efcfc5/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/816c7db8603142c49d_a4298ded4256/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/5f1d0ff8204d4dad97_346331b688f7/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/ea6a0271fd4b4bcfb5_0529e40fe796/86"
+        ],
+        "image_count": 7,
+        "posted_text": "7 days ago",
+        "posted_utc": 1791109924.168,
+        "posted_at": "2026-10-04T10:32:04.168000Z",
+        "status": "LIVE",
+        "seller_type": "Private",
+        "seller_id": "103262444",
+        "account_id": "102719651",
+        "is_pro_seller": false,
+        "is_featured": true,
+        "is_urgent": false,
+        "is_bumped_up": false,
+        "is_standout": false,
+        "is_premium": false,
+        "has_video": false,
+        "supports_shipping": false,
+        "favourite_count": 1,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "vehicle_cap_code",
+            "label": "Cap Code",
+            "value": "MIOU20GX45EXIA4 3",
+            "unit": null
+          },
+          {
+            "key": "vehicle_estimated_mileage",
+            "label": "Estimated Mileage",
+            "value": "122193",
+            "unit": null
+          },
+          {
+            "key": "vehicle_cap_id",
+            "label": "Cap Id",
+            "value": "59072",
+            "unit": null
+          },
+          {
+            "key": "vehicle_make",
+            "label": "Make",
+            "value": "Mitsubishi",
+            "unit": null
+          },
+          {
+            "key": "vrn",
+            "label": "Vehicle Registration Number",
+            "value": "DK15ZMU",
+            "unit": null
+          },
+          {
+            "key": "vehicle_model",
+            "label": "Model",
+            "value": "OUTLANDER",
+            "unit": null
+          },
+          {
+            "key": "vehicle_registration_year",
+            "label": "Year",
+            "value": "2015",
+            "unit": null
+          },
+          {
+            "key": "vehicle_mileage",
+            "label": "Mileage",
+            "value": "123000",
+            "unit": "miles"
+          },
+          {
+            "key": "seller_type",
+            "label": "Seller type",
+            "value": "Private",
+            "unit": null
+          },
+          {
+            "key": "vehicle_body_type",
+            "label": "Body type",
+            "value": "Estate",
+            "unit": null
+          },
+          {
+            "key": "vehicle_transmission",
+            "label": "Transmission",
+            "value": "Other",
+            "unit": null
+          },
+          {
+            "key": "vehicle_brochure_engine_size",
+            "label": "Brochure Engine size",
+            "value": "2.0",
+            "unit": "L"
+          },
+          {
+            "key": "vehicle_fuel_type",
+            "label": "Fuel type",
+            "value": "Hybrid Electric",
+            "unit": null
+          },
+          {
+            "key": "vehicle_average_mpg",
+            "label": "Fuel Consumption",
+            "value": "148",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_insurance_group",
+            "label": "Insurance Group",
+            "value": "27E",
+            "unit": null
+          },
+          {
+            "key": "vehicle_not_stolen",
+            "label": "Not stolen",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_emission",
+            "label": "CO2 emissions",
+            "value": "44",
+            "unit": "g/km"
+          },
+          {
+            "key": "vehicle_not_scrapped",
+            "label": "Not reported scrapped",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_euro_emission",
+            "label": "Euro Emissions",
+            "value": "Euro 5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_size",
+            "label": "Engine size",
+            "value": "1998",
+            "unit": "cc"
+          },
+          {
+            "key": "vehicle_not_exported",
+            "label": "Not reported exported",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_power",
+            "label": "Engine Power",
+            "value": "119.4",
+            "unit": "bhp"
+          },
+          {
+            "key": "vehicle_road_worthy",
+            "label": "Roadworthy",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_acceleration_0_62",
+            "label": "Acceleration (0-62mph)",
+            "value": "11",
+            "unit": "seconds"
+          },
+          {
+            "key": "vehicle_not_writeoff",
+            "label": "Not written-off",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_top_speed",
+            "label": "Top Speed",
+            "value": "106",
+            "unit": "mph"
+          },
+          {
+            "key": "vehicle_seats",
+            "label": "Seats",
+            "value": "5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_doors",
+            "label": "Doors",
+            "value": "5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_number_plate",
+            "label": "Original number plate",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_colour",
+            "label": "Colour",
+            "value": "White",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_colour",
+            "label": "Original colour",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_vhc_checked",
+            "label": "Vehicle history checked",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_fuel_capacity",
+            "label": "Fuel Capacity",
+            "value": "45",
+            "unit": "litres"
+          },
+          {
+            "key": "vehicle_previous_keepers",
+            "label": "Previous Keepers",
+            "value": "3",
+            "unit": null
+          },
+          {
+            "key": "vehicle_derivative",
+            "label": "Derivative",
+            "value": "GX4",
+            "unit": null
+          }
+        ]
+      },
+      {
+        "id": "1802409381",
+        "title": "Ford, RANGER, Pick Up, 2024, Automatic, 1996 (cc)",
+        "url": "https://www.gumtree.com/p/ford/ford-ranger-pick-up-2024-automatic-1996-cc-/1802409381",
+        "description": "2024 Ford Ranger Automatic – NO VAT – Only 11,400 Miles\n\nVery clean, low-mileage example of a 2024 Ford Ranger with just 11,400 miles from new. Well looked after and presented in excellent condition inside and out.\n\nFull Ford service history, last se",
+        "price": 29000.0,
+        "price_text": "£29,000.00",
+        "price_frequency": null,
+        "currency": "GBP",
+        "location": "Penkridge, Staffordshire",
+        "location_id": "11002225",
+        "postcode": "ST195DU",
+        "latitude": 52.7257,
+        "longitude": -2.10523,
+        "distance_text": "30 miles",
+        "distance_miles": 30.0,
+        "category_id": 10306,
+        "category_name": "Ford",
+        "category_ids": [
+          2551,
+          9311,
+          10306
+        ],
+        "image_url": "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c77d793ecce84e13a9_a54724b51d3e/86",
+        "image_urls": [
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c77d793ecce84e13a9_a54724b51d3e/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/deee82b490b34320bc_357e6025aea6/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/81897ca3b748464db7_36b529d154f6/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/2655894711164faeac_ede486d608a8/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/fa120eb1795b4801a6_459d45e3549f/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/7d382d5b8e7e4773b6_3c498818bf52/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/b0a1fdb116854be3aa_68c3f9969f78/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c10b75030fab49119a_a8ed83495d43/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/1cf52dc699e34a0fba_0d7abbe23e06/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/258ccebc6a1240abbb_bbe90dd15718/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c4ef21fae2534cab9f_6e33bc4003b0/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/d953fdd9b252462d9c_42f1db15b3b7/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/cec5aae4d9124379b8_117a2eeee272/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/2acb2840d0714c54b5_75b671c87f43/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/2c9774ae31fd45a382_3191b22f97be/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/9ba018df018844a488_950842b5bd44/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/6079a8c424f44b9db7_2d0084e9a9b7/86"
+        ],
+        "image_count": 17,
+        "posted_text": "4 days ago",
+        "posted_utc": 1791395043.988,
+        "posted_at": "2026-10-07T17:44:03.988000Z",
+        "status": "LIVE",
+        "seller_type": "Private",
+        "seller_id": "96740710",
+        "account_id": "96201978",
+        "is_pro_seller": false,
+        "is_featured": true,
+        "is_urgent": true,
+        "is_bumped_up": false,
+        "is_standout": false,
+        "is_premium": false,
+        "has_video": false,
+        "supports_shipping": false,
+        "favourite_count": 1,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "vehicle_cap_code",
+            "label": "Cap Code",
+            "value": "FORA20WILD7DTA4 7  L",
+            "unit": null
+          },
+          {
+            "key": "vehicle_cap_id",
+            "label": "Cap Id",
+            "value": "56276",
+            "unit": null
+          },
+          {
+            "key": "vehicle_make",
+            "label": "Make",
+            "value": "Ford",
+            "unit": null
+          },
+          {
+            "key": "vrn",
+            "label": "Vehicle Registration Number",
+            "value": "SK24XMG",
+            "unit": null
+          },
+          {
+            "key": "vehicle_model",
+            "label": "Model",
+            "value": "RANGER",
+            "unit": null
+          },
+          {
+            "key": "vehicle_registration_year",
+            "label": "Year",
+            "value": "2024",
+            "unit": null
+          },
+          {
+            "key": "vehicle_mileage",
+            "label": "Mileage",
+            "value": "11400",
+            "unit": "miles"
+          },
+          {
+            "key": "seller_type",
+            "label": "Seller type",
+            "value": "Private",
+            "unit": null
+          },
+          {
+            "key": "vehicle_body_type",
+            "label": "Body type",
+            "value": "Pick Up",
+            "unit": null
+          },
+          {
+            "key": "vehicle_transmission",
+            "label": "Transmission",
+            "value": "Automatic",
+            "unit": null
+          },
+          {
+            "key": "vehicle_brochure_engine_size",
+            "label": "Brochure Engine size",
+            "value": "74",
+            "unit": "L"
+          },
+          {
+            "key": "vehicle_fuel_type",
+            "label": "Fuel type",
+            "value": "Diesel",
+            "unit": null
+          },
+          {
+            "key": "vehicle_urban_mpg",
+            "label": "Urban mpg",
+            "value": "44.1",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_extra_urban_mpg",
+            "label": "Extra Urban mpg",
+            "value": "62.8",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_average_mpg",
+            "label": "Fuel Consumption",
+            "value": "32.1",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_insurance_group",
+            "label": "Insurance Group",
+            "value": "Not Available",
+            "unit": null
+          },
+          {
+            "key": "vehicle_not_stolen",
+            "label": "Not stolen",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_emission",
+            "label": "CO2 emissions",
+            "value": "230",
+            "unit": "g/km"
+          },
+          {
+            "key": "vehicle_not_scrapped",
+            "label": "Not reported scrapped",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_euro_emission",
+            "label": "Euro Emissions",
+            "value": "Euro 6",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_size",
+            "label": "Engine size",
+            "value": "1996",
+            "unit": "cc"
+          },
+          {
+            "key": "vehicle_not_exported",
+            "label": "Not reported exported",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_power",
+            "label": "Engine Power",
+            "value": "205",
+            "unit": "bhp"
+          },
+          {
+            "key": "vehicle_road_worthy",
+            "label": "Roadworthy",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_not_writeoff",
+            "label": "Not written-off",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_top_speed",
+            "label": "Top Speed",
+            "value": "111",
+            "unit": "mph"
+          },
+          {
+            "key": "vehicle_seats",
+            "label": "Seats",
+            "value": "5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_number_plate",
+            "label": "Original number plate",
+            "value": "false",
+            "unit": null
+          },
+          {
+            "key": "vehicle_colour",
+            "label": "Colour",
+            "value": "White",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_colour",
+            "label": "Original colour",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_vhc_checked",
+            "label": "Vehicle history checked",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_previous_keepers",
+            "label": "Previous Keepers",
+            "value": "4",
+            "unit": null
+          },
+          {
+            "key": "vehicle_derivative",
+            "label": "Derivative",
+            "value": "Wildtrak",
+            "unit": null
+          }
+        ]
+      }
+    ],
+    "category_facets": [],
+    "url": "https://www.gumtree.com/search?search_category=cars&search_location=uk"
+  },
+  "GET /v1/gumtree/listings/1803293391": {
+    "id": "1803293391",
+    "title": "Mazda, 2, Hatchback, 2018, Manual, 1496 (cc), 5 doors",
+    "url": null,
+    "description": "Welcome to Thomson Twins Motors. We are based in Larkhall, Scotland. Our cars come with a Fresh Service, Valeted inside and long MOT's  and we provide 6 Months Warranty for FREE. If you require any extra information regarding our vehicles then contact our friendly team directly . Please contact us direct for Finance options. Cards Accepted. Presenting a Mazda 2 1.5 Petrol Skyactive G-Sport Nav. Long MOT 27/9/2027, New Service, 2 Keys, we provide a 6 Month Warranty with this Mazda. This vehicle comes in Metallic grey with 16 inch two tone alloys and privacy glass in the rear. Interior is black cloth with white stitching in excellent condition. The Specification on this model includes 7in Colour Touch Screen Display, AM-FM-DAB Radio - Single CD Player-MP3 Audio System with 6 Speakers, AUX and 2 USB Inputs, Integrated Bluetooth System, Satellite Navigation System, Cruise Control,Gear Shift Indicator, Lane Departure Warning System, Multimedia Commander, Rear Parking Sensors, Trip Computer,\nTyre Pressure Monitoring System, 16in Alloy Wheels, Body Coloured Door Mirrors, Door Handles - Body Coloured, Door Mirrors - Electrically Adjustable - Heated - Power Folding with Integrated Indicator Lights, Electric Windows - Front and Rear,, Front Grille Insert - Body-coloured, Privacy Glass - Rear and Rear Side Windows, Rear Roof Spoiler, Dusk Sensing Automatic Headlights, Halogen Daytime Running Lights, Headlights - Halogen, Air Conditioning - Climate Control, Dashboard Panel - Black - Soft-touch with Red Stitching, Engine Start-Stop Button, Front Passengers Seat - Manual Slide and Recline Adjustment, Gear Knob - Leather, Handbrake - Leather Wrapped,\nLuggage Compartment - Light, Rain-Sensing Front Wipers, Seats - 60-40 Split Folding Rear, Seats - Drivers Manual Slide-Recline and Height Adjustment\nSteering Wheel - Leather, Mounted Audio and Bluetooth Controls, Tilt and Height Adjustment, Three Height Adjustable Rear Head Restraints, Adjustable Speed Limiter\nElectronic Power Assisted Steering, ABS - Anti Lock Braking System,Airbags - Front Passenger Deactivation System,Dual Front Airbags\nDynamic Stability Control - DSC - with Traction Control System - TCS, Emergency Stop Signalling System - ESS, Front Side Airbags, Front and Rear Curtain Airbags, Hill Hold Assist, ISOFIX Child Seat Anchorage for Outer Rear Seats, Seatbelt Reminder, Smart City Brake Support, Smart Keyless Entry, Thatcham Category 1 Alarm and Immobiliser. This vehicle comes with MOT until 27/9/2027 with green pass no advisories, had a new Service completed, provided with a 6 month warranty. We accept card payments and please contact us directly for beat finance option. We welcome Part Exchange vehicles. CONTACT US DIRECTLY FOR FINANCE OPTIONS Baird Avenue Larkhall ML92PJ",
+    "price": 5699.0,
+    "price_text": "£5,699.00",
+    "price_frequency": null,
+    "currency": "GBP",
+    "vat": "No VAT",
+    "location": "Larkhall, South Lanarkshire",
+    "area": "South Lanarkshire",
+    "sub_area": "Larkhall",
+    "location_id": "11000569",
+    "postcode": "ML93BQ",
+    "latitude": 55.7269,
+    "longitude": -3.92624,
+    "category_id": 10312,
+    "category_name": "Mazda",
+    "category_ids": [
+      2551,
+      9311,
+      10312
+    ],
+    "breadcrumbs": [
+      {
+        "name": "Home",
+        "url": "https://www.gumtree.com/"
+      },
+      {
+        "name": "Motors",
+        "url": "https://www.gumtree.com/cars-vans-motorbikes/uk/larkhall"
+      },
+      {
+        "name": "Cars",
+        "url": "https://www.gumtree.com/cars-vans-motorbikes/cars/uk/larkhall"
+      },
+      {
+        "name": "Mazda",
+        "url": "https://www.gumtree.com/cars-vans-motorbikes/cars/mazda/uk/larkhall"
+      },
+      {
+        "name": "Mazda 2",
+        "url": "https://www.gumtree.com/cars-vans-motorbikes/cars/mazda/2/uk/larkhall"
+      }
+    ],
+    "image_urls": [
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/cba6556cbcb7464a97_78d604ec62db/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/b5a807b290974290b8_5c9645400e3e/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/36d5f36d0994440cb3_2a0439ce4d0f/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/e1063ffdddfa468b86_c13b00b90a60/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/93d845a615894a9696_6a2f37359295/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/ac2a1cfd15b14235bc_fa6b4dd7a511/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/4ebec44e3cbf463999_b06c8aba2f22/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c83f5348f56e4a8f91_431f5df57511/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/fdceb778c6f0400ca0_8f25a4930e10/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/579820ca40a946f3b1_d49eea46e901/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/3fd5c443f2854cd8a0_fa57f47c4f1d/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/1407362c0cc647c6b2_fd9a5d85f29f/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/d8346e7178de4ef0a0_6fed3078eaeb/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/e9ae746a12ec46e7a8_01e183584b8d/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/3f8e8d290cfe4fb799_50a9bf64a057/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/f4876d54176c4532af_b42695c44ddc/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/2098bb8db9664e6d95_7afb0b64d05c/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/61866eab605142daa8_c91aecca7da7/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/24329ebffc6c446c93_2abd33652a5f/86",
+      "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/6e0bfedf42ed430280_0353d5898fab/86"
+    ],
+    "video_urls": [],
+    "posted_text": "1 day ago",
+    "posted_utc": 1791643486.952,
+    "posted_at": "2026-10-10T14:44:46.952000Z",
+    "created_utc": 1790675543.83,
+    "created_at": "2026-09-29T09:52:23.830000Z",
+    "updated_utc": 1791643487.028,
+    "updated_at": "2026-10-10T14:44:47.028000Z",
+    "expires_at": "2026-11-09",
+    "is_featured": false,
+    "is_urgent": false,
+    "is_bumped_up": false,
+    "is_standout": false,
+    "favourite_count": 2,
+    "vehicle_history_checked": true,
+    "attributes": [
+      {
+        "key": "vehicle_make",
+        "label": "Make",
+        "value": "Mazda",
+        "unit": null
+      },
+      {
+        "key": "vehicle_model",
+        "label": "Model",
+        "value": "2",
+        "unit": null
+      },
+      {
+        "key": "vehicle_registration_year",
+        "label": "Year",
+        "value": "2018",
+        "unit": null
+      },
+      {
+        "key": "vehicle_mileage",
+        "label": "Mileage",
+        "value": "94130",
+        "unit": "miles"
+      },
+      {
+        "key": "seller_type",
+        "label": "Seller type",
+        "value": "Trade",
+        "unit": null
+      },
+      {
+        "key": "vehicle_body_type",
+        "label": "Body type",
+        "value": "Hatchback",
+        "unit": null
+      },
+      {
+        "key": "vehicle_transmission",
+        "label": "Transmission",
+        "value": "Manual",
+        "unit": null
+      },
+      {
+        "key": "vehicle_brochure_engine_size",
+        "label": "Brochure Engine size",
+        "value": "1.5",
+        "unit": "L"
+      },
+      {
+        "key": "vehicle_fuel_type",
+        "label": "Fuel type",
+        "value": "Petrol",
+        "unit": null
+      },
+      {
+        "key": "vehicle_urban_mpg",
+        "label": "Urban mpg",
+        "value": "47.9",
+        "unit": "mpg"
+      },
+      {
+        "key": "vehicle_extra_urban_mpg",
+        "label": "Extra Urban mpg",
+        "value": "76.3",
+        "unit": "mpg"
+      },
+      {
+        "key": "vehicle_average_mpg",
+        "label": "Fuel Consumption",
+        "value": "62.8",
+        "unit": "mpg"
+      },
+      {
+        "key": "vehicle_insurance_group",
+        "label": "Insurance Group",
+        "value": "16E",
+        "unit": null
+      },
+      {
+        "key": "vehicle_emission",
+        "label": "CO2 emissions",
+        "value": "105",
+        "unit": "g/km"
+      },
+      {
+        "key": "vehicle_euro_emission",
+        "label": "Euro Emissions",
+        "value": "Euro 6",
+        "unit": null
+      },
+      {
+        "key": "vehicle_engine_size",
+        "label": "Engine size",
+        "value": "1496",
+        "unit": "cc"
+      },
+      {
+        "key": "vehicle_engine_power",
+        "label": "Engine Power",
+        "value": "88.5",
+        "unit": "bhp"
+      },
+      {
+        "key": "vehicle_acceleration_0_62",
+        "label": "Acceleration (0-62mph)",
+        "value": "9.4",
+        "unit": "seconds"
+      },
+      {
+        "key": "vehicle_top_speed",
+        "label": "Top Speed",
+        "value": "114",
+        "unit": "mph"
+      },
+      {
+        "key": "vehicle_seats",
+        "label": "Seats",
+        "value": "5",
+        "unit": null
+      },
+      {
+        "key": "vehicle_doors",
+        "label": "Doors",
+        "value": "5",
+        "unit": null
+      },
+      {
+        "key": "vehicle_colour",
+        "label": "Colour",
+        "value": "Grey",
+        "unit": null
+      },
+      {
+        "key": "vehicle_fuel_capacity",
+        "label": "Fuel Capacity",
+        "value": "44",
+        "unit": "litres"
+      },
+      {
+        "key": "vehicle_luggage_capacity",
+        "label": "Luggage Capacity (seats up)",
+        "value": "280",
+        "unit": "litres"
+      },
+      {
+        "key": "vehicle_derivative",
+        "label": "Derivative",
+        "value": "Sport",
+        "unit": null
+      },
+      {
+        "key": "vat",
+        "label": "VAT",
+        "value": "No VAT",
+        "unit": null
+      }
+    ],
+    "seller": {
+      "name": "Thomson Twins Motors Ltd",
+      "user_id": "91457907",
+      "public_id": "41d401e0ec9e0dfa128b17775c8f2f9d",
+      "type": "Trade",
+      "is_pro": true,
+      "posting_since": "4+ months",
+      "last_active_utc": null,
+      "last_active_at": null,
+      "total_listings": null,
+      "listings_last_year": null,
+      "listings_by_category": {},
+      "reply_speed": null,
+      "reply_rate": null,
+      "rating": {
+        "average": 0.0,
+        "total": 0,
+        "breakdown": {
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0
+        }
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "label": "Business Verified",
+        "checks": [
+          "Age verification (maximum)",
+          "Age verification (minimum)",
+          "Directors",
+          "Director p"
+        ]
+      },
+      "phone_masked": null,
+      "website_url": null,
+      "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL53WVnGjpLqSKwpMtVgP0DWJhISVEYDGxqUG7CKA65GEpPrHk=s96-c",
+      "logo_url": null,
+      "badges": []
+    },
+    "seller_skills": [],
+    "seller_listings_url": "https://www.gumtree.com/sellerads/1803293391?userId=91457907&publicUserId=41d401e0ec9e0dfa128b17775c8f2f9d",
+    "similar_listings": [
+      {
+        "id": "1803422383",
+        "title": "2017 Mazda MX-5 1.5 SE-L Nav 2dr CONVERTIBLE PETROL Manual",
+        "url": "https://www.gumtree.com/p/mazda/2017-mazda-mx-5-1.5-se-l-nav-2dr-convertible-petrol-manual/1803422383",
+        "description": "A superb example of the Mazda MX5 SEL Nav finished in Ceramic White. Full service history totalling 10 services, all done at the Mazda main dealership. Great spec including DAB Radio and Sat Nav. electric hardtop roof, a beautiful, well cherished ex",
+        "price": 12695.0,
+        "price_text": "£12,695.00",
+        "price_frequency": null,
+        "currency": "GBP",
+        "location": "Colchester, Essex",
+        "location_id": "11000115",
+        "postcode": "CO27QB",
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 10312,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/476feee298e74f1c83_9c1f539543d4/86",
+        "image_urls": [
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/476feee298e74f1c83_9c1f539543d4/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/1fed988b819c4919bf_28e464fec79d/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/a1094e28cdde40b18b_d83daf1d77e0/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/b896eceba03b4ec497_c95778d36471/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/27cac9bd0e6643898d_4211292118eb/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/91d3ca3cec8d4dc281_e4e6c73a06fb/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/446486d8d2b745ec8a_ad0536768d57/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/6415a72cb6dd49a889_d39824e131c5/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/113ad4b5ba93482897_82e5bcb4ab61/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/8f1b4a7273ab489b85_edf91e3750f0/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/0117ad6cf12d43d894_5a0a0c2a3e38/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/f8b4d4ba360e4ba6a3_4628f6c8af3a/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/8d6228e2f3fc4d00bf_1720770de353/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/4ec7a5f5f2a04284b9_f7da132c278d/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c8c04045423e41e6b5_e5512eb67c7e/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/2e09f0454aff4ca7b7_cafdf15dd819/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/0223692ff69a457cb5_d685acb84cc9/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/76f0eb9687df42a9a0_3d169025e2af/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/8a25701ae98b4d628b_faf724dd2dee/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/0fbbde3c49574a55b6_c90232a2f5ff/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/3c2be5332e83434891_7f7f6b86ceef/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/2e56b81474344e4490_716a9c5a6068/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/bc4550c7d9574934a7_90acb5efeb4e/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/6f695d4427894cb598_f52418bd0b59/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/a91957b8f8564f04aa_8918413fac03/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/11610da2eb1049d18b_f2f36e3afe1c/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/b0969ee7e7fc47c38a_a97d409c0f0b/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/4507218e6681483583_63416f70003e/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/fc4b0c787d2d48f9be_3518abf08547/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/4926b619b972422784_7bbddeddb3f7/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/ac063a6b2e1a4d70a4_84617a7473aa/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/b236fc74b1c44266a8_cdf37fd7e31e/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/7550d53ea74d49ad93_ebe877fb5eff/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/0cd4b9decd7e4964b6_52ad339fe0b5/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/614210d9398f46c5a5_37dbeb512762/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/962af34c25b24514b6_ff84d39f1431/86"
+        ],
+        "image_count": 36,
+        "posted_text": "Just now",
+        "posted_utc": 1791756016.233,
+        "posted_at": "2026-10-11T22:00:16.233000Z",
+        "status": "LIVE",
+        "seller_type": "Trade",
+        "seller_id": "53458489",
+        "account_id": "94368145",
+        "is_pro_seller": true,
+        "is_featured": false,
+        "is_urgent": false,
+        "is_bumped_up": false,
+        "is_standout": false,
+        "is_premium": false,
+        "has_video": false,
+        "supports_shipping": false,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "vehicle_cap_code",
+            "label": "Cap Code",
+            "value": null,
+            "unit": null
+          },
+          {
+            "key": "radio_with_speakers",
+            "label": "Radio CD with Speakers",
+            "value": "Yes",
+            "unit": null
+          },
+          {
+            "key": "navigation_system",
+            "label": "Navigation System",
+            "value": "Yes",
+            "unit": null
+          },
+          {
+            "key": "safety_belt_pretensioners",
+            "label": "Safety Belt Pretensioners",
+            "value": "Yes",
+            "unit": null
+          },
+          {
+            "key": "vehicle_cap_id",
+            "label": "Cap Id",
+            "value": null,
+            "unit": null
+          },
+          {
+            "key": "vrn",
+            "label": "Vehicle Registration Number",
+            "value": null,
+            "unit": null
+          },
+          {
+            "key": "vehicle_make",
+            "label": "Make",
+            "value": "Mazda",
+            "unit": null
+          },
+          {
+            "key": "vehicle_model",
+            "label": "Model",
+            "value": "MX-5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_registration_year",
+            "label": "Year",
+            "value": "2017",
+            "unit": null
+          },
+          {
+            "key": "vehicle_mileage",
+            "label": "Mileage",
+            "value": "46000",
+            "unit": "miles"
+          },
+          {
+            "key": "seller_type",
+            "label": "Seller type",
+            "value": "Trade",
+            "unit": null
+          },
+          {
+            "key": "vehicle_body_type",
+            "label": "Body type",
+            "value": "Convertible",
+            "unit": null
+          },
+          {
+            "key": "vehicle_transmission",
+            "label": "Transmission",
+            "value": "Manual",
+            "unit": null
+          },
+          {
+            "key": "vehicle_brochure_engine_size",
+            "label": "Brochure Engine size",
+            "value": "1.5",
+            "unit": "L"
+          },
+          {
+            "key": "vehicle_fuel_type",
+            "label": "Fuel type",
+            "value": "Petrol",
+            "unit": null
+          },
+          {
+            "key": "vehicle_urban_mpg",
+            "label": "Urban mpg",
+            "value": "34.9",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_extra_urban_mpg",
+            "label": "Extra Urban mpg",
+            "value": "57.6",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_average_mpg",
+            "label": "Fuel Consumption",
+            "value": "46.3",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_insurance_group",
+            "label": "Insurance Group",
+            "value": "24E",
+            "unit": null
+          },
+          {
+            "key": "vehicle_not_stolen",
+            "label": "Not stolen",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_emission",
+            "label": "CO2 emissions",
+            "value": "142",
+            "unit": "g/km"
+          },
+          {
+            "key": "vehicle_not_scrapped",
+            "label": "Not reported scrapped",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_euro_emission",
+            "label": "Euro Emissions",
+            "value": "Euro 6",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_size",
+            "label": "Engine size",
+            "value": "1496",
+            "unit": "cc"
+          },
+          {
+            "key": "vehicle_not_exported",
+            "label": "Not reported exported",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_power",
+            "label": "Engine Power",
+            "value": "128.7",
+            "unit": "bhp"
+          },
+          {
+            "key": "vehicle_road_worthy",
+            "label": "Roadworthy",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_acceleration_0_62",
+            "label": "Acceleration (0-62mph)",
+            "value": "8.6",
+            "unit": "seconds"
+          },
+          {
+            "key": "vehicle_not_writeoff",
+            "label": "Not written-off",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_top_speed",
+            "label": "Top Speed",
+            "value": "126",
+            "unit": "mph"
+          },
+          {
+            "key": "vehicle_seats",
+            "label": "Seats",
+            "value": "2",
+            "unit": null
+          },
+          {
+            "key": "vehicle_doors",
+            "label": "Doors",
+            "value": "2",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_number_plate",
+            "label": "Original number plate",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_colour",
+            "label": "Colour",
+            "value": "Silver",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_colour",
+            "label": "Original colour",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_fuel_capacity",
+            "label": "Fuel Capacity",
+            "value": "45",
+            "unit": "litres"
+          },
+          {
+            "key": "vehicle_vhc_checked",
+            "label": "Vehicle history checked",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_luggage_capacity",
+            "label": "Luggage Capacity (seats up)",
+            "value": "127",
+            "unit": "litres"
+          },
+          {
+            "key": "vehicle_previous_keepers",
+            "label": "Previous Keepers",
+            "value": "3",
+            "unit": null
+          },
+          {
+            "key": "vehicle_derivative",
+            "label": "Derivative",
+            "value": "SE-L Nav",
+            "unit": null
+          }
+        ]
+      }
+    ]
+  },
+  "GET /v1/gumtree/search/filters?category=cars": {
+    "category": "cars",
+    "category_name": "Cars",
+    "total_results": 139812,
+    "filters": [
+      {
+        "key": "vehicle_make",
+        "label": "Make",
+        "type": "enum",
+        "min_key": null,
+        "max_key": null,
+        "options": [
+          {
+            "label": "Abarth",
+            "value": "abarth",
+            "count": 265
+          },
+          {
+            "label": "AC",
+            "value": "ac",
+            "count": 1
+          },
+          {
+            "label": "Aixam",
+            "value": "aixam",
+            "count": 1
+          }
+        ],
+        "min_options": [],
+        "max_options": []
+      },
+      {
+        "key": "vehicle_transmission",
+        "label": "Transmission",
+        "type": "multiple_selection",
+        "min_key": null,
+        "max_key": null,
+        "options": [
+          {
+            "label": "Automatic",
+            "value": "automatic",
+            "count": 45316
+          },
+          {
+            "label": "Manual",
+            "value": "manual",
+            "count": 83436
+          },
+          {
+            "label": "Semi-Auto",
+            "value": "semi_auto",
+            "count": 6852
+          }
+        ],
+        "min_options": [],
+        "max_options": []
+      }
+    ],
+    "sort_options": [
+      {
+        "value": "relevance",
+        "label": "Most relevant first"
+      },
+      {
+        "value": "date",
+        "label": "Most recent first"
+      },
+      {
+        "value": "price_lowest_first",
+        "label": "Price: Low to High"
+      },
+      {
+        "value": "price_highest_first",
+        "label": "Price: High to Low"
+      },
+      {
+        "value": "distance",
+        "label": "Nearest first"
+      }
+    ],
+    "distance_options": [
+      1.0,
+      3.0,
+      5.0,
+      10.0,
+      15.0,
+      30.0,
+      50.0,
+      75.0,
+      100.0,
+      1000.0
+    ],
+    "category_facets": []
+  },
+  "GET /v1/gumtree/listings/1803293391/seller-listings": {
+    "listing_id": "1803293391",
+    "seller_name": "Allan",
+    "total_results": 12,
+    "page": 1,
+    "total_pages": 1,
+    "result_count": 12,
+    "listings": [
+      {
+        "id": "1803761638",
+        "title": "Honda, CIVIC, Hatchback, 2016, Manual, 1597 (cc), 5 doors",
+        "url": "https://www.gumtree.com/p/honda/honda-civic-hatchback-2016-manual-1597-cc-5-doors/1803761638",
+        "description": "Welcome to Thomson Twins Motors. We are a family run business based in Larkhall Scotland. We use our years of experience in the motor industry to carefully select the best vehicles and provide them at competitive prices alongside Free warranties and",
+        "price": 5799.0,
+        "price_text": "£5,799.00",
+        "price_frequency": null,
+        "currency": "GBP",
+        "location": "Larkhall, South Lanarkshire",
+        "location_id": "11000569",
+        "postcode": "ML93BQ",
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 10307,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/f0018e42e2c44a579d_150de0fec609/86",
+        "image_urls": [
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/f0018e42e2c44a579d_150de0fec609/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/98ca7af6680041d8b0_24da9aa44baa/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/cb468934c11c4f39a7_193af3e1f4ce/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/7b044c89303540189a_6ace9c8af893/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/8f6a6961e33e478687_720ec21685d1/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/a90268c094224ff2a0_7d0b0984c9bc/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/f817343b26114cf3b1_ed3a3bdc93e0/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/021744aedcb6461296_e4e82a394c20/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/c44cf5594f2f469ebc_5aa0411d9cf9/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/9bb5395159a44453b0_35f3d7f6c5fa/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/5d0229c513234bab84_dd5686808541/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/e6cf261a517343659c_c33fa0696dcb/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/0a680de055984c77a3_1e8d44b22fba/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/d5ac8237118a40dc8e_2192ca167ae8/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/19c2455389004c959e_03f36eb1ab10/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/458ffd3199ff4e5ab2_d734fcf190e1/86",
+          "https://img.gumtree.com/ePR8PyKf84wPHx7_RYmEag/14d06d8ea17d4c3493_763746313288/86"
+        ],
+        "image_count": 17,
+        "posted_text": "3 hours ago",
+        "posted_utc": 1791743982.768,
+        "posted_at": "2026-10-11T18:39:42.768000Z",
+        "status": "LIVE",
+        "seller_type": "Trade",
+        "seller_id": "91457907",
+        "account_id": "101852652",
+        "is_pro_seller": true,
+        "is_featured": false,
+        "is_urgent": false,
+        "is_bumped_up": false,
+        "is_standout": false,
+        "is_premium": false,
+        "has_video": false,
+        "supports_shipping": false,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "vehicle_cap_code",
+            "label": "Cap Code",
+            "value": "HOCI16SPV5HDTM  5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_estimated_mileage",
+            "label": "Estimated Mileage",
+            "value": "92132",
+            "unit": null
+          },
+          {
+            "key": "vehicle_cap_id",
+            "label": "Cap Id",
+            "value": "67809",
+            "unit": null
+          },
+          {
+            "key": "vrn",
+            "label": "Vehicle Registration Number",
+            "value": "SJ66XSV",
+            "unit": null
+          },
+          {
+            "key": "vehicle_make",
+            "label": "Make",
+            "value": "Honda",
+            "unit": null
+          },
+          {
+            "key": "vehicle_model",
+            "label": "Model",
+            "value": "CIVIC",
+            "unit": null
+          },
+          {
+            "key": "vehicle_registration_year",
+            "label": "Year",
+            "value": "2016",
+            "unit": null
+          },
+          {
+            "key": "vehicle_mileage",
+            "label": "Mileage",
+            "value": "92500",
+            "unit": "miles"
+          },
+          {
+            "key": "seller_type",
+            "label": "Seller type",
+            "value": "Trade",
+            "unit": null
+          },
+          {
+            "key": "vehicle_body_type",
+            "label": "Body type",
+            "value": "Hatchback",
+            "unit": null
+          },
+          {
+            "key": "vehicle_transmission",
+            "label": "Transmission",
+            "value": "Manual",
+            "unit": null
+          },
+          {
+            "key": "vehicle_brochure_engine_size",
+            "label": "Brochure Engine size",
+            "value": "1.6",
+            "unit": "L"
+          },
+          {
+            "key": "vehicle_fuel_type",
+            "label": "Fuel type",
+            "value": "Diesel",
+            "unit": null
+          },
+          {
+            "key": "vehicle_urban_mpg",
+            "label": "Urban mpg",
+            "value": "72.4",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_extra_urban_mpg",
+            "label": "Extra Urban mpg",
+            "value": "83.1",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_average_mpg",
+            "label": "Fuel Consumption",
+            "value": "78.5",
+            "unit": "mpg"
+          },
+          {
+            "key": "vehicle_insurance_group",
+            "label": "Insurance Group",
+            "value": "15E",
+            "unit": null
+          },
+          {
+            "key": "vehicle_not_stolen",
+            "label": "Not stolen",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_emission",
+            "label": "CO2 emissions",
+            "value": "94",
+            "unit": "g/km"
+          },
+          {
+            "key": "vehicle_not_scrapped",
+            "label": "Not reported scrapped",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_euro_emission",
+            "label": "Euro Emissions",
+            "value": "Euro 6",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_size",
+            "label": "Engine size",
+            "value": "1597",
+            "unit": "cc"
+          },
+          {
+            "key": "vehicle_not_exported",
+            "label": "Not reported exported",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_engine_power",
+            "label": "Engine Power",
+            "value": "118",
+            "unit": "bhp"
+          },
+          {
+            "key": "vehicle_road_worthy",
+            "label": "Roadworthy",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_acceleration_0_62",
+            "label": "Acceleration (0-62mph)",
+            "value": "10.5",
+            "unit": "seconds"
+          },
+          {
+            "key": "vehicle_not_writeoff",
+            "label": "Not written-off",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_top_speed",
+            "label": "Top Speed",
+            "value": "129",
+            "unit": "mph"
+          },
+          {
+            "key": "vehicle_seats",
+            "label": "Seats",
+            "value": "5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_doors",
+            "label": "Doors",
+            "value": "5",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_number_plate",
+            "label": "Original number plate",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_colour",
+            "label": "Colour",
+            "value": "Silver",
+            "unit": null
+          },
+          {
+            "key": "vehicle_original_colour",
+            "label": "Original colour",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_fuel_capacity",
+            "label": "Fuel Capacity",
+            "value": "50",
+            "unit": "litres"
+          },
+          {
+            "key": "vehicle_vhc_checked",
+            "label": "Vehicle history checked",
+            "value": "true",
+            "unit": null
+          },
+          {
+            "key": "vehicle_luggage_capacity",
+            "label": "Luggage Capacity (seats up)",
+            "value": "477",
+            "unit": "litres"
+          },
+          {
+            "key": "vehicle_previous_keepers",
+            "label": "Previous Keepers",
+            "value": "1",
+            "unit": null
+          },
+          {
+            "key": "vehicle_derivative",
+            "label": "Derivative",
+            "value": "SE Plus",
+            "unit": null
+          },
+          {
+            "key": "vat",
+            "label": "VAT",
+            "value": "No VAT",
+            "unit": null
+          }
+        ]
+      }
+    ]
+  },
+  "GET /v1/gumtree/autocomplete?query=sofa": {
+    "query": "sofa",
+    "result_count": 10,
+    "suggestions": [
+      {
+        "query": "sofa",
+        "highlighted": "<em>sofa</em>",
+        "categories": [
+          {
+            "id": 12494,
+            "name": "Sofas & Couches",
+            "slug": "sofas-couches"
+          },
+          {
+            "id": 679,
+            "name": "Sofa Beds & Futons",
+            "slug": "sofa-beds-futons"
+          }
+        ]
+      },
+      {
+        "query": "sofa bed",
+        "highlighted": "<em>sofa</em> bed",
+        "categories": []
+      },
+      {
+        "query": "sofa set",
+        "highlighted": "<em>sofa</em> set",
+        "categories": []
+      }
+    ]
+  },
+  "GET /v1/gumtree/locations/autocomplete?query=leed": {
+    "query": "leed",
+    "result_count": 2,
+    "locations": [
+      {
+        "id": 10000360,
+        "name": "Leeds",
+        "type": "location",
+        "latitude": 53.808019,
+        "longitude": -1.541784
+      },
+      {
+        "id": 52026,
+        "name": "Leeds City Centre, West Yorkshire",
+        "type": "location",
+        "latitude": 53.797899,
+        "longitude": -1.548119
+      }
+    ]
+  },
+  "GET /v1/gumtree/categories?parent_id=2551": {
+    "id": 2551,
+    "name": "Motors",
+    "slug": "cars-vans-motorbikes",
+    "result_count": 12,
+    "children": [
+      {
+        "id": 11986,
+        "name": "Other Categories",
+        "slug": "other-vehicle-categories",
+        "has_children": false
+      },
+      {
+        "id": 9311,
+        "name": "Cars",
+        "slug": "cars",
+        "has_children": false
+      },
+      {
+        "id": 10442,
+        "name": "Motorbikes & Scooters",
+        "slug": "motorbikes-scooters",
+        "has_children": false
+      },
+      {
+        "id": 94,
+        "name": "Vans",
+        "slug": "vans",
+        "has_children": false
+      }
+    ]
+  },
+  "GET /v1/gumtree/locations?parent_id=10000393": {
+    "id": 10000393,
+    "name": "England",
+    "slug": "england",
+    "result_count": 47,
+    "children": [
+      {
+        "id": 11000000,
+        "name": "Bedfordshire",
+        "slug": "bedfordshire",
+        "has_children": true
+      },
+      {
+        "id": 11000001,
+        "name": "Berkshire",
+        "slug": "berkshire",
+        "has_children": true
+      },
+      {
+        "id": 10000348,
+        "name": "Bristol",
+        "slug": "bristol",
+        "has_children": true
+      }
+    ]
+  }
+}
