@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.58.0 — 2026-10-11
 
 - **Wallapop API — 10 endpoints via `client.wallapop`.** A typed client for the Spanish, Italian and Portuguese second-hand marketplace (`market`: `es`, `it`, `pt`): `search` (40 listings per page with Wallapop's own filters — location and radius, category, price, condition, brand, model, colour, listing age, shipping, warranty, refurbished, and the cars filters year, km, gearbox and horsepower; cursor pagination via `next_page`), `get_item`, `get_user`, `get_user_items`, `get_user_reviews`, `autocomplete`, `list_categories`, `list_filters`, `list_filter_options` and `list_markets`. Boolean filters are only sent when `True`. Models are exported top-level with a `Wallapop` prefix (`WallapopSearchResponse`, `WallapopItemDetail`, `WallapopUserProfile`, ...).
 
