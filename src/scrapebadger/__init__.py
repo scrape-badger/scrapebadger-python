@@ -783,6 +783,82 @@ from scrapebadger.vinted.models import (
     VintedUserProfile,
     VintedUserSummary,
 )
+from scrapebadger.wallapop.client import WallapopClient
+from scrapebadger.wallapop.models import (
+    Attribute as WallapopAttribute,
+)
+from scrapebadger.wallapop.models import (
+    AutocompleteResponse as WallapopAutocompleteResponse,
+)
+from scrapebadger.wallapop.models import (
+    CategoriesResponse as WallapopCategoriesResponse,
+)
+from scrapebadger.wallapop.models import (
+    Category as WallapopCategory,
+)
+from scrapebadger.wallapop.models import (
+    FilterOption as WallapopFilterOption,
+)
+from scrapebadger.wallapop.models import (
+    FilterOptionsResponse as WallapopFilterOptionsResponse,
+)
+from scrapebadger.wallapop.models import (
+    FiltersResponse as WallapopFiltersResponse,
+)
+from scrapebadger.wallapop.models import (
+    Image as WallapopImage,
+)
+from scrapebadger.wallapop.models import (
+    ItemDetail as WallapopItemDetail,
+)
+from scrapebadger.wallapop.models import (
+    Location as WallapopLocation,
+)
+from scrapebadger.wallapop.models import (
+    Market as WallapopMarket,
+)
+from scrapebadger.wallapop.models import (
+    MarketsResponse as WallapopMarketsResponse,
+)
+from scrapebadger.wallapop.models import (
+    Review as WallapopReview,
+)
+from scrapebadger.wallapop.models import (
+    Reviewer as WallapopReviewer,
+)
+from scrapebadger.wallapop.models import (
+    ReviewItem as WallapopReviewItem,
+)
+from scrapebadger.wallapop.models import (
+    ReviewsResponse as WallapopReviewsResponse,
+)
+from scrapebadger.wallapop.models import (
+    SearchFilter as WallapopSearchFilter,
+)
+from scrapebadger.wallapop.models import (
+    SearchItem as WallapopSearchItem,
+)
+from scrapebadger.wallapop.models import (
+    SearchResponse as WallapopSearchResponse,
+)
+from scrapebadger.wallapop.models import (
+    Suggestion as WallapopSuggestion,
+)
+from scrapebadger.wallapop.models import (
+    TaxonomyNode as WallapopTaxonomyNode,
+)
+from scrapebadger.wallapop.models import (
+    UserItem as WallapopUserItem,
+)
+from scrapebadger.wallapop.models import (
+    UserItemsResponse as WallapopUserItemsResponse,
+)
+from scrapebadger.wallapop.models import (
+    UserProfile as WallapopUserProfile,
+)
+from scrapebadger.wallapop.models import (
+    UserValidations as WallapopUserValidations,
+)
 from scrapebadger.walmart.client import WalmartClient
 from scrapebadger.walmart.models import (
     AutocompleteResponse as WalmartAutocompleteResponse,
@@ -1579,6 +1655,33 @@ __all__ = [
     "VintedStatus",
     "VintedUserProfile",
     "VintedUserSummary",
+    # Wallapop
+    "WallapopAttribute",
+    "WallapopAutocompleteResponse",
+    "WallapopCategoriesResponse",
+    "WallapopCategory",
+    "WallapopClient",
+    "WallapopFilterOption",
+    "WallapopFilterOptionsResponse",
+    "WallapopFiltersResponse",
+    "WallapopImage",
+    "WallapopItemDetail",
+    "WallapopLocation",
+    "WallapopMarket",
+    "WallapopMarketsResponse",
+    "WallapopReview",
+    "WallapopReviewItem",
+    "WallapopReviewer",
+    "WallapopReviewsResponse",
+    "WallapopSearchFilter",
+    "WallapopSearchItem",
+    "WallapopSearchResponse",
+    "WallapopSuggestion",
+    "WallapopTaxonomyNode",
+    "WallapopUserItem",
+    "WallapopUserItemsResponse",
+    "WallapopUserProfile",
+    "WallapopUserValidations",
     # Walmart
     "WalmartAutocompleteResponse",
     "WalmartBadge",
