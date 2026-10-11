@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.57.0 — 2026-10-12
+
+- **`facebook.get_group_posts(sort=...)`.** `"newest"` (the API default) returns a group's feed newest first by post time, and each page continues with older posts. `"relevance"` keeps Facebook's top-posts ranking, which moves older posts with fresh comments up. Facebook serves 3 posts per page to logged-out clients on every plan; keep the same `sort` while following `end_cursor`.
+- Album, sale and listing posts now list each photo once in `attachments`, with `uri`, `width` and `height` (server-side fix, no SDK change needed).
+
 ## 0.56.0 — 2026-10-10
 
 - **`web.screenshot()` — a PNG of any page.** `POST /v1/web/screenshot` renders the URL in the browser engine and returns the PNG base64-encoded in `ScreenshotResult.screenshot`; `.png` decodes it and `.save(path)` writes the file. Options: `full_page`, `width` (320–3840), `height` (240–4320), `wait_for`, `country`, `proxy_tier`. A page that loads without a screenshot is a `502` and costs nothing.

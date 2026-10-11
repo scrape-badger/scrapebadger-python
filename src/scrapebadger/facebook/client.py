@@ -73,12 +73,18 @@ class FacebookClient:
         """
         return await self._client.get(f"/v1/facebook/groups/{group_id}")
 
-    async def get_group_posts(self, group_id: str, *, after: str | None = None) -> dict[str, Any]:
-        """Get group posts.
+    async def get_group_posts(
+        self, group_id: str, *, after: str | None = None, sort: str | None = None
+    ) -> dict[str, Any]:
+        """Get a public group's post feed, 3 posts per page.
+
+        ``sort`` is ``"newest"`` (newest first by post time, the API default) or
+        ``"relevance"`` (Facebook's top-posts ranking). Follow ``end_cursor`` as
+        ``after`` while ``has_next_page`` for older posts, keeping the same sort.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
-        params = {k: v for k, v in {"after": after}.items() if v is not None}
+        params = {k: v for k, v in {"after": after, "sort": sort}.items() if v is not None}
         return await self._client.get(f"/v1/facebook/groups/{group_id}/posts", params=params)
 
     async def list_categories(self) -> dict[str, Any]:
