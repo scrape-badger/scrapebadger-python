@@ -328,6 +328,12 @@ from scrapebadger.gumtree.models import (
     LocationSuggestion as GumtreeLocationSuggestion,
 )
 from scrapebadger.gumtree.models import (
+    MarketInfo as GumtreeMarketInfo,
+)
+from scrapebadger.gumtree.models import (
+    MarketsResponse as GumtreeMarketsResponse,
+)
+from scrapebadger.gumtree.models import (
     SearchFilter as GumtreeSearchFilter,
 )
 from scrapebadger.gumtree.models import (
@@ -1329,7 +1335,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.59.0"
+__version__ = "0.60.0"
 
 __all__ = [
     # TikTok core models
@@ -1485,6 +1491,8 @@ __all__ = [
     "GumtreeListingSummary",
     "GumtreeLocationAutocompleteResponse",
     "GumtreeLocationSuggestion",
+    "GumtreeMarketInfo",
+    "GumtreeMarketsResponse",
     "GumtreeSearchFilter",
     "GumtreeSearchResponse",
     "GumtreeSeller",

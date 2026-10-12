@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.60.0 — 2026-10-12
+
+- **Gumtree Australia + South Africa.** Every `client.gumtree` method takes an optional `market`: `"uk"` (gumtree.com, GBP — the default when unset, so existing calls are unchanged), `"au"` (gumtree.com.au, AUD) or `"za"` (gumtree.co.za, ZAR). uk takes slugs for `category`/`location`; au and za take the numeric ids (as strings) from `list_categories`, `list_locations` and `location_autocomplete` of the same market, e.g. `search(market="za", category="9077", location="3100003")`. `search` `distance` is miles (uk) or km (au) and not offered by za; `urgent_only`/`with_photos` are uk only; `seller_type` is uk and za. za listing ids are the full 26-digit ad id.
+- **`gumtree.list_markets()`** returns each market's domain, country, currency, distance unit, page size and id format (`GumtreeMarketsResponse` / `GumtreeMarketInfo`).
+- **Behaviour change:** `search` and `search_filters` no longer send `location="uk"` by default — unset means the whole country of the chosen market. `search_filters` also takes `filters` (za: filters already applied, e.g. `"ma:toyota"` to list Toyota models).
+- **New response fields:** `market` on every top-level response; `currency` on `SearchResponse`; `short_id`, `price_type` and `seller_name` on listings; `id` on category facets (the au/za category id); `price_type`, `status`, `view_count` and `reply_count` on `ListingDetail`; `member_since_year`, `last_active_text`, `lifetime_listings` and `total_views` on `Seller`.
+- Australian `search` and `search_filters` cost 10 credits and Australian `list_locations` 5 credits (browser-rendered); everything else is priced as before.
+
 ## 0.59.0 — 2026-10-12
 
 - **Gumtree API — 8 endpoints via `client.gumtree`.** UK classifieds (gumtree.com): `search` (keywords, `category` slug, `location` slug/town/postcode with a `distance` radius in miles, `min_price`/`max_price` in GBP, `sort`, `seller_type`, `urgent_only`, `with_photos`, category-specific `filters="key:value,..."`, `page` 1–50), `search_filters` (a category's filters, sort orders and radius options with live counts), `get_listing` (description, every attribute incl. full vehicle spec and history-check flags, images, location, seller with rating, verification and masked phone, similar listings), `get_seller_listings`, `autocomplete`, `location_autocomplete`, `list_locations` and `list_categories`. Dates come as both Unix `*_utc` and ISO 8601 `*_at`. Models are exported top-level with a `Gumtree` prefix (e.g. `GumtreeListingDetail`).

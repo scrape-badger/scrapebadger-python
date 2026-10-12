@@ -1,5 +1,6 @@
 {
   "GET /v1/gumtree/search?category=cars": {
+    "market": "uk",
     "query": null,
     "category": "cars",
     "category_name": "Cars",
@@ -12,15 +13,18 @@
     "total_pages": 50,
     "total_results": 139812,
     "result_count": 30,
+    "currency": "GBP",
     "listings": [
       {
         "id": "1803479690",
+        "short_id": null,
         "title": "Mitsubishi, OUTLANDER, Estate, 2015, Other, 1998 (cc), 5 doors",
         "url": "https://www.gumtree.com/p/mitsubishi/mitsubishi-outlander-estate-2015-other-1998-cc-5-doors/1803479690",
         "description": "MITSUBISHI OUTLANDER PHEV GX4\nH (DK15ZMU)\n2015 Petrol 2.0L Automatic 5 doors Est\nate\nNice family car.. driving is really amazing.fully serviced and changed new tyres all papers included test drive welcome. Any questions please feel free to ask .no o",
         "price": 4500.0,
         "price_text": "£4,500.00",
         "price_frequency": null,
+        "price_type": null,
         "currency": "GBP",
         "location": "London",
         "location_id": "10000344",
@@ -53,6 +57,7 @@
         "status": "LIVE",
         "seller_type": "Private",
         "seller_id": "103262444",
+        "seller_name": null,
         "account_id": "102719651",
         "is_pro_seller": false,
         "is_featured": true,
@@ -279,12 +284,14 @@
       },
       {
         "id": "1802409381",
+        "short_id": null,
         "title": "Ford, RANGER, Pick Up, 2024, Automatic, 1996 (cc)",
         "url": "https://www.gumtree.com/p/ford/ford-ranger-pick-up-2024-automatic-1996-cc-/1802409381",
         "description": "2024 Ford Ranger Automatic – NO VAT – Only 11,400 Miles\n\nVery clean, low-mileage example of a 2024 Ford Ranger with just 11,400 miles from new. Well looked after and presented in excellent condition inside and out.\n\nFull Ford service history, last se",
         "price": 29000.0,
         "price_text": "£29,000.00",
         "price_frequency": null,
+        "price_type": null,
         "currency": "GBP",
         "location": "Penkridge, Staffordshire",
         "location_id": "11002225",
@@ -327,6 +334,7 @@
         "status": "LIVE",
         "seller_type": "Private",
         "seller_id": "96740710",
+        "seller_name": null,
         "account_id": "96201978",
         "is_pro_seller": false,
         "is_featured": true,
@@ -544,6 +552,7 @@
     "url": "https://www.gumtree.com/search?search_category=cars&search_location=uk"
   },
   "GET /v1/gumtree/listings/1803293391": {
+    "market": "uk",
     "id": "1803293391",
     "title": "Mazda, 2, Hatchback, 2018, Manual, 1496 (cc), 5 doors",
     "url": null,
@@ -551,6 +560,7 @@
     "price": 5699.0,
     "price_text": "£5,699.00",
     "price_frequency": null,
+    "price_type": null,
     "currency": "GBP",
     "vat": "No VAT",
     "location": "Larkhall, South Lanarkshire",
@@ -620,6 +630,9 @@
     "updated_utc": 1791643487.028,
     "updated_at": "2026-10-10T14:44:47.028000Z",
     "expires_at": "2026-11-09",
+    "status": null,
+    "view_count": null,
+    "reply_count": null,
     "is_featured": false,
     "is_urgent": false,
     "is_bumped_up": false,
@@ -791,9 +804,13 @@
       "type": "Trade",
       "is_pro": true,
       "posting_since": "4+ months",
+      "member_since_year": null,
+      "last_active_text": null,
       "last_active_utc": null,
       "last_active_at": null,
       "total_listings": null,
+      "lifetime_listings": null,
+      "total_views": null,
       "listings_last_year": null,
       "listings_by_category": {},
       "reply_speed": null,
@@ -830,12 +847,14 @@
     "similar_listings": [
       {
         "id": "1803422383",
+        "short_id": null,
         "title": "2017 Mazda MX-5 1.5 SE-L Nav 2dr CONVERTIBLE PETROL Manual",
         "url": "https://www.gumtree.com/p/mazda/2017-mazda-mx-5-1.5-se-l-nav-2dr-convertible-petrol-manual/1803422383",
         "description": "A superb example of the Mazda MX5 SEL Nav finished in Ceramic White. Full service history totalling 10 services, all done at the Mazda main dealership. Great spec including DAB Radio and Sat Nav. electric hardtop roof, a beautiful, well cherished ex",
         "price": 12695.0,
         "price_text": "£12,695.00",
         "price_frequency": null,
+        "price_type": null,
         "currency": "GBP",
         "location": "Colchester, Essex",
         "location_id": "11000115",
@@ -893,6 +912,7 @@
         "status": "LIVE",
         "seller_type": "Trade",
         "seller_id": "53458489",
+        "seller_name": null,
         "account_id": "94368145",
         "is_pro_seller": true,
         "is_featured": false,
@@ -1150,6 +1170,7 @@
     ]
   },
   "GET /v1/gumtree/search/filters?category=cars": {
+    "market": "uk",
     "category": "cars",
     "category_name": "Cars",
     "total_results": 139812,
@@ -1244,6 +1265,7 @@
     "category_facets": []
   },
   "GET /v1/gumtree/listings/1803293391/seller-listings": {
+    "market": "uk",
     "listing_id": "1803293391",
     "seller_name": "Allan",
     "total_results": 12,
@@ -1253,12 +1275,14 @@
     "listings": [
       {
         "id": "1803761638",
+        "short_id": null,
         "title": "Honda, CIVIC, Hatchback, 2016, Manual, 1597 (cc), 5 doors",
         "url": "https://www.gumtree.com/p/honda/honda-civic-hatchback-2016-manual-1597-cc-5-doors/1803761638",
         "description": "Welcome to Thomson Twins Motors. We are a family run business based in Larkhall Scotland. We use our years of experience in the motor industry to carefully select the best vehicles and provide them at competitive prices alongside Free warranties and",
         "price": 5799.0,
         "price_text": "£5,799.00",
         "price_frequency": null,
+        "price_type": null,
         "currency": "GBP",
         "location": "Larkhall, South Lanarkshire",
         "location_id": "11000569",
@@ -1297,6 +1321,7 @@
         "status": "LIVE",
         "seller_type": "Trade",
         "seller_id": "91457907",
+        "seller_name": null,
         "account_id": "101852652",
         "is_pro_seller": true,
         "is_featured": false,
@@ -1548,6 +1573,7 @@
     ]
   },
   "GET /v1/gumtree/autocomplete?query=sofa": {
+    "market": "uk",
     "query": "sofa",
     "result_count": 10,
     "suggestions": [
@@ -1580,6 +1606,7 @@
     ]
   },
   "GET /v1/gumtree/locations/autocomplete?query=leed": {
+    "market": "uk",
     "query": "leed",
     "result_count": 2,
     "locations": [
@@ -1600,6 +1627,7 @@
     ]
   },
   "GET /v1/gumtree/categories?parent_id=2551": {
+    "market": "uk",
     "id": 2551,
     "name": "Motors",
     "slug": "cars-vans-motorbikes",
@@ -1632,6 +1660,7 @@
     ]
   },
   "GET /v1/gumtree/locations?parent_id=10000393": {
+    "market": "uk",
     "id": 10000393,
     "name": "England",
     "slug": "england",
@@ -1654,6 +1683,772 @@
         "name": "Bristol",
         "slug": "bristol",
         "has_children": true
+      }
+    ]
+  },
+  "GET /v1/gumtree/markets": {
+    "result_count": 3,
+    "markets": [
+      {
+        "market": "uk",
+        "domain": "www.gumtree.com",
+        "country": "GB",
+        "currency": "GBP",
+        "distance_unit": "miles",
+        "page_size": 25,
+        "id_format": "slugs: category 'cars', location 'london' or a UK postcode"
+      },
+      {
+        "market": "au",
+        "domain": "www.gumtree.com.au",
+        "country": "AU",
+        "currency": "AUD",
+        "distance_unit": "km",
+        "page_size": 24,
+        "id_format": "numeric ids from /categories and /locations (market=au)"
+      },
+      {
+        "market": "za",
+        "domain": "www.gumtree.co.za",
+        "country": "ZA",
+        "currency": "ZAR",
+        "distance_unit": null,
+        "page_size": 20,
+        "id_format": "numeric ids from /categories and /locations (market=za)"
+      }
+    ]
+  },
+  "GET /v1/gumtree/search?market=za&category=9077&location=3100003": {
+    "market": "za",
+    "query": null,
+    "category": "9077",
+    "category_name": null,
+    "category_id": 9077,
+    "location": "3100003",
+    "location_name": "Cars & Bakkies in Gauteng",
+    "distance": null,
+    "sort": null,
+    "page": 1,
+    "total_pages": 50,
+    "total_results": 2964,
+    "result_count": 20,
+    "currency": "ZAR",
+    "listings": [
+      {
+        "id": "10013681279811013062940409",
+        "short_id": "1368127981",
+        "title": "2023 Toyota Corolla cross 1.8i for sale",
+        "url": "https://www.gumtree.co.za/a-cars-bakkies/inner-city-cbd-bruma/2023-toyota-corolla-cross-1-8i-for-sale/10013681279811013062940409",
+        "description": null,
+        "price": 248000.0,
+        "price_text": "R 248,000 NEGOTIABLE",
+        "price_frequency": null,
+        "price_type": "FIXED",
+        "currency": "ZAR",
+        "location": "Inner City / CBD&Bruma",
+        "location_id": null,
+        "postcode": null,
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 9077,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://gms.gumtree.co.za/v2/images/za_ads_130629404_261012_6acc7e7f93b58b8535042a5a?size=l",
+        "image_urls": [
+          "https://gms.gumtree.co.za/v2/images/za_ads_130629404_261012_6acc7e7f93b58b8535042a5a?size=l"
+        ],
+        "image_count": 12,
+        "posted_text": "1h",
+        "posted_utc": null,
+        "posted_at": null,
+        "status": "ACTIVE",
+        "seller_type": "Private",
+        "seller_id": null,
+        "seller_name": "Kevin Noel Ngandu",
+        "account_id": null,
+        "is_pro_seller": false,
+        "is_featured": null,
+        "is_urgent": null,
+        "is_bumped_up": null,
+        "is_standout": null,
+        "is_premium": null,
+        "has_video": null,
+        "supports_shipping": null,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "CarYear",
+            "label": null,
+            "value": "2023",
+            "unit": null
+          },
+          {
+            "key": "CarTransmission",
+            "label": null,
+            "value": "Automatic",
+            "unit": null
+          },
+          {
+            "key": "MakeOffer",
+            "label": null,
+            "value": "1",
+            "unit": null
+          },
+          {
+            "key": "ForSaleBy",
+            "label": null,
+            "value": "Owner",
+            "unit": null
+          },
+          {
+            "key": "FuelType",
+            "label": null,
+            "value": "Petrol",
+            "unit": null
+          },
+          {
+            "key": "CarBodyType",
+            "label": null,
+            "value": "SUV",
+            "unit": null
+          },
+          {
+            "key": "CarMake",
+            "label": null,
+            "value": "Toyota",
+            "unit": null
+          },
+          {
+            "key": "CarModel",
+            "label": null,
+            "value": "Corolla Cross",
+            "unit": null
+          },
+          {
+            "key": "CarColor",
+            "label": null,
+            "value": "White",
+            "unit": null
+          },
+          {
+            "key": "CarMileageInKms",
+            "label": null,
+            "value": "85,400km",
+            "unit": null
+          }
+        ]
+      },
+      {
+        "id": "10013680889901013488680709",
+        "short_id": "1368088990",
+        "title": "Vw golf4 1.6 automatic",
+        "url": "https://www.gumtree.co.za/a-cars-bakkies/dobsonville/vw-golf4-1-6-automatic/10013680889901013488680709",
+        "description": null,
+        "price": null,
+        "price_text": "Negotiable",
+        "price_frequency": null,
+        "price_type": "MAKE_OFFER",
+        "currency": "ZAR",
+        "location": "Dobsonville",
+        "location_id": null,
+        "postcode": null,
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 9077,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://gms.gumtree.co.za/v2/images/za_ads_134886807_261011_6acb5c7c93b58b85367bdfe1?size=l",
+        "image_urls": [
+          "https://gms.gumtree.co.za/v2/images/za_ads_134886807_261011_6acb5c7c93b58b85367bdfe1?size=l"
+        ],
+        "image_count": 2,
+        "posted_text": "1d",
+        "posted_utc": null,
+        "posted_at": null,
+        "status": "ACTIVE",
+        "seller_type": "Private",
+        "seller_id": null,
+        "seller_name": "Richard Ngwenya",
+        "account_id": null,
+        "is_pro_seller": false,
+        "is_featured": null,
+        "is_urgent": null,
+        "is_bumped_up": null,
+        "is_standout": null,
+        "is_premium": null,
+        "has_video": null,
+        "supports_shipping": null,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "CarYear",
+            "label": null,
+            "value": "2002",
+            "unit": null
+          },
+          {
+            "key": "CarTransmission",
+            "label": null,
+            "value": "Automatic",
+            "unit": null
+          },
+          {
+            "key": "ForSaleBy",
+            "label": null,
+            "value": "Owner",
+            "unit": null
+          },
+          {
+            "key": "FuelType",
+            "label": null,
+            "value": "Petrol",
+            "unit": null
+          },
+          {
+            "key": "CarBodyType",
+            "label": null,
+            "value": "Hatchback",
+            "unit": null
+          },
+          {
+            "key": "CarMake",
+            "label": null,
+            "value": "Volkswagen",
+            "unit": null
+          },
+          {
+            "key": "CarModel",
+            "label": null,
+            "value": "Golf",
+            "unit": null
+          },
+          {
+            "key": "CarColor",
+            "label": null,
+            "value": "Black",
+            "unit": null
+          },
+          {
+            "key": "CarMileageInKms",
+            "label": null,
+            "value": "190km",
+            "unit": null
+          },
+          {
+            "key": "CarDriveType",
+            "label": null,
+            "value": "4x2",
+            "unit": null
+          }
+        ]
+      }
+    ],
+    "category_facets": [],
+    "url": "https://www.gumtree.co.za/s-x/x/v1c9077l3100003p1"
+  },
+  "GET /v1/gumtree/listings/10013681289561010209976109?market=za": {
+    "market": "za",
+    "id": "10013681289561010209976109",
+    "title": "Bunkbed Pine Wood Single R2600",
+    "url": "https://www.gumtree.co.za/a-beds-headboards/centurion/bunkbed-pine-wood-single-r2600/10013681289561010209976109",
+    "description": "Second hand Single Size Bunkbed in Painted Pine Wood with matching Pedestal available in lyttelton Centurion.",
+    "price": 2600.0,
+    "price_text": "R 2,600",
+    "price_frequency": null,
+    "price_type": "FIXED",
+    "currency": "ZAR",
+    "vat": null,
+    "location": "Centurion",
+    "area": "Gauteng",
+    "sub_area": "Pretoria / Tshwane",
+    "location_id": "3100247",
+    "postcode": null,
+    "latitude": -25.862281,
+    "longitude": 28.088474,
+    "category_id": 9272,
+    "category_name": "Beds & Headboards",
+    "category_ids": [],
+    "breadcrumbs": [
+      {
+        "name": "Gauteng",
+        "url": "https://www.gumtree.co.za/s-gauteng/v1l3100003p1"
+      },
+      {
+        "name": "Pretoria / Tshwane",
+        "url": "https://www.gumtree.co.za/s-pretoria-tshwane/v1l3100094p1"
+      },
+      {
+        "name": "Home & Garden Supplies",
+        "url": "https://www.gumtree.co.za/s-home-garden/centurion/v1c9175l3100247p1"
+      },
+      {
+        "name": "Furniture",
+        "url": "https://www.gumtree.co.za/s-furniture/centurion/v1c9181l3100247p1"
+      },
+      {
+        "name": "Bedroom Furniture",
+        "url": "https://www.gumtree.co.za/s-bedroom-furniture/centurion/v1c9699l3100247p1"
+      },
+      {
+        "name": "Beds & Headboards",
+        "url": "https://www.gumtree.co.za/s-beds-headboards/centurion/v1c9272l3100247p1"
+      }
+    ],
+    "image_urls": [
+      "https://gms.gumtree.co.za/v2/images/za_ads_102099761_261012_6acc81ab93b58b8535042afc?size=l",
+      "https://gms.gumtree.co.za/v2/images/za_ads_102099761_261012_6acc81ad93b58b8535042afd?size=l",
+      "https://gms.gumtree.co.za/v2/images/za_ads_102099761_261012_6acc81b093b58b8535042afe?size=l"
+    ],
+    "video_urls": [],
+    "posted_text": "1 hour ago",
+    "posted_utc": 1791787539.0,
+    "posted_at": "2026-10-12T06:45:39Z",
+    "created_utc": 1791787539.0,
+    "created_at": "2026-10-12T06:45:39Z",
+    "updated_utc": 1791787539.0,
+    "updated_at": "2026-10-12T06:45:39Z",
+    "expires_at": "2026-11-11",
+    "status": "ACTIVE",
+    "view_count": 65,
+    "reply_count": null,
+    "is_featured": null,
+    "is_urgent": null,
+    "is_bumped_up": null,
+    "is_standout": null,
+    "favourite_count": null,
+    "vehicle_history_checked": null,
+    "attributes": [
+      {
+        "key": "Condition",
+        "label": null,
+        "value": "used",
+        "unit": null
+      },
+      {
+        "key": "BedMattressesSize",
+        "label": null,
+        "value": "single",
+        "unit": null
+      },
+      {
+        "key": "Material",
+        "label": null,
+        "value": "wood",
+        "unit": null
+      },
+      {
+        "key": "FurnitureColour",
+        "label": null,
+        "value": "blue",
+        "unit": null
+      },
+      {
+        "key": "ForSaleBy",
+        "label": null,
+        "value": "delr",
+        "unit": null
+      }
+    ],
+    "seller": {
+      "name": "Paul",
+      "user_id": "102099761",
+      "public_id": null,
+      "type": "Trade",
+      "is_pro": false,
+      "posting_since": "Selling for 12+ years",
+      "member_since_year": null,
+      "last_active_text": null,
+      "last_active_utc": null,
+      "last_active_at": null,
+      "total_listings": 183,
+      "lifetime_listings": 3100,
+      "total_views": 263430,
+      "listings_last_year": null,
+      "listings_by_category": {},
+      "reply_speed": null,
+      "reply_rate": null,
+      "rating": null,
+      "verification": null,
+      "phone_masked": "068*******",
+      "website_url": null,
+      "avatar_url": null,
+      "logo_url": null,
+      "badges": []
+    },
+    "seller_skills": [],
+    "seller_listings_url": "https://www.gumtree.co.za/u-seller-listings/x/v1u102099761p1",
+    "similar_listings": []
+  },
+  "GET /v1/gumtree/search?market=au": {
+    "market": "au",
+    "query": null,
+    "category": "all",
+    "category_name": null,
+    "category_id": null,
+    "location": null,
+    "location_name": "Australia",
+    "distance": null,
+    "sort": "relevance",
+    "page": 1,
+    "total_pages": 50,
+    "total_results": 1728346,
+    "result_count": 30,
+    "currency": "AUD",
+    "listings": [
+      {
+        "id": "1345095168",
+        "short_id": null,
+        "title": "2021 Mitsubishi Triton GLX MR 4X4",
+        "url": "https://www.gumtree.com.au/web/listing/cars-vans-utes/1345095168",
+        "description": "2021 Mitsubishi Triton GLX MR 4X4",
+        "price": 27990.0,
+        "price_text": "$27,990",
+        "price_frequency": null,
+        "price_type": "FIXED",
+        "currency": "AUD",
+        "location": "Canning Area, WA",
+        "location_id": null,
+        "postcode": null,
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 18320,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://images.gumtree.com.au/image/private/t_$_35/move/840a7abe-61df-4b7d-9cbb-6d878972d457",
+        "image_urls": [
+          "https://images.gumtree.com.au/image/private/t_$_35/move/840a7abe-61df-4b7d-9cbb-6d878972d457",
+          "https://images.gumtree.com.au/image/private/t_$_74/move/56b83824-b518-4542-b7a5-ce276321531b",
+          "https://images.gumtree.com.au/image/private/t_$_74/move/d1a3a3b5-4ec7-49ed-a1ad-da91109c3c59",
+          "https://images.gumtree.com.au/image/private/t_$_74/move/947167f7-0c65-46c3-8bb1-3081b0235565",
+          "https://images.gumtree.com.au/image/private/t_$_74/move/a99f53f2-a533-4478-b22f-6de9cade5a85"
+        ],
+        "image_count": 5,
+        "posted_text": "4 minutes ago",
+        "posted_utc": null,
+        "posted_at": null,
+        "status": null,
+        "seller_type": "Dealer used",
+        "seller_id": null,
+        "seller_name": "Canning Vale Toyota",
+        "account_id": null,
+        "is_pro_seller": null,
+        "is_featured": true,
+        "is_urgent": false,
+        "is_bumped_up": null,
+        "is_standout": false,
+        "is_premium": true,
+        "has_video": false,
+        "supports_shipping": null,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "engine_capacity_litres",
+            "label": null,
+            "value": "2.4L",
+            "unit": null
+          },
+          {
+            "key": "cylinder_configuration",
+            "label": null,
+            "value": "4 cyl",
+            "unit": null
+          },
+          {
+            "key": "carmileageinkms",
+            "label": null,
+            "value": "106085 km",
+            "unit": null
+          },
+          {
+            "key": "carbodytype",
+            "label": null,
+            "value": "Ute",
+            "unit": null
+          },
+          {
+            "key": "cartransmission",
+            "label": null,
+            "value": "Auto",
+            "unit": null
+          }
+        ]
+      },
+      {
+        "id": "1344046669",
+        "short_id": null,
+        "title": "peppermint bristlenose 4-5cm  about 15 left only shipping avaliable ",
+        "url": "https://www.gumtree.com.au/web/listing/fish/1344046669",
+        "description": "peppermint bristlenose\n4-5cm $15 each\nTop quality jet-black the parents are jet black no muddy look.\nAll breeders have been carfuly selected and bred to produce quality patterns.\nPickup silverdale NSW near Penrith\nshipping also available contact for details.",
+        "price": 15.0,
+        "price_text": "$15",
+        "price_frequency": null,
+        "price_type": "FIXED",
+        "currency": "AUD",
+        "location": "Wollondilly Area, NSW",
+        "location_id": null,
+        "postcode": null,
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 0,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://images.gumtree.com.au/image/private/t_$_35/gumtree/c9fe9704-d000-4bfd-b8b0-b4d03e8e933b.jpg",
+        "image_urls": [
+          "https://images.gumtree.com.au/image/private/t_$_35/gumtree/c9fe9704-d000-4bfd-b8b0-b4d03e8e933b.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/1721b70f-4ee8-4bb3-9347-14a2eadc9de7.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/eb14272e-15fe-4395-933a-dce0f48956be.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/96f8593e-5e92-4d41-a1c3-18c356a8b35d.jpg"
+        ],
+        "image_count": 4,
+        "posted_text": "5 minutes ago",
+        "posted_utc": null,
+        "posted_at": null,
+        "status": null,
+        "seller_type": null,
+        "seller_id": null,
+        "seller_name": null,
+        "account_id": null,
+        "is_pro_seller": null,
+        "is_featured": false,
+        "is_urgent": false,
+        "is_bumped_up": null,
+        "is_standout": false,
+        "is_premium": false,
+        "has_video": false,
+        "supports_shipping": null,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "fish-species",
+            "label": null,
+            "value": "Pleco",
+            "unit": null
+          }
+        ]
+      }
+    ],
+    "category_facets": [
+      {
+        "id": 9299,
+        "name": "Cars & Vehicles",
+        "slug": null,
+        "count": 450286
+      },
+      {
+        "id": 18397,
+        "name": "Home & Garden",
+        "slug": null,
+        "count": 389561
+      },
+      {
+        "id": 9296,
+        "name": "Real Estate",
+        "slug": null,
+        "count": 181693
+      },
+      {
+        "id": 18308,
+        "name": "Clothing & Jewellery",
+        "slug": null,
+        "count": 149516
+      }
+    ],
+    "url": "https://www.gumtree.com.au/s-search.html"
+  },
+  "GET /v1/gumtree/listings/1339574407?market=au": {
+    "market": "au",
+    "id": "1339574407",
+    "title": "No31- YBN S410 Single Speed Bicycle Chain - Compatible with BM",
+    "url": "https://www.gumtree.com.au/web/listing/bicycle-parts-and-accessories/1339574407",
+    "description": "YBN S410 Single Speed Bicycle Chain For Bikes- Compatible with BMX& Freestyle\n\n1856A bicycle Chain 1/8\" *110L brown/grey\n\nFills most bikes\nList No.31",
+    "price": 15.95,
+    "price_text": "$15.95",
+    "price_frequency": null,
+    "price_type": "FIXED",
+    "currency": "AUD",
+    "vat": null,
+    "location": "Knoxfield, VIC",
+    "area": null,
+    "sub_area": null,
+    "location_id": "3001531",
+    "postcode": null,
+    "latitude": -37.89044,
+    "longitude": 145.24924,
+    "category_id": 18540,
+    "category_name": "Bicycle Parts and Accessories",
+    "category_ids": [
+      18314,
+      18560,
+      18540
+    ],
+    "breadcrumbs": [
+      {
+        "name": "Knoxfield",
+        "url": "https://www.gumtree.com.au/s-knoxfield-melbourne/l3001531"
+      },
+      {
+        "name": "Sport & Fitness",
+        "url": "https://www.gumtree.com.au/s-sport-fitness/knoxfield-melbourne/c18314l3001531"
+      },
+      {
+        "name": "Bicycles",
+        "url": "https://www.gumtree.com.au/s-bicycles/c18560"
+      },
+      {
+        "name": "Bicycle Parts and Accessories",
+        "url": "https://www.gumtree.com.au/s-bicycle-parts-and-accessories/c18540"
+      }
+    ],
+    "image_urls": [
+      "https://images.gumtree.com.au/image/private/t_$_20/gumtree/8f6c6c77-af16-44ee-b7e0-cbd318b5041c.jpg",
+      "https://images.gumtree.com.au/image/private/t_$_20/gumtree/fcb11483-603c-41c4-9e90-7a649e209faa.jpg",
+      "https://images.gumtree.com.au/image/private/t_$_20/gumtree/f48ce5a5-f2be-47ec-b294-a5cd0a239e68.jpg"
+    ],
+    "video_urls": [],
+    "posted_text": "06/01/2026",
+    "posted_utc": 1767657600.0,
+    "posted_at": "2026-01-06T00:00:00Z",
+    "created_utc": 1767657600.0,
+    "created_at": "2026-01-06T00:00:00Z",
+    "updated_utc": 1787529600.0,
+    "updated_at": "2026-08-24T00:00:00Z",
+    "expires_at": null,
+    "status": "ACTIVE",
+    "view_count": 88,
+    "reply_count": 0,
+    "is_featured": false,
+    "is_urgent": false,
+    "is_bumped_up": null,
+    "is_standout": false,
+    "favourite_count": null,
+    "vehicle_history_checked": null,
+    "attributes": [
+      {
+        "key": "Date Listed",
+        "label": null,
+        "value": "06/01/2026",
+        "unit": null
+      },
+      {
+        "key": "Last Edited",
+        "label": null,
+        "value": "24/08/2026",
+        "unit": null
+      },
+      {
+        "key": "Condition",
+        "label": null,
+        "value": "New",
+        "unit": null
+      },
+      {
+        "key": "Shipping",
+        "label": null,
+        "value": "Price on request",
+        "unit": null
+      }
+    ],
+    "seller": {
+      "name": "AT BICYCLE",
+      "user_id": "3094382848742",
+      "public_id": "1030807455",
+      "type": "Private",
+      "is_pro": false,
+      "posting_since": null,
+      "member_since_year": 2025,
+      "last_active_text": "yesterday",
+      "last_active_utc": null,
+      "last_active_at": null,
+      "total_listings": 166,
+      "lifetime_listings": null,
+      "total_views": null,
+      "listings_last_year": null,
+      "listings_by_category": {},
+      "reply_speed": null,
+      "reply_rate": null,
+      "rating": {
+        "average": null,
+        "total": 0,
+        "breakdown": {}
+      },
+      "verification": null,
+      "phone_masked": null,
+      "website_url": null,
+      "avatar_url": "https://images.gumtree.com.au/image/private/t_$_74/gumtree/f8ffff25-4f0e-4a28-80f1-dcc5c3315965",
+      "logo_url": null,
+      "badges": []
+    },
+    "seller_skills": [],
+    "seller_listings_url": "https://www.gumtree.com.au/web/s-user/3094382848742",
+    "similar_listings": [
+      {
+        "id": "1337354072",
+        "short_id": null,
+        "title": "Bike Carrier 4 Bicycle Rear Rack Hitch Mount 2 Towbar Foldable Steel",
+        "url": "https://www.gumtree.com.au/web/listing/bicycle-parts-and-accessories/1337354072",
+        "description": "🌟 BRAND NEW | 🚚 Delivery Price Calculated at Checkout\n\nNo Local Pickup - Delivery Only\n\n🚚 Delivery within 2 to 8 Business Days\n🧘🏻♂️ 1 Year Warranty\n📦 In stock in Australia, ready to ship\n\nPayPal | AfterPay | Apple Pay | Cards\n\n\nBike Carrier 4 Bicycle Rear Rack Hitch Mount 2\" Towbar Foldable Steel\n\n\nTake your cycling adventures further with the Giantz 4-Bike Carrier, designed for convenience, strength and versatility. Built from heavy-duty powder-coated steel, this carrier fits any standa",
+        "price": 151.0,
+        "price_text": "$151",
+        "price_frequency": null,
+        "price_type": "FIXED",
+        "currency": "AUD",
+        "location": "Melbourne City, VIC",
+        "location_id": null,
+        "postcode": null,
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": 0,
+        "category_name": null,
+        "category_ids": [],
+        "image_url": "https://images.gumtree.com.au/image/private/t_$_35/gumtree/88f80e20-6ef8-4138-8c41-15f61c06a5fa.jpg",
+        "image_urls": [
+          "https://images.gumtree.com.au/image/private/t_$_35/gumtree/88f80e20-6ef8-4138-8c41-15f61c06a5fa.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/38654861-caae-48eb-8dfa-a253d9956a3a.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/542bfb2d-1ae4-44f9-80f1-c84821c06b4d.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/404871f9-eb5d-435f-b912-88df8146e9ae.jpg",
+          "https://images.gumtree.com.au/image/private/t_$_74/gumtree/88ebf471-74b7-4a02-816c-7d00aa29686a.jpg"
+        ],
+        "image_count": 5,
+        "posted_text": "27/09/2025",
+        "posted_utc": null,
+        "posted_at": null,
+        "status": null,
+        "seller_type": null,
+        "seller_id": null,
+        "seller_name": null,
+        "account_id": null,
+        "is_pro_seller": null,
+        "is_featured": false,
+        "is_urgent": false,
+        "is_bumped_up": null,
+        "is_standout": false,
+        "is_premium": false,
+        "has_video": false,
+        "supports_shipping": null,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
+          {
+            "key": "offer_shipping",
+            "label": null,
+            "value": "Price on request",
+            "unit": null
+          }
+        ]
       }
     ]
   }
