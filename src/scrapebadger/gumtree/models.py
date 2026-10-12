@@ -4,10 +4,13 @@ These models mirror the backend ``gumtree_scraper`` response schema
 field-for-field. All models are immutable (frozen) and ignore unknown fields
 for forward compatibility.
 
-Gumtree is UK-only — gumtree.com is the single supported market. Prices are
-in GBP. Every datetime ships in BOTH forms: ``*_utc`` (Unix seconds) and
-``*_at`` (ISO 8601 UTC string). Phone numbers are only ever the MASKED form
-Gumtree shows a logged-out visitor.
+Three markets share these models: ``uk`` (gumtree.com, GBP), ``au``
+(gumtree.com.au, AUD) and ``za`` (gumtree.co.za, ZAR). They are separate
+platforms, so a field one market does not publish is simply ``None`` there.
+Every top-level response carries the ``market`` it came from. Every datetime
+ships in BOTH forms: ``*_utc`` (Unix seconds) and ``*_at`` (ISO 8601 UTC
+string). Phone numbers are only ever the MASKED form Gumtree shows a
+logged-out visitor.
 """
 
 from __future__ import annotations
@@ -62,12 +65,18 @@ class ListingSummary(_BaseModel):
     """A listing as it appears on a search / seller / similar-listings grid."""
 
     id: str
+    short_id: str | None = Field(
+        default=None, description="za: the 10-digit id Gumtree shows (the `id` is the full ad id)"
+    )
     title: str | None = None
     url: str | None = None
     description: str | None = Field(default=None, description="Gumtree's short description")
-    price: float | None = Field(default=None, description="Numeric price in GBP")
+    price: float | None = Field(default=None, description="Numeric price in `currency`")
     price_text: str | None = Field(default=None, description="Price as shown, e.g. '£1,850.00pm'")
     price_frequency: str | None = Field(default=None, description="pm / pw for rentals")
+    price_type: str | None = Field(
+        default=None, description="au/za: FIXED, NEGOTIABLE / MAKE_OFFER, FREE, SWAP_TRADE…"
+    )
     currency: str = "GBP"
     location: str | None = None
     location_id: str | None = None
@@ -75,7 +84,7 @@ class ListingSummary(_BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     distance_text: str | None = Field(
-        default=None, description="e.g. '13 miles' from the search location"
+        default=None, description="e.g. '13 miles' (uk) or '4 km' (au) from the search location"
     )
     distance_miles: float | None = None
     category_id: int | None = None
@@ -92,6 +101,7 @@ class ListingSummary(_BaseModel):
     status: str | None = None
     seller_type: str | None = Field(default=None, description="Private / Trade / Agency")
     seller_id: str | None = None
+    seller_name: str | None = None
     account_id: str | None = None
     is_pro_seller: bool | None = None
     is_featured: bool | None = Field(default=None, description="Paid top-slot ad")
@@ -114,6 +124,7 @@ class ListingSummary(_BaseModel):
 class CategoryFacet(_BaseModel):
     """A sub-category of a result set, with its listing count."""
 
+    id: int | None = Field(default=None, description="au/za: the category id `search` takes")
     name: str | None = None
     slug: str | None = None
     count: int | None = None
@@ -122,6 +133,9 @@ class CategoryFacet(_BaseModel):
 class SearchResponse(_BaseModel):
     """Response from ``GET /v1/gumtree/search``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     query: str | None = None
     category: str | None = Field(default=None, description="Category slug the search ran in")
     category_name: str | None = None
@@ -134,6 +148,7 @@ class SearchResponse(_BaseModel):
     total_pages: int | None = None
     total_results: int | None = None
     result_count: int = 0
+    currency: str = Field(default="GBP", description="Currency of every price in the results")
     listings: list[ListingSummary] = Field(default_factory=list)
     category_facets: list[CategoryFacet] = Field(
         default_factory=list, description="Sub-categories of the result set, with counts"
@@ -175,13 +190,16 @@ class SortOption(_BaseModel):
 class FiltersResponse(_BaseModel):
     """Response from ``GET /v1/gumtree/search/filters``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     category: str | None = None
     category_name: str | None = None
     total_results: int | None = None
     filters: list[SearchFilter] = Field(default_factory=list)
     sort_options: list[SortOption] = Field(default_factory=list)
     distance_options: list[float] = Field(
-        default_factory=list, description="Radius values in miles"
+        default_factory=list, description="Radius values: miles (uk) or km (au)"
     )
     category_facets: list[CategoryFacet] = Field(default_factory=list)
 
@@ -216,9 +234,13 @@ class Seller(_BaseModel):
     type: str | None = Field(default=None, description="Private / Trade / Agency")
     is_pro: bool | None = None
     posting_since: str | None = Field(default=None, description="e.g. '6+ years'")
+    member_since_year: int | None = Field(default=None, description="au: year the account opened")
+    last_active_text: str | None = Field(default=None, description="au: e.g. 'yesterday'")
     last_active_utc: float | None = None
     last_active_at: str | None = None
-    total_listings: int | None = None
+    total_listings: int | None = Field(default=None, description="Live listings right now")
+    lifetime_listings: int | None = Field(default=None, description="za: ads ever posted")
+    total_views: int | None = Field(default=None, description="za: views across all their ads")
     listings_last_year: int | None = None
     listings_by_category: dict[str, int] = Field(default_factory=dict)
     reply_speed: str | None = None
@@ -235,6 +257,9 @@ class Seller(_BaseModel):
 class ListingDetail(_BaseModel):
     """Response from ``GET /v1/gumtree/listings/{listing_id}``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     id: str
     title: str | None = None
     url: str | None = None
@@ -242,6 +267,9 @@ class ListingDetail(_BaseModel):
     price: float | None = None
     price_text: str | None = None
     price_frequency: str | None = None
+    price_type: str | None = Field(
+        default=None, description="au/za: FIXED, NEGOTIABLE / MAKE_OFFER, FREE, SWAP_TRADE…"
+    )
     currency: str = "GBP"
     vat: str | None = Field(default=None, description="Motors trade listings: 'Inc VAT' / 'No VAT'")
     location: str | None = None
@@ -267,6 +295,9 @@ class ListingDetail(_BaseModel):
     expires_at: str | None = Field(
         default=None, description="Date the ad is valid through (YYYY-MM-DD)"
     )
+    status: str | None = None
+    view_count: int | None = Field(default=None, description="au/za: views of this ad")
+    reply_count: int | None = Field(default=None, description="au: replies to this ad")
     is_featured: bool | None = None
     is_urgent: bool | None = None
     is_bumped_up: bool | None = None
@@ -290,11 +321,17 @@ class ListingDetail(_BaseModel):
 class SellerListingsResponse(_BaseModel):
     """Response from ``GET /v1/gumtree/listings/{listing_id}/seller-listings``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     listing_id: str
     seller_name: str | None = None
     total_results: int | None = None
     page: int = 1
     total_pages: int | None = None
+    has_next: bool | None = Field(
+        default=None, description="za: another page follows (the site gives no total upfront)"
+    )
     result_count: int = 0
     listings: list[ListingSummary] = Field(default_factory=list)
 
@@ -317,6 +354,9 @@ class Suggestion(_BaseModel):
 class AutocompleteResponse(_BaseModel):
     """Response from ``GET /v1/gumtree/autocomplete``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     query: str
     result_count: int = 0
     suggestions: list[Suggestion] = Field(default_factory=list)
@@ -327,7 +367,9 @@ class LocationSuggestion(_BaseModel):
 
     id: int | None = None
     name: str | None = None
-    type: str | None = Field(default=None, description="location / outcode / postcode")
+    type: str | None = Field(
+        default=None, description="uk: location / outcode / postcode; au/za: region / area"
+    )
     latitude: float | None = None
     longitude: float | None = None
 
@@ -335,13 +377,16 @@ class LocationSuggestion(_BaseModel):
 class LocationAutocompleteResponse(_BaseModel):
     """Response from ``GET /v1/gumtree/locations/autocomplete``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     query: str
     result_count: int = 0
     locations: list[LocationSuggestion] = Field(default_factory=list)
 
 
 class TreeNode(_BaseModel):
-    """A category or location node. ``slug`` is what ``search`` takes."""
+    """A category or location node. ``slug`` (uk) or ``id`` (au/za) is what ``search`` takes."""
 
     id: int
     name: str | None = None
@@ -352,8 +397,37 @@ class TreeNode(_BaseModel):
 class TreeResponse(_BaseModel):
     """Response from ``GET /v1/gumtree/categories`` and ``GET /v1/gumtree/locations``."""
 
+    market: str = Field(
+        default="uk", description="uk = gumtree.com, au = gumtree.com.au, za = gumtree.co.za"
+    )
     id: int
     name: str | None = None
     slug: str | None = None
     result_count: int = 0
     children: list[TreeNode] = Field(default_factory=list)
+
+
+# =============================================================================
+# Markets
+# =============================================================================
+
+
+class MarketInfo(_BaseModel):
+    """One Gumtree site this API covers."""
+
+    market: str = Field(description="uk / au / za — the `market` every method takes")
+    domain: str
+    country: str = Field(description="ISO country code, e.g. 'GB'")
+    currency: str
+    distance_unit: str | None = Field(
+        default=None, description="Unit of the search `distance` (None: radius not offered)"
+    )
+    page_size: int = Field(description="Organic results per search page")
+    id_format: str = Field(description="How search takes `category` and `location`")
+
+
+class MarketsResponse(_BaseModel):
+    """Response from ``GET /v1/gumtree/markets``."""
+
+    result_count: int = 0
+    markets: list[MarketInfo] = Field(default_factory=list)
