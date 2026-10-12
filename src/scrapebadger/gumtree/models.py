@@ -329,6 +329,9 @@ class SellerListingsResponse(_BaseModel):
     total_results: int | None = None
     page: int = 1
     total_pages: int | None = None
+    has_next: bool | None = Field(
+        default=None, description="za: another page follows (the site gives no total upfront)"
+    )
     result_count: int = 0
     listings: list[ListingSummary] = Field(default_factory=list)
 
