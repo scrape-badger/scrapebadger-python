@@ -19,9 +19,9 @@ Example:
         detail = await client.gumtree.get_listing("1803293391")
         print(detail.title, detail.seller.name if detail.seller else None)
 
-        # Australia and South Africa take numeric category / location ids
+        # Australia takes numeric ids, South Africa refs (Cars & Bakkies in Gauteng)
         au = await client.gumtree.search("road bike", market="au", location="3003435")
-        za = await client.gumtree.search(market="za", category="9077", location="3100003")
+        za = await client.gumtree.search(market="za", category="p6dnh", location="dkp8y")
     ```
 """
 

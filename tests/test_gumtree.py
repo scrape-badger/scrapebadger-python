@@ -43,11 +43,14 @@ LOCATION_AUTOCOMPLETE = SAMPLES["GET /v1/gumtree/locations/autocomplete?query=le
 CATEGORIES = SAMPLES["GET /v1/gumtree/categories?parent_id=2551"]
 LOCATIONS = SAMPLES["GET /v1/gumtree/locations?parent_id=10000393"]
 MARKETS = SAMPLES["GET /v1/gumtree/markets"]
-ZA_SEARCH = SAMPLES["GET /v1/gumtree/search?market=za&category=9077&location=3100003"]
-ZA_LISTING = SAMPLES["GET /v1/gumtree/listings/10013681289561010209976109?market=za"]
+ZA_SEARCH = SAMPLES[
+    "GET /v1/gumtree/search?market=za&category=p6dnh&location=dkp8y&filters=make:toyota&sort=date"
+]
+ZA_LISTING = SAMPLES["GET /v1/gumtree/listings/ls26bvmcpnsqmz7l9jz?market=za"]
+ZA_CATEGORIES = SAMPLES["GET /v1/gumtree/categories?market=za&parent_id=l4dq6"]
 AU_SEARCH = SAMPLES["GET /v1/gumtree/search?market=au"]
 AU_LISTING = SAMPLES["GET /v1/gumtree/listings/1339574407?market=au"]
-ZA_LISTING_ID = "10013681289561010209976109"
+ZA_LISTING_ID = "ls26bvmcpnsqmz7l9jz"
 
 
 @pytest.fixture
@@ -145,7 +148,7 @@ class TestRouting:
     async def test_search_market(self, gumtree: GumtreeClient, mock_base_client: MagicMock) -> None:
         mock_base_client.get.return_value = ZA_SEARCH
         result = await gumtree.search(
-            market="za", category="9077", location="3100003", filters="ma:toyota"
+            market="za", category="p6dnh", location="dkp8y", filters="make:toyota"
         )
 
         assert result.market == "za"
@@ -153,9 +156,9 @@ class TestRouting:
         assert path == "/v1/gumtree/search"
         assert params is not None
         assert params["market"] == "za"
-        assert params["category"] == "9077"
-        assert params["location"] == "3100003"
-        assert params["filters"] == "ma:toyota"
+        assert params["category"] == "p6dnh"
+        assert params["location"] == "dkp8y"
+        assert params["filters"] == "make:toyota"
 
     async def test_search_filters(
         self, gumtree: GumtreeClient, mock_base_client: MagicMock
@@ -179,15 +182,15 @@ class TestRouting:
         self, gumtree: GumtreeClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = FILTERS
-        await gumtree.search_filters("9077", filters="ma:toyota", market="za")
+        await gumtree.search_filters("p6dnh", filters="make:toyota", market="za")
 
         assert _call(mock_base_client) == (
             "/v1/gumtree/search/filters",
             {
-                "category": "9077",
+                "category": "p6dnh",
                 "location": None,
                 "query": None,
-                "filters": "ma:toyota",
+                "filters": "make:toyota",
                 "market": "za",
             },
         )
@@ -365,6 +368,7 @@ class TestGumtreeModels:
             (MarketsResponse, MARKETS),
             (SearchResponse, ZA_SEARCH),
             (ListingDetail, ZA_LISTING),
+            (TreeResponse, ZA_CATEGORIES),
             (SearchResponse, AU_SEARCH),
             (ListingDetail, AU_LISTING),
         ],
@@ -394,23 +398,44 @@ class TestGumtreeModels:
         assert (legacy.market, legacy.currency) == ("uk", "GBP")
 
     def test_za_fields(self) -> None:
+        # gumtree.co.za re-platformed on 2026-10-12: ids are refs (strings).
         search = SearchResponse.model_validate(ZA_SEARCH)
-        assert (search.market, search.currency, search.total_results) == ("za", "ZAR", 2964)
+        assert (search.market, search.currency, search.total_results) == ("za", "ZAR", 429)
+        assert (search.category_id, search.total_pages) == ("p6dnh", 19)
         car = search.listings[0]
-        assert car.id == "10013681279811013062940409"
-        assert car.short_id == "1368127981"
-        assert car.price == 248000
-        assert car.price_type == "FIXED"
-        assert car.seller_name == "Kevin Noel Ngandu"
-        assert search.listings[1].price_type == "MAKE_OFFER"
+        assert car.id == "ls26bvmcpnsqmz7l9jz"
+        assert car.short_id is None
+        assert (car.price, car.price_text, car.price_type) == (190000, "R190,000", "ASKING_PRICE")
+        assert (car.category_id, car.category_ids) == ("p6dnh", ["kyzkk", "l4dq6", "p6dnh"])
+        assert car.location_id == "mxm68"
 
         listing = ListingDetail.model_validate(ZA_LISTING)
         assert listing.market == "za"
-        assert (listing.price_type, listing.status, listing.view_count) == ("FIXED", "ACTIVE", 65)
+        assert (listing.price_type, listing.status) == ("ASKING_PRICE", "PUBLISHED")
+        assert listing.category_id == "p6dnh"
         assert listing.seller is not None
-        assert listing.seller.lifetime_listings == 3100
-        assert listing.seller.total_views == 263430
-        assert listing.seller.phone_masked == "068*******"
+        assert listing.seller.member_since_year == 2016
+        assert listing.seller.phone_masked is None
+
+    def test_za_tree_ids_are_refs(self) -> None:
+        tree = TreeResponse.model_validate(ZA_CATEGORIES)
+        assert (tree.id, tree.name) == ("l4dq6", "Vehicles")
+        cars = next(c for c in tree.children if c.name == "Cars & Bakkies")
+        assert (cars.id, cars.slug) == ("p6dnh", "cars-bakkies")
+        # uk/au ids stay ints
+        assert TreeResponse.model_validate(CATEGORIES).id == 2551
+
+    async def test_za_parent_id_is_a_ref(
+        self, gumtree: GumtreeClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.get.return_value = ZA_CATEGORIES
+        result = await gumtree.list_categories("l4dq6", market="za")
+
+        assert result.id == "l4dq6"
+        assert _call(mock_base_client) == (
+            "/v1/gumtree/categories",
+            {"parent_id": "l4dq6", "market": "za"},
+        )
 
     def test_au_fields(self) -> None:
         search = SearchResponse.model_validate(AU_SEARCH)
