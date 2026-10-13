@@ -11,8 +11,9 @@ models.
 Three markets, chosen per call with ``market``: ``"uk"`` (gumtree.com, GBP —
 the server default), ``"au"`` (gumtree.com.au, AUD) and ``"za"``
 (gumtree.co.za, ZAR). They are separate sites: uk takes slugs for category
-and location, au/za take numeric ids from :meth:`GumtreeClient.list_categories`
-and :meth:`GumtreeClient.list_locations` of the same market.
+and location, au takes numeric ids and za takes refs (``"p6dnh"``) from
+:meth:`GumtreeClient.list_categories` and :meth:`GumtreeClient.list_locations`
+of the same market.
 """
 
 from __future__ import annotations
@@ -61,8 +62,10 @@ class GumtreeClient:
                 market="au", category="18320", location="3003435", distance=10
             )
 
-            # South Africa: cars (9077) in Gauteng (3100003); ids are 26 digits
-            za = await client.gumtree.search(market="za", category="9077", location="3100003")
+            # South Africa: refs — Cars & Bakkies (p6dnh) in Gauteng (dkp8y)
+            za = await client.gumtree.search(
+                market="za", category="p6dnh", location="dkp8y", filters="make:toyota"
+            )
             detail = await client.gumtree.get_listing(za.listings[0].id, market="za")
             print(detail.seller.name if detail.seller else None)
 
@@ -106,13 +109,15 @@ class GumtreeClient:
             query: Search keywords, e.g. ``"mountain bike"``. Optional — a
                 category alone browses it.
             category: uk: category slug, e.g. ``"cars"``, ``"for-sale"``,
-                ``"property-to-rent"``. au/za: numeric category id as a string,
-                e.g. ``"18320"`` (au cars) or ``"9077"`` (za cars). Browse the
-                tree with :meth:`list_categories`. Default ``"all"``.
+                ``"property-to-rent"``. au: numeric category id as a string,
+                e.g. ``"18320"`` (cars). za: category ref, e.g. ``"p6dnh"``
+                (Cars & Bakkies). Browse the tree with :meth:`list_categories`.
+                Default ``"all"``.
             location: uk: location slug (``"london"``), town name or UK postcode
-                (``"SW1A 1AA"``). au/za: numeric location id as a string, e.g.
-                ``"3003435"`` (au Sydney) or ``"3100003"`` (za Gauteng). Resolve
-                one with :meth:`location_autocomplete`. Default: the whole country.
+                (``"SW1A 1AA"``). au: numeric location id as a string, e.g.
+                ``"3003435"`` (Sydney). za: location ref, e.g. ``"dkp8y"``
+                (Gauteng). Resolve one with :meth:`location_autocomplete`.
+                Default: the whole country.
             distance: Radius around ``location`` (>0, max 1000): miles (uk) or
                 km (au). Not offered by za.
             min_price: Minimum price in the market's currency (uk: needs a
@@ -127,10 +132,12 @@ class GumtreeClient:
             with_photos: uk only: only ads with photos.
             filters: Category-specific filters as comma-separated ``key:value``
                 pairs, e.g. ``"vehicle_make:bmw,min_vehicle_mileage:10000"`` (uk)
-                or ``"ma:toyota,fu:petrol,max_km:100000"`` (za). Range filters
+                or ``"make:toyota,fuelType:petrol,max_mileageKm:100000"`` (za).
+                Range filters
                 take ``min_<key>``/``max_<key>``. Discover keys with
                 :meth:`search_filters` for the same market.
-            page: Page number, 1-50.
+            page: Page number, 1-50 (za: only the first 375 matches are
+                reachable; a page past them comes back empty).
             market: ``"uk"`` (gumtree.com), ``"au"`` (gumtree.com.au) or ``"za"``
                 (gumtree.co.za). Unset = the server default, ``"uk"``.
 
@@ -177,13 +184,14 @@ class GumtreeClient:
         a ``value`` back into :meth:`search` as ``filters="key:value"``.
 
         Args:
-            category: uk: category slug, e.g. ``"cars"``; au/za: numeric
-                category id. Default ``"all"``.
-            location: uk: location slug, town or UK postcode; au/za: numeric
-                location id. Default: the whole country.
+            category: uk: category slug, e.g. ``"cars"``; au: numeric category
+                id; za: category ref, e.g. ``"p6dnh"``. Default ``"all"``.
+            location: uk: location slug, town or UK postcode; au: numeric
+                location id; za: location ref, e.g. ``"dkp8y"``. Default: the
+                whole country.
             query: Optional keywords to scope the counts.
-            filters: za only: filters already applied, e.g. ``"ma:toyota"`` to
-                list the Toyota models.
+            filters: za only: filters already applied, e.g. ``"make:toyota"``
+                to narrow the model counts to Toyota's models.
             market: ``"uk"``, ``"au"`` or ``"za"``. Unset = ``"uk"``.
 
         Returns:
@@ -217,9 +225,9 @@ class GumtreeClient:
         variant, odometer, VIN, rego).
 
         Args:
-            listing_id: Gumtree listing id — the number at the end of the
-                listing URL (uk/au: ~10 digits; za: the full 26-digit ad id,
-                not the short one).
+            listing_id: Gumtree listing id from the end of the listing URL
+                (uk/au: ~10 digits; za: the listing ref, e.g.
+                ``"ls26bvmcpnsqmz7l9jz"``).
             market: ``"uk"``, ``"au"`` or ``"za"``. Unset = ``"uk"``.
 
         Returns:
@@ -242,8 +250,8 @@ class GumtreeClient:
         of theirs works.
 
         Args:
-            listing_id: Any Gumtree listing id belonging to the seller (za: the
-                26-digit id).
+            listing_id: Any Gumtree listing id belonging to the seller (za: a
+                listing ref, e.g. ``"ls26bvmcpnsqmz7l9jz"``).
             page: Page number, 1-50.
             market: ``"uk"``, ``"au"`` or ``"za"``. Unset = ``"uk"``.
 
@@ -278,8 +286,8 @@ class GumtreeClient:
     ) -> LocationAutocompleteResponse:
         """Resolve a place name or postcode prefix to Gumtree locations.
 
-        The ``id`` (au/za) or ``name`` (uk) is what :meth:`search` takes as
-        ``location``.
+        The ``id`` (au: a number; za: a ref such as ``"pfw8k"``) or ``name``
+        (uk) is what :meth:`search` takes as ``location``.
 
         Args:
             query: Town, area or postcode prefix (min 2 chars), e.g. ``"manch"``
@@ -295,15 +303,16 @@ class GumtreeClient:
         return LocationAutocompleteResponse.model_validate(response)
 
     async def list_locations(
-        self, parent_id: int | None = None, *, market: GumtreeMarket | None = None
+        self, parent_id: int | str | None = None, *, market: GumtreeMarket | None = None
     ) -> TreeResponse:
         """Browse Gumtree's location tree.
 
         uk: UK -> nations -> counties -> towns. au: states -> regions -> areas.
-        za: provinces -> towns.
+        za: provinces -> towns and suburbs.
 
         Args:
-            parent_id: Location id to list the children of. Unset = the
+            parent_id: Location id to list the children of — a number on uk/au,
+                a ref on za (e.g. ``"dkp8y"`` for Gauteng). Unset = the
                 market's root (the whole country) server-side.
             market: ``"uk"``, ``"au"`` or ``"za"``. Unset = ``"uk"``.
 
@@ -316,14 +325,16 @@ class GumtreeClient:
         return TreeResponse.model_validate(response)
 
     async def list_categories(
-        self, parent_id: int | None = None, *, market: GumtreeMarket | None = None
+        self, parent_id: int | str | None = None, *, market: GumtreeMarket | None = None
     ) -> TreeResponse:
         """Browse Gumtree's category tree.
 
-        A node's ``slug`` (uk) or ``id`` (au/za) is the :meth:`search` category.
+        A node's ``slug`` (uk) or ``id`` (au: a number; za: a ref such as
+        ``"p6dnh"``) is the :meth:`search` category.
 
         Args:
-            parent_id: Category id to list the children of. Unset = the
+            parent_id: Category id to list the children of — a number on uk/au,
+                a ref on za (e.g. ``"l4dq6"`` for Vehicles). Unset = the
                 market's root (all categories) server-side.
             market: ``"uk"``, ``"au"`` or ``"za"``. Unset = ``"uk"``.
 

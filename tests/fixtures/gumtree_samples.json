@@ -1714,61 +1714,65 @@
         "currency": "ZAR",
         "distance_unit": null,
         "page_size": 20,
-        "id_format": "numeric ids from /categories and /locations (market=za)"
+        "id_format": "refs like 'p6dnh' from /categories and /locations (market=za)"
       }
     ]
   },
-  "GET /v1/gumtree/search?market=za&category=9077&location=3100003": {
+  "GET /v1/gumtree/search?market=za&category=p6dnh&location=dkp8y&filters=make:toyota&sort=date": {
     "market": "za",
     "query": null,
-    "category": "9077",
-    "category_name": null,
-    "category_id": 9077,
-    "location": "3100003",
-    "location_name": "Cars & Bakkies in Gauteng",
+    "category": "p6dnh",
+    "category_name": "Cars & Bakkies",
+    "category_id": "p6dnh",
+    "location": "dkp8y",
+    "location_name": "Gauteng",
     "distance": null,
-    "sort": null,
+    "sort": "date",
     "page": 1,
-    "total_pages": 50,
-    "total_results": 2964,
+    "total_pages": 19,
+    "total_results": 429,
     "result_count": 20,
     "currency": "ZAR",
     "listings": [
       {
-        "id": "10013681279811013062940409",
-        "short_id": "1368127981",
-        "title": "2023 Toyota Corolla cross 1.8i for sale",
-        "url": "https://www.gumtree.co.za/a-cars-bakkies/inner-city-cbd-bruma/2023-toyota-corolla-cross-1-8i-for-sale/10013681279811013062940409",
-        "description": null,
-        "price": 248000.0,
-        "price_text": "R 248,000 NEGOTIABLE",
+        "id": "ls26bvmcpnsqmz7l9jz",
+        "short_id": null,
+        "title": "Toyota Yaris",
+        "url": "https://www.gumtree.co.za/listing/ls26bvmcpnsqmz7l9jz",
+        "description": "2018 Toyota Yaris 1.5XS CVT Automatic 85000km FSH with Toyota (service books including all...",
+        "price": 190000.0,
+        "price_text": "R190,000",
         "price_frequency": null,
-        "price_type": "FIXED",
+        "price_type": "ASKING_PRICE",
         "currency": "ZAR",
-        "location": "Inner City / CBD&Bruma",
-        "location_id": null,
+        "location": "Weltevreden Park",
+        "location_id": "mxm68",
         "postcode": null,
         "latitude": null,
         "longitude": null,
         "distance_text": null,
         "distance_miles": null,
-        "category_id": 9077,
+        "category_id": "p6dnh",
         "category_name": null,
-        "category_ids": [],
-        "image_url": "https://gms.gumtree.co.za/v2/images/za_ads_130629404_261012_6acc7e7f93b58b8535042a5a?size=l",
-        "image_urls": [
-          "https://gms.gumtree.co.za/v2/images/za_ads_130629404_261012_6acc7e7f93b58b8535042a5a?size=l"
+        "category_ids": [
+          "kyzkk",
+          "l4dq6",
+          "p6dnh"
         ],
-        "image_count": 12,
-        "posted_text": "1h",
-        "posted_utc": null,
-        "posted_at": null,
-        "status": "ACTIVE",
-        "seller_type": "Private",
-        "seller_id": null,
-        "seller_name": "Kevin Noel Ngandu",
+        "image_url": "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b509064a60001fdf52c",
+        "image_urls": [
+          "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b509064a60001fdf52c"
+        ],
+        "image_count": 1,
+        "posted_text": null,
+        "posted_utc": 1791912864.365,
+        "posted_at": "2026-10-13T17:34:24.365000Z",
+        "status": null,
+        "seller_type": null,
+        "seller_id": "s16zcgy0ntjnvg2",
+        "seller_name": "Thanuj",
         "account_id": null,
-        "is_pro_seller": false,
+        "is_pro_seller": null,
         "is_featured": null,
         "is_urgent": null,
         "is_bumped_up": null,
@@ -1780,102 +1784,64 @@
         "seller_skills": [],
         "attributes": [
           {
-            "key": "CarYear",
-            "label": null,
-            "value": "2023",
+            "key": "mileageKm",
+            "label": "Kilometres",
+            "value": "85000",
             "unit": null
           },
           {
-            "key": "CarTransmission",
-            "label": null,
+            "key": "transmission",
+            "label": "Transmission",
             "value": "Automatic",
             "unit": null
           },
           {
-            "key": "MakeOffer",
-            "label": null,
-            "value": "1",
-            "unit": null
-          },
-          {
-            "key": "ForSaleBy",
-            "label": null,
-            "value": "Owner",
-            "unit": null
-          },
-          {
-            "key": "FuelType",
-            "label": null,
+            "key": "fuelType",
+            "label": "Fuel Type",
             "value": "Petrol",
-            "unit": null
-          },
-          {
-            "key": "CarBodyType",
-            "label": null,
-            "value": "SUV",
-            "unit": null
-          },
-          {
-            "key": "CarMake",
-            "label": null,
-            "value": "Toyota",
-            "unit": null
-          },
-          {
-            "key": "CarModel",
-            "label": null,
-            "value": "Corolla Cross",
-            "unit": null
-          },
-          {
-            "key": "CarColor",
-            "label": null,
-            "value": "White",
-            "unit": null
-          },
-          {
-            "key": "CarMileageInKms",
-            "label": null,
-            "value": "85,400km",
             "unit": null
           }
         ]
       },
       {
-        "id": "10013680889901013488680709",
-        "short_id": "1368088990",
-        "title": "Vw golf4 1.6 automatic",
-        "url": "https://www.gumtree.co.za/a-cars-bakkies/dobsonville/vw-golf4-1-6-automatic/10013680889901013488680709",
-        "description": null,
+        "id": "ls26cpwv7p4f8fb98p6",
+        "short_id": null,
+        "title": "2007 Toyota Yaris",
+        "url": "https://www.gumtree.co.za/listing/ls26cpwv7p4f8fb98p6",
+        "description": "2007 Toyota Yaris 1.3i for Sale VVT-i T3 A/C R28,500 Call/WhatsApp 072 626 6659 Petrol Manual...",
         "price": null,
-        "price_text": "Negotiable",
+        "price_text": "POA",
         "price_frequency": null,
-        "price_type": "MAKE_OFFER",
+        "price_type": "POA",
         "currency": "ZAR",
-        "location": "Dobsonville",
-        "location_id": null,
+        "location": "Hammanskraal",
+        "location_id": "gkk41",
         "postcode": null,
         "latitude": null,
         "longitude": null,
         "distance_text": null,
         "distance_miles": null,
-        "category_id": 9077,
+        "category_id": "p6dnh",
         "category_name": null,
-        "category_ids": [],
-        "image_url": "https://gms.gumtree.co.za/v2/images/za_ads_134886807_261011_6acb5c7c93b58b85367bdfe1?size=l",
-        "image_urls": [
-          "https://gms.gumtree.co.za/v2/images/za_ads_134886807_261011_6acb5c7c93b58b85367bdfe1?size=l"
+        "category_ids": [
+          "kyzkk",
+          "l4dq6",
+          "p6dnh"
         ],
-        "image_count": 2,
-        "posted_text": "1d",
-        "posted_utc": null,
-        "posted_at": null,
-        "status": "ACTIVE",
-        "seller_type": "Private",
-        "seller_id": null,
-        "seller_name": "Richard Ngwenya",
+        "image_url": "https://media.gumtree.co.za/v1/images/za_listing_s16f1m78tnlbb6k_261013_6ace559548903500011e5fa9",
+        "image_urls": [
+          "https://media.gumtree.co.za/v1/images/za_listing_s16f1m78tnlbb6k_261013_6ace559548903500011e5fa9"
+        ],
+        "image_count": 1,
+        "posted_text": null,
+        "posted_utc": 1791907542.222,
+        "posted_at": "2026-10-13T16:05:42.222000Z",
+        "status": null,
+        "seller_type": null,
+        "seller_id": "s16f1m78tnlbb6k",
+        "seller_name": "mr golf",
         "account_id": null,
-        "is_pro_seller": false,
+        "is_pro_seller": null,
         "is_featured": null,
         "is_urgent": null,
         "is_bumped_up": null,
@@ -1887,135 +1853,159 @@
         "seller_skills": [],
         "attributes": [
           {
-            "key": "CarYear",
-            "label": null,
-            "value": "2002",
+            "key": "mileageKm",
+            "label": "Kilometres",
+            "value": "179000",
             "unit": null
           },
           {
-            "key": "CarTransmission",
-            "label": null,
-            "value": "Automatic",
+            "key": "transmission",
+            "label": "Transmission",
+            "value": "Manual",
             "unit": null
           },
           {
-            "key": "ForSaleBy",
-            "label": null,
-            "value": "Owner",
-            "unit": null
-          },
-          {
-            "key": "FuelType",
-            "label": null,
+            "key": "fuelType",
+            "label": "Fuel Type",
             "value": "Petrol",
             "unit": null
-          },
+          }
+        ]
+      },
+      {
+        "id": "ls269wf5j1z7p6wrrwf",
+        "short_id": null,
+        "title": "2014 Toyota Quantum MPV/Bus",
+        "url": "https://www.gumtree.co.za/listing/ls269wf5j1z7p6wrrwf",
+        "description": "2014 Toyota Quantum 2.5D-4D GL 14-Seater. •Cash Price R75,000 •Accident free •Full franchise...",
+        "price": null,
+        "price_text": "POA",
+        "price_frequency": null,
+        "price_type": "POA",
+        "currency": "ZAR",
+        "location": "Johannesburg",
+        "location_id": "bm0kj",
+        "postcode": null,
+        "latitude": null,
+        "longitude": null,
+        "distance_text": null,
+        "distance_miles": null,
+        "category_id": "p6dnh",
+        "category_name": null,
+        "category_ids": [
+          "kyzkk",
+          "l4dq6",
+          "p6dnh"
+        ],
+        "image_url": "https://media.gumtree.co.za/v1/images/za_listing_s265lks2w7q4wjb_261013_6ace4ec748903500011e5e3e",
+        "image_urls": [
+          "https://media.gumtree.co.za/v1/images/za_listing_s265lks2w7q4wjb_261013_6ace4ec748903500011e5e3e"
+        ],
+        "image_count": 1,
+        "posted_text": null,
+        "posted_utc": 1791905779.817,
+        "posted_at": "2026-10-13T15:36:19.817000Z",
+        "status": null,
+        "seller_type": null,
+        "seller_id": "s265lks2w7q4wjb",
+        "seller_name": "Patience Kupiso",
+        "account_id": null,
+        "is_pro_seller": null,
+        "is_featured": null,
+        "is_urgent": null,
+        "is_bumped_up": null,
+        "is_standout": null,
+        "is_premium": null,
+        "has_video": null,
+        "supports_shipping": null,
+        "favourite_count": null,
+        "seller_skills": [],
+        "attributes": [
           {
-            "key": "CarBodyType",
-            "label": null,
-            "value": "Hatchback",
+            "key": "mileageKm",
+            "label": "Kilometres",
+            "value": "121000",
             "unit": null
           },
           {
-            "key": "CarMake",
-            "label": null,
-            "value": "Volkswagen",
+            "key": "transmission",
+            "label": "Transmission",
+            "value": "Manual",
             "unit": null
           },
           {
-            "key": "CarModel",
-            "label": null,
-            "value": "Golf",
-            "unit": null
-          },
-          {
-            "key": "CarColor",
-            "label": null,
-            "value": "Black",
-            "unit": null
-          },
-          {
-            "key": "CarMileageInKms",
-            "label": null,
-            "value": "190km",
-            "unit": null
-          },
-          {
-            "key": "CarDriveType",
-            "label": null,
-            "value": "4x2",
+            "key": "fuelType",
+            "label": "Fuel Type",
+            "value": "Diesel",
             "unit": null
           }
         ]
       }
     ],
     "category_facets": [],
-    "url": "https://www.gumtree.co.za/s-x/x/v1c9077l3100003p1"
+    "url": "https://www.gumtree.co.za/search"
   },
-  "GET /v1/gumtree/listings/10013681289561010209976109?market=za": {
+  "GET /v1/gumtree/listings/ls26bvmcpnsqmz7l9jz?market=za": {
     "market": "za",
-    "id": "10013681289561010209976109",
-    "title": "Bunkbed Pine Wood Single R2600",
-    "url": "https://www.gumtree.co.za/a-beds-headboards/centurion/bunkbed-pine-wood-single-r2600/10013681289561010209976109",
-    "description": "Second hand Single Size Bunkbed in Painted Pine Wood with matching Pedestal available in lyttelton Centurion.",
-    "price": 2600.0,
-    "price_text": "R 2,600",
+    "id": "ls26bvmcpnsqmz7l9jz",
+    "title": "Toyota Yaris",
+    "url": "https://www.gumtree.co.za/listing/ls26bvmcpnsqmz7l9jz",
+    "description": "2018 Toyota Yaris\n1.5XS CVT\nAutomatic\n85000km\nFSH with Toyota (service books including all manuals)\nSpare key\nKeyless entry\nNavigation\nSmash and grab tint",
+    "price": 190000.0,
+    "price_text": "R190,000",
     "price_frequency": null,
-    "price_type": "FIXED",
+    "price_type": "ASKING_PRICE",
     "currency": "ZAR",
     "vat": null,
-    "location": "Centurion",
+    "location": "Weltevreden Park",
     "area": "Gauteng",
-    "sub_area": "Pretoria / Tshwane",
-    "location_id": "3100247",
+    "sub_area": null,
+    "location_id": "mxm68",
     "postcode": null,
-    "latitude": -25.862281,
-    "longitude": 28.088474,
-    "category_id": 9272,
-    "category_name": "Beds & Headboards",
-    "category_ids": [],
+    "latitude": null,
+    "longitude": null,
+    "category_id": "p6dnh",
+    "category_name": "Cars & Bakkies",
+    "category_ids": [
+      "kyzkk",
+      "l4dq6",
+      "p6dnh"
+    ],
     "breadcrumbs": [
       {
-        "name": "Gauteng",
-        "url": "https://www.gumtree.co.za/s-gauteng/v1l3100003p1"
+        "name": "All Categories",
+        "url": null
       },
       {
-        "name": "Pretoria / Tshwane",
-        "url": "https://www.gumtree.co.za/s-pretoria-tshwane/v1l3100094p1"
+        "name": "Vehicles",
+        "url": null
       },
       {
-        "name": "Home & Garden Supplies",
-        "url": "https://www.gumtree.co.za/s-home-garden/centurion/v1c9175l3100247p1"
-      },
-      {
-        "name": "Furniture",
-        "url": "https://www.gumtree.co.za/s-furniture/centurion/v1c9181l3100247p1"
-      },
-      {
-        "name": "Bedroom Furniture",
-        "url": "https://www.gumtree.co.za/s-bedroom-furniture/centurion/v1c9699l3100247p1"
-      },
-      {
-        "name": "Beds & Headboards",
-        "url": "https://www.gumtree.co.za/s-beds-headboards/centurion/v1c9272l3100247p1"
+        "name": "Cars & Bakkies",
+        "url": null
       }
     ],
     "image_urls": [
-      "https://gms.gumtree.co.za/v2/images/za_ads_102099761_261012_6acc81ab93b58b8535042afc?size=l",
-      "https://gms.gumtree.co.za/v2/images/za_ads_102099761_261012_6acc81ad93b58b8535042afd?size=l",
-      "https://gms.gumtree.co.za/v2/images/za_ads_102099761_261012_6acc81b093b58b8535042afe?size=l"
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b509064a60001fdf52c",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b539064a60001fdf531",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b559064a60001fdf537",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b589064a60001fdf539",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b5a9064a60001fdf53a",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b5d9064a60001fdf53b",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b609064a60001fdf53c",
+      "https://media.gumtree.co.za/v1/images/za_listing_s16zcgy0ntjnvg2_261013_6ace6b649064a60001fdf53d"
     ],
     "video_urls": [],
-    "posted_text": "1 hour ago",
-    "posted_utc": 1791787539.0,
-    "posted_at": "2026-10-12T06:45:39Z",
-    "created_utc": 1791787539.0,
-    "created_at": "2026-10-12T06:45:39Z",
-    "updated_utc": 1791787539.0,
-    "updated_at": "2026-10-12T06:45:39Z",
-    "expires_at": "2026-11-11",
-    "status": "ACTIVE",
-    "view_count": 65,
+    "posted_text": null,
+    "posted_utc": 1791912864.365,
+    "posted_at": "2026-10-13T17:34:24.365000Z",
+    "created_utc": null,
+    "created_at": null,
+    "updated_utc": null,
+    "updated_at": null,
+    "expires_at": "2026-11-12",
+    "status": "PUBLISHED",
+    "view_count": 3,
     "reply_count": null,
     "is_featured": null,
     "is_urgent": null,
@@ -2025,65 +2015,159 @@
     "vehicle_history_checked": null,
     "attributes": [
       {
-        "key": "Condition",
-        "label": null,
-        "value": "used",
+        "key": "sellerType",
+        "label": "Seller Type",
+        "value": "Owner",
         "unit": null
       },
       {
-        "key": "BedMattressesSize",
-        "label": null,
-        "value": "single",
+        "key": "make",
+        "label": "Make",
+        "value": "Toyota",
         "unit": null
       },
       {
-        "key": "Material",
-        "label": null,
-        "value": "wood",
+        "key": "model",
+        "label": "Model",
+        "value": "Yaris",
         "unit": null
       },
       {
-        "key": "FurnitureColour",
-        "label": null,
-        "value": "blue",
+        "key": "bodyType",
+        "label": "Body Type",
+        "value": "Hatchback",
         "unit": null
       },
       {
-        "key": "ForSaleBy",
-        "label": null,
-        "value": "delr",
+        "key": "year",
+        "label": "Year",
+        "value": "2018",
+        "unit": null
+      },
+      {
+        "key": "mileageKm",
+        "label": "Kilometres",
+        "value": "85000",
+        "unit": null
+      },
+      {
+        "key": "driveType",
+        "label": "Drive Type",
+        "value": "4x2",
+        "unit": null
+      },
+      {
+        "key": "transmission",
+        "label": "Transmission",
+        "value": "Automatic",
+        "unit": null
+      },
+      {
+        "key": "fuelType",
+        "label": "Fuel Type",
+        "value": "Petrol",
+        "unit": null
+      },
+      {
+        "key": "colour",
+        "label": "Colour",
+        "value": "Blue",
         "unit": null
       }
     ],
     "seller": {
-      "name": "Paul",
-      "user_id": "102099761",
-      "public_id": null,
-      "type": "Trade",
-      "is_pro": false,
-      "posting_since": "Selling for 12+ years",
-      "member_since_year": null,
+      "name": "Thanuj",
+      "user_id": "s16zcgy0ntjnvg2",
+      "public_id": "s16zcgy0ntjnvg2",
+      "type": "Private",
+      "is_pro": null,
+      "posting_since": null,
+      "member_since_year": 2016,
       "last_active_text": null,
       "last_active_utc": null,
       "last_active_at": null,
-      "total_listings": 183,
-      "lifetime_listings": 3100,
-      "total_views": 263430,
+      "total_listings": null,
+      "lifetime_listings": null,
+      "total_views": null,
       "listings_last_year": null,
       "listings_by_category": {},
       "reply_speed": null,
       "reply_rate": null,
       "rating": null,
-      "verification": null,
-      "phone_masked": "068*******",
+      "verification": {
+        "status": null,
+        "label": null,
+        "checks": [
+          "identity",
+          "mobileNumber"
+        ]
+      },
+      "phone_masked": null,
       "website_url": null,
       "avatar_url": null,
       "logo_url": null,
       "badges": []
     },
     "seller_skills": [],
-    "seller_listings_url": "https://www.gumtree.co.za/u-seller-listings/x/v1u102099761p1",
+    "seller_listings_url": null,
     "similar_listings": []
+  },
+  "GET /v1/gumtree/categories?market=za&parent_id=l4dq6": {
+    "market": "za",
+    "id": "l4dq6",
+    "name": "Vehicles",
+    "slug": "vehicles",
+    "result_count": 8,
+    "children": [
+      {
+        "id": "c07q9",
+        "name": "Auto Parts & Accessories",
+        "slug": "auto-parts-accessories",
+        "has_children": true
+      },
+      {
+        "id": "f5ph8",
+        "name": "Caravans & Trailers",
+        "slug": "caravans-trailers",
+        "has_children": false
+      },
+      {
+        "id": "p6dnh",
+        "name": "Cars & Bakkies",
+        "slug": "cars-bakkies",
+        "has_children": false
+      },
+      {
+        "id": "hpjhk",
+        "name": "Classic & Vintage Cars",
+        "slug": "classic-vintage-cars",
+        "has_children": false
+      },
+      {
+        "id": "k6xjq",
+        "name": "Farm Vehicles & Equipment",
+        "slug": "farm-vehicles-equipment",
+        "has_children": false
+      },
+      {
+        "id": "zw82s",
+        "name": "Medium & Heavy Commercials",
+        "slug": "medium-heavy-commercials",
+        "has_children": true
+      },
+      {
+        "id": "v062d",
+        "name": "Motorcycle Parts & Accessories",
+        "slug": "motorcycle-parts-accessories",
+        "has_children": true
+      },
+      {
+        "id": "b8stt",
+        "name": "Motorcycles & Scooters",
+        "slug": "motorcycles-scooters",
+        "has_children": false
+      }
+    ]
   },
   "GET /v1/gumtree/search?market=au": {
     "market": "au",
