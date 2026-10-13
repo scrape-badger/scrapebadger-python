@@ -32,6 +32,7 @@ For more information, see https://docs.scrapebadger.com
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
+    BlockedError,
     InsufficientCreditsError,
     IPNotAllowedError,
     NotFoundError,
@@ -1335,7 +1336,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.60.1"
+__version__ = "0.61.0"
 
 __all__ = [
     # TikTok core models
@@ -1394,6 +1395,7 @@ __all__ = [
     "BingSearchResponse",
     "BingVideoResult",
     "BingVideosResponse",
+    "BlockedError",
     # Vinted response envelopes
     "BrandsResponse",
     "CategoriesResponse",

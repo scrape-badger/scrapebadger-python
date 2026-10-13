@@ -14,6 +14,7 @@ import httpx
 
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
+    BlockedError,
     InsufficientCreditsError,
     IPNotAllowedError,
     NotFoundError,
@@ -46,7 +47,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.60.1"
+SDK_VERSION = "0.61.0"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -156,7 +157,8 @@ class BaseClient:
             PermissionDeniedError: For 403 responses from a key restricted
                 away from the API it called.
             NotFoundError: For 404 responses.
-            ValidationError: For 422 responses.
+            BlockedError: For a 422 blocking_page_detected (web scraping).
+            ValidationError: For other 422 responses.
             RateLimitError: For 429 responses.
             ServerError: For 5xx responses.
             ScrapeBadgerError: For other error responses.
@@ -185,6 +187,9 @@ class BaseClient:
 
         if status_code == 404:
             raise NotFoundError(message, status_code, data)
+
+        if status_code == 422 and data.get("error") == "blocking_page_detected":
+            raise BlockedError(message, status_code, data)
 
         if status_code == 422:
             raise ValidationError(message, status_code, data)

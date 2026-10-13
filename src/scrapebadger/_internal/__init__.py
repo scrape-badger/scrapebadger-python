@@ -4,6 +4,7 @@ from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger._internal.exceptions import (
     AuthenticationError,
+    BlockedError,
     InsufficientCreditsError,
     IPNotAllowedError,
     NotFoundError,
@@ -18,6 +19,7 @@ from scrapebadger._internal.pagination import PaginatedResponse, paginate
 __all__ = [
     "AuthenticationError",
     "BaseClient",
+    "BlockedError",
     "ClientConfig",
     "IPNotAllowedError",
     "InsufficientCreditsError",
