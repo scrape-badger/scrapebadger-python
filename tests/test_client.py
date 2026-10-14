@@ -189,3 +189,61 @@ class TestIPNotAllowed:
             await client.get("/v1/google/search")
         assert exc.value.client_ip == "203.0.113.9"
         assert isinstance(exc.value, PermissionDeniedError)
+
+
+class TestBlocked:
+    async def _raise(self, api_key: str, body: dict) -> Exception:
+        import httpx
+
+        from scrapebadger._internal.client import BaseClient
+        from scrapebadger._internal.config import ClientConfig
+
+        client = BaseClient(ClientConfig(api_key=api_key))
+        client._client = httpx.AsyncClient(
+            transport=httpx.MockTransport(lambda r: httpx.Response(422, json=body)),
+            base_url="https://api.test",
+        )
+        with pytest.raises(Exception) as exc:
+            await client.post("/v1/web/scrape", json={"url": "https://example.com"})
+        return exc.value
+
+    async def test_blocking_422_raises_blocked_error(self, api_key: str) -> None:
+        from scrapebadger import BlockedError, ValidationError
+
+        captcha = {
+            "system": "recaptcha_v2",
+            "version": "v2_checkbox",
+            "gate": True,
+            "params": {"sitekey": "6Lc"},
+        }
+        err = await self._raise(
+            api_key,
+            {
+                "error": "blocking_page_detected",
+                "detail": "blocked",
+                "block_kind": "captcha",
+                "vendor": "google",
+                "captcha": captcha,
+                "data": {"status_code": 403},
+            },
+        )
+        assert isinstance(err, BlockedError)
+        assert isinstance(err, ValidationError)
+        assert err.block_kind == "captcha"
+        assert err.vendor == "google"
+        assert err.captcha == captcha
+        assert err.data == {"status_code": 403}
+
+    async def test_older_blocking_body_has_none_fields(self, api_key: str) -> None:
+        from scrapebadger import BlockedError
+
+        err = await self._raise(api_key, {"error": "blocking_page_detected", "detail": "blocked"})
+        assert isinstance(err, BlockedError)
+        assert err.block_kind is None and err.vendor is None and err.captcha is None
+
+    async def test_other_422_stays_validation_error(self, api_key: str) -> None:
+        from scrapebadger import BlockedError, ValidationError
+
+        err = await self._raise(api_key, {"detail": [{"loc": ["body", "url"], "msg": "required"}]})
+        assert isinstance(err, ValidationError)
+        assert not isinstance(err, BlockedError)

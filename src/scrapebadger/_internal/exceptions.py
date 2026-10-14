@@ -244,6 +244,53 @@ class ValidationError(ScrapeBadgerError):
         super().__init__(message, status_code, response_data)
 
 
+class BlockedError(ValidationError):
+    """Raised when the Web Scraping API reports the target blocked the request.
+
+    A ``422`` with ``error == "blocking_page_detected"``: every retry hit an
+    anti-bot wall. It subclasses :class:`ValidationError`, so existing
+    ``except ValidationError`` handlers keep catching it. Blocked requests are
+    not charged.
+
+    Attributes:
+        block_kind: The wall's class: ``"antibot"``, ``"captcha"``,
+            ``"rate_limit"``, ``"ip_ban"``, ``"geo_block"``, ``"auth_wall"``,
+            ``"empty"`` or ``"other"`` (``None`` on older responses).
+        vendor: The protection vendor that served it, e.g. ``"cloudflare"``,
+            ``"datadome"``, ``"akamai"``, ``"aws_waf"`` (``None`` when unknown).
+        captcha: The CAPTCHA gating the page when ``block_kind == "captcha"``:
+            ``system``, ``version``, ``gate``, ``solvable`` and ``params``
+            (e.g. ``sitekey``), else ``None``.
+        data: The scrape result the API returned with the block.
+
+    Example:
+        ```python
+        try:
+            page = await client.web.scrape("https://example.com")
+        except BlockedError as e:
+            print(e.block_kind, e.vendor)
+            if e.captcha:
+                print(e.captcha["system"], e.captcha.get("params"))
+        ```
+    """
+
+    @property
+    def block_kind(self) -> str | None:
+        return self.response_data.get("block_kind")
+
+    @property
+    def vendor(self) -> str | None:
+        return self.response_data.get("vendor")
+
+    @property
+    def captcha(self) -> dict[str, Any] | None:
+        return self.response_data.get("captcha")
+
+    @property
+    def data(self) -> dict[str, Any] | None:
+        return self.response_data.get("data")
+
+
 class ServerError(ScrapeBadgerError):
     """Raised when the server encounters an error.
 
