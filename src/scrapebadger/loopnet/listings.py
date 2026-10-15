@@ -33,7 +33,7 @@ class ListingsClient:
         self._client = client
 
     async def get(self, listing_id: str, *, market: str = "us") -> ListingResponse:
-        """Get a single LoopNet listing's full detail. Costs 12 credits.
+        """Get a single LoopNet listing's full detail.
 
         Args:
             listing_id: The LoopNet listing id.

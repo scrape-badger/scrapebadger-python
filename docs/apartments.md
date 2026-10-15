@@ -93,4 +93,5 @@ as schools.
 
 ## Cost
 
-5 credits per search page and per property.
+Each search page and each property is billed as one request. Current prices are
+on the [Credits & Pricing](https://docs.scrapebadger.com/credits-and-pricing) page.

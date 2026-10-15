@@ -91,7 +91,7 @@ class SearchClient:
                 no native country filter, so ScrapeBadger applies this filter.
                 When set, each returned item gains a ``seller_country_code`` and
                 the response gains a top-level ``seller_country`` echo.
-                Billing: a search is a flat 5 credits whatever filters you
+                Billing: a search is one flat price whatever filters you
                 pass; seller lookups are not billed on top.
 
         Returns:
