@@ -132,7 +132,7 @@ class SearchClient:
         This is what the camera icon in eBay's search bar does: the picture is
         uploaded to eBay, which answers with a handle for it, and that handle is
         then searched like a keyword. The results are ordinary listings, so every
-        filter below behaves as it does on :meth:`search`. Costs 10 credits.
+        filter below behaves as it does on :meth:`search`.
 
         There is deliberately no ``sort_by``: eBay ignores sorting on a visual
         results page.

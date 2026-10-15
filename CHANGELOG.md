@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.61.1 — 2026-10-15
+
+- **Removed per-endpoint credit prices from docstrings and docs again.** Baidu, ChatGPT, eBay image search, Google Shopping offers, LoopNet and the Apartments guide had picked up hard-coded "Costs N credits" lines, which the 2026-10-14 repricing made wrong. Prices are configured per endpoint by ScrapeBadger and served live from `GET /public/pricing`; see the per-endpoint docs at docs.scrapebadger.com. Free reference endpoints still say they are free.
+
 ## 0.61.0 — 2026-10-14
 
 - **`BlockedError` — why a web scrape was blocked.** A `web.scrape` whose every attempt hit an anti-bot wall (`422`, `error: "blocking_page_detected"`) now raises `BlockedError`, a subclass of `ValidationError`, so existing `except ValidationError` handlers still catch it. It exposes `block_kind` (`"antibot"`, `"captcha"`, `"rate_limit"`, `"ip_ban"`, `"geo_block"`, `"auth_wall"`, `"empty"` or `"other"`), `vendor` (the protection that served the wall, e.g. `"cloudflare"`, `"datadome"`, `"akamai"`, `"aws_waf"`), `captcha` (the CAPTCHA gating the page when `block_kind == "captcha"`: `system`, `version`, `gate`, `solvable`, `params` such as `sitekey`) and `data` (the scrape result returned with the block). Blocked requests are not charged.

@@ -36,8 +36,6 @@ class ReferenceClient:
     async def models(self, *, country: str = "US") -> ModelsResponse:
         """Get the models chatgpt.com currently offers.
 
-        Costs 1 credit.
-
         Args:
             country: ISO-3166 alpha-2 egress country. Defaults to "US".
 

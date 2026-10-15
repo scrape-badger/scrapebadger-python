@@ -80,8 +80,6 @@ class BaiduClient:
     ) -> SearchResponse:
         """Search baidu.com — the web SERP.
 
-        Costs 5 credits.
-
         Args:
             query: Search keywords, e.g. ``"咖啡机"`` or ``"coffee machine"``.
             page: Result page, 1-76. Baidu's SERP stops serving past ~76 pages
@@ -127,8 +125,6 @@ class BaiduClient:
     ) -> NewsResponse:
         """Search the Baidu news vertical.
 
-        Costs 5 credits.
-
         Args:
             query: Search keywords, e.g. ``"人工智能"``.
             page: Result page, 1-76.
@@ -155,8 +151,6 @@ class BaiduClient:
     async def images(self, query: str, *, page: int = 1) -> ImagesResponse:
         """Search Baidu images.
 
-        Costs 5 credits.
-
         Args:
             query: Search keywords, e.g. ``"猫"``.
             page: Result page, 1-50. Baidu serves 30 images per page.
@@ -182,8 +176,6 @@ class BaiduClient:
 
     async def autocomplete(self, query: str) -> AutocompleteResponse:
         """Baidu search-box suggestions — the cheapest call in this API.
-
-        Costs 1 credit.
 
         Args:
             query: Partial search term, e.g. ``"咖啡"`` or ``"coff"``.

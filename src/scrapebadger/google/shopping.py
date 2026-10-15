@@ -141,7 +141,7 @@ class ShoppingClient:
         first) or ``catalog_id`` (Google Shopping ``catalogid`` — the
         ``catalog_id`` on ``shopping.search`` tiles or ``prds=catalogid:…`` in
         a Google Shopping URL; sellers read straight off Google's product
-        page). Costs 14 credits.
+        page).
 
         Args:
             barcode: Product barcode — a GTIN-8/UPC-A/EAN-13/GTIN-14.

@@ -48,7 +48,7 @@ class SearchClient:
         min_size: int | None = None,
         max_size: int | None = None,
     ) -> SearchResponse:
-        """Search LoopNet for commercial listings. Costs 10 credits.
+        """Search LoopNet for commercial listings.
 
         Args:
             location: City/state ("Houston, TX"), ZIP, state code, or "usa" (required).

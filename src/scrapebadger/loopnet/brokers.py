@@ -39,7 +39,7 @@ class BrokersClient:
         *,
         market: str = "us",
     ) -> BrokerResponse:
-        """Get a LoopNet broker's profile and their listings. Costs 8 credits.
+        """Get a LoopNet broker's profile and their listings.
 
         Args:
             slug: The broker's URL slug (e.g. "jane-doe").

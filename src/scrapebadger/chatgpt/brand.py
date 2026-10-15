@@ -54,8 +54,6 @@ class BrandClient:
     ) -> BrandVisibilityResponse:
         """Analyse how a brand shows up in ChatGPT's answer to a prompt.
 
-        Costs 25 credits.
-
         Args:
             prompt: The prompt to send. Maximum 4096 characters.
             brand: The brand name to look for in the answer.
