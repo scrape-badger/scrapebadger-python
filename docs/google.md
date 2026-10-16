@@ -351,15 +351,15 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 
 | Endpoint | Credits |
 |---|---|
-| `search`, `images`, `videos`, `maps/search`, `shopping/search`, `jobs/search`, `scholar/search`, `patents/search`, `finance/quote`, `trends/*` (except trending) | **2** |
-| `maps/place`, `maps/reviews`, `patents/detail`, `ai-mode/search`, `lens/search`, `hotels/search`, `products/detail` | **3** |
-| `hotels/details`, `shopping/product` | **5** |
+| `search`, `images`, `videos`, `shorts`, `light`, `local`, `ai-mode/search`, `ai-overview`, `lens/search`, `autocomplete`, `maps/*`, `news/*`, `trends/*`, `jobs/search`, `scholar/*`, `patents/*`, `finance/quote`, `hotels/*`, `flights/*`, `shopping/search`, `products/detail` | **20** |
+| `shopping/offers` | **25** |
 | `ads/advertisers`, `ads/advertiser`, `ads/creative` | **15** |
 | `ads/search` | **25** |
 | `ads/advertisers` with `fuzzy=true` (billed as 3 lookups) | **45** |
-| `shopping/offers` | **14** |
-| `news/*`, `autocomplete`, `trends/trending`, `maps/photos`, `maps/posts`, `shopping/product/click` | **1** |
+| `shopping/product`, `shopping/product/click` | **1** |
 | Failed requests | **0** |
+
+Prices change; `GET /api/public/pricing` (or the [pricing page](https://scrapebadger.com/pricing)) always has the live per-endpoint cost.
 
 ## Anti-Bot Handling
 
