@@ -353,9 +353,10 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 |---|---|
 | `search`, `images`, `videos`, `maps/search`, `shopping/search`, `jobs/search`, `scholar/search`, `patents/search`, `finance/quote`, `trends/*` (except trending) | **2** |
 | `maps/place`, `maps/reviews`, `patents/detail`, `ai-mode/search`, `lens/search`, `hotels/search`, `products/detail` | **3** |
-| `hotels/details`, `shopping/product`, `ads/advertisers`, `ads/advertiser`, `ads/creative` | **5** |
-| `ads/search` | **10** |
-| `ads/advertisers` with `fuzzy=true` | **15** |
+| `hotels/details`, `shopping/product` | **5** |
+| `ads/advertisers`, `ads/advertiser`, `ads/creative` | **15** |
+| `ads/search` | **25** |
+| `ads/advertisers` with `fuzzy=true` (billed as 3 lookups) | **45** |
 | `shopping/offers` | **14** |
 | `news/*`, `autocomplete`, `trends/trending`, `maps/photos`, `maps/posts`, `shopping/product/click` | **1** |
 | Failed requests | **0** |
