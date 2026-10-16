@@ -268,7 +268,7 @@ class TikTokClient:
         *,
         region: str = "US",
         count: int = 20,
-        exclude_product_ids: list | None = None,
+        exclude_product_ids: list[str] | None = None,
     ) -> dict[str, Any]:
         """TikTok Shop category products.
 

@@ -74,7 +74,7 @@ class FacebookClient:
         return await self._client.get(f"/v1/facebook/groups/{group_id}")
 
     async def get_group_posts(
-        self, group_id: str, *, after: str | None = None, sort: str = "newest"
+        self, group_id: str, *, after: str | None = None, sort: str | None = None
     ) -> dict[str, Any]:
         """Get group posts.
 
