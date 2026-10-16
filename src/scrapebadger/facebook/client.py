@@ -76,11 +76,7 @@ class FacebookClient:
     async def get_group_posts(
         self, group_id: str, *, after: str | None = None, sort: str | None = None
     ) -> dict[str, Any]:
-        """Get a public group's post feed, 3 posts per page.
-
-        ``sort`` is ``"newest"`` (newest first by post time, the API default) or
-        ``"relevance"`` (Facebook's top-posts ranking). Follow ``end_cursor`` as
-        ``after`` while ``has_next_page`` for older posts, keeping the same sort.
+        """Get group posts.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """

@@ -11,16 +11,20 @@ from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.account.client import AccountClient
 from scrapebadger.airbnb.client import AirbnbClient
+from scrapebadger.aliexpress.client import AliexpressClient
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.app_store.client import AppStoreClient
+from scrapebadger.asos.client import AsosClient
 from scrapebadger.baidu.client import BaiduClient
+from scrapebadger.bestbuy.client import BestbuyClient
 from scrapebadger.bing.client import BingClient
 from scrapebadger.booking.client import BookingClient
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.duckduckgo.client import DuckDuckGoClient
 from scrapebadger.ebay.client import EbayClient
+from scrapebadger.etsy.client import EtsyClient
 from scrapebadger.facebook.client import FacebookClient
 from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.google.client import GoogleClient
@@ -37,6 +41,7 @@ from scrapebadger.perplexity.client import PerplexityClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.redfin.client import RedfinClient
+from scrapebadger.target.client import TargetClient
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
 from scrapebadger.vinted.client import VintedClient
@@ -152,15 +157,19 @@ class ScrapeBadger:
         self._idealista: IdealistaClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
+        self._target: TargetClient | None = None
         self._apartments: ApartmentsClient | None = None
         self._app_store: AppStoreClient | None = None
+        self._asos: AsosClient | None = None
         self._depop: DepopClient | None = None
         self._wallapop: WallapopClient | None = None
         self._linkedin: LinkedInClient | None = None
         self._account: AccountClient | None = None
         self._airbnb: AirbnbClient | None = None
+        self._aliexpress: AliexpressClient | None = None
         self._amazon: AmazonClient | None = None
         self._ebay: EbayClient | None = None
+        self._etsy: EtsyClient | None = None
         self._facebook: FacebookClient | None = None
         self._youtube: YoutubeClient | None = None
         self._tiktok: TikTokClient | None = None
@@ -177,6 +186,7 @@ class ScrapeBadger:
         self._gumtree: GumtreeClient | None = None
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
+        self._bestbuy: BestbuyClient | None = None
         self._bing: BingClient | None = None
         self._booking: BookingClient | None = None
         self._yahoo: YahooClient | None = None
@@ -993,3 +1003,38 @@ class ScrapeBadger:
         if self._naver is None:
             self._naver = NaverClient(self._base_client)
         return self._naver
+
+    @property
+    def aliexpress(self) -> AliexpressClient:
+        """Access Aliexpress API operations. (Generated from the OpenAPI spec.)"""
+        if self._aliexpress is None:
+            self._aliexpress = AliexpressClient(self._base_client)
+        return self._aliexpress
+
+    @property
+    def asos(self) -> AsosClient:
+        """Access Asos API operations. (Generated from the OpenAPI spec.)"""
+        if self._asos is None:
+            self._asos = AsosClient(self._base_client)
+        return self._asos
+
+    @property
+    def bestbuy(self) -> BestbuyClient:
+        """Access Bestbuy API operations. (Generated from the OpenAPI spec.)"""
+        if self._bestbuy is None:
+            self._bestbuy = BestbuyClient(self._base_client)
+        return self._bestbuy
+
+    @property
+    def etsy(self) -> EtsyClient:
+        """Access Etsy API operations. (Generated from the OpenAPI spec.)"""
+        if self._etsy is None:
+            self._etsy = EtsyClient(self._base_client)
+        return self._etsy
+
+    @property
+    def target(self) -> TargetClient:
+        """Access Target API operations. (Generated from the OpenAPI spec.)"""
+        if self._target is None:
+            self._target = TargetClient(self._base_client)
+        return self._target
