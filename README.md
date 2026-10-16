@@ -80,6 +80,29 @@ You can also set the `SCRAPEBADGER_API_KEY` environment variable:
 export SCRAPEBADGER_API_KEY="sb_live_xxxxxxxxxxxxx"
 ```
 
+## Dedicated ecommerce APIs
+
+The `etsy`, `aliexpress`, `target`, `asos`, and `bestbuy` clients expose 44 dedicated ecommerce endpoints. These generated methods return response dictionaries; consult the endpoint documentation for response fields, supported filters, pagination and current pricing.
+
+```python
+async with ScrapeBadger(api_key="your-api-key") as client:
+    etsy = await client.etsy.search_listings(query="ceramic mug")
+    aliexpress = await client.aliexpress.search_products(query="wireless mouse")
+    target = await client.target.search_products(query="coffee")
+    asos = await client.asos.search_products(query="shoes", market="uk")
+    bestbuy = await client.bestbuy.search_products(query="laptop")
+```
+
+| Client | Endpoints | Documentation |
+|--------|-----------|---------------|
+| `client.etsy` | 8 — listing search/detail/reviews, shop profile/listings/reviews, categories, autocomplete | [Etsy](https://docs.scrapebadger.com/etsy/overview) |
+| `client.aliexpress` | 8 — product search/detail/reviews, store profile/products/categories, category navigation, autocomplete | [AliExpress](https://docs.scrapebadger.com/aliexpress/overview) |
+| `client.target` | 11 — search, category browse/navigation, autocomplete, product detail/reviews/questions/availability, nearby stores/store detail, markets | [Target](https://docs.scrapebadger.com/target/overview) |
+| `client.asos` | 7 — product search/detail, stock/prices, category navigation, search filters, autocomplete, markets | [ASOS](https://docs.scrapebadger.com/asos/overview) |
+| `client.bestbuy` | 10 — search, category browse/navigation, deals, autocomplete, product detail/reviews/questions/availability, markets | [Best Buy](https://docs.scrapebadger.com/bestbuy/overview) |
+
+Etsy and AliExpress category navigation is separate from search: their search methods do not offer a category filter. ASOS search follows its upstream semantic matching. Target and Best Buy serve the US market. The linked endpoint references describe further measured limits.
+
 ## Available APIs
 
 | API | Description | Documentation |

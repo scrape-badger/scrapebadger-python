@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.62.0 — 2026-10-17
+
+- Add 44 dedicated ecommerce API methods across Etsy (8), AliExpress (8), Target (11), ASOS (7), and Best Buy (10), including discovery, product details, reviews, navigation and availability where supported.
+- Expose the gateway query parameters with their defaults, including market and locale options where supported. See the endpoint docs for verified filters, pagination and current pricing.
+
 ## 0.61.1 — 2026-10-15
 
 - **Removed per-endpoint credit prices from docstrings and docs again.** Baidu, ChatGPT, eBay image search, Google Shopping offers, LoopNet and the Apartments guide had picked up hard-coded "Costs N credits" lines, which the 2026-10-14 repricing made wrong. Prices are configured per endpoint by ScrapeBadger and served live from `GET /public/pricing`; see the per-endpoint docs at docs.scrapebadger.com. Free reference endpoints still say they are free.
