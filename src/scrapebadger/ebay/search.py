@@ -207,8 +207,9 @@ class SearchClient:
 
     async def completed(
         self,
-        query: str,
+        query: str | None = None,
         *,
+        seller: str | None = None,
         domain: str = "com",
         category_id: str | None = None,
         page: int = 1,
@@ -220,8 +221,12 @@ class SearchClient:
     ) -> SearchResponse:
         """Search completed/sold listings — eBay's sold-price history.
 
+        Pass ``query``, ``seller`` or both. ``seller`` alone pages through
+        everything that seller sold, with no keyword needed.
+
         Args:
-            query: Search keywords.
+            query: Search keywords. Optional when ``seller`` is given.
+            seller: Only this seller's sold listings (eBay username).
             domain: eBay marketplace domain (e.g. "com", "co.uk", "de"). Defaults to "com".
             category_id: Restrict the search to a category id.
             page: Page number (1-indexed). Defaults to 1.
@@ -240,10 +245,16 @@ class SearchClient:
             sold = await client.ebay.search.completed("ipad pro", domain="com")
             for item in sold.results:
                 print(f"{item.title}: {item.price.raw if item.price else 'N/A'}")
+
+            # Everything one seller sold, no keyword
+            sold = await client.ebay.search.completed(seller="musicmagpie", domain="co.uk")
             ```
         """
+        if not (query or seller):
+            raise ValueError("Pass query, seller, or both.")
         params: dict[str, Any] = {
             "query": query,
+            "seller": seller,
             "domain": domain,
             "category_id": category_id,
             "page": page,
