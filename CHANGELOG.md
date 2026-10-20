@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.63.0 — 2026-10-20
+
+- **Sold listings by seller.** `ebay.search.completed(seller="musicmagpie", domain="co.uk")` returns one seller's sold listings, page by page, with no keyword needed. `query` is now optional; pass `query`, `seller` or both (neither raises `ValueError`).
+- `pagination.has_more` on completed searches is now correct at `per_page` 120 and 240 (server-side fix; it used to read `False` on every page at those sizes).
+
 ## 0.62.0 — 2026-10-17
 
 - Add 44 dedicated ecommerce API methods across Etsy (8), AliExpress (8), Target (11), ASOS (7), and Best Buy (10), including discovery, product details, reviews, navigation and availability where supported.
