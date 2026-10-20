@@ -721,6 +721,19 @@ class TestSearchClient:
         assert call_args[0][0] == "/v1/ebay/completed"
         assert call_args[1]["params"]["condition"] == "used"
 
+    async def test_completed_by_seller_without_a_query(
+        self, search_client: SearchClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.get.return_value = COMPLETED_RESPONSE
+        await search_client.completed(seller="musicmagpie", domain="co.uk")
+        params = mock_base_client.get.call_args.kwargs["params"]
+        assert params["seller"] == "musicmagpie"
+        assert "query" not in params or params["query"] is None
+
+    async def test_completed_needs_a_query_or_a_seller(self, search_client: SearchClient) -> None:
+        with pytest.raises(ValueError):
+            await search_client.completed()
+
     async def test_autocomplete(
         self, search_client: SearchClient, mock_base_client: MagicMock
     ) -> None:
