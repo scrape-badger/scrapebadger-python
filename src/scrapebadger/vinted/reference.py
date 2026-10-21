@@ -39,6 +39,9 @@ class ReferenceClient:
             for b in brands.brands:
                 print(f"{b.title} (id={b.id})")
 
+            # Broad brand ID list from the A-Z directory
+            popular = await client.vinted.reference.popular_brands("A", market="uk")
+
             # Get colors for a market
             colors = await client.vinted.reference.colors(market="de")
             for c in colors.colors:
@@ -88,6 +91,44 @@ class ReferenceClient:
             },
         )
         return BrandsResponse.model_validate(response)
+
+    async def popular_brands(
+        self,
+        letter: str | None = None,
+        *,
+        market: str = "fr",
+    ) -> BrandsResponse:
+        """Get Vinted's A-Z directory of popular brands.
+
+        Returns about 240 of the most popular brands whose name starts with
+        ``letter``, with ID, slug and item count. Loop ``letter`` over A-Z and
+        ``"0"`` (digits) for a reference list of roughly 6,000 brand IDs.
+        ``brands()`` stops at 10 matches per keyword. 1 credit per call.
+
+        Args:
+            letter: First letter of the brand name, "A"-"Z", or "0" for
+                digits. Omit for the most popular brands overall.
+            market: Vinted market code (e.g. "fr", "uk"). Defaults to "fr".
+
+        Returns:
+            Brands response (no pagination; Vinted serves one page per letter).
+
+        Example:
+            ```python
+            import string
+
+            brand_ids = {}
+            for letter in [*string.ascii_uppercase, "0"]:
+                result = await client.vinted.reference.popular_brands(letter, market="uk")
+                brand_ids.update({b.title: b.id for b in result.brands})
+            ```
+        """
+        parameters = {"letter": letter} if letter else {}
+        response = await self._client.post(
+            "/v1/vinted/mobile/popular-brands",
+            json={"market": market, "parameters": parameters},
+        )
+        return BrandsResponse.model_validate(response.get("data", {}))
 
     async def colors(
         self,
