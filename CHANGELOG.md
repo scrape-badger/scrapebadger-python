@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.64.0 — 2026-10-21
+
+- **Vinted brand ID list.** `vinted.reference.popular_brands(letter, market=...)` (Node: `popularBrands({ letter, market })`) returns Vinted's A–Z brand directory: about 240 of the most popular brands per letter with ID, slug and item count. Loop A–Z and `"0"` for about 6,000 brand IDs; `brands()` stops at 10 matches per keyword.
+
 ## 0.63.0 — 2026-10-20
 
 - **Sold listings by seller.** `ebay.search.completed(seller="musicmagpie", domain="co.uk")` returns one seller's sold listings, page by page, with no keyword needed. `query` is now optional; pass `query`, `seller` or both (neither raises `ValueError`).

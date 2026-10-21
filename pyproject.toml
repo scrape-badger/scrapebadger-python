@@ -1,6 +1,6 @@
 [project]
 name = "scrapebadger"
-version = "0.63.0"
+version = "0.64.0"
 description = "Official Python SDK for ScrapeBadger - Async web scraping APIs for Twitter and more"
 readme = "README.md"
 license = { text = "MIT" }

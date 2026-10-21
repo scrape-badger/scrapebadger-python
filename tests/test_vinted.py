@@ -822,6 +822,32 @@ class TestReferenceClient:
         assert params["market"] == "de"
         assert params["per_page"] == 10
 
+    # -- popular_brands --
+
+    async def test_popular_brands_posts_the_mobile_operation(
+        self, reference_client: ReferenceClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.post.return_value = {
+            "operation": "popular-brands",
+            "market": "gb",
+            "data": {"brands": [SAMPLE_BRAND], "code": 0},
+        }
+        result = await reference_client.popular_brands("A", market="uk")
+
+        assert isinstance(result, BrandsResponse)
+        assert result.brands[0].title == "Nike"
+        assert result.pagination is None
+        call_args = mock_base_client.post.call_args
+        assert call_args[0][0] == "/v1/vinted/mobile/popular-brands"
+        assert call_args[1]["json"] == {"market": "uk", "parameters": {"letter": "A"}}
+
+    async def test_popular_brands_without_a_letter(
+        self, reference_client: ReferenceClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.post.return_value = {"data": {"brands": []}}
+        await reference_client.popular_brands()
+        assert mock_base_client.post.call_args[1]["json"] == {"market": "fr", "parameters": {}}
+
     # -- colors --
 
     async def test_colors_default_market(
