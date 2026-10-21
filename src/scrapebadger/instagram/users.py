@@ -52,18 +52,12 @@ class UsersClient:
         return User.model_validate(response)
 
     async def about(self, username: str) -> UserAbout:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get "About this account" metadata for a user.
-        """
+        """Get "About this account" metadata for a user."""
         response = await self._client.get(f"/v1/instagram/users/{username}/about")
         return UserAbout.model_validate(response)
 
     async def related(self, username: str) -> Paginated[UserShort]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get accounts related/suggested for a user.
-        """
+        """Get accounts related/suggested for a user."""
         response = await self._client.get(f"/v1/instagram/users/{username}/related")
         return Paginated[UserShort].model_validate(response)
 
@@ -84,9 +78,10 @@ class UsersClient:
         amount: int = 12,
         cursor: str | None = None,
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
+        """Get a user's video posts from their feed.
 
-        Get a user's video posts (IGTV/feed videos).
+        A page may hold slightly more than ``amount`` items; pass
+        ``next_cursor`` back as ``cursor`` to continue the feed.
         """
         return await self._paginated_media(f"/v1/instagram/users/{username}/videos", amount, cursor)
 
@@ -97,10 +92,7 @@ class UsersClient:
         amount: int = 12,
         cursor: str | None = None,
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a user's reels.
-        """
+        """Get a user's reels."""
         return await self._paginated_media(f"/v1/instagram/users/{username}/reels", amount, cursor)
 
     async def tagged(
@@ -110,17 +102,11 @@ class UsersClient:
         amount: int = 12,
         cursor: str | None = None,
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get media a user is tagged in.
-        """
+        """Get media a user is tagged in."""
         return await self._paginated_media(f"/v1/instagram/users/{username}/tagged", amount, cursor)
 
     async def pinned(self, username: str) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a user's pinned posts.
-        """
+        """Get a user's pinned posts."""
         response = await self._client.get(f"/v1/instagram/users/{username}/pinned")
         return Paginated[Media].model_validate(response)
 
@@ -132,9 +118,7 @@ class UsersClient:
         cursor: str | None = None,
         order: str | None = None,
     ) -> Paginated[UserShort]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a user's followers.
+        """Get a user's followers.
 
         Args:
             username: Instagram username.
@@ -155,10 +139,7 @@ class UsersClient:
         amount: int = 100,
         cursor: str | None = None,
     ) -> Paginated[UserShort]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get the accounts a user follows.
-        """
+        """Get the accounts a user follows."""
         params: dict[str, Any] = {"amount": amount, "cursor": cursor}
         response = await self._client.get(
             f"/v1/instagram/users/{username}/following", params=params
@@ -173,10 +154,7 @@ class UsersClient:
         amount: int = 100,
         cursor: str | None = None,
     ) -> Paginated[UserShort]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Search within a user's followers by name/username.
-        """
+        """Search within a user's followers by name/username."""
         params: dict[str, Any] = {"query": query, "amount": amount, "cursor": cursor}
         response = await self._client.get(
             f"/v1/instagram/users/{username}/followers/search", params=params
@@ -184,18 +162,12 @@ class UsersClient:
         return Paginated[UserShort].model_validate(response)
 
     async def stories(self, username: str) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a user's currently-live stories.
-        """
+        """Get a user's currently-live stories."""
         response = await self._client.get(f"/v1/instagram/users/{username}/stories")
         return Paginated[Media].model_validate(response)
 
     async def highlights(self, username: str) -> Paginated[Highlight]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a user's story highlights.
-        """
+        """Get a user's story highlights."""
         response = await self._client.get(f"/v1/instagram/users/{username}/highlights")
         return Paginated[Highlight].model_validate(response)
 

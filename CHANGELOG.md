@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.64.1 — 2026-10-21
+
+- **Instagram: every method is available again.** The authenticated Instagram tier is back on, so the "Temporarily unavailable" note is gone from every Instagram docstring (`users.about`, `related`, `videos`, `reels`, `tagged`, `pinned`, `followers`, `following`, `search_followers`, `stories`, `highlights`; `media.oembed`, `likers`, `replies`, `comment_likers`; all `hashtags`, `locations`, `audio` and `search` methods). `users.related` returns the standard paginated envelope; `users.videos` may return slightly more than `amount` items and `next_cursor` continues the feed; `search.places` ranks globally. When the account pool is momentarily saturated these calls can return `503 pool_unavailable` (not billed, retry after 10 s); a single API key over its fair share of the pool gets `429 rate_limited`. No signature changes. (SCR-431)
+
 ## 0.64.0 — 2026-10-21
 
 - **Vinted brand ID list.** `vinted.reference.popular_brands(letter, market=...)` (Node: `popularBrands({ letter, market })`) returns Vinted's A–Z brand directory: about 240 of the most popular brands per letter with ID, slug and item count. Loop A–Z and `"0"` for about 6,000 brand IDs; `brands()` stops at 10 matches per keyword.
