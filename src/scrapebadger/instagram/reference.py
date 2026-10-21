@@ -27,38 +27,26 @@ class HashtagsClient:
         self._client = client
 
     async def get(self, tag: str) -> Hashtag:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a hashtag's info (media count, cover).
-        """
+        """Get a hashtag's info (media count, cover)."""
         response = await self._client.get(f"/v1/instagram/hashtags/{tag}")
         return Hashtag.model_validate(response)
 
     async def top(
         self, tag: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get the top/popular media for a hashtag.
-        """
+        """Get the top/popular media for a hashtag."""
         return await _media(self._client, f"/v1/instagram/hashtags/{tag}/top", amount, cursor)
 
     async def recent(
         self, tag: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get the most recent media for a hashtag.
-        """
+        """Get the most recent media for a hashtag."""
         return await _media(self._client, f"/v1/instagram/hashtags/{tag}/recent", amount, cursor)
 
     async def reels(
         self, tag: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get reels for a hashtag.
-        """
+        """Get reels for a hashtag."""
         return await _media(self._client, f"/v1/instagram/hashtags/{tag}/reels", amount, cursor)
 
 
@@ -69,36 +57,24 @@ class LocationsClient:
         self._client = client
 
     async def get(self, pk: str) -> Location:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get a location's info.
-        """
+        """Get a location's info."""
         response = await self._client.get(f"/v1/instagram/locations/{pk}")
         return Location.model_validate(response)
 
     async def top(
         self, pk: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get the top/popular media for a location.
-        """
+        """Get the top/popular media for a location."""
         return await _media(self._client, f"/v1/instagram/locations/{pk}/top", amount, cursor)
 
     async def recent(
         self, pk: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get the most recent media for a location.
-        """
+        """Get the most recent media for a location."""
         return await _media(self._client, f"/v1/instagram/locations/{pk}/recent", amount, cursor)
 
     async def search(self, query: str) -> Paginated[Location]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Search locations by name.
-        """
+        """Search locations by name."""
         params: dict[str, Any] = {"query": query}
         response = await self._client.get("/v1/instagram/locations/search", params=params)
         return Paginated[Location].model_validate(response)
@@ -111,27 +87,18 @@ class AudioClient:
         self._client = client
 
     async def get(self, audio_id: str) -> Audio:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get an audio track's info.
-        """
+        """Get an audio track's info."""
         response = await self._client.get(f"/v1/instagram/audio/{audio_id}")
         return Audio.model_validate(response)
 
     async def media(
         self, audio_id: str, *, amount: int = 20, cursor: str | None = None
     ) -> Paginated[Media]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get media that use an audio track.
-        """
+        """Get media that use an audio track."""
         return await _media(self._client, f"/v1/instagram/audio/{audio_id}/media", amount, cursor)
 
     async def trending(self) -> Paginated[Audio]:
-        """Temporarily unavailable: authenticated Instagram data is temporarily offline.
-
-        Get currently-trending audio tracks.
-        """
+        """Get currently-trending audio tracks."""
         response = await self._client.get("/v1/instagram/audio/trending")
         return Paginated[Audio].model_validate(response)
 
