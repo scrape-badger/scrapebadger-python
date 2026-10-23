@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.64.1"
+SDK_VERSION = "0.65.0"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -262,6 +262,36 @@ class BaseClient:
             ScrapeBadgerError: For API errors.
             httpx.RequestError: For network errors after retries exhausted.
         """
+        data, headers, _ = await self._request_with_status(method, path, params=params, json=json)
+        return data, headers
+
+    async def _request_with_status(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> tuple[dict[str, Any], dict[str, str], int]:
+        """Make an HTTP request with retry logic, returning data, headers and status.
+
+        For endpoints whose 2xx status carries meaning — ``/v1/requests/{id}``
+        answers 202 while the call is still running and the original status
+        once it finished.
+
+        Args:
+            method: HTTP method (GET, POST, etc.).
+            path: API endpoint path.
+            params: Query parameters.
+            json: JSON body for POST/PUT requests.
+
+        Returns:
+            A (data, headers, status_code) tuple.
+
+        Raises:
+            ScrapeBadgerError: For API errors.
+            httpx.RequestError: For network errors after retries exhausted.
+        """
         # Filter out None values from params
         if params:
             params = {k: v for k, v in params.items() if v is not None}
@@ -311,7 +341,7 @@ class BaseClient:
                         data,
                     )
 
-                return data, headers
+                return data, headers, response.status_code
 
             except RETRYABLE_TRANSPORT_ERRORS as e:
                 last_exception = e

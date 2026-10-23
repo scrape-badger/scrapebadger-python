@@ -44,6 +44,19 @@ from scrapebadger._internal.exceptions import (
     WebSocketStreamError,
 )
 from scrapebadger._internal.pagination import PaginatedResponse
+from scrapebadger.agent import (
+    AgentClient,
+    AgentTrial,
+    AsyncRequest,
+    FeedbackReceipt,
+    Quote,
+    QuoteCredits,
+    QuoteFieldError,
+    QuoteLatency,
+    QuoteUsd,
+    RequestsClient,
+    ResultsClient,
+)
 from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.amazon.models import (
     AmazonPrice,
@@ -1336,7 +1349,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.64.1"
+__version__ = "0.65.0"
 
 __all__ = [
     # TikTok core models
@@ -1350,6 +1363,8 @@ __all__ = [
     "AdTargetingRegion",
     "AdvertiserSearchResponse",
     "AdvertiserSuggestion",
+    "AgentClient",
+    "AgentTrial",
     # Amazon
     "AmazonAutocompleteResponse",
     "AmazonCategoryInfo",
@@ -1366,6 +1381,7 @@ __all__ = [
     "ApartmentsSearchResponse",
     "ApartmentsSearchResult",
     "ApartmentsUnit",
+    "AsyncRequest",
     "AuthenticationError",
     # Baidu
     "BaiduAutocompleteResponse",
@@ -1471,6 +1487,7 @@ __all__ = [
     "EbaySellerProfileResponse",
     "ExtractResult",
     "FeedbackBreakdown",
+    "FeedbackReceipt",
     # Gemini
     "GeminiAskResponse",
     "GeminiBrandVisibilityResponse",
@@ -1610,6 +1627,11 @@ __all__ = [
     "PostDuplicatesResponse",
     "Product",
     "ProductDetailResponse",
+    "Quote",
+    "QuoteCredits",
+    "QuoteFieldError",
+    "QuoteLatency",
+    "QuoteUsd",
     "RateLimitError",
     "RealtorAddress",
     "RealtorAgent",
@@ -1673,6 +1695,8 @@ __all__ = [
     "RedfinSearchResponse",
     "RedfinTaxHistoryEvent",
     "RegionInfo",
+    "RequestsClient",
+    "ResultsClient",
     "ReturnsPolicy",
     "Review",
     "ReviewsResponse",
