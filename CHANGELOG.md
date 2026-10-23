@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Agent platform endpoints (all free, never billed).** `agent.quote(method, path, params=, body=)` returns a typed `Quote` — credits (`min`/`max`/`base`/`per_item`), USD at list and best plan rates, parameter validation (`valid`, `errors`) and p50/p95/p99 latency. `agent.feedback(summary, kind=, details=, request_id=, endpoint=, contact=)` and `agent.report_bug(...)` file feedback or a bug report. `results.get(result_id, jq=, fields=, max_items=, summary=)` re-reads a billed result (`X-Result-ID`) for ~15 minutes, optionally reshaped. `requests.get(request_id)` polls a call made with `Prefer: respond-async` and returns an `AsyncRequest` with `running`, `status_code`, `result_id`, `credits_used` and `data`. New `AgentTrial` model for the `agent_trial` block of `account.get_account_info()` on trial keys. No existing signature changes. (SCR-443)
+
 ## 0.64.1 — 2026-10-21
 
 - **Instagram: every method is available again.** The authenticated Instagram tier is back on, so the "Temporarily unavailable" note is gone from every Instagram docstring (`users.about`, `related`, `videos`, `reels`, `tagged`, `pinned`, `followers`, `following`, `search_followers`, `stories`, `highlights`; `media.oembed`, `likers`, `replies`, `comment_likers`; all `hashtags`, `locations`, `audio` and `search` methods). `users.related` returns the standard paginated envelope; `users.videos` may return slightly more than `amount` items and `next_cursor` continues the feed; `search.places` ranks globally. When the account pool is momentarily saturated these calls can return `503 pool_unavailable` (not billed, retry after 10 s); a single API key over its fair share of the pool gets `429 rate_limited`. No signature changes. (SCR-431)

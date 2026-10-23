@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger.account.client import AccountClient
+from scrapebadger.agent.client import AgentClient, RequestsClient, ResultsClient
 from scrapebadger.airbnb.client import AirbnbClient
 from scrapebadger.aliexpress.client import AliexpressClient
 from scrapebadger.amazon.client import AmazonClient
@@ -165,6 +166,9 @@ class ScrapeBadger:
         self._wallapop: WallapopClient | None = None
         self._linkedin: LinkedInClient | None = None
         self._account: AccountClient | None = None
+        self._agent: AgentClient | None = None
+        self._results: ResultsClient | None = None
+        self._requests: RequestsClient | None = None
         self._airbnb: AirbnbClient | None = None
         self._aliexpress: AliexpressClient | None = None
         self._amazon: AmazonClient | None = None
@@ -933,6 +937,39 @@ class ScrapeBadger:
         if self._account is None:
             self._account = AccountClient(self._base_client)
         return self._account
+
+    @property
+    def agent(self) -> AgentClient:
+        """Quote a call before making it, and report bugs or send feedback.
+
+        Returns:
+            AgentClient for ``quote``, ``feedback`` and ``report_bug``. Free.
+        """
+        if self._agent is None:
+            self._agent = AgentClient(self._base_client)
+        return self._agent
+
+    @property
+    def results(self) -> ResultsClient:
+        """Re-read a recent result (``X-Result-ID``) for free, optionally trimmed.
+
+        Returns:
+            ResultsClient for ``get``.
+        """
+        if self._results is None:
+            self._results = ResultsClient(self._base_client)
+        return self._results
+
+    @property
+    def requests(self) -> RequestsClient:
+        """Poll a call made with ``Prefer: respond-async``.
+
+        Returns:
+            RequestsClient for ``get``.
+        """
+        if self._requests is None:
+            self._requests = RequestsClient(self._base_client)
+        return self._requests
 
     @property
     def facebook(self) -> FacebookClient:
