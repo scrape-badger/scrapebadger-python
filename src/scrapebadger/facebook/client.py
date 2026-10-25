@@ -98,9 +98,13 @@ class FacebookClient:
         min_price: str | None = None,
         max_price: str | None = None,
         sort_by: str | None = None,
+        radius: int | None = None,
         after: str | None = None,
     ) -> dict[str, Any]:
         """Browse a Marketplace category.
+
+        ``radius`` is the distance around ``location`` (km, or miles in the US);
+        Facebook's default is 65. ``resolved_location.radius`` echoes the applied one.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
@@ -111,6 +115,7 @@ class FacebookClient:
                 "min_price": min_price,
                 "max_price": max_price,
                 "sort_by": sort_by,
+                "radius": radius,
                 "after": after,
             }.items()
             if v is not None
