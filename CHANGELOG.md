@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.65.1 — 2026-10-25
+
+- **Facebook: `facebook.browse_a_marketplace_category(..., radius=)`.** Category browse now takes `radius` (km, or miles in the US; Facebook's default is 65). The API used to drop it on a category; Facebook does apply it, so a local feed no longer pulls in the next city over. `resolved_location.radius` now reports the radius that was applied. (SB-001140, SCR-447)
+
 ## 0.65.0 — 2026-10-23
 
 - **Agent platform endpoints (all free, never billed).** `agent.quote(method, path, params=, body=)` returns a typed `Quote` — credits (`min`/`max`/`base`/`per_item`), USD at list and best plan rates, parameter validation (`valid`, `errors`) and p50/p95/p99 latency. `agent.feedback(summary, kind=, details=, request_id=, endpoint=, contact=)` and `agent.report_bug(...)` file feedback or a bug report. `results.get(result_id, jq=, fields=, max_items=, summary=)` re-reads a billed result (`X-Result-ID`) for ~15 minutes, optionally reshaped. `requests.get(request_id)` polls a call made with `Prefer: respond-async` and returns an `AsyncRequest` with `running`, `status_code`, `result_id`, `credits_used` and `data`. New `AgentTrial` model for the `agent_trial` block of `account.get_account_info()` on trial keys. No existing signature changes. (SCR-443)
