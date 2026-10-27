@@ -15,13 +15,23 @@ class PerplexityClient:
         self._client = client
 
     async def ask_perplexity_a_question(
-        self, *, prompt: str, country: str | None = None
+        self, *, prompt: str, country: str | None = None, strict_country: bool = False
     ) -> dict[str, Any]:
         """Ask Perplexity a question.
 
         Generated from the OpenAPI spec; returns the raw response dict.
+
+        ``country`` is best-effort: when that market has no exit left, another one
+        answers and the response ``country`` says which. ``strict_country=True``
+        answers only from an exit in ``country`` (required with it); when none
+        answers in time the call raises with HTTP 503 ``country_unavailable`` and
+        is not billed. On the POST form, put ``"strict_country": true`` in ``payload``.
         """
-        params = {k: v for k, v in {"prompt": prompt, "country": country}.items() if v is not None}
+        params: dict[str, Any] = {
+            k: v for k, v in {"prompt": prompt, "country": country}.items() if v is not None
+        }
+        if strict_country:
+            params["strict_country"] = True
         return await self._client.get("/v1/perplexity/ask", params=params)
 
     async def ask_perplexity_a_question_post(
@@ -42,12 +52,19 @@ class PerplexityClient:
         aliases: str | None = None,
         competitors: str | None = None,
         country: str | None = None,
+        strict_country: bool = False,
     ) -> dict[str, Any]:
         """Measure a brand's visibility in a Perplexity answer.
 
         Generated from the OpenAPI spec; returns the raw response dict.
+
+        ``country`` is best-effort: when that market has no exit left, another one
+        answers and the response ``country`` says which. ``strict_country=True``
+        answers only from an exit in ``country`` (required with it); when none
+        answers in time the call raises with HTTP 503 ``country_unavailable`` and
+        is not billed. On the POST form, put ``"strict_country": true`` in ``payload``.
         """
-        params = {
+        params: dict[str, Any] = {
             k: v
             for k, v in {
                 "prompt": prompt,
@@ -59,6 +76,8 @@ class PerplexityClient:
             }.items()
             if v is not None
         }
+        if strict_country:
+            params["strict_country"] = True
         return await self._client.get("/v1/perplexity/brand-visibility", params=params)
 
     async def measure_a_brand_s_visibility_in_a_perplexity_answer_post(
