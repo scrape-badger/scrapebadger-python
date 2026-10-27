@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.67.0 — 2026-10-27
+
+- **Perplexity: `strict_country`.** `perplexity.ask_perplexity_a_question(prompt=..., country="DE", strict_country=True)` and `perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(..., strict_country=True)` answer only from an exit in `country`, never another one. When no exit there answers in time the call fails with HTTP 503 `country_unavailable` and is not billed. Requires `country` (400 otherwise). Without it `country` stays best-effort: when that market has no exit left, another one answers and the response `country` says which. On the POST forms put `"strict_country": true` in `payload`. Sent only when true. (SCR-464)
+
 ## 0.65.1 — 2026-10-25
 
 - **Facebook: `facebook.browse_a_marketplace_category(..., radius=)`.** Category browse now takes `radius` (km, or miles in the US; Facebook's default is 65). The API used to drop it on a category; Facebook does apply it, so a local feed no longer pulls in the next city over. `resolved_location.radius` now reports the radius that was applied. (SB-001140, SCR-447)
