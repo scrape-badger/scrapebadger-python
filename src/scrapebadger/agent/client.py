@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-from scrapebadger.agent.models import AsyncRequest, FeedbackReceipt, Quote
+from scrapebadger.agent.models import AsyncRequest, BatchSubmission, FeedbackReceipt, Quote
 
 if TYPE_CHECKING:
     from scrapebadger._internal.client import BaseClient
@@ -261,3 +261,39 @@ class RequestsClient:
             credits_used=int(credits_used) if credits_used and credits_used.isdigit() else None,
             data=data,
         )
+
+    async def batch(
+        self,
+        requests: list[dict[str, Any]],
+        *,
+        callback_url: str | None = None,
+    ) -> BatchSubmission:
+        """Submit up to 100 GET reads as async requests in one call. Submitting is free.
+
+        Each item runs under this key with the same auth, credit check, rate
+        limit and price as if sent alone; at most 10 of a batch run at a time.
+
+        Example:
+            ```python
+            sub = await client.requests.batch(
+                [{"path": "/v1/chatgpt/ask", "query": {"prompt": p}} for p in prompts],
+                callback_url="https://example.com/hook",
+            )
+            ids = [r.request_id for r in sub.requests if r.accepted]
+            ```
+
+        Args:
+            requests: Items ``{"path": "/v1/...", "query": {...}}`` (``method``
+                defaults to "GET").
+            callback_url: https URL that gets one signed webhook per item when
+                it completes. Verify it with ``verify_webhook_signature`` and the
+                secret from ``GET /v1/account/webhook-secret``.
+
+        Returns:
+            BatchSubmission with a request_id (or the refusal) for every item.
+        """
+        payload: dict[str, Any] = {"requests": requests}
+        if callback_url is not None:
+            payload["callback_url"] = callback_url
+        response = await self._client.post("/v1/batch", json=payload)
+        return BatchSubmission.model_validate(response)

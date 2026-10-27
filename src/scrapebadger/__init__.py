@@ -48,6 +48,8 @@ from scrapebadger.agent import (
     AgentClient,
     AgentTrial,
     AsyncRequest,
+    BatchItemResult,
+    BatchSubmission,
     FeedbackReceipt,
     Quote,
     QuoteCredits,
@@ -1394,6 +1396,8 @@ __all__ = [
     "BaiduRelatedSearch",
     "BaiduSearchResponse",
     "BaiduSuggestion",
+    "BatchItemResult",
+    "BatchSubmission",
     "Bestseller",
     "BestsellersResponse",
     # Bing

@@ -239,6 +239,45 @@ class TestRequests:
         with pytest.raises(NotFoundError):
             await sb.requests.get("nope")
 
+    @respx.mock
+    async def test_batch_submits_items_and_parses_each_outcome(self, sb: ScrapeBadger) -> None:
+        route = respx.post(f"{BASE}/v1/batch").mock(
+            return_value=httpx.Response(
+                202,
+                json={
+                    "batch_id": "b-1",
+                    "count": 2,
+                    "accepted": 1,
+                    "requests": [
+                        {
+                            "index": 0,
+                            "accepted": True,
+                            "status": 202,
+                            "request_id": "r-0",
+                            "poll_url": "/v1/requests/r-0",
+                        },
+                        {
+                            "index": 1,
+                            "accepted": False,
+                            "status": 429,
+                            "request_id": "r-1",
+                            "error": {"detail": "Rate limit exceeded"},
+                        },
+                    ],
+                },
+            )
+        )
+        items = [{"path": "/v1/chatgpt/ask", "query": {"prompt": p}} for p in ("a", "b")]
+        sub = await sb.requests.batch(items, callback_url="https://example.com/hook")
+
+        assert json.loads(route.calls[0].request.content) == {
+            "requests": items,
+            "callback_url": "https://example.com/hook",
+        }
+        assert sub.batch_id == "b-1" and sub.accepted == 1
+        assert sub.requests[0].poll_url == "/v1/requests/r-0"
+        assert not sub.requests[1].accepted and sub.requests[1].status == 429
+
 
 def test_agent_trial_block_parses() -> None:
     trial = AgentTrial.model_validate(
