@@ -1188,3 +1188,14 @@ class TestRedditGalleryImages:
     def test_gallery_image_importable(self) -> None:
         from scrapebadger import RedditGalleryImage as _TopLevel  # noqa: F401
         from scrapebadger.reddit import RedditGalleryImage as _SubPkg  # noqa: F401
+
+
+@pytest.mark.parametrize(
+    "model,field", [(SearchPostsResponse, "posts"), (SubredditsListResponse, "subreddits")]
+)
+def test_api_pagination_envelope_preserves_sdk_accessors(model, field):
+    response = model.model_validate(
+        {field: [], "pagination": {"after": "rs1.next", "before": None, "count": 10, "limit": 25}}
+    )
+    assert response.after == "rs1.next"
+    assert response.count == 10
