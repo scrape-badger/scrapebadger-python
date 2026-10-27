@@ -23,6 +23,9 @@ class SearchClient:
 
     Provides async methods for searching across Reddit's content.
 
+    Pass search pagination.after unchanged with the same query and filters.
+    Search cursors expire after 30 minutes; native pages can be smaller than limit.
+
     Example:
         ```python
         async with ScrapeBadger(api_key="key") as client:

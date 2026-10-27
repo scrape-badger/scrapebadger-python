@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # =============================================================================
 # Base Configuration
@@ -35,6 +35,21 @@ class _BaseModel(BaseModel):
         extra="ignore",
         str_strip_whitespace=True,
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _read_pagination_envelope(cls, data: Any) -> Any:
+        """Keep the SDK's .after/.count accessors for the API's nested envelope."""
+        if isinstance(data, dict) and isinstance(data.get("pagination"), dict):
+            return {
+                **data,
+                **{
+                    key: value
+                    for key, value in data["pagination"].items()
+                    if key in {"after", "before", "count"} and key in cls.model_fields
+                },
+            }
+        return data
 
 
 # =============================================================================
@@ -89,6 +104,7 @@ class RedditPost(_BaseModel):
     # Body
     selftext: str = ""
     selftext_html: str | None = None
+    search_snippet: str | None = None
     # Link
     url: str = ""
     permalink: str = ""
@@ -243,6 +259,8 @@ class RedditSubreddit(_BaseModel):
     public_description_html: str | None = None
     url: str = ""
     subscribers: int = 0
+    weekly_visitors: int | None = None
+    weekly_contributions: int | None = None
     created_utc: float = 0
     created_at: str | None = None
     # Type / flags
