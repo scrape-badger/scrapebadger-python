@@ -174,6 +174,37 @@ class AsyncRequest(_BaseModel):
     data: Any = None
 
 
+class BatchItemResult(_BaseModel):
+    """One item of a ``requests.batch`` submission.
+
+    Attributes:
+        index: Position of the item in the submitted list.
+        accepted: True when the item started; poll ``request_id`` (or wait for
+            its webhook). False when it was refused before running (rate
+            limit, credits, unknown endpoint...): not billed, resubmit later.
+        status: HTTP status of the submission (202 when accepted).
+        request_id: The item's request id (also set when refused, for bug reports).
+        poll_url: Where to poll it (accepted items).
+        error: The refusal's error body (refused items).
+    """
+
+    index: int
+    accepted: bool
+    status: int
+    request_id: str | None = None
+    poll_url: str | None = None
+    error: Any = None
+
+
+class BatchSubmission(_BaseModel):
+    """Result of ``requests.batch``: one entry per submitted item, in order."""
+
+    batch_id: str
+    count: int
+    accepted: int
+    requests: list[BatchItemResult] = Field(default_factory=list)
+
+
 # =============================================================================
 # Account
 # =============================================================================
