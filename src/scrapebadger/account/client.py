@@ -20,3 +20,21 @@ class AccountClient:
         Generated from the OpenAPI spec; returns the raw response dict.
         """
         return await self._client.get("/v1/account/me")
+
+    async def get_the_webhook_signing_secret(self) -> dict[str, Any]:
+        """Get the webhook signing secret.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        return await self._client.get("/v1/account/webhook-secret")
+
+    async def rotate_the_webhook_signing_secret(
+        self, *, payload: dict[str, Any] | None = None, params: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Rotate the webhook signing secret.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        return await self._client.post(
+            "/v1/account/webhook-secret/rotate", params=params, json=payload
+        )
