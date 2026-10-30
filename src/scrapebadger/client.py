@@ -22,6 +22,7 @@ from scrapebadger.bestbuy.client import BestbuyClient
 from scrapebadger.bing.client import BingClient
 from scrapebadger.booking.client import BookingClient
 from scrapebadger.chatgpt.client import ChatGPTClient
+from scrapebadger.copilot.client import CopilotClient
 from scrapebadger.depop.client import DepopClient
 from scrapebadger.duckduckgo.client import DuckDuckGoClient
 from scrapebadger.ebay.client import EbayClient
@@ -184,6 +185,7 @@ class ScrapeBadger:
         self._loopnet: LoopNetClient | None = None
         self._perplexity: PerplexityClient | None = None
         self._chatgpt: ChatGPTClient | None = None
+        self._copilot: CopilotClient | None = None
         self._gemini: GeminiClient | None = None
         self._instagram: InstagramClient | None = None
         self._walmart: WalmartClient | None = None
@@ -1075,3 +1077,10 @@ class ScrapeBadger:
         if self._target is None:
             self._target = TargetClient(self._base_client)
         return self._target
+
+    @property
+    def copilot(self) -> CopilotClient:
+        """Access Copilot API operations. (Generated from the OpenAPI spec.)"""
+        if self._copilot is None:
+            self._copilot = CopilotClient(self._base_client)
+        return self._copilot
