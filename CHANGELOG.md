@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.69.0 — 2026-10-30
+
+- **Copilot API.** New `copilot` namespace: `copilot.ask_copilot_a_question(prompt=..., country=, market=, strict_country=)` asks Microsoft Copilot (Copilot Search in Bing) and returns the answer with the sources it cites, `copilot.measure_a_brand_s_visibility_in_a_copilot_answer(prompt=..., brand=..., ...)` scores a brand in that answer, and `copilot.list_copilot_markets()` lists the markets. POST forms take a `payload`. `strict_country=True` answers only from an exit in `country` and fails with HTTP 503 `country_unavailable` (not billed) when none answers. Also fixes the `User-Agent` version, which still said 0.67.0. No existing signature changes. (SCR-479)
+
 ## 0.68.0 — 2026-10-28
 
 - **Batch submit and webhooks.** `requests.batch(items, callback_url=)` submits up to 100 GET reads (`{"path": "/v1/...", "query": {...}}`) as async requests in one free call and returns a `BatchSubmission` holding one `BatchItemResult` per item: `accepted`, `status`, `request_id`, `poll_url`, or `error` when the item was refused (not billed). With `callback_url`, every item POSTs a signed webhook when it completes. Verify it with the existing `scrapebadger.twitter.verify_webhook_signature(secret, raw_body, header)` and the secret from `GET /v1/account/webhook-secret`. It is the same `X-ScrapeBadger-Signature: sha256=` scheme stream monitors use. No existing signature changes. (SCR-470)
