@@ -71,6 +71,7 @@ SAMPLE_SEARCH_RESULT: dict[str, Any] = {
     "sold_count": 1200,
     "sold_date": "2 Jul 2026",
     "sold_date_at": "2026-07-02",
+    "ended_at": "2026-07-02T14:31:00Z",
     "watchers": 42,
     "rating": 4.8,
     "ratings_total": 530,
@@ -505,6 +506,7 @@ class TestEbayModels:
         assert len(resp.results) == 1
         assert resp.results[0].sold_date == "2 Jul 2026"
         assert resp.results[0].sold_date_at == "2026-07-02"
+        assert resp.results[0].ended_at == "2026-07-02T14:31:00Z"
 
     def test_item_detail_response(self) -> None:
         resp = ItemDetailResponse.model_validate(ITEM_DETAIL_RESPONSE)

@@ -123,7 +123,13 @@ class SearchResult(_BaseModel):
     returns: str | None = None
     sold_count: int | None = None
     sold_date: str | None = None  # completed cards: sale date as rendered, e.g. "2 Jul 2026"
-    sold_date_at: str | None = None  # ISO "2026-07-02", best-effort (None on non-English markets)
+    # ISO "2026-07-02": a day the item sold, per eBay's "Sold" label. On a
+    # multi-quantity listing eBay labels an earlier sale; bucket by ``ended_at``.
+    sold_date_at: str | None = None
+    # UTC "2026-11-01T16:05:00Z": when eBay last closed the listing out (its end,
+    # or the latest sale on a live multi-quantity listing). Completed results are
+    # ordered by it, newest first.
+    ended_at: str | None = None
     watchers: int | None = None
     coupon: str | None = None
     rating: float | None = None

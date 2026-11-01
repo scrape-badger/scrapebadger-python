@@ -224,15 +224,23 @@ class SearchClient:
         Pass ``query``, ``seller`` or both. ``seller`` alone pages through
         everything that seller sold, with no keyword needed.
 
+        Results are ordered by ``ended_at`` (when eBay last closed the listing
+        out, UTC), newest first. eBay applies no other time order to sold
+        listings: ``best_match``, ``ending_soonest`` and ``newly_listed`` all
+        return this one; the two price sorts do reorder. One listing is one
+        result, however many units it sold. eBay's replicas disagree slightly,
+        so a page walk can repeat or miss a listing; de-duplicate on ``item_id``.
+
         Args:
             query: Search keywords. Optional when ``seller`` is given.
             seller: Only this seller's sold listings (eBay username).
             domain: eBay marketplace domain (e.g. "com", "co.uk", "de"). Defaults to "com".
             category_id: Restrict the search to a category id.
             page: Page number (1-indexed). Defaults to 1.
-            per_page: Results per page (60, 120 or 240; clamped).
+            per_page: Results per page (60, 120 or 200; 240 returns 200).
             sort_by: Sort order ("best_match", "ending_soonest", "newly_listed",
-                "price_low_to_high", "price_high_to_low").
+                "price_low_to_high", "price_high_to_low"). Only the price sorts
+                change the order; see above.
             condition: Item condition ("new", "open_box", "refurbished", "used", "for_parts").
             min_price: Minimum price filter.
             max_price: Maximum price filter.
