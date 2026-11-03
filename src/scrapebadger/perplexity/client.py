@@ -15,7 +15,12 @@ class PerplexityClient:
         self._client = client
 
     async def ask_perplexity_a_question(
-        self, *, prompt: str, country: str | None = None, strict_country: bool = False
+        self,
+        *,
+        prompt: str,
+        country: str | None = None,
+        strict_country: bool = False,
+        location: str | None = None,
     ) -> dict[str, Any]:
         """Ask Perplexity a question.
 
@@ -26,9 +31,21 @@ class PerplexityClient:
         answers only from an exit in ``country`` (required with it); when none
         answers in time the call raises with HTTP 503 ``country_unavailable`` and
         is not billed. On the POST form, put ``"strict_country": true`` in ``payload``.
+
+        ``location`` is where the asker is: a city slug (``"tokyo"``, ``"osaka"``,
+        ``"seoul"``, ``"new-york"``, ``"london"``, ...; case-insensitive, spaces and
+        underscores fold to hyphens) or ``"lat,lng"`` in decimal degrees
+        (``"35.6812,139.7671"``). Perplexity then answers a local-sounding question
+        ("best dentist") for that place instead of the exit IP's city. It does not
+        change the exit: ``country`` still picks the exit and language. Any other
+        value raises with HTTP 400; the server holds the city list. The response
+        ``location`` is the canonical form that was sent (``None`` when unset). On
+        the POST form, put ``"location": "tokyo"`` in ``payload``. Sent only when set.
         """
         params: dict[str, Any] = {
-            k: v for k, v in {"prompt": prompt, "country": country}.items() if v is not None
+            k: v
+            for k, v in {"prompt": prompt, "country": country, "location": location}.items()
+            if v is not None
         }
         if strict_country:
             params["strict_country"] = True
@@ -53,6 +70,7 @@ class PerplexityClient:
         competitors: str | None = None,
         country: str | None = None,
         strict_country: bool = False,
+        location: str | None = None,
     ) -> dict[str, Any]:
         """Measure a brand's visibility in a Perplexity answer.
 
@@ -63,6 +81,16 @@ class PerplexityClient:
         answers only from an exit in ``country`` (required with it); when none
         answers in time the call raises with HTTP 503 ``country_unavailable`` and
         is not billed. On the POST form, put ``"strict_country": true`` in ``payload``.
+
+        ``location`` is where the asker is: a city slug (``"tokyo"``, ``"osaka"``,
+        ``"seoul"``, ``"new-york"``, ``"london"``, ...; case-insensitive, spaces and
+        underscores fold to hyphens) or ``"lat,lng"`` in decimal degrees
+        (``"35.6812,139.7671"``). Perplexity then answers a local-sounding question
+        ("best dentist") for that place instead of the exit IP's city. It does not
+        change the exit: ``country`` still picks the exit and language. Any other
+        value raises with HTTP 400; the server holds the city list. The response
+        ``location`` is the canonical form that was sent (``None`` when unset). On
+        the POST form, put ``"location": "tokyo"`` in ``payload``. Sent only when set.
         """
         params: dict[str, Any] = {
             k: v
@@ -73,6 +101,7 @@ class PerplexityClient:
                 "aliases": aliases,
                 "competitors": competitors,
                 "country": country,
+                "location": location,
             }.items()
             if v is not None
         }

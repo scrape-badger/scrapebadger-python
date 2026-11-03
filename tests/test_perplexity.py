@@ -1,4 +1,4 @@
-"""Unit tests for the Perplexity SDK client — query building for strict_country."""
+"""Unit tests for the Perplexity SDK client — query building for strict_country and location."""
 
 from __future__ import annotations
 
@@ -50,3 +50,45 @@ async def test_brand_visibility_strict_country(
     base.get.reset_mock()
     await perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(prompt="q", brand="Nike")
     assert "strict_country" not in base.get.await_args.kwargs["params"]
+
+
+async def test_ask_omits_location_by_default(perplexity: PerplexityClient, base: MagicMock) -> None:
+    await perplexity.ask_perplexity_a_question(prompt="q", country="JP")
+    assert "location" not in base.get.await_args.kwargs["params"]
+
+
+async def test_ask_sends_location(perplexity: PerplexityClient, base: MagicMock) -> None:
+    await perplexity.ask_perplexity_a_question(
+        prompt="best dentist", country="JP", strict_country=True, location="tokyo"
+    )
+    base.get.assert_awaited_once_with(
+        "/v1/perplexity/ask",
+        params={
+            "prompt": "best dentist",
+            "country": "JP",
+            "strict_country": True,
+            "location": "tokyo",
+        },
+    )
+
+
+async def test_location_is_sent_as_given(perplexity: PerplexityClient, base: MagicMock) -> None:
+    # The server folds and validates; the SDK must not rewrite or reject.
+    await perplexity.ask_perplexity_a_question(prompt="q", location="New York")
+    assert base.get.await_args.kwargs["params"]["location"] == "New York"
+    base.get.reset_mock()
+    await perplexity.ask_perplexity_a_question(prompt="q", location="35.6812,139.7671")
+    assert base.get.await_args.kwargs["params"]["location"] == "35.6812,139.7671"
+
+
+async def test_brand_visibility_location(perplexity: PerplexityClient, base: MagicMock) -> None:
+    await perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(
+        prompt="q", brand="Nike", country="JP", location="osaka"
+    )
+    base.get.assert_awaited_once_with(
+        "/v1/perplexity/brand-visibility",
+        params={"prompt": "q", "brand": "Nike", "country": "JP", "location": "osaka"},
+    )
+    base.get.reset_mock()
+    await perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(prompt="q", brand="Nike")
+    assert "location" not in base.get.await_args.kwargs["params"]

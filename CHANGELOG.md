@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.71.0 — 2026-11-03
+
+- **Perplexity: `location`.** `perplexity.ask_perplexity_a_question(prompt=..., location="tokyo")` and `perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(..., location="tokyo")` say where the asker is, so Perplexity answers a local-sounding question ("best dentist", "popular cafes") for that place instead of the residential exit's city. It takes a city slug (`tokyo`, `osaka`, `seoul`, `new-york`, `london`, ...; case-insensitive, spaces and underscores fold to hyphens, so `"New York"` works) or `"lat,lng"` in decimal degrees (`"35.6812,139.7671"`). It does not change the exit: `country` still picks the exit and language. Any other value fails with HTTP 400; the SDK sends it as given and leaves validation to the API. The response gains `location`, the canonical form that was sent (`"tokyo"`, `"35.6812,139.7671"`), or `None` when unset. On the POST forms put `"location": "tokyo"` in `payload`. Sent only when set. No existing signature changes. (SB-001181)
+
 ## 0.70.0 — 2026-11-03
 
 - **Google Search: People Also Ask answers.** `google.search.search(q, expand_related_questions=True)` opens every People Also Ask question the page shows (usually four); an integer `N` opens the first N. Each answered question in `related_questions` then carries `text_blocks` and `references`, in the same shape as `ai_overview`; a question whose answer did not come back keeps them `None`. The answers are fetched on the session that served the SERP, so a question can't be expanded later. Each answered question bills as one more Search request (credits = 20 x (1 + answered) at today's price). Sent as `"true"` or `N` only when set; `None`, `False` and `0` send nothing, and values outside 0-99 raise `ValueError`. It upgrades `mode="fast"` to full; `/v1/google/light/search` does not accept it.
