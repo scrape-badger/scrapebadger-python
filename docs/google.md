@@ -30,15 +30,48 @@ async with ScrapeBadger(api_key="your-key") as client:
         safe="off",
     )
     # Structured sections:
-    #   serp["organic_results"]      — position, title, link, snippet, displayed_link
+    #   serp["organic_results"]      — position, title, link, snippet, displayed_link,
+    #                                  date, sitelinks, rich_snippet, read_more_link
     #   serp["knowledge_graph"]      — title, type, description, attributes
-    #   serp["ai_overview"]          — text_blocks, references, videos
-    #   serp["related_questions"]    — People Also Ask
+    #   serp["ai_overview"]          — text_blocks (paragraph/heading/list, with
+    #                                  reference_indexes), references, videos
+    #   serp["related_questions"]    — People Also Ask: question, rank, type
+    #   serp["shopping_results"]     — carousel products with prices and IDs
+    #   serp["perspectives"], serp["discussions_and_forums"],
+    #   serp["short_videos"], serp["things_to_know"]
     #   serp["related_searches"]     — query, link
     #   serp["pagination"]           — current, next, page_no map
     print(f"About {serp['search_information']['total_results']:,} results "
           f"in {serp['search_information']['time_taken']}s")
 ```
+
+#### People Also Ask answers
+
+Google loads a People Also Ask answer only when the question is clicked, so a
+plain search returns the questions without answers. `expand_related_questions`
+opens them during the same search (`True` = every question the page shows,
+usually four; an integer `N` = the first N):
+
+```python
+async with ScrapeBadger(api_key="your-key") as client:
+    serp = await client.google.search.search(
+        "are noise cancelling headphones worth it",
+        expand_related_questions=2,
+    )
+    for q in serp["related_questions"]:
+        if q["text_blocks"] is None:
+            continue  # not opened, or the answer did not come back
+        print(q["question"])
+        for block in q["text_blocks"]:
+            print("  ", block.get("snippet"))
+        for ref in q["references"]:
+            print("   source:", ref["title"], ref["link"])
+```
+
+Each answered question bills as one more Search request (credits = 20 x (1 +
+answered) at today's price); a question that does not come back is not billed.
+It adds about a second per question and upgrades `mode="fast"` to full. Light
+Search does not accept it.
 
 ### Maps (Search, Place, Reviews, Photos, Posts)
 
@@ -351,7 +384,8 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 
 | Endpoint | Credits |
 |---|---|
-| `search`, `images`, `videos`, `shorts`, `light`, `local`, `ai-mode/search`, `ai-overview`, `lens/search`, `autocomplete`, `maps/*`, `news/*`, `trends/*`, `jobs/search`, `scholar/*`, `patents/*`, `finance/quote`, `hotels/*`, `flights/*`, `shopping/search`, `products/detail` | **20** |
+| `light` (`/v1/google/light/search`) | **10** |
+| `search`, `images`, `videos`, `shorts`, `local`, `ai-mode/search`, `ai-overview`, `lens/search`, `autocomplete`, `maps/*`, `news/*`, `trends/*`, `jobs/search`, `scholar/*`, `patents/*`, `finance/quote`, `hotels/*`, `flights/*`, `shopping/search`, `products/detail` | **20** |
 | `shopping/offers` | **25** |
 | `ads/advertisers`, `ads/advertiser`, `ads/creative` | **15** |
 | `ads/search` | **25** |
