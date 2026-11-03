@@ -128,6 +128,27 @@ class TestSearchClient:
             await google.search.search("python", expand_related_questions=value)
         mock_base_client.get.assert_not_awaited()
 
+    @pytest.mark.asyncio
+    async def test_light_uses_dedicated_endpoint(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        await google.search.light(
+            "python", gl="gb", num=20, start=10, domain="google.co.uk", tbs="qdr:w"
+        )
+        mock_base_client.get.assert_awaited_once()
+        args, kwargs = mock_base_client.get.call_args
+        assert args[0] == "/v1/google/light/search"
+        params = kwargs["params"]
+        assert params["q"] == "python"
+        assert params["gl"] == "gb"
+        assert params["num"] == 20
+        assert params["start"] == 10
+        assert params["domain"] == "google.co.uk"
+        assert params["tbs"] == "qdr:w"
+        # Light cannot be upgraded to full Search, so none of its controls are sent.
+        for key in ("mode", "ai_overview", "expand_related_questions"):
+            assert key not in params
+
 
 class TestMapsClient:
     @pytest.mark.asyncio

@@ -186,30 +186,82 @@ class SearchClient:
         domain: str = "google.com",
         location: str | None = None,
         safe: str = "off",
+        device: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int | None = None,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
     ) -> dict[str, Any]:
-        """Lightweight Google Search — organic results + related searches only.
+        """Google Light Search — organic results + related searches only.
 
-        ~40% faster than :meth:`search`. Skips ads, Knowledge Graph,
-        AI Overview, local pack, news, inline videos, and shopping.
-        Use when you only need the 10 blue links. Credit cost is
-        configured per-endpoint by admins — query ``/public/pricing``
-        for the live rate. Has a 12-second processing budget; past it the
-        API returns ``503`` with ``Retry-After: 60``. People Also Ask
-        answers (``expand_related_questions``) need :meth:`search`.
+        Calls the dedicated ``/v1/google/light/search`` endpoint, which is
+        billed at the Light rate (half of full :meth:`search`; query
+        ``/public/pricing`` for the live rate). Skips ads, Knowledge Graph,
+        AI Overview, People Also Ask, local pack, news, inline videos and
+        shopping. Use when you only need the 10 blue links. Has a 12-second
+        processing budget; past it the API returns ``503`` with
+        ``Retry-After: 60``. AI Overview and People Also Ask answers
+        (``ai_overview``, ``expand_related_questions``) need :meth:`search`.
+
+        Args:
+            q: Search query (supports Google operators like `site:`).
+            gl: Country code (default "us").
+            hl: Language code (default "en").
+            num: Results per page (1-100).
+            start: Page offset (0, 10, 20, ...).
+            domain: Google domain (e.g. "google.com", "google.co.uk").
+            location: City-level geo-targeting.
+            safe: Safe search ("off", "medium", "high").
+            device: "desktop" or "mobile" (server default: desktop).
+            lr: Language restrict (e.g. "lang_en").
+            tbs: Time filter (e.g. "qdr:d" for past 24h).
+            uule: UULE encoded location.
+            filter: Show omitted results when set to 0.
+            nfpr: Set to 1 to disable auto-correction.
+            cr: Country restrict.
+            ludocid: Google Place CID.
+            lsig: Knowledge Graph map ID.
+            kgmid: Knowledge Graph entity ID.
+            si: Cached search params token.
+            ibp: Layout control.
+            uds: Google filter string.
 
         Returns:
             ``{search_information, organic_results, related_searches,
             pagination}`` — no ``ai_overview`` / ``knowledge_graph`` /
             ``ads`` / ``local_results`` / ``news_results`` blocks.
+            ``search_information.organic_results_state`` is filled, as on
+            full Search.
         """
-        return await self.search(
-            q,
-            gl=gl,
-            hl=hl,
-            num=num,
-            start=start,
-            domain=domain,
-            location=location,
-            safe=safe,
-            mode="fast",
-        )
+        params: dict[str, Any] = {
+            "q": q,
+            "gl": gl,
+            "hl": hl,
+            "num": num,
+            "start": start,
+            "domain": domain,
+            "location": location,
+            "safe": safe,
+            "device": device,
+            "lr": lr,
+            "tbs": tbs,
+            "uule": uule,
+            "filter": filter,
+            "nfpr": nfpr,
+            "cr": cr,
+            "ludocid": ludocid,
+            "lsig": lsig,
+            "kgmid": kgmid,
+            "si": si,
+            "ibp": ibp,
+            "uds": uds,
+        }
+        return await self._client.get("/v1/google/light/search", params=params)

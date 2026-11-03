@@ -384,7 +384,8 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 
 | Endpoint | Credits |
 |---|---|
-| `search`, `images`, `videos`, `shorts`, `light`, `local`, `ai-mode/search`, `ai-overview`, `lens/search`, `autocomplete`, `maps/*`, `news/*`, `trends/*`, `jobs/search`, `scholar/*`, `patents/*`, `finance/quote`, `hotels/*`, `flights/*`, `shopping/search`, `products/detail` | **20** |
+| `light` (`/v1/google/light/search`) | **10** |
+| `search`, `images`, `videos`, `shorts`, `local`, `ai-mode/search`, `ai-overview`, `lens/search`, `autocomplete`, `maps/*`, `news/*`, `trends/*`, `jobs/search`, `scholar/*`, `patents/*`, `finance/quote`, `hotels/*`, `flights/*`, `shopping/search`, `products/detail` | **20** |
 | `shopping/offers` | **25** |
 | `ads/advertisers`, `ads/advertiser`, `ads/creative` | **15** |
 | `ads/search` | **25** |
