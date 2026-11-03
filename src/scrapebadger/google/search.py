@@ -47,6 +47,7 @@ class SearchClient:
         ibp: str | None = None,
         uds: str | None = None,
         ai_overview: bool = False,
+        expand_related_questions: bool | int | None = None,
         mode: Literal["full", "fast"] = "full",
     ) -> dict[str, Any]:
         """Search Google and get a structured SERP response.
@@ -79,6 +80,21 @@ class SearchClient:
                 the overview; no-op otherwise. Credit cost is configured
                 per-endpoint by ScrapeBadger admins — query the public
                 ``/public/pricing`` API for the live rate.
+            expand_related_questions: Open the People Also Ask questions
+                and return their answers. ``True`` opens every question the
+                page shows (usually four), an integer ``N`` opens the first
+                N (0-99; ``0`` or ``False`` opens none). Each answered
+                question in ``related_questions`` then carries
+                ``text_blocks`` and ``references``, in the same shape as
+                ``ai_overview``. The answers are fetched on the same session
+                that served the SERP, so there is no way to expand a
+                question later; a question whose answer did not come back
+                keeps them ``None``. Each answered question bills as one
+                more Search request (credits = 20 x (1 + answered) at
+                today's price); a question that does not come back is not
+                billed. Adds about a second per question. Upgrades
+                ``mode="fast"`` to ``"full"``. Not accepted by
+                ``/v1/google/light/search``.
             mode: ``"full"`` (default) returns the complete SERP with every
                 block — organic, ads, knowledge graph, People Also Ask, AI
                 Overview, local pack, news, related searches, videos.
@@ -86,14 +102,42 @@ class SearchClient:
                 ``gbv=1`` endpoint and returns only organic results +
                 related searches. Rich blocks (KG, local, AI Overview, news)
                 are not returned. Auto-upgrades to ``"full"`` when
-                ``ai_overview=True``.
+                ``ai_overview=True`` or ``expand_related_questions`` is set.
+                ``"fast"`` has a 12-second processing budget; past it the
+                API returns ``503`` with ``Retry-After: 60``.
+
+        A full-mode query with a ``site:`` operator is answered from
+        Google's Web tab: ``organic_results``, ``related_searches`` and
+        ``pagination`` only, rich blocks empty (pass ``ai_overview=True``
+        for the full page). When Google explicitly finds nothing,
+        ``organic_results`` is empty and
+        ``search_information.organic_results_state`` is ``"no_results"``;
+        when it drops quotes to find results, it is
+        ``"Results for relaxed query"``.
 
         Returns:
             Structured SERP response containing:
-            - `search_information`: total_results, time_taken, query_displayed
-            - `organic_results`: list of position/title/link/snippet/displayed_link
-            - `ads`, `knowledge_graph`, `related_questions`, `related_searches`
-            - `local_results`, `inline_videos`, `ai_overview`
+            - `search_information`: total_results, time_taken, query_displayed,
+              organic_results_state
+            - `organic_results`: position/title/link/snippet/displayed_link,
+              plus `date`, `sitelinks`, `rich_snippet` and `read_more_link`
+              when Google shows them
+            - `ads`, `knowledge_graph`, `related_searches`,
+              `people_also_search_for`
+            - `related_questions`: question, rank, `type` (``"ai_overview"``
+              or ``None``), and `text_blocks` / `references` when expanded
+            - `ai_overview`: `text_blocks` (paragraph, heading and list
+              blocks; list blocks carry `list_items`) with
+              `reference_indexes` (0-based into `references`), and
+              `references` (title, link, source, snippet, logo)
+            - `shopping_results`: position, category, title, price,
+              extracted_price, original_price, extracted_original_price,
+              source, rating, reviews, delivery, extensions, thumbnail,
+              product_id, catalog_id, product_link,
+              scrapebadger_product_detail_link
+            - `perspectives`, `discussions_and_forums`, `short_videos`,
+              `things_to_know`
+            - `local_results`, `inline_videos`
             - `pagination`
         """
         params: dict[str, Any] = {
@@ -121,6 +165,12 @@ class SearchClient:
         }
         if ai_overview:
             params["ai_overview"] = True
+        if expand_related_questions is True:
+            params["expand_related_questions"] = "true"
+        elif expand_related_questions:  # an int N; None, False and 0 open none
+            if not 0 < expand_related_questions <= 99:
+                raise ValueError("expand_related_questions must be True or an integer 0-99")
+            params["expand_related_questions"] = expand_related_questions
         if mode != "full":
             params["mode"] = mode
         return await self._client.get("/v1/google/search", params=params)
@@ -143,7 +193,9 @@ class SearchClient:
         AI Overview, local pack, news, inline videos, and shopping.
         Use when you only need the 10 blue links. Credit cost is
         configured per-endpoint by admins — query ``/public/pricing``
-        for the live rate.
+        for the live rate. Has a 12-second processing budget; past it the
+        API returns ``503`` with ``Retry-After: 60``. People Also Ask
+        answers (``expand_related_questions``) need :meth:`search`.
 
         Returns:
             ``{search_information, organic_results, related_searches,

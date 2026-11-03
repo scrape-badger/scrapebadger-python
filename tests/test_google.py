@@ -92,6 +92,41 @@ class TestSearchClient:
         assert params["start"] == 10
         assert params["domain"] == "google.co.uk"
         assert params["device"] == "mobile"
+        assert "expand_related_questions" not in params
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("value", "sent"),
+        [(True, "true"), (2, 2), (99, 99)],
+    )
+    async def test_search_expand_related_questions(
+        self,
+        google: GoogleClient,
+        mock_base_client: MagicMock,
+        value: bool | int,
+        sent: str | int,
+    ) -> None:
+        await google.search.search("noise cancelling headphones", expand_related_questions=value)
+        _, kwargs = mock_base_client.get.call_args
+        assert kwargs["params"]["expand_related_questions"] == sent
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("value", [None, False, 0])
+    async def test_search_expand_related_questions_off_is_omitted(
+        self, google: GoogleClient, mock_base_client: MagicMock, value: bool | int | None
+    ) -> None:
+        await google.search.search("python", expand_related_questions=value)
+        _, kwargs = mock_base_client.get.call_args
+        assert "expand_related_questions" not in kwargs["params"]
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("value", [-1, 100])
+    async def test_search_expand_related_questions_out_of_range(
+        self, google: GoogleClient, mock_base_client: MagicMock, value: int
+    ) -> None:
+        with pytest.raises(ValueError, match="expand_related_questions"):
+            await google.search.search("python", expand_related_questions=value)
+        mock_base_client.get.assert_not_awaited()
 
 
 class TestMapsClient:
