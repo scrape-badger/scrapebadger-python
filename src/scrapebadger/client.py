@@ -18,6 +18,7 @@ from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.app_store.client import AppStoreClient
 from scrapebadger.asos.client import AsosClient
 from scrapebadger.baidu.client import BaiduClient
+from scrapebadger.batch.client import BatchClient
 from scrapebadger.bestbuy.client import BestbuyClient
 from scrapebadger.bing.client import BingClient
 from scrapebadger.booking.client import BookingClient
@@ -192,6 +193,7 @@ class ScrapeBadger:
         self._gumtree: GumtreeClient | None = None
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
+        self._batch: BatchClient | None = None
         self._bestbuy: BestbuyClient | None = None
         self._bing: BingClient | None = None
         self._booking: BookingClient | None = None
@@ -1084,3 +1086,10 @@ class ScrapeBadger:
         if self._copilot is None:
             self._copilot = CopilotClient(self._base_client)
         return self._copilot
+
+    @property
+    def batch(self) -> BatchClient:
+        """Access Batch API operations. (Generated from the OpenAPI spec.)"""
+        if self._batch is None:
+            self._batch = BatchClient(self._base_client)
+        return self._batch
