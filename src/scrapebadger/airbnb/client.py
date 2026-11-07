@@ -89,7 +89,7 @@ class AirbnbClient:
         room_id: str,
         *,
         month: int = 1,
-        year: int = 2026,
+        year: str | None = None,
         months: int = 12,
         currency: str | None = None,
         locale: str | None = None,
