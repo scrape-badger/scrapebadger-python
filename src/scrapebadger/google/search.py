@@ -69,6 +69,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["html"],
     ) -> str: ...
@@ -120,6 +123,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["json"] = "json",
     ) -> dict[str, Any]: ...
@@ -171,6 +177,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["json", "html"],
     ) -> dict[str, Any] | str: ...
@@ -221,6 +230,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["json", "html"] = "json",
     ) -> dict[str, Any] | str:
@@ -246,6 +258,9 @@ class SearchClient:
             as_qdr: Time range, such as d, w, m or y1.
             as_rq: Related URL; availability depends on Google.
             as_sitesearch: Restrict results to a site.
+            oq: Original query sent to Google. Defaults to q; an empty string omits it.
+            sourceid: Google source identifier. Defaults to chrome; an empty string omits it.
+            ie: Google input encoding hint. Defaults to UTF-8; an empty string omits it.
             user_agent: Custom User-Agent override.
             output: json returns structured results; html returns the raw page.
             q: Search query (supports Google operators like `site:`, `intitle:`).
@@ -355,6 +370,9 @@ class SearchClient:
             "as_qdr": as_qdr,
             "as_rq": as_rq,
             "as_sitesearch": as_sitesearch,
+            "oq": oq,
+            "sourceid": sourceid,
+            "ie": ie,
             "user_agent": user_agent,
             "output": output,
             "q": q,
@@ -438,6 +456,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["html"],
     ) -> str: ...
@@ -486,6 +507,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["json"] = "json",
     ) -> dict[str, Any]: ...
@@ -534,6 +558,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["json", "html"],
     ) -> dict[str, Any] | str: ...
@@ -581,6 +608,9 @@ class SearchClient:
         as_qdr: str | None = None,
         as_rq: str | None = None,
         as_sitesearch: str | None = None,
+        oq: str | None = None,
+        sourceid: str | None = None,
+        ie: str | None = None,
         user_agent: str | None = None,
         output: Literal["json", "html"] = "json",
     ) -> dict[str, Any] | str:
@@ -615,6 +645,9 @@ class SearchClient:
             as_qdr: Time range, such as d, w, m or y1.
             as_rq: Related URL; availability depends on Google.
             as_sitesearch: Restrict results to a site.
+            oq: Original query sent to Google. Defaults to q; an empty string omits it.
+            sourceid: Google source identifier. Defaults to chrome; an empty string omits it.
+            ie: Google input encoding hint. Defaults to UTF-8; an empty string omits it.
             user_agent: Custom User-Agent override.
             output: json returns structured results; html returns the raw page.
             q: Search query (supports Google operators like `site:`).
@@ -666,6 +699,9 @@ class SearchClient:
             "as_qdr": as_qdr,
             "as_rq": as_rq,
             "as_sitesearch": as_sitesearch,
+            "oq": oq,
+            "sourceid": sourceid,
+            "ie": ie,
             "user_agent": user_agent,
             "output": output,
             "q": q,

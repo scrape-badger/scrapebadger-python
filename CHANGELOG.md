@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.76.0 — 2026-11-07
+
+- Expose Google Search `oq`, `sourceid` and `ie` request fields, including explicit empty values. Backend defaults are `oq=q`, `sourceid=chrome`, `ie=UTF-8`.
+
 ## 0.75.0 — 2026-11-07
 
 - Add Google Search and Light location, coordinates, radius, color scheme, advanced query filters, and cache bypass controls.
