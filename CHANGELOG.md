@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.72.0 — 2026-11-07
+
+- **GitHub Profile API.** Adds `github.get_profile(username, tab=, year=, page=, next_page_token=)` for public user and organization profiles, native README and contribution sections, profile repositories, and paginated user stars.
+- **Brave Search API.** Adds the `brave` namespace for web, image, video and news search, autocomplete, and locale discovery.
+- **AutoScout24 API.** Adds the `autoscout24` namespace for public vehicle search, listing detail, supported markets, and search filters.
+- Refreshes generated OpenAPI facades, including batch, Google related-question expansion, Facebook, account and Airbnb parameters. Existing callable signatures are preserved from the reviewed generated SDK candidate.
+- Aligns Copilot and Perplexity query-building tests with the generated explicit `strict_country=False` default. The gateway and scraper already default this flag to false; true-value, location and POST behavior remain covered.
+
 ## 0.71.0 — 2026-11-03
 
 - **Perplexity: `location`.** `perplexity.ask_perplexity_a_question(prompt=..., location="tokyo")` and `perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(..., location="tokyo")` say where the asker is, so Perplexity answers a local-sounding question ("best dentist", "popular cafes") for that place instead of the residential exit's city. It takes a city slug (`tokyo`, `osaka`, `seoul`, `new-york`, `london`, ...; case-insensitive, spaces and underscores fold to hyphens, so `"New York"` works) or `"lat,lng"` in decimal degrees (`"35.6812,139.7671"`). It does not change the exit: `country` still picks the exit and language. Any other value fails with HTTP 400; the SDK sends it as given and leaves validation to the API. The response gains `location`, the canonical form that was sent (`"tokyo"`, `"35.6812,139.7671"`), or `None` when unset. On the POST forms put `"location": "tokyo"` in `payload`. Sent only when set. No existing signature changes. (SB-001181)
