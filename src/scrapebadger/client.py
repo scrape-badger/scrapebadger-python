@@ -937,6 +937,16 @@ class ScrapeBadger:
         """Exit async context manager."""
         await self.close()
 
+    async def endpoints(self) -> list[dict[str, str]]:
+        """Read the current endpoint catalog, excluding hidden endpoints.
+
+        Status is active, temporarily_unavailable, or deprecated. The catalog
+        is fetched on each call so admin changes do not require an SDK upgrade.
+        Restricted calls raise the API's 404, 410 or 423 error and are not billed.
+        """
+        response = await self._base_client.get("/api/public/endpoint-catalog")
+        return list(response["endpoints"])
+
     def __repr__(self) -> str:
         """Return string representation."""
         return f"ScrapeBadger(base_url={self._config.base_url!r})"

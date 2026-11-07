@@ -1,3 +1,7 @@
+## 0.73.0
+
+- Add live `endpoints()` discovery, reflecting admin availability and omitting hidden endpoints. Lifecycle errors retain HTTP 404/410/423 and are not retried.
+
 # Changelog
 
 ## 0.72.0 — 2026-11-07
