@@ -4,7 +4,7 @@
 
 - **GitHub Profile API.** Adds `github.get_profile(username, tab=, year=, page=, next_page_token=)` for public user and organization profiles, native README and contribution sections, profile repositories, and paginated user stars.
 - **Brave Search API.** Adds the `brave` namespace for web, image, video and news search, autocomplete, and locale discovery.
-- **AutoScout24 API.** Adds the `autoscout24` namespace for public vehicle search, listing detail, supported markets, and search filters.
+- **AutoScout24 API.** Adds the `autoscout24` namespace for public vehicle search, supported markets, and search filters.
 - Refreshes generated OpenAPI facades, including batch, Google related-question expansion, Facebook, account and Airbnb parameters. Existing callable signatures are preserved from the reviewed generated SDK candidate.
 - Aligns Copilot and Perplexity query-building tests with the generated explicit `strict_country=False` default. The gateway and scraper already default this flag to false; true-value, location and POST behavior remain covered.
 
