@@ -21,11 +21,13 @@ def perplexity(base: MagicMock) -> PerplexityClient:
     return PerplexityClient(base)
 
 
-async def test_ask_omits_strict_country_by_default(
+async def test_ask_sends_false_strict_country_default(
     perplexity: PerplexityClient, base: MagicMock
 ) -> None:
     await perplexity.ask_perplexity_a_question(prompt="q", country="DE")
-    base.get.assert_awaited_once_with("/v1/perplexity/ask", params={"prompt": "q", "country": "DE"})
+    base.get.assert_awaited_once_with(
+        "/v1/perplexity/ask", params={"prompt": "q", "country": "DE", "strict_country": False}
+    )
 
 
 async def test_ask_sends_strict_country_when_true(
@@ -49,7 +51,7 @@ async def test_brand_visibility_strict_country(
     )
     base.get.reset_mock()
     await perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(prompt="q", brand="Nike")
-    assert "strict_country" not in base.get.await_args.kwargs["params"]
+    assert base.get.await_args.kwargs["params"]["strict_country"] is False
 
 
 async def test_ask_omits_location_by_default(perplexity: PerplexityClient, base: MagicMock) -> None:
@@ -87,7 +89,13 @@ async def test_brand_visibility_location(perplexity: PerplexityClient, base: Mag
     )
     base.get.assert_awaited_once_with(
         "/v1/perplexity/brand-visibility",
-        params={"prompt": "q", "brand": "Nike", "country": "JP", "location": "osaka"},
+        params={
+            "prompt": "q",
+            "brand": "Nike",
+            "country": "JP",
+            "strict_country": False,
+            "location": "osaka",
+        },
     )
     base.get.reset_mock()
     await perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(prompt="q", brand="Nike")

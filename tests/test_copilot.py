@@ -27,9 +27,13 @@ def test_registered_on_client() -> None:
     assert isinstance(ScrapeBadger(api_key="k").copilot, CopilotClient)
 
 
-async def test_ask_omits_unset_params(copilot: CopilotClient, base: MagicMock) -> None:
+async def test_ask_sends_false_default_and_omits_unset_params(
+    copilot: CopilotClient, base: MagicMock
+) -> None:
     await copilot.ask_copilot_a_question(prompt="q")
-    base.get.assert_awaited_once_with("/v1/copilot/ask", params={"prompt": "q"})
+    base.get.assert_awaited_once_with(
+        "/v1/copilot/ask", params={"prompt": "q", "strict_country": False}
+    )
 
 
 async def test_ask_sends_market_and_strict_country(copilot: CopilotClient, base: MagicMock) -> None:

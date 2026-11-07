@@ -17,10 +17,13 @@ from scrapebadger.amazon.client import AmazonClient
 from scrapebadger.apartments.client import ApartmentsClient
 from scrapebadger.app_store.client import AppStoreClient
 from scrapebadger.asos.client import AsosClient
+from scrapebadger.autoscout24.client import Autoscout24Client
 from scrapebadger.baidu.client import BaiduClient
+from scrapebadger.batch.client import BatchClient
 from scrapebadger.bestbuy.client import BestbuyClient
 from scrapebadger.bing.client import BingClient
 from scrapebadger.booking.client import BookingClient
+from scrapebadger.brave.client import BraveClient
 from scrapebadger.chatgpt.client import ChatGPTClient
 from scrapebadger.copilot.client import CopilotClient
 from scrapebadger.depop.client import DepopClient
@@ -29,6 +32,7 @@ from scrapebadger.ebay.client import EbayClient
 from scrapebadger.etsy.client import EtsyClient
 from scrapebadger.facebook.client import FacebookClient
 from scrapebadger.gemini.client import GeminiClient
+from scrapebadger.github.client import GithubClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.google_play.client import GooglePlayClient
 from scrapebadger.gumtree.client import GumtreeClient
@@ -163,6 +167,7 @@ class ScrapeBadger:
         self._apartments: ApartmentsClient | None = None
         self._app_store: AppStoreClient | None = None
         self._asos: AsosClient | None = None
+        self._autoscout24: Autoscout24Client | None = None
         self._depop: DepopClient | None = None
         self._wallapop: WallapopClient | None = None
         self._linkedin: LinkedInClient | None = None
@@ -187,14 +192,17 @@ class ScrapeBadger:
         self._chatgpt: ChatGPTClient | None = None
         self._copilot: CopilotClient | None = None
         self._gemini: GeminiClient | None = None
+        self._github: GithubClient | None = None
         self._instagram: InstagramClient | None = None
         self._walmart: WalmartClient | None = None
         self._gumtree: GumtreeClient | None = None
         self._duckduckgo: DuckDuckGoClient | None = None
         self._baidu: BaiduClient | None = None
+        self._batch: BatchClient | None = None
         self._bestbuy: BestbuyClient | None = None
         self._bing: BingClient | None = None
         self._booking: BookingClient | None = None
+        self._brave: BraveClient | None = None
         self._yahoo: YahooClient | None = None
         self._yandex: YandexClient | None = None
         self._naver: NaverClient | None = None
@@ -1084,3 +1092,31 @@ class ScrapeBadger:
         if self._copilot is None:
             self._copilot = CopilotClient(self._base_client)
         return self._copilot
+
+    @property
+    def autoscout24(self) -> Autoscout24Client:
+        """Access Autoscout24 API operations. (Generated from the OpenAPI spec.)"""
+        if self._autoscout24 is None:
+            self._autoscout24 = Autoscout24Client(self._base_client)
+        return self._autoscout24
+
+    @property
+    def batch(self) -> BatchClient:
+        """Access Batch API operations. (Generated from the OpenAPI spec.)"""
+        if self._batch is None:
+            self._batch = BatchClient(self._base_client)
+        return self._batch
+
+    @property
+    def brave(self) -> BraveClient:
+        """Access Brave API operations. (Generated from the OpenAPI spec.)"""
+        if self._brave is None:
+            self._brave = BraveClient(self._base_client)
+        return self._brave
+
+    @property
+    def github(self) -> GithubClient:
+        """Access Github API operations. (Generated from the OpenAPI spec.)"""
+        if self._github is None:
+            self._github = GithubClient(self._base_client)
+        return self._github
