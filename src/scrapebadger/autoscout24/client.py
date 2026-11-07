@@ -24,6 +24,20 @@ class Autoscout24Client:
         params = {k: v for k, v in {"market": market, "make": make}.items() if v is not None}
         return await self._client.get("/v1/autoscout24/filters", params=params)
 
+    async def get_listing(
+        self, *, url: str | None = None, listing_id: str | None = None, market: str | None = None
+    ) -> dict[str, Any]:
+        """Get listing.
+
+        Generated from the OpenAPI spec; returns the raw response dict.
+        """
+        params = {
+            k: v
+            for k, v in {"url": url, "listing_id": listing_id, "market": market}.items()
+            if v is not None
+        }
+        return await self._client.get("/v1/autoscout24/listing", params=params)
+
     async def list_markets(self) -> dict[str, Any]:
         """List markets.
 
