@@ -56,6 +56,7 @@ from scrapebadger.walmart.client import WalmartClient
 from scrapebadger.web.client import WebClient
 from scrapebadger.yahoo.client import YahooClient
 from scrapebadger.yandex.client import YandexClient
+from scrapebadger.yelp.client import YelpClient
 from scrapebadger.youtube.client import YoutubeClient
 from scrapebadger.zillow.client import ZillowClient
 
@@ -205,6 +206,7 @@ class ScrapeBadger:
         self._brave: BraveClient | None = None
         self._yahoo: YahooClient | None = None
         self._yandex: YandexClient | None = None
+        self._yelp: YelpClient | None = None
         self._naver: NaverClient | None = None
 
     @property
@@ -1130,3 +1132,10 @@ class ScrapeBadger:
         if self._github is None:
             self._github = GithubClient(self._base_client)
         return self._github
+
+    @property
+    def yelp(self) -> YelpClient:
+        """Access Yelp API operations. (Generated from the OpenAPI spec.)"""
+        if self._yelp is None:
+            self._yelp = YelpClient(self._base_client)
+        return self._yelp
