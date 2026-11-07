@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, overload
 
 if TYPE_CHECKING:
     from scrapebadger._internal.client import BaseClient
@@ -21,6 +21,159 @@ class SearchClient:
 
     def __init__(self, client: BaseClient) -> None:
         self._client = client
+
+    @overload
+    async def search(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        device: str = "desktop",
+        location: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        safe: str = "off",
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int = 0,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
+        ai_overview: bool = False,
+        expand_related_questions: bool | int | None = None,
+        mode: Literal["full", "fast"] = "full",
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["html"],
+    ) -> str: ...
+
+    @overload
+    async def search(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        device: str = "desktop",
+        location: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        safe: str = "off",
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int = 0,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
+        ai_overview: bool = False,
+        expand_related_questions: bool | int | None = None,
+        mode: Literal["full", "fast"] = "full",
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["json"] = "json",
+    ) -> dict[str, Any]: ...
+
+    @overload
+    async def search(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        device: str = "desktop",
+        location: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        safe: str = "off",
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int = 0,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
+        ai_overview: bool = False,
+        expand_related_questions: bool | int | None = None,
+        mode: Literal["full", "fast"] = "full",
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["json", "html"],
+    ) -> dict[str, Any] | str: ...
 
     async def search(
         self,
@@ -49,10 +202,52 @@ class SearchClient:
         ai_overview: bool = False,
         expand_related_questions: bool | int | None = None,
         mode: Literal["full", "fast"] = "full",
-    ) -> dict[str, Any]:
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["json", "html"] = "json",
+    ) -> dict[str, Any] | str:
         """Search Google and get a structured SERP response.
 
         Args:
+            google_domain: Alias for domain; Google requests use google.com with country targeting.
+            lat: Latitude; supply together with lon instead of location or uule.
+            lon: Longitude; supply together with lat.
+            radius: Accuracy in meters; needs lat/lon or a city with a known center.
+            color_scheme: Google color scheme.
+            tbm: Search type; use output=html or the dedicated vertical APIs.
+            udm: Google result filter: 14 web, 18 forums. Other verticals require output=html.
+            no_cache: Bypass result caches and request a fresh Google fetch.
+            as_dt: Site restriction mode: i includes, e excludes as_sitesearch.
+            as_epq: Exact phrase.
+            as_eq: Words to exclude.
+            as_lq: Find pages linking to this URL; availability depends on Google.
+            as_nlo: Numeric range minimum.
+            as_nhi: Numeric range maximum.
+            as_oq: Match any of these words.
+            as_q: Additional query words.
+            as_qdr: Time range, such as d, w, m or y1.
+            as_rq: Related URL; availability depends on Google.
+            as_sitesearch: Restrict results to a site.
+            user_agent: Custom User-Agent override.
+            output: json returns structured results; html returns the raw page.
             q: Search query (supports Google operators like `site:`, `intitle:`).
             gl: Country code (default "us").
             hl: Language code (default "en").
@@ -141,6 +336,27 @@ class SearchClient:
             - `pagination`
         """
         params: dict[str, Any] = {
+            "google_domain": google_domain,
+            "lat": lat,
+            "lon": lon,
+            "radius": radius,
+            "color_scheme": color_scheme,
+            "tbm": tbm,
+            "udm": udm,
+            "no_cache": no_cache,
+            "as_dt": as_dt,
+            "as_epq": as_epq,
+            "as_eq": as_eq,
+            "as_lq": as_lq,
+            "as_nlo": as_nlo,
+            "as_nhi": as_nhi,
+            "as_oq": as_oq,
+            "as_q": as_q,
+            "as_qdr": as_qdr,
+            "as_rq": as_rq,
+            "as_sitesearch": as_sitesearch,
+            "user_agent": user_agent,
+            "output": output,
             "q": q,
             "gl": gl,
             "hl": hl,
@@ -173,7 +389,154 @@ class SearchClient:
             params["expand_related_questions"] = expand_related_questions
         if mode != "full":
             params["mode"] = mode
+        if output == "html":
+            body, _, _ = await self._client.get_raw("/v1/google/search", params=params)
+            return body.decode("utf-8")
         return await self._client.get("/v1/google/search", params=params)
+
+    @overload
+    async def light(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        location: str | None = None,
+        safe: str = "off",
+        device: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int | None = None,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["html"],
+    ) -> str: ...
+
+    @overload
+    async def light(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        location: str | None = None,
+        safe: str = "off",
+        device: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int | None = None,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["json"] = "json",
+    ) -> dict[str, Any]: ...
+
+    @overload
+    async def light(
+        self,
+        q: str,
+        *,
+        gl: str = "us",
+        hl: str = "en",
+        num: int = 10,
+        start: int = 0,
+        domain: str = "google.com",
+        location: str | None = None,
+        safe: str = "off",
+        device: str | None = None,
+        lr: str | None = None,
+        tbs: str | None = None,
+        uule: str | None = None,
+        filter: int | None = None,
+        nfpr: int | None = None,
+        cr: str | None = None,
+        ludocid: str | None = None,
+        lsig: str | None = None,
+        kgmid: str | None = None,
+        si: str | None = None,
+        ibp: str | None = None,
+        uds: str | None = None,
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["json", "html"],
+    ) -> dict[str, Any] | str: ...
 
     async def light(
         self,
@@ -199,7 +562,28 @@ class SearchClient:
         si: str | None = None,
         ibp: str | None = None,
         uds: str | None = None,
-    ) -> dict[str, Any]:
+        google_domain: str | None = None,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius: float | None = None,
+        color_scheme: Literal["light", "dark"] | None = None,
+        tbm: Literal["isch", "lcl", "vid", "nws", "shop", "pts", "bks"] | None = None,
+        udm: str | None = None,
+        no_cache: bool = False,
+        as_dt: str | None = None,
+        as_epq: str | None = None,
+        as_eq: str | None = None,
+        as_lq: str | None = None,
+        as_nlo: str | None = None,
+        as_nhi: str | None = None,
+        as_oq: str | None = None,
+        as_q: str | None = None,
+        as_qdr: str | None = None,
+        as_rq: str | None = None,
+        as_sitesearch: str | None = None,
+        user_agent: str | None = None,
+        output: Literal["json", "html"] = "json",
+    ) -> dict[str, Any] | str:
         """Google Light Search — organic results + related searches only.
 
         Calls the dedicated ``/v1/google/light/search`` endpoint, which is
@@ -212,6 +596,27 @@ class SearchClient:
         (``ai_overview``, ``expand_related_questions``) need :meth:`search`.
 
         Args:
+            google_domain: Alias for domain; Google requests use google.com with country targeting.
+            lat: Latitude; supply together with lon instead of location or uule.
+            lon: Longitude; supply together with lat.
+            radius: Accuracy in meters; needs lat/lon or a city with a known center.
+            color_scheme: Google color scheme.
+            tbm: Search type; use output=html or the dedicated vertical APIs.
+            udm: Google result filter: 14 web, 18 forums. Other verticals require output=html.
+            no_cache: Bypass result caches and request a fresh Google fetch.
+            as_dt: Site restriction mode: i includes, e excludes as_sitesearch.
+            as_epq: Exact phrase.
+            as_eq: Words to exclude.
+            as_lq: Find pages linking to this URL; availability depends on Google.
+            as_nlo: Numeric range minimum.
+            as_nhi: Numeric range maximum.
+            as_oq: Match any of these words.
+            as_q: Additional query words.
+            as_qdr: Time range, such as d, w, m or y1.
+            as_rq: Related URL; availability depends on Google.
+            as_sitesearch: Restrict results to a site.
+            user_agent: Custom User-Agent override.
+            output: json returns structured results; html returns the raw page.
             q: Search query (supports Google operators like `site:`).
             gl: Country code (default "us").
             hl: Language code (default "en").
@@ -242,6 +647,27 @@ class SearchClient:
             full Search.
         """
         params: dict[str, Any] = {
+            "google_domain": google_domain,
+            "lat": lat,
+            "lon": lon,
+            "radius": radius,
+            "color_scheme": color_scheme,
+            "tbm": tbm,
+            "udm": udm,
+            "no_cache": no_cache,
+            "as_dt": as_dt,
+            "as_epq": as_epq,
+            "as_eq": as_eq,
+            "as_lq": as_lq,
+            "as_nlo": as_nlo,
+            "as_nhi": as_nhi,
+            "as_oq": as_oq,
+            "as_q": as_q,
+            "as_qdr": as_qdr,
+            "as_rq": as_rq,
+            "as_sitesearch": as_sitesearch,
+            "user_agent": user_agent,
+            "output": output,
             "q": q,
             "gl": gl,
             "hl": hl,
@@ -264,4 +690,7 @@ class SearchClient:
             "ibp": ibp,
             "uds": uds,
         }
+        if output == "html":
+            body, _, _ = await self._client.get_raw("/v1/google/light/search", params=params)
+            return body.decode("utf-8")
         return await self._client.get("/v1/google/light/search", params=params)

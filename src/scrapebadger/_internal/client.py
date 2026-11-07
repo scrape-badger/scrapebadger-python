@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.74.0"
+SDK_VERSION = "0.75.0"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -426,6 +426,34 @@ class BaseClient:
             (e.g. ``{"X-RateLimit-Remaining": "250", ...}``).
         """
         return await self._request_with_retry("GET", path, params=params)
+
+    async def get_raw(
+        self,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+    ) -> tuple[bytes, dict[str, str], int]:
+        """GET and return the undecoded response body.
+
+        Used by Google Search with ``output=html``. Preserves the body while
+        retaining the normal authentication, retries, and API error handling.
+
+        Returns ``(body_bytes, headers, status_code)``. Bytes, not text: the
+        body may be an image or a PDF, and decoding it would corrupt it.
+
+        Raises:
+            ScrapeBadgerError: For API errors.
+        """
+        response = await self._execute_request("GET", path, params=params)
+
+        if response.status_code >= 400:
+            try:
+                data: dict[str, Any] = response.json()
+            except Exception:
+                data = {}
+            self._handle_error_response(response, data)
+
+        return response.content, dict(response.headers), response.status_code
 
     async def post_raw(
         self,
