@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.75.0 — 2026-11-07
+
+- Add Google Search and Light location, coordinates, radius, color scheme, advanced query filters, and cache bypass controls.
+- Support raw Google HTML without JSON decoding; preserve existing JSON calls.
+
+
 ## 0.74.0
 
 - **Yelp Search API.** New `yelp` namespace: `yelp.search_businesses(location=..., query=, market="us", category=, sort_by="recommended", price=, features=, page=1)` returns ranked Yelp businesses for a location, and `yelp.list_markets()` lists the Yelp sites it searches (`us`, `ca`). `location` is what you would type into Yelp (city, neighbourhood, address or postcode). `query` (what to search for) and `category` (a Yelp category alias such as `pizza`) are both optional; with neither, the search browses the location. `sort_by` is `recommended`, `rating` or `review_count`; `price` takes comma-separated levels 1-4; `features` takes comma-separated refinements (`delivery`, `takeout`, `reservations`, `outdoor_seating`, `good_for_kids`, `dogs_allowed`, `free_wifi`, `wheelchair_accessible`); `page` is 1-11, ten businesses each. Ads come back in `ads`, separate from ranked `results`. The response is the raw dict and keeps `False`, `0`, empty and `None` values unchanged. A page costs 15 credits; an empty result and `list_markets()` are free. Unsupported, repeated or malformed parameters (an unknown feature, a repeated price level) raise `ValidationError` from an unbilled 422. Business detail and reviews are not part of this API. (SCR-569)
