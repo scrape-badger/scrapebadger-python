@@ -20,6 +20,9 @@ async def test_search_targeting_roundtrip(method, path):
             no_cache=True,
             as_epq="vinted api",
             color_scheme="dark",
+            oq="vinted café + api&gl=fr",
+            sourceid="",
+            ie="UTF-8",
         )
     assert result == {"organic_results": []}
     sent = route.calls.last.request.url.params
@@ -27,6 +30,9 @@ async def test_search_targeting_roundtrip(method, path):
     assert sent["no_cache"] == "true"
     assert sent["as_epq"] == "vinted api"
     assert sent["color_scheme"] == "dark"
+    assert sent["oq"] == "vinted café + api&gl=fr"
+    assert sent["sourceid"] == ""
+    assert sent["ie"] == "UTF-8"
 
 
 @pytest.mark.parametrize("method,path", [("search", "search"), ("light", "light/search")])
