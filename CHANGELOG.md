@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.76.1] - 2026-11-08
+
+- Add verified account-free Facebook Marketplace filters, public continuations and detail enrichment.
+
 ## 0.76.0 — 2026-11-07
 
 - Expose Google Search `oq`, `sourceid` and `ie` request fields, including explicit empty values. Backend defaults are `oq=q`, `sourceid=chrome`, `ie=UTF-8`.

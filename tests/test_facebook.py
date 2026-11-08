@@ -38,3 +38,27 @@ class TestGroupPosts:
             "after": "CUR",
             "sort": "relevance",
         }
+
+
+async def test_verified_marketplace_options_and_opaque_cursor(
+    facebook_client: FacebookClient, mock_base_client: MagicMock
+) -> None:
+    mock_base_client.get.return_value = {
+        "listings": [],
+        "has_next_page": True,
+        "end_cursor": "sbmp1_next",
+        "search_info": {"coverage": "partial"},
+    }
+    result = await facebook_client.search_marketplace(
+        query="bicycle",
+        location="london",
+        radius="20",
+        strict_filters=True,
+        include_details=True,
+        after="sbmp1_previous",
+    )
+    assert result["has_next_page"] is True
+    params = mock_base_client.get.call_args.kwargs["params"]
+    assert params["strict_filters"] is True
+    assert params["include_details"] is True
+    assert params["after"] == "sbmp1_previous"
