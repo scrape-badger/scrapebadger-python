@@ -341,3 +341,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 Made with ❤️ by [ScrapeBadger](https://scrapebadger.com)
+
+### Verified public Facebook Marketplace
+
+```python
+page = await client.facebook.search_marketplace(
+    query="bicycle", location="london", radius="20", days_since_listed="2",
+    sort_by="creation_time_descend", strict_filters=True, include_details=True,
+)
+```
+
+No Facebook account is needed. Radius is verified in kilometres against approximate
+listing coordinates. Follow the opaque `end_cursor` with unchanged filters, even
+after an empty filtered page. Continuations explore price ranges (up to eight pages,
+one-hour cursor expiry); coverage and discovery freshness are partial. Sort all
+collected pages by `creation_time_utc` and persist IDs for daily deduplication.
+See the [daily collector](https://github.com/scrape-badger/scrapebadger/blob/main/examples/facebook_marketplace_monitor.py).

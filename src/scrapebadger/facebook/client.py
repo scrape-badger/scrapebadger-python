@@ -172,6 +172,8 @@ class FacebookClient:
         delivery_method: str | None = None,
         radius: str | None = None,
         after: str | None = None,
+        strict_filters: bool = False,
+        include_details: bool = False,
     ) -> dict[str, Any]:
         """Search Marketplace.
 
@@ -190,6 +192,8 @@ class FacebookClient:
                 "delivery_method": delivery_method,
                 "radius": radius,
                 "after": after,
+                "strict_filters": strict_filters,
+                "include_details": include_details,
             }.items()
             if v is not None
         }
