@@ -246,7 +246,8 @@ class SearchClient:
             color_scheme: Google color scheme.
             tbm: Search type; use output=html or the dedicated vertical APIs.
             udm: Google result filter: 14 web, 18 forums. Other verticals require output=html.
-            no_cache: Bypass result caches and request a fresh Google fetch.
+            no_cache: No effect: ScrapeBadger no longer caches responses, so
+                every call is a fresh Google fetch. Kept for compatibility.
             as_dt: Site restriction mode: i includes, e excludes as_sitesearch.
             as_epq: Exact phrase.
             as_eq: Words to exclude.
@@ -633,7 +634,8 @@ class SearchClient:
             color_scheme: Google color scheme.
             tbm: Search type; use output=html or the dedicated vertical APIs.
             udm: Google result filter: 14 web, 18 forums. Other verticals require output=html.
-            no_cache: Bypass result caches and request a fresh Google fetch.
+            no_cache: No effect: ScrapeBadger no longer caches responses, so
+                every call is a fresh Google fetch. Kept for compatibility.
             as_dt: Site restriction mode: i includes, e excludes as_sitesearch.
             as_epq: Exact phrase.
             as_eq: Words to exclude.

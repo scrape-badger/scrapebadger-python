@@ -1,4 +1,4 @@
-"""Agent platform API: quotes, feedback, result re-reads, async request polling and batches."""
+"""Agent platform API: quotes, feedback, async request polling and batches."""
 
 from scrapebadger.agent.client import AgentClient, RequestsClient, ResultsClient
 from scrapebadger.agent.models import (

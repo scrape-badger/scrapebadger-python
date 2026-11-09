@@ -1,12 +1,14 @@
 """Agent platform API clients.
 
 Free helpers around the scraper APIs: quote a call before making it, report a
-bug, re-read a recent result, and poll a call made with
-``Prefer: respond-async``. None of these calls is ever billed.
+bug, and poll a call made with ``Prefer: respond-async``. None of these calls is
+ever billed. (``results.get`` is deprecated: the API stopped storing results on
+2026-11-09.)
 """
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, Any, Literal
 
 from scrapebadger.agent.models import AsyncRequest, BatchSubmission, FeedbackReceipt, Quote
@@ -149,11 +151,12 @@ class AgentClient:
 
 
 class ResultsClient:
-    """Client for re-reading recent results for free.
+    """Deprecated client for the removed ``GET /v1/results/{id}`` re-read.
 
-    Every billed 2xx read carries an ``X-Result-ID`` header; the body is kept
-    for about 15 minutes and can be replayed — optionally reshaped — without
-    re-running (and re-paying for) the call.
+    ScrapeBadger no longer stores results: responses carry no ``X-Result-ID``
+    and ``GET /v1/results/{id}`` answers 410 Gone since 2026-11-09. To get a
+    different shape of a result, re-run the call with the ``jq``, ``fields``
+    or ``max_items`` view parameters (billed as a normal call).
 
     Note:
         This client is not instantiated directly. Instead, access it through
@@ -177,7 +180,13 @@ class ResultsClient:
         max_items: int | None = None,
         summary: bool = False,
     ) -> Any:
-        """Replay a recent result, optionally trimmed. Free.
+        """Deprecated: the API no longer stores results, so there is nothing to re-read.
+
+        ``GET /v1/results/{id}`` was removed from the API on 2026-11-09 and now
+        answers 410 Gone, which this method raises as ``ScrapeBadgerError``.
+        Re-run the original call with the ``jq``, ``fields`` or ``max_items``
+        view parameters instead (billed as a normal call). Kept only so existing
+        code fails with a clear error; it will be removed in a future release.
 
         Args:
             result_id: ``X-Result-ID`` of the original call.
@@ -195,8 +204,16 @@ class ResultsClient:
             value (object, list, string, number).
 
         Raises:
-            NotFoundError: Unknown result, or it expired (~15 minutes).
+            ScrapeBadgerError: Always (410 Gone ``results_removed``) against the
+                current API.
         """
+        warnings.warn(
+            "results.get() is deprecated: ScrapeBadger stopped storing results on "
+            "2026-11-09 and GET /v1/results/{id} answers 410 Gone. Re-run the call "
+            "with jq/fields/max_items view parameters instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         params: dict[str, Any] = {
             "jq": jq,
             "fields": ",".join(fields) if isinstance(fields, list) else fields,
@@ -257,7 +274,7 @@ class RequestsClient:
             running=running,
             status_code=status_code,
             retry_after_seconds=retry_after,
-            result_id=lower.get("x-result-id"),
+            result_id=None,  # deprecated: the API no longer sends X-Result-ID
             credits_used=int(credits_used) if credits_used and credits_used.isdigit() else None,
             data=data,
         )

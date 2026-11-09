@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.76.2] - 2026-11-09
+
+- Deprecate `results.get()`. ScrapeBadger no longer caches or stores responses: `GET /v1/results/{id}` answers 410 Gone, responses carry no `X-Result-ID`, and identical calls are always fetched fresh and billed. The method now emits a `DeprecationWarning` and raises the API's 410 as `ScrapeBadgerError`; re-run the call with `jq`/`fields`/`max_items` instead. `AsyncRequest.result_id` is always `None`. Google `no_cache` is kept for compatibility but has no effect. Async polling (`requests.get`) and batches are unchanged. (SCR-396)
+
 ## [0.76.1] - 2026-11-08
 
 - Add verified account-free Facebook Marketplace filters, public continuations and detail enrichment.
