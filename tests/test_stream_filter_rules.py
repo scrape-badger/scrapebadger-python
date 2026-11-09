@@ -607,9 +607,10 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = FILTER_RULE_DELIVERY_LOG_LIST
-        result = await stream_client.list_filter_rule_delivery_logs(
-            "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
-        )
+        with pytest.warns(DeprecationWarning, match="list_filter_rule_delivery_logs"):
+            result = await stream_client.list_filter_rule_delivery_logs(
+                "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
+            )
         assert isinstance(result, FilterRuleDeliveryLogList)
         assert result.total == 1
 
@@ -623,13 +624,14 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = FILTER_RULE_DELIVERY_LOG_LIST
-        await stream_client.list_filter_rule_delivery_logs(
-            "aaaabbbb-cccc-dddd-eeee-ffffffffffff",
-            limit=50,
-            offset=10,
-            delivery_status="webhook_delivered",
-            sort="asc",
-        )
+        with pytest.warns(DeprecationWarning, match="list_filter_rule_delivery_logs"):
+            await stream_client.list_filter_rule_delivery_logs(
+                "aaaabbbb-cccc-dddd-eeee-ffffffffffff",
+                limit=50,
+                offset=10,
+                delivery_status="webhook_delivered",
+                sort="asc",
+            )
         params = mock_base_client.get.call_args[1]["params"]
         assert params["limit"] == 50
         assert params["offset"] == 10
@@ -640,7 +642,10 @@ class TestStreamClientFilterRules:
         self, stream_client: StreamClient, mock_base_client: MagicMock
     ) -> None:
         mock_base_client.get.return_value = FILTER_RULE_DELIVERY_LOG_LIST
-        await stream_client.list_filter_rule_delivery_logs("aaaabbbb-cccc-dddd-eeee-ffffffffffff")
+        with pytest.warns(DeprecationWarning, match="list_filter_rule_delivery_logs"):
+            await stream_client.list_filter_rule_delivery_logs(
+                "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
+            )
         params = mock_base_client.get.call_args[1]["params"]
         assert "delivery_status" not in params
 
@@ -649,7 +654,8 @@ class TestStreamClientFilterRules:
     ) -> None:
         mock_base_client.get.return_value = FILTER_RULE_DELIVERY_LOG_LIST
         rule_id = "aaaabbbb-cccc-dddd-eeee-ffffffffffff"
-        await stream_client.list_filter_rule_delivery_logs(rule_id)
+        with pytest.warns(DeprecationWarning, match="list_filter_rule_delivery_logs"):
+            await stream_client.list_filter_rule_delivery_logs(rule_id)
         called_path = mock_base_client.get.call_args[0][0]
         assert called_path == f"/v1/twitter/stream/filter-rules/{rule_id}/logs"
 
