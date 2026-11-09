@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import warnings
 from collections.abc import AsyncIterator  # noqa: TC003 (used at runtime by asynccontextmanager)
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
@@ -438,6 +439,12 @@ class StreamClient:
     ) -> DeliveryLogList:
         """List tweet delivery logs.
 
+        .. deprecated:: 0.76.3
+            Removed from the API on 2026-11-09: ScrapeBadger no longer stores
+            delivered tweets, and ``GET /v1/twitter/stream/logs`` answers
+            ``410 Gone`` (``delivery_logs_removed``). Each tweet is delivered to
+            your webhook (or WebSocket) only; keep your own log there.
+
         Args:
             monitor_id: Filter to a specific monitor.
             author_username: Filter to a specific author handle.
@@ -458,7 +465,18 @@ class StreamClient:
             )
             print(f"Total deliveries: {logs.total}")
             ```
+
+        Raises:
+            ScrapeBadgerError: Always (410 Gone ``delivery_logs_removed``)
+                against the current API.
         """
+        warnings.warn(
+            "list_delivery_logs() is deprecated: ScrapeBadger stopped storing "
+            "delivered tweets on 2026-11-09 and GET /v1/twitter/stream/logs answers "
+            "410 Gone. Keep your own log at your webhook receiver.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         params: dict[str, object] = {"page": page, "page_size": page_size, "sort": sort}
         if monitor_id is not None:
             params["monitor_id"] = monitor_id
@@ -793,6 +811,12 @@ class StreamClient:
     ) -> FilterRuleDeliveryLogList:
         """List tweet delivery logs for a specific filter rule.
 
+        .. deprecated:: 0.76.3
+            Removed from the API on 2026-11-09: ScrapeBadger no longer stores
+            delivered tweets, and ``GET /v1/twitter/stream/filter-rules/{id}/logs``
+            answers ``410 Gone`` (``delivery_logs_removed``). Each tweet is
+            delivered to your webhook only; keep your own log there.
+
         Args:
             rule_id: UUID of the filter rule.
             limit: Maximum results to return (default 20).
@@ -811,7 +835,19 @@ class StreamClient:
             )
             print(f"Total deliveries: {logs.total}")
             ```
+
+        Raises:
+            ScrapeBadgerError: Always (410 Gone ``delivery_logs_removed``)
+                against the current API.
         """
+        warnings.warn(
+            "list_filter_rule_delivery_logs() is deprecated: ScrapeBadger stopped "
+            "storing delivered tweets on 2026-11-09 and "
+            "GET /v1/twitter/stream/filter-rules/{id}/logs answers 410 Gone. Keep "
+            "your own log at your webhook receiver.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         params: dict[str, object] = {
             "limit": limit,
             "offset": offset,

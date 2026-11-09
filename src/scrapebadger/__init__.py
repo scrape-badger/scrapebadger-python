@@ -1351,7 +1351,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.76.2"
+__version__ = "0.76.3"
 
 __all__ = [
     # TikTok core models

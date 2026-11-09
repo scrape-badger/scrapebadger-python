@@ -553,7 +553,8 @@ class TestStreamClientLogs:
             "page": 1,
             "page_size": 20,
         }
-        result = await stream_client.list_delivery_logs()
+        with pytest.warns(DeprecationWarning, match="list_delivery_logs"):
+            result = await stream_client.list_delivery_logs()
         assert isinstance(result, DeliveryLogList)
         assert result.total == 1
         params = mock_base_client.get.call_args[1]["params"]
@@ -570,12 +571,13 @@ class TestStreamClientLogs:
             "page": 1,
             "page_size": 20,
         }
-        await stream_client.list_delivery_logs(
-            monitor_id="monitor-uuid",
-            author_username="elonmusk",
-            delivery_status="webhook_delivered",
-            sort="asc",
-        )
+        with pytest.warns(DeprecationWarning, match="list_delivery_logs"):
+            await stream_client.list_delivery_logs(
+                monitor_id="monitor-uuid",
+                author_username="elonmusk",
+                delivery_status="webhook_delivered",
+                sort="asc",
+            )
         params = mock_base_client.get.call_args[1]["params"]
         assert params["monitor_id"] == "monitor-uuid"
         assert params["author_username"] == "elonmusk"
@@ -591,7 +593,8 @@ class TestStreamClientLogs:
             "page": 1,
             "page_size": 20,
         }
-        await stream_client.list_delivery_logs()
+        with pytest.warns(DeprecationWarning, match="list_delivery_logs"):
+            await stream_client.list_delivery_logs()
         params = mock_base_client.get.call_args[1]["params"]
         assert "monitor_id" not in params
         assert "author_username" not in params

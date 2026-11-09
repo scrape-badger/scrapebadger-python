@@ -242,7 +242,7 @@ async def handle_webhook(request):
 | **Communities** | `get_detail`, `search`, `get_tweets`, `get_tweets_all`, `get_members`, `get_moderators`, `search_tweets`, `get_timeline` |
 | **Trends** | `get_trends`, `get_place_trends`, `get_available_locations` |
 | **Geo** | `get_detail`, `search` |
-| **Streams** | `create_monitor`, `list_monitors`, `get_monitor`, `update_monitor`, `pause_monitor`, `resume_monitor`, `delete_monitor`, `list_delivery_logs`, `list_billing_logs`, `connect` |
+| **Streams** | `create_monitor`, `list_monitors`, `get_monitor`, `update_monitor`, `pause_monitor`, `resume_monitor`, `delete_monitor`, `list_billing_logs`, `connect` (`list_delivery_logs` is deprecated: delivered tweets are no longer stored) |
 
 ## Response Models
 
