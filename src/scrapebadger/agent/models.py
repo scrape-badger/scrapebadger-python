@@ -158,8 +158,8 @@ class AsyncRequest(_BaseModel):
         status_code: HTTP status of this poll: 202 while running, otherwise
             the original call's status.
         retry_after_seconds: Suggested wait before the next poll (running only).
-        result_id: ``X-Result-ID`` of the finished call, for free re-reads via
-            ``results.get``.
+        result_id: Deprecated, always None. The API stopped sending
+            ``X-Result-ID`` (and storing results for re-reads) on 2026-11-09.
         credits_used: ``X-Credits-Used`` of the finished call.
         data: The original call's response body once finished (any JSON
             value), or the 202 status body while running.

@@ -973,7 +973,10 @@ class ScrapeBadger:
 
     @property
     def results(self) -> ResultsClient:
-        """Re-read a recent result (``X-Result-ID``) for free, optionally trimmed.
+        """Deprecated: re-reads of stored results (the API no longer stores them).
+
+        ``GET /v1/results/{id}`` answers 410 Gone since 2026-11-09; see
+        :meth:`ResultsClient.get`.
 
         Returns:
             ResultsClient for ``get``.

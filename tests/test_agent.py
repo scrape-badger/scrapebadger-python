@@ -10,7 +10,7 @@ import pytest
 import respx
 
 from scrapebadger import AgentTrial, AsyncRequest, FeedbackReceipt, Quote, ScrapeBadger
-from scrapebadger._internal.exceptions import NotFoundError, ServerError
+from scrapebadger._internal.exceptions import NotFoundError, ScrapeBadgerError, ServerError
 from scrapebadger.agent import AgentClient, RequestsClient, ResultsClient
 
 if TYPE_CHECKING:
@@ -145,39 +145,32 @@ class TestFeedback:
 
 class TestResults:
     @respx.mock
-    async def test_plain_view_params(self, sb: ScrapeBadger) -> None:
+    async def test_get_is_deprecated(self, sb: ScrapeBadger) -> None:
         route = respx.get(f"{BASE}/v1/results/res-1").mock(
             return_value=httpx.Response(200, json=["a", "b"])
         )
-        data = await sb.results.get(
-            "res-1", jq=".results[].title", fields=["title", "link"], max_items=5, summary=True
-        )
+        with pytest.warns(DeprecationWarning, match="results.get"):
+            data = await sb.results.get(
+                "res-1", jq=".results[].title", fields=["title", "link"], max_items=5, summary=True
+            )
 
         params = route.calls.last.request.url.params
         assert params["jq"] == ".results[].title"
         assert params["fields"] == "title,link"
         assert params["max_items"] == "5"
         assert params["summary"] == "true"
-        assert not any(k.startswith("_") for k in params)
         assert data == ["a", "b"]
 
     @respx.mock
-    async def test_no_view_params_by_default(self, sb: ScrapeBadger) -> None:
-        route = respx.get(f"{BASE}/v1/results/res-1").mock(
-            return_value=httpx.Response(200, json={"results": []})
-        )
-        assert await sb.results.get("res-1") == {"results": []}
-        assert not route.calls.last.request.url.params
-
-    @respx.mock
-    async def test_expired_result_raises_not_found(self, sb: ScrapeBadger) -> None:
-        respx.get(f"{BASE}/v1/results/gone").mock(
+    async def test_removed_endpoint_raises(self, sb: ScrapeBadger) -> None:
+        respx.get(f"{BASE}/v1/results/res-1").mock(
             return_value=httpx.Response(
-                404, json={"error": "result_not_found", "detail": "expired"}
+                410, json={"error": "results_removed", "detail": "Results are no longer stored."}
             )
         )
-        with pytest.raises(NotFoundError):
-            await sb.results.get("gone")
+        with pytest.warns(DeprecationWarning), pytest.raises(ScrapeBadgerError) as exc:
+            await sb.results.get("res-1")
+        assert exc.value.status_code == 410
 
 
 class TestRequests:
@@ -217,7 +210,7 @@ class TestRequests:
         assert state.running is False
         assert state.status_code == 200
         assert state.retry_after_seconds is None
-        assert state.result_id == "req-1"
+        assert state.result_id is None  # deprecated: X-Result-ID is ignored
         assert state.credits_used == 20
         assert state.data == {"status": "ok", "results": [1, 2]}
 

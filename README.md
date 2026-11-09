@@ -135,7 +135,7 @@ Etsy and AliExpress category navigation is separate from search: their search me
 | **ChatGPT** | Prompt the real chatgpt.com anonymously — structured answer with citations anchored to character offsets, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [ChatGPT Guide](docs/chatgpt.md) |
 | **Gemini** | Prompt the real gemini.google.com anonymously — structured answer with cited web sources, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [Gemini Docs](https://docs.scrapebadger.com/gemini/overview) |
 
-## Quotes, feedback and free re-reads
+## Quotes, feedback and async polling
 
 These calls are free and never billed.
 
@@ -144,12 +144,6 @@ async with ScrapeBadger(api_key="your-api-key") as client:
     # What would a call cost, are its params valid, how long does it take?
     quote = await client.agent.quote("GET", "/v1/google/search", params={"q": "coffee"})
     print(quote.valid, quote.errors, quote.credits.max, quote.usd, quote.latency)
-
-    # Re-read a billed result for ~15 minutes, reshaped. The ID is the call's X-Result-ID
-    # header (raw HTTP, the CLI) or AsyncRequest.result_id.
-    titles = await client.results.get(result_id, jq="[.organic_results[].title]")
-    outline = await client.results.get(result_id, summary=True)
-    first5 = await client.results.get(result_id, fields=["title", "link"], max_items=5)
 
     # Poll a call made with `Prefer: respond-async` (202 + request_id).
     state = await client.requests.get(request_id)
@@ -161,7 +155,7 @@ async with ScrapeBadger(api_key="your-api-key") as client:
     await client.agent.feedback("Need a Google Maps photos endpoint")
 ```
 
-`results.get` returns the stored body as-is (any JSON value) and raises `NotFoundError` once it has expired. `requests.get` returns `running=True` while the call is in progress — wait `retry_after_seconds` and poll again; never re-submit the call. Once finished it returns the original body, or raises the original call's error.
+ScrapeBadger does not cache or store responses: every call is fetched fresh and billed, and `results.get` (the old free re-read) is deprecated because `GET /v1/results/{id}` was removed on 2026-11-09. To reshape a result, re-run the call with the `jq`, `fields` or `max_items` view parameters. `requests.get` returns `running=True` while the call is in progress — wait `retry_after_seconds` and poll again; never re-submit the call. Once finished it returns the original body, or raises the original call's error.
 
 The SDK's own methods never send `Prefer: respond-async`; `requests.get` polls a request ID obtained elsewhere (raw HTTP, the CLI or MCP server).
 
