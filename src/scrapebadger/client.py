@@ -5,7 +5,7 @@ This module provides the main entry point for the ScrapeBadger SDK.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from scrapebadger._internal.client import BaseClient
 from scrapebadger._internal.config import ClientConfig
@@ -114,6 +114,9 @@ class ScrapeBadger:
         base_url: Override the API base URL (for testing or self-hosted).
         timeout: Request timeout in seconds (default: 300s / 5 minutes).
         max_retries: Maximum retry attempts for failed requests (default: 3).
+        no_cache: Skip the API's 60-second duplicate-request cache on every
+            call (default: False). See :meth:`with_options` to skip it for a
+            single call.
         config: Advanced configuration. If provided, other args are ignored.
     """
 
@@ -124,6 +127,7 @@ class ScrapeBadger:
         base_url: str | None = None,
         timeout: float | None = None,
         max_retries: int | None = None,
+        no_cache: bool = False,
         config: ClientConfig | None = None,
     ) -> None:
         """Initialize the ScrapeBadger client.
@@ -133,6 +137,9 @@ class ScrapeBadger:
             base_url: Override the API base URL.
             timeout: Request timeout in seconds.
             max_retries: Maximum retry attempts.
+            no_cache: Send ``Cache-Control: no-cache`` on every request, so an
+                identical call repeated within 60 seconds is fetched fresh (and
+                billed) instead of replayed from the cache. Defaults to False.
             config: Advanced configuration object.
 
         Raises:
@@ -152,10 +159,16 @@ class ScrapeBadger:
                 kwargs["timeout"] = timeout
             if max_retries is not None:
                 kwargs["max_retries"] = max_retries
+            if no_cache:
+                kwargs["no_cache"] = True
 
             self._config = ClientConfig(**kwargs)  # type: ignore[arg-type]
 
         self._base_client = BaseClient(self._config)
+        self._init_sub_clients()
+
+    def _init_sub_clients(self) -> None:
+        """Reset the lazily built per-API clients."""
         self._twitter: TwitterClient | None = None
         self._vinted: VintedClient | None = None
         self._web: WebClient | None = None
@@ -213,6 +226,39 @@ class ScrapeBadger:
     def config(self) -> ClientConfig:
         """Get the client configuration."""
         return self._config
+
+    def with_options(self, **overrides: Any) -> ScrapeBadger:
+        """Return a copy of this client with some options changed.
+
+        Use it for a single call, for example to skip the 60-second
+        duplicate-request cache for one request:
+
+        ```python
+        answer = await client.with_options(no_cache=True).perplexity.ask_perplexity_a_question(
+            prompt="best CRM for startups"
+        )
+        ```
+
+        Any :class:`ClientConfig` field can be overridden (``no_cache``,
+        ``timeout``, ``max_retries``, ``headers``, ...). ``headers`` are added
+        to this client's headers rather than replacing them. The copy shares
+        this client's connection pool when the base URL is unchanged; closing
+        the copy leaves the pool open, closing this client closes it. This
+        client is not modified.
+
+        Args:
+            **overrides: ClientConfig fields to change.
+
+        Returns:
+            A new ScrapeBadger client.
+        """
+        if "headers" in overrides:
+            overrides["headers"] = {**self._config.headers, **overrides["headers"]}
+        clone = object.__new__(type(self))
+        clone._config = self._config.with_overrides(**overrides)
+        clone._base_client = self._base_client.derive(clone._config)
+        clone._init_sub_clients()
+        return clone
 
     @property
     def web(self) -> WebClient:

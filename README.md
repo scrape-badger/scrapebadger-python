@@ -234,6 +234,36 @@ config = ClientConfig(
 client = ScrapeBadger(config=config)
 ```
 
+### Bypassing the cache
+
+The API caches repeated calls for 60 seconds. If the same API key sends an
+identical request (same endpoint, parameters and body) within 60 seconds, the API
+returns the stored response with `X-Cache: HIT` and `X-Credits-Used: 0`. It does
+not fetch the data again. This protects you from paying twice for retry loops and
+duplicate calls.
+
+To get a fresh result instead, for example to ask an AI engine the same question
+several times and compare the answers, skip the cache. A call that skips the cache
+is billed like any other call. There are two ways to do it:
+
+```python
+from scrapebadger import ScrapeBadger
+
+# 1. For a single call: with_options returns a copy of the client.
+async with ScrapeBadger(api_key="your-key") as client:
+    answer = await client.with_options(no_cache=True).perplexity.ask_perplexity_a_question(
+        prompt="best CRM for startups",
+    )
+
+# 2. For every call made by this client:
+client = ScrapeBadger(api_key="your-key", no_cache=True)
+```
+
+Both send the `Cache-Control: no-cache` request header. The copy from
+`with_options` shares the parent's connection pool and leaves the parent
+unchanged. `with_options` also takes `timeout`, `max_retries`, `headers` and the
+other configuration fields. By default `no_cache` is `False`, so the cache is used.
+
 ### Retry Behavior
 
 The SDK automatically retries requests that fail with 500, 502, 503, or 504 status

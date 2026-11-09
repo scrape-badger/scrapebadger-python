@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.77.0] - 2026-11-09
+
+- **Bypassing the cache.** The API returns an identical call from the same API key within 60 seconds from its cache (`X-Cache: HIT`, `X-Credits-Used: 0`). `ScrapeBadger(api_key=..., no_cache=True)` skips that cache on every call. `client.with_options(no_cache=True)` skips it for one call: `await client.with_options(no_cache=True).perplexity.ask_perplexity_a_question(prompt=...)`. Both send `Cache-Control: no-cache`, and the call is billed as normal. `no_cache` defaults to `False`. `ClientConfig` gains `no_cache`. (SCR-396)
+- **`with_options(**overrides)`** returns a copy of the client with any `ClientConfig` field changed (`no_cache`, `timeout`, `max_retries`, `headers`, ...). `headers` are merged into the parent's. The copy shares the parent's connection pool unless `base_url` changes. Closing the copy leaves the pool open, and the parent is not modified.
+- No existing signature changes.
+
 ## [0.76.1] - 2026-11-08
 
 - Add verified account-free Facebook Marketplace filters, public continuations and detail enrichment.

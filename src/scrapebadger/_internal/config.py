@@ -31,6 +31,10 @@ class ClientConfig:
         retry_on_status: HTTP status codes that trigger a retry. Defaults to the
             transient server-side codes (500, 502, 503, 504).
         headers: Additional headers to include in all requests.
+        no_cache: Skip the API's 60-second duplicate-request cache. When true,
+            every request carries ``Cache-Control: no-cache``, so an identical
+            call repeated within 60 seconds runs again (and is billed) instead
+            of being replayed for free with ``X-Cache: HIT``. Defaults to False.
 
     Example:
         ```python
@@ -55,6 +59,7 @@ class ClientConfig:
     # permanent than a 502, and leaving it out kills long paginated runs outright.
     retry_on_status: tuple[int, ...] = (500, 502, 503, 504)
     headers: dict[str, str] = field(default_factory=dict)
+    no_cache: bool = False
 
     def __post_init__(self) -> None:
         """Validate configuration after initialization."""
@@ -94,6 +99,7 @@ class ClientConfig:
             "max_retries": self.max_retries,
             "retry_on_status": self.retry_on_status,
             "headers": dict(self.headers),
+            "no_cache": self.no_cache,
         }
         current.update(kwargs)
         return ClientConfig(**current)

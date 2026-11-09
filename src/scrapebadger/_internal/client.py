@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.76.1"
+SDK_VERSION = "0.77.0"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -86,22 +86,61 @@ class BaseClient:
         ```
     """
 
-    def __init__(self, config: ClientConfig) -> None:
+    def __init__(self, config: ClientConfig, *, pool_owner: BaseClient | None = None) -> None:
         """Initialize the base client.
 
         Args:
             config: Client configuration including API key and options.
+            pool_owner: Borrow this client's connection pool instead of opening
+                one. Closing a borrower leaves the owner's pool open.
         """
         self._config = config
         self._client: httpx.AsyncClient | None = None
+        self._pool_owner = pool_owner
 
     @property
     def config(self) -> ClientConfig:
         """Get the client configuration."""
         return self._config
 
+    def derive(self, config: ClientConfig) -> BaseClient:
+        """Return a client with ``config`` that shares this client's connection pool.
+
+        The pool is shared only when the base URL is the same; otherwise the new
+        client opens its own.
+        """
+        owner = self._pool_owner or self
+        if config.base_url != owner.config.base_url:
+            return BaseClient(config)
+        return BaseClient(config, pool_owner=owner)
+
+    def _per_request_options(self) -> dict[str, Any]:
+        """Headers and timeout to send with each request, on top of the pool's defaults.
+
+        ``Cache-Control: no-cache`` is set per request, never on the pool, so a
+        client derived with another ``no_cache`` value can share the pool. A
+        borrower also sends its own key, headers and timeout, because the pool's
+        defaults are the owner's.
+        """
+        headers: dict[str, str] = {}
+        options: dict[str, Any] = {}
+        if self._pool_owner is not None:
+            headers["x-api-key"] = self._config.api_key
+            headers.update(self._config.headers)
+            options["timeout"] = httpx.Timeout(
+                timeout=self._config.timeout,
+                connect=self._config.connect_timeout,
+            )
+        if self._config.no_cache:
+            headers["Cache-Control"] = "no-cache"
+        if headers:
+            options["headers"] = headers
+        return options
+
     async def _get_client(self) -> httpx.AsyncClient:
         """Get or create the HTTP client."""
+        if self._pool_owner is not None:
+            return await self._pool_owner._get_client()
         if self._client is None or self._client.is_closed:
             timeout = httpx.Timeout(
                 timeout=self._config.timeout,
@@ -121,7 +160,12 @@ class BaseClient:
         return self._client
 
     async def close(self) -> None:
-        """Close the HTTP client and release resources."""
+        """Close the HTTP client and release resources.
+
+        A client that borrows another's pool leaves it open; the owner closes it.
+        """
+        if self._pool_owner is not None:
+            return
         if self._client is not None and not self._client.is_closed:
             await self._client.aclose()
             self._client = None
@@ -236,6 +280,7 @@ class BaseClient:
             url=path,
             params=params,
             json=json,
+            **self._per_request_options(),
         )
 
     async def _request_with_retry(
