@@ -285,6 +285,15 @@ async with ScrapeBadger(api_key="your-key") as client:
     for ref in ai_answer["references"]:
         print("Source:", ref["title"], ref["link"])
 
+    # Localise "near me" answers: one of location, uule, or lat + lon.
+    # With location and no gl, gl becomes the location's country ("kr").
+    local = await client.google.ai_mode.search(
+        "best coffee near me", location="Wonju-si,Gangwon-do,South Korea", hl="ko"
+    )
+    print(local["location"]["resolved"], local["country"])
+    busan = await client.google.ai_mode.search("맛집 추천", lat=35.1763, lon=129.0798, gl="kr")
+    print(busan["markdown"])
+
     # Visual image search by URL
     lens = await client.google.lens.search("https://example.com/photo.jpg")
 
@@ -370,7 +379,7 @@ look-alikes and lists the `variants` it searched.
 | `images` | `search(q, *, gl, hl, tbs, imgsz, imgcolor, imgtype, safe, page)` | Image search |
 | `videos` | `search(q, *, gl, hl, tbs, safe, page)` | Video search |
 | `finance` | `quote(q, *, hl)` | Stock/index/crypto quote |
-| `ai_mode` | `search(q, *, gl, hl)` | AI-generated answer |
+| `ai_mode` | `search(q, *, gl, hl, include_html, location, uule, lat, lon)` | AI-generated answer, optionally localised |
 | `lens` | `search(url, *, gl, hl)` | Visual search by URL |
 | `products` | `detail(product_id, *, gl, hl)` | Immersive product |
 | `ads` | `search(query, *, advertiser_id, region, format, start_date, end_date, num, cursor)` | Ad creatives |
