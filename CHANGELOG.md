@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.77.0] - 2026-11-10
+
+- **Google AI Mode: location targeting.** `google.ai_mode.search()` takes `location`, `uule`, `lat` and `lon` (all optional, keyword-only) and answers "near me" and other local questions as if the user were in that place, down to the city or district, wherever the request exits from. `location` is a Google canonical location name (`"Wonju-si,Gangwon-do,South Korea"`), a Google criteria ID (`"1009889"`) or an unambiguous short name within `gl`; `uule` is a Google UULE in its `w+` or `j+` form; `lat` and `lon` go together. Use only one of the three. Located answers carry a `location` object (`requested`, `resolved`, `latitude`, `longitude`, `uule`), and `country` is the effective `gl`. The API answers 422 (`ValidationError`) for more than one targeting method, `lat` without `lon`, an unknown or ambiguous location (the error lists candidate names), or a `uule` that is not `w+`/`j+`. A located request that cannot be answered right now fails with an unbilled 503; retry it. (SCR-610)
+- `gl` on `google.ai_mode.search()` is now `str | None = None`, so `location` can supply it: with `location` and no `gl`, the SDK leaves `gl` out and the API uses the location's country. Without `location`, an omitted `gl` is still sent as `"us"`, so existing calls send exactly the same request. `gl` is Google's market parameter; it does not choose the exit country.
+
 ## [0.76.3] - 2026-11-09
 
 - Deprecate `twitter.stream.list_delivery_logs()` and `twitter.stream.list_filter_rule_delivery_logs()`. ScrapeBadger no longer stores delivered tweets: `GET /v1/twitter/stream/logs` and `GET /v1/twitter/stream/filter-rules/{id}/logs` answer 410 Gone (`delivery_logs_removed`). Both methods keep their signatures, emit a `DeprecationWarning` and raise the API's 410 as `ScrapeBadgerError`. Keep your own log at your webhook receiver. Monitors, filter rules, webhooks and billing logs are unchanged. (SCR-396)
