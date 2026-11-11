@@ -92,22 +92,10 @@ class IdealistaClient:
     async def get_listing_engagement_stats(
         self, property_code: str, *, market: str = "es", locale: str = "en"
     ) -> dict[str, Any]:
-        """Get listing engagement stats (deprecated).
-
-        Deprecated: Idealista withdrew public per-ad stats on 2026-11-10; the
-        operation is marked deprecated in the OpenAPI spec, answers an error,
-        and will be removed in a future release.
+        """Get listing engagement stats.
 
         Generated from the OpenAPI spec; returns the raw response dict.
         """
-        import warnings
-
-        warnings.warn(
-            "get_listing_engagement_stats() is deprecated: Idealista withdrew public "
-            "per-ad stats on 2026-11-10; it will be removed in a future release.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
         params = {k: v for k, v in {"market": market, "locale": locale}.items() if v is not None}
         return await self._client.get(
             f"/v1/idealista/properties/{property_code}/stats", params=params

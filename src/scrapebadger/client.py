@@ -42,6 +42,7 @@ from scrapebadger.instagram.client import InstagramClient
 from scrapebadger.leboncoin.client import LeboncoinClient
 from scrapebadger.linkedin.client import LinkedInClient
 from scrapebadger.loopnet.client import LoopNetClient
+from scrapebadger.meta_ai.client import MetaAiClient
 from scrapebadger.naver.client import NaverClient
 from scrapebadger.perplexity.client import PerplexityClient
 from scrapebadger.realtor.client import RealtorClient
@@ -189,6 +190,7 @@ class ScrapeBadger:
         self._leboncoin: LeboncoinClient | None = None
         self._immobiliare: ImmobiliareClient | None = None
         self._loopnet: LoopNetClient | None = None
+        self._meta_ai: MetaAiClient | None = None
         self._perplexity: PerplexityClient | None = None
         self._chatgpt: ChatGPTClient | None = None
         self._copilot: CopilotClient | None = None
@@ -1142,3 +1144,10 @@ class ScrapeBadger:
         if self._yelp is None:
             self._yelp = YelpClient(self._base_client)
         return self._yelp
+
+    @property
+    def meta_ai(self) -> MetaAiClient:
+        """Access Meta_Ai API operations. (Generated from the OpenAPI spec.)"""
+        if self._meta_ai is None:
+            self._meta_ai = MetaAiClient(self._base_client)
+        return self._meta_ai
