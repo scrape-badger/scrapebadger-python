@@ -4,11 +4,9 @@ These models mirror the backend ``linkedin_scraper`` response schema
 field-for-field. All models are immutable (frozen) and ignore unknown fields
 for forward compatibility.
 
-All data comes from LinkedIn's public, logged-out surface: the ``/jobs-guest``
-guest APIs (job search cards + one-posting detail + a geo/company typeahead)
-and the SSR public pages for profiles, companies, schools, posts, and courses
-(parsed from their in-``<head>`` JSON-LD). Deep logged-in sections are
-auth-gated and out of scope.
+Public data comes from LinkedIn's logged-out ``/jobs-guest`` APIs and SSR
+pages. The separately labelled full-profile route uses a server-owned
+authenticated projection when configured.
 """
 
 from __future__ import annotations
@@ -88,48 +86,160 @@ class JobDetail(_BaseModel):
 
 
 # =============================================================================
-# Profile (public)
+# Profile (public or separately authenticated)
 # =============================================================================
 
 
 class ProfileExperience(_BaseModel):
-    """A current/past role from the public JSON-LD ``worksFor``."""
-
     title: str | None = None
     company: str | None = None
     company_url: str | None = None
+    location: str | None = None
+    employment_type: str | None = None
+    description: str | None = None
+    date_range: str | None = None
+    duration: str | None = None
     start_year: int | None = None
     end_year: int | None = None
+    is_current: bool | None = None
 
 
 class ProfileEducation(_BaseModel):
-    """A school from the public JSON-LD ``alumniOf``."""
-
     school: str | None = None
     school_url: str | None = None
+    degree: str | None = None
+    field_of_study: str | None = None
+    description: str | None = None
+    date_range: str | None = None
     start_year: int | None = None
     end_year: int | None = None
 
 
+class ProfileLanguage(_BaseModel):
+    name: str
+    proficiency: str | None = None
+
+
+class ProfileAward(_BaseModel):
+    title: str
+    issuer: str | None = None
+    issued_on: str | None = None
+    url: str | None = None
+    description: str | None = None
+
+
+class ProfileVolunteering(_BaseModel):
+    title: str
+    organization: str | None = None
+    organization_url: str | None = None
+    date_range: str | None = None
+    start_year: int | None = None
+    end_year: int | None = None
+    description: str | None = None
+
+
+class ProfileRecommendation(_BaseModel):
+    author_name: str | None = None
+    author_url: str | None = None
+    text: str
+
+
+class ProfileInstructorCourse(_BaseModel):
+    title: str
+    url: str | None = None
+    instructor: str | None = None
+    duration: str | None = None
+    viewers: str | None = None
+
+
+class ProfileActivity(_BaseModel):
+    type: str
+    url: str | None = None
+    title: str | None = None
+    text: str | None = None
+    published_at: str | None = None
+    like_count: int | None = None
+    comment_count: int | None = None
+    author_name: str | None = None
+    author_url: str | None = None
+
+
+class ProfileEntry(_BaseModel):
+    name: str | None = None
+    title: str | None = None
+    subtitle: str | None = None
+    role: str | None = None
+    organization: str | None = None
+    issuer: str | None = None
+    proficiency: str | None = None
+    number: str | None = None
+    score: str | None = None
+    cause: str | None = None
+    url: str | None = None
+    date_range: str | None = None
+    start_year: int | None = None
+    end_year: int | None = None
+    issued_on: str | None = None
+    published_on: str | None = None
+    description: str | None = None
+
+
+class ProfileSimilar(_BaseModel):
+    name: str | None = None
+    headline: str | None = None
+    url: str
+    follower_count: int | None = None
+    location: str | None = None
+
+
+class ProfileSectionCount(_BaseModel):
+    shown: int
+    total: int | None = None
+
+
 class Profile(_BaseModel):
-    """A public LinkedIn profile (JSON-LD ``Person`` + og/top-card subset)."""
+    """A LinkedIn profile from the public page or an authenticated projection."""
 
     public_id: str
     linkedin_url: str
+    access_scope: str = "public"
     name: str | None = None
     headline: str | None = None
     location: str | None = None
     country: str | None = None
     about: str | None = None
     image: str | None = None
+    cover_image: str | None = None
     follower_count: int | None = None
+    connection_count: str | None = None
+    badges: list[str] = Field(default_factory=list)
+    websites: list[str] = Field(default_factory=list)
     job_titles: list[str] = Field(default_factory=list)
     current_company: str | None = None
     current_company_url: str | None = None
     experience: list[ProfileExperience] = Field(default_factory=list)
     education: list[ProfileEducation] = Field(default_factory=list)
     languages: list[str] = Field(default_factory=list)
+    language_details: list[ProfileLanguage] = Field(default_factory=list)
     awards: list[str] = Field(default_factory=list)
+    award_details: list[ProfileAward] = Field(default_factory=list)
+    volunteering: list[ProfileVolunteering] = Field(default_factory=list)
+    recommendations: list[ProfileRecommendation] = Field(default_factory=list)
+    instructor_courses: list[ProfileInstructorCourse] = Field(default_factory=list)
+    recent_posts: list[ProfileActivity] = Field(default_factory=list)
+    recent_articles: list[ProfileActivity] = Field(default_factory=list)
+    similar_profiles: list[ProfileSimilar] = Field(default_factory=list)
+    skills: list[str] = Field(default_factory=list)
+    certifications: list[ProfileEntry] = Field(default_factory=list)
+    honors: list[ProfileEntry] = Field(default_factory=list)
+    publications: list[ProfileEntry] = Field(default_factory=list)
+    projects: list[ProfileEntry] = Field(default_factory=list)
+    courses: list[ProfileEntry] = Field(default_factory=list)
+    organizations: list[ProfileEntry] = Field(default_factory=list)
+    patents: list[ProfileEntry] = Field(default_factory=list)
+    test_scores: list[ProfileEntry] = Field(default_factory=list)
+    counts: dict[str, ProfileSectionCount] = Field(default_factory=dict)
+    partial_sections: list[str] = Field(default_factory=list)
 
 
 # =============================================================================

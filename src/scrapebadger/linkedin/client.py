@@ -1,13 +1,9 @@
 """LinkedIn API client.
 
-LinkedIn endpoints cover the public, no-auth (logged-out) surface only: the
-guest **Jobs** API (``jobs_search``, ``get_job``, ``company_jobs``), public SSR
-entity pages parsed from JSON-LD (``get_company``, ``get_school``,
-``get_profile``, ``get_post``, ``get_article``, ``get_course``) and a
-``geo_suggest`` id helper. All methods are async and return strongly-typed
-Pydantic models. LinkedIn hard-blocks datacenter IPs, so requests egress via
-residential exits — SSR pages occasionally take a few seconds because the client
-retries past LinkedIn's intermittent 999 auth-wall on a fresh IP.
+LinkedIn endpoints cover public guest jobs and SSR entity pages, plus the
+separately labelled authenticated full-profile projection. All methods are
+async and return strongly-typed Pydantic models. Requests egress via
+residential exits because LinkedIn hard-blocks datacenter IPs.
 """
 
 from __future__ import annotations
@@ -32,11 +28,9 @@ if TYPE_CHECKING:
 class LinkedInClient:
     """Client for all LinkedIn API operations.
 
-    Covers LinkedIn's public **no-auth** surface (no login, no cookies): the
-    guest Jobs API, public company/school/profile SSR pages (JSON-LD), public
-    posts / Pulse articles / Learning courses, and a geo/company id helper.
-    Deep logged-in data (full experience, activity feed, follower lists) is
-    auth-gated and not available.
+    Covers LinkedIn's public guest Jobs API, company/school/profile SSR pages,
+    posts, courses and geo helpers, plus the separately authenticated full-profile
+    projection with position pagination.
 
     Example:
         ```python
@@ -205,6 +199,16 @@ class LinkedInClient:
         """
         params: dict[str, Any] = {"country": country}
         response = await self._client.get(f"/v1/linkedin/profiles/{public_id}", params=params)
+        return Profile.model_validate(response)
+
+    async def get_full_profile(self, public_id: str, *, country: str = "us") -> Profile:
+        """Get a full profile through the server-owned authenticated projection.
+
+        This separately labelled tier pages position groups and returns richer
+        verticals when visible to the configured LinkedIn session.
+        """
+        params: dict[str, Any] = {"country": country}
+        response = await self._client.get(f"/v1/linkedin/profiles/{public_id}/full", params=params)
         return Profile.model_validate(response)
 
     async def get_post(self, post_slug: str, *, country: str = "us") -> Post:

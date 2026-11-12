@@ -111,6 +111,31 @@ async def test_get_profile(linkedin: LinkedInClient, mock_base_client: MagicMock
     assert mock_base_client.get.call_args[0][0] == "/v1/linkedin/profiles/williamhgates"
 
 
+async def test_get_full_profile(linkedin: LinkedInClient, mock_base_client: MagicMock) -> None:
+    mock_base_client.get.return_value = {
+        **PROFILE,
+        "access_scope": "authenticated",
+        "experience": [
+            {
+                "title": "Co-chair",
+                "company": "Gates Foundation",
+                "date_range": "2000 - Present",
+                "is_current": True,
+            }
+        ],
+        "skills": ["Leadership"],
+        "counts": {"experience": {"shown": 1, "total": 1}},
+    }
+    result = await linkedin.get_full_profile("williamhgates")
+    assert isinstance(result, Profile)
+    assert result.access_scope == "authenticated"
+    assert result.experience[0].title == "Co-chair"
+    assert result.experience[0].is_current is True
+    assert result.skills == ["Leadership"]
+    assert result.counts["experience"].shown == 1
+    assert mock_base_client.get.call_args[0][0] == "/v1/linkedin/profiles/williamhgates/full"
+
+
 async def test_get_post_and_article(linkedin: LinkedInClient, mock_base_client: MagicMock) -> None:
     mock_base_client.get.return_value = POST
     assert isinstance(await linkedin.get_post("slug-activity-1-x"), Post)

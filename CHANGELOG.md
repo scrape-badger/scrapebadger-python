@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.78.0] - 2026-11-12
+
+- **LinkedIn profile verticals and authenticated full profile.** `linkedin.get_profile()` now returns positional job titles plus public DOM/JSON-LD fields when exposed: detailed roles and education, badges, language proficiency, awards, volunteering, recommendations, instructor courses, recent posts and articles, similar profiles, websites and cover images. `linkedin.get_full_profile()` calls the separately labelled `/full` route using the server-owned authenticated projection, with paginated position groups, skills, certifications, honors, publications, projects, courses, organizations, patents, test scores and section counts. Responses add `access_scope` (`public` or `authenticated`) and `partial_sections`; existing fields are unchanged. (SCR-613)
+
 ## [0.77.1] - 2026-11-11
 
 - **`idealista.get_listing_engagement_stats` is deprecated.** Idealista withdrew public per-ad stats on 2026-11-10 (the `allowsAdStats` flag flipped platform-wide; 0/50 live ES ads eligible; the route answers "stats not found" — the data is advertiser-login-only now). The method now emits a `DeprecationWarning` and still calls the endpoint, which answers an error; it will be removed in a future release. No other changes.

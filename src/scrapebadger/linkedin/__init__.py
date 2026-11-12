@@ -1,9 +1,7 @@
 """LinkedIn API module for ScrapeBadger SDK.
 
-This module provides an async client for scraping LinkedIn's public, no-auth
-(logged-out) surface through the ScrapeBadger API: the guest Jobs API, public
-company/school/profile SSR pages, public posts / Pulse articles / Learning
-courses, and a geo/company id helper. All methods are async and return
+This module provides an async client for public LinkedIn data plus the
+separately labelled authenticated full-profile projection. All methods return
 strongly-typed Pydantic models.
 
 Example:
@@ -14,6 +12,7 @@ Example:
         jobs = await client.linkedin.jobs_search(keywords="python", location="Berlin")
         company = await client.linkedin.get_company("microsoft")
         profile = await client.linkedin.get_profile("williamhgates")
+        full_profile = await client.linkedin.get_full_profile("williamhgates")
     ```
 """
 
@@ -32,8 +31,17 @@ from scrapebadger.linkedin.models import (
     Post,
     PostComment,
     Profile,
+    ProfileActivity,
+    ProfileAward,
     ProfileEducation,
+    ProfileEntry,
     ProfileExperience,
+    ProfileInstructorCourse,
+    ProfileLanguage,
+    ProfileRecommendation,
+    ProfileSectionCount,
+    ProfileSimilar,
+    ProfileVolunteering,
     School,
 )
 
@@ -52,7 +60,16 @@ __all__ = [
     "Post",
     "PostComment",
     "Profile",
+    "ProfileActivity",
+    "ProfileAward",
     "ProfileEducation",
+    "ProfileEntry",
     "ProfileExperience",
+    "ProfileInstructorCourse",
+    "ProfileLanguage",
+    "ProfileRecommendation",
+    "ProfileSectionCount",
+    "ProfileSimilar",
+    "ProfileVolunteering",
     "School",
 ]
