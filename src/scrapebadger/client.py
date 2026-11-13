@@ -35,6 +35,7 @@ from scrapebadger.gemini.client import GeminiClient
 from scrapebadger.github.client import GithubClient
 from scrapebadger.google.client import GoogleClient
 from scrapebadger.google_play.client import GooglePlayClient
+from scrapebadger.grok.client import GrokClient
 from scrapebadger.gumtree.client import GumtreeClient
 from scrapebadger.idealista.client import IdealistaClient
 from scrapebadger.immobiliare.client import ImmobiliareClient
@@ -162,6 +163,7 @@ class ScrapeBadger:
         self._web: WebClient | None = None
         self._google: GoogleClient | None = None
         self._google_play: GooglePlayClient | None = None
+        self._grok: GrokClient | None = None
         self._idealista: IdealistaClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
@@ -1151,3 +1153,10 @@ class ScrapeBadger:
         if self._meta_ai is None:
             self._meta_ai = MetaAiClient(self._base_client)
         return self._meta_ai
+
+    @property
+    def grok(self) -> GrokClient:
+        """Access Grok API operations. (Generated from the OpenAPI spec.)"""
+        if self._grok is None:
+            self._grok = GrokClient(self._base_client)
+        return self._grok
