@@ -439,6 +439,32 @@ class TestEbayModels:
         item = Item.model_validate({**SAMPLE_AUCTION_ITEM, "is_ended": True, "time_left": None})
         assert item.is_ended is True
 
+    def test_item_sold_through_an_accepted_best_offer(self) -> None:
+        """SB-001247: the accepted amount is ``price``, the listed price ``original_price``."""
+        item = Item.model_validate(
+            {
+                **SAMPLE_ITEM,
+                "price": {"value": 210.0, "currency": "GBP", "symbol": None, "raw": "£210.00"},
+                "original_price": {"value": 239.9, "currency": "GBP", "raw": "£239.90"},
+                "discount_percent": 12.5,
+                "buy_it_now_price": {"value": 239.9, "currency": "GBP", "raw": "£239.90"},
+                "is_ended": True,
+                "is_sold": True,
+                "best_offer_accepted": True,
+            }
+        )
+        assert item.best_offer_accepted is True
+        assert item.is_sold is True
+        assert item.price is not None and item.price.value == 210.0
+        assert item.original_price is not None and item.original_price.value == 239.9
+        assert item.buy_it_now_price is not None and item.buy_it_now_price.value == 239.9
+
+    def test_item_closed_listing_flags_default_to_false(self) -> None:
+        """An answer from before the fields existed still validates."""
+        item = Item.model_validate(SAMPLE_ITEM)
+        assert item.is_sold is False
+        assert item.best_offer_accepted is False
+
     def test_item_non_auction_has_no_auction_fields(self) -> None:
         item = Item.model_validate(SAMPLE_ITEM)
         assert item.is_auction is False

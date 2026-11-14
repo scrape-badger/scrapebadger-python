@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.80.0] - 2026-11-15
+
+- **eBay item detail: accepted Best Offers.** `ebay.items.get_item()` answers carry two new fields on `Item`. `best_offer_accepted` is true when the listing closed on an accepted Best Offer, and `is_sold` is true when a closed listing carries eBay's "Sold" label rather than "Ended". On such a listing `price` is now the amount the offer was accepted at, where eBay's item page publishes it, with the listed price in `original_price` and `buy_it_now_price` (before, `price` was the listed price and `original_price` was `None`). When `best_offer_accepted` is true and `original_price` is `None`, eBay did not publish the amount on that read and `price` is the listed price. `is_ended` and the end time are now also set on closed listings of non-English marketplaces. Both fields default to `False`, so older answers still validate. (SB-001247)
+
 ## [0.79.0] - 2026-11-14
 
 - **Grok API.** Adds the generated `grok` client for real Grok answers with web citations, X post references, multi-turn conversations, assistant modes, and brand-visibility analysis. Includes GET and POST ask/brand methods, conversation history, and models. (SCR-623)

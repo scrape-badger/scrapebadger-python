@@ -181,6 +181,11 @@ class Item(_BaseModel):
     condition: str | None = None
     condition_id: str | None = None
     condition_description: str | None = None
+    # The price the listing's buy box shows. On a listing that sold through an
+    # accepted Best Offer (``best_offer_accepted``) eBay publishes the accepted
+    # amount on most reads: then this is that amount and ``original_price`` the
+    # listed price. Where eBay only strikes the listed price through, this stays
+    # the listed price and ``original_price`` is None.
     price: EbayPrice | None = None
     original_price: EbayPrice | None = None
     discount_percent: float | None = None
@@ -195,10 +200,17 @@ class Item(_BaseModel):
     current_bid: EbayPrice | None = None  # auctions: the current high bid (mirrors ``price``)
     time_left: str | None = None  # relative remaining, e.g. "12h 16m"
     is_ended: bool = False  # listing has closed (sold / ended), any buying format
+    # The closed listing carries eBay's "Sold" label rather than "Ended". Always
+    # False on a live listing, however many units it has sold (``quantity_sold``).
+    is_sold: bool = False
     end_time_utc: float | None = None  # listing end: auction close / sold time (Unix float)
     end_time_at: str | None = None  # listing end: auction close / sold time (ISO-8601 Z)
     buy_it_now_price: EbayPrice | None = None  # BIN price (fixed-price, or auction-with-BIN)
     best_offer_enabled: bool | None = None
+    # The listing closed on an accepted Best Offer. With ``original_price`` set,
+    # ``price`` is the accepted amount; with it None, eBay did not publish the
+    # amount on this read and ``price`` is the listed price.
+    best_offer_accepted: bool = False
     brand: str | None = None
     mpn: str | None = None
     model: str | None = None
