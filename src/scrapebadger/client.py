@@ -49,6 +49,7 @@ from scrapebadger.perplexity.client import PerplexityClient
 from scrapebadger.realtor.client import RealtorClient
 from scrapebadger.reddit.client import RedditClient
 from scrapebadger.redfin.client import RedfinClient
+from scrapebadger.rufus.client import RufusClient
 from scrapebadger.target.client import TargetClient
 from scrapebadger.tiktok.client import TikTokClient
 from scrapebadger.twitter.client import TwitterClient
@@ -167,6 +168,7 @@ class ScrapeBadger:
         self._idealista: IdealistaClient | None = None
         self._reddit: RedditClient | None = None
         self._redfin: RedfinClient | None = None
+        self._rufus: RufusClient | None = None
         self._target: TargetClient | None = None
         self._apartments: ApartmentsClient | None = None
         self._app_store: AppStoreClient | None = None
@@ -1160,3 +1162,10 @@ class ScrapeBadger:
         if self._grok is None:
             self._grok = GrokClient(self._base_client)
         return self._grok
+
+    @property
+    def rufus(self) -> RufusClient:
+        """Access Rufus API operations. (Generated from the OpenAPI spec.)"""
+        if self._rufus is None:
+            self._rufus = RufusClient(self._base_client)
+        return self._rufus
