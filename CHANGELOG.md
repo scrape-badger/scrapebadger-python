@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.79.0] - 2026-11-14
+
+- **Grok API.** Adds the generated `grok` client for real Grok answers with web citations, X post references, multi-turn conversations, assistant modes, and brand-visibility analysis. Includes GET and POST ask/brand methods, conversation history, and models. (SCR-623)
+
 ## [0.78.0] - 2026-11-12
 
 - **LinkedIn profile verticals and authenticated full profile.** `linkedin.get_profile()` now returns positional job titles plus public DOM/JSON-LD fields when exposed: detailed roles and education, badges, language proficiency, awards, volunteering, recommendations, instructor courses, recent posts and articles, similar profiles, websites and cover images. `linkedin.get_full_profile()` calls the separately labelled `/full` route using the server-owned authenticated projection, with paginated position groups, skills, certifications, honors, publications, projects, courses, organizations, patents, test scores and section counts. Responses add `access_scope` (`public` or `authenticated`) and `partial_sections`; existing fields are unchanged. (SCR-613)
