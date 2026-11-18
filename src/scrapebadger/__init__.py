@@ -29,8 +29,10 @@ Example:
 For more information, see https://docs.scrapebadger.com
 """
 
+from scrapebadger import webhooks
 from scrapebadger._internal.config import ClientConfig
 from scrapebadger._internal.exceptions import (
+    AsyncRequestTimeoutError,
     AuthenticationError,
     BlockedError,
     InsufficientCreditsError,
@@ -44,12 +46,14 @@ from scrapebadger._internal.exceptions import (
     WebSocketStreamError,
 )
 from scrapebadger._internal.pagination import PaginatedResponse
+from scrapebadger.account import WebhookDeliveries, WebhookDelivery, WebhookSecret
 from scrapebadger.agent import (
     AgentClient,
     AgentTrial,
     AsyncRequest,
     BatchItemResult,
     BatchSubmission,
+    CallbackStatus,
     FeedbackReceipt,
     Quote,
     QuoteCredits,
@@ -1052,6 +1056,7 @@ from scrapebadger.walmart.models import (
     Warranty as WalmartWarranty,
 )
 from scrapebadger.web.models import DetectResult, ExtractResult, ScrapeResult, ScreenshotResult
+from scrapebadger.webhooks import WebhookEvent, parse_event, verify_signature
 from scrapebadger.yahoo.client import YahooClient
 from scrapebadger.yahoo.models import Ad as YahooAd
 from scrapebadger.yahoo.models import AutocompleteResponse as YahooAutocompleteResponse
@@ -1351,7 +1356,7 @@ from scrapebadger.zillow.models import (
     ZestimateHistoryPoint as ZillowZestimateHistoryPoint,
 )
 
-__version__ = "0.77.0"
+__version__ = "0.80.0"
 
 __all__ = [
     # TikTok core models
@@ -1384,6 +1389,7 @@ __all__ = [
     "ApartmentsSearchResult",
     "ApartmentsUnit",
     "AsyncRequest",
+    "AsyncRequestTimeoutError",
     "AuthenticationError",
     # Baidu
     "BaiduAutocompleteResponse",
@@ -1418,6 +1424,7 @@ __all__ = [
     "BlockedError",
     # Vinted response envelopes
     "BrandsResponse",
+    "CallbackStatus",
     "CategoriesResponse",
     "CategoryResponse",
     # ChatGPT
@@ -1846,6 +1853,10 @@ __all__ = [
     "WalmartWarranty",
     # Stream exceptions
     "WebSocketStreamError",
+    "WebhookDeliveries",
+    "WebhookDelivery",
+    "WebhookEvent",
+    "WebhookSecret",
     # Yahoo
     "YahooAd",
     "YahooAutocompleteResponse",
@@ -1961,4 +1972,7 @@ __all__ = [
     "ZillowZestimateHistoryPoint",
     # Version
     "__version__",
+    "parse_event",
+    "verify_signature",
+    "webhooks",
 ]

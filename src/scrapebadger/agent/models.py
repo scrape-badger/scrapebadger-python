@@ -1,16 +1,16 @@
 """Pydantic models for the agent platform endpoints.
 
-Quote, feedback and async-request polling — the account-level helpers an
-agent uses around the scraper APIs. None of these calls is ever billed. All
-models are immutable (frozen) and ignore unknown fields for forward
-compatibility.
+Quote, feedback and async requests — the account-level helpers an agent uses
+around the scraper APIs. None of these calls is ever billed (an async call is
+billed once, like any call, when it completes). All models are immutable
+(frozen) and ignore unknown fields for forward compatibility.
 """
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class _BaseModel(BaseModel):
@@ -149,29 +149,84 @@ class FeedbackReceipt(_BaseModel):
 
 
 class AsyncRequest(_BaseModel):
-    """State of a call made with ``Prefer: respond-async``.
+    """State of an async call: submitted with ``requests.submit`` (or
+    ``Prefer: respond-async``) and read back with ``requests.get`` / ``wait``.
 
     Attributes:
-        request_id: The request polled.
-        running: True while the call is still in progress (HTTP 202). Poll
-            again after ``retry_after_seconds``; never re-submit the call.
-        status_code: HTTP status of this poll: 202 while running, otherwise
-            the original call's status.
+        request_id: The request's id (``X-Request-ID``).
+        status: "running" while the call is in progress (HTTP 202), then
+            "completed". Never re-submit a running call: poll it, or wait for
+            its webhook.
+        running: ``status == "running"`` (kept from earlier releases).
+        status_code: 202 while running, then the original call's HTTP status.
         retry_after_seconds: Suggested wait before the next poll (running only).
+        headers: The original call's response headers, lower-cased names
+            (completed only), e.g. ``x-credits-used``.
+        body: The original call's response body (completed only): decoded JSON
+            for a JSON response, else the text.
+        replayed: True when the API answered from an earlier call with the same
+            ``Idempotency-Key`` (``Idempotent-Replayed: true``) instead of
+            running it again. Nothing was billed for the replay.
+        credits_used: ``X-Credits-Used`` of the finished call.
         result_id: Deprecated, always None. The API stopped sending
             ``X-Result-ID`` (and storing results for re-reads) on 2026-11-09.
-        credits_used: ``X-Credits-Used`` of the finished call.
-        data: The original call's response body once finished (any JSON
-            value), or the 202 status body while running.
+        data: The response body as earlier releases returned it: ``body`` once
+            completed, the 202 status body while running.
     """
 
     request_id: str
+    status: Literal["running", "completed"]
     running: bool
     status_code: int
     retry_after_seconds: int | None = None
-    result_id: str | None = None
+    headers: dict[str, str] = Field(default_factory=dict)
+    body: Any = None
+    replayed: bool = False
     credits_used: int | None = None
+    result_id: str | None = None
     data: Any = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _status_and_running(cls, values: Any) -> Any:
+        """Accept either ``status`` or ``running`` and derive the other."""
+        if isinstance(values, dict):
+            if "status" not in values and "running" in values:
+                values = {**values, "status": "running" if values["running"] else "completed"}
+            elif "running" not in values and "status" in values:
+                values = {**values, "running": values["status"] == "running"}
+        return values
+
+
+class CallbackStatus(_BaseModel):
+    """Delivery state of a request's webhook (``requests.callback_status``).
+
+    Only requests submitted with a ``callback_url`` have one. The delivery
+    metadata is kept for 24 hours; it holds the callback host only, never its
+    path or query.
+
+    Attributes:
+        request_id: The request the webhook is for.
+        state: "pending" (not sent yet, or waiting for a retry), "delivering",
+            "delivered" or "failed" (all attempts used, or a final status).
+        attempts: Attempts made so far (at most 4: retries after 10 s, 60 s
+            and 5 min).
+        last_status: HTTP status your endpoint answered on the last attempt,
+            or None (no answer, e.g. a timeout).
+        last_error: Short error class of the last attempt, or None.
+        next_attempt_at: Unix time of the next retry, or None.
+        delivered_at: Unix time of the successful delivery, or None.
+        callback_host: Host of the callback URL.
+    """
+
+    request_id: str
+    state: str = "pending"
+    attempts: int = 0
+    last_status: int | None = None
+    last_error: str | None = None
+    next_attempt_at: int | float | None = None
+    delivered_at: int | float | None = None
+    callback_host: str | None = None
 
 
 class BatchItemResult(_BaseModel):

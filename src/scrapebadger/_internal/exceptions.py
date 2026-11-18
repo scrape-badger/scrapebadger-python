@@ -323,6 +323,42 @@ class ServerError(ScrapeBadgerError):
         super().__init__(message, status_code, response_data)
 
 
+class AsyncRequestTimeoutError(ScrapeBadgerError, TimeoutError):
+    """Raised when ``requests.wait`` gives up before the call completed.
+
+    The call itself keeps running and is billed once when it completes: keep
+    polling ``request_id`` (free) or wait for its webhook. Never re-submit it.
+    Also a ``TimeoutError``, so ``except TimeoutError`` catches it.
+
+    Attributes:
+        request_id: The request that was still running.
+        timeout: The ``timeout`` that ran out, in seconds.
+
+    Example:
+        ```python
+        from scrapebadger import AsyncRequestTimeoutError
+
+        try:
+            done = await client.requests.wait(request_id, timeout=120)
+        except AsyncRequestTimeoutError as e:
+            print(f"{e.request_id} still running; poll it again later")
+        ```
+    """
+
+    def __init__(
+        self,
+        message: str = "The async request is still running",
+        status_code: int | None = None,
+        response_data: dict[str, Any] | None = None,
+        *,
+        request_id: str = "",
+        timeout: float | None = None,
+    ) -> None:
+        super().__init__(message, status_code, response_data)
+        self.request_id = request_id
+        self.timeout = timeout
+
+
 class WebSocketStreamError(ScrapeBadgerError):
     """Raised when the WebSocket stream connection fails or is terminated.
 
