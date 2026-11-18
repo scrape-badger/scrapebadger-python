@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.80.0] - 2026-11-18
+
+- **Async requests and webhooks.** Run any slow call asynchronously and get the result by polling or by a signed webhook. Submitting and polling are free; the call is billed once, when it completes. (SCR-652)
+  - `requests.submit(path, *, method="GET", params=None, json=None, callback_url=None, wait=None, idempotency_key=None)` sends the call with `Prefer: respond-async[, wait=N]`, `X-Callback-URL` and `Idempotency-Key`. It returns an `AsyncRequest`: running (202, with `request_id`) or completed (the result within `wait` seconds). `wait` (0-120) defaults to 0 with a `callback_url`, otherwise to the API's default.
+  - `idempotency_key` (1-200 visible ASCII characters): re-submitting the same call with the same key returns the first call's state with `replayed=True` (`Idempotent-Replayed: true`) and does not run or bill it again. The same key with a different call raises `ScrapeBadgerError` 409 `idempotency_key_reused`. The SDK retries a submit whose answer was lost in transit (a read timeout) only when it has a key; connection errors raised before anything was sent are always retried.
+  - `requests.wait(request_id, *, timeout=600.0)` polls until the call completes, sleeping `Retry-After` between polls. It raises the new `AsyncRequestTimeoutError` (a `ScrapeBadgerError` and a `TimeoutError`) when time runs out. A completed call with an error status is raised as the matching exception without retrying: a stored result can't change.
+  - `requests.callback_status(request_id)` returns a `CallbackStatus`: the webhook's `state`, `attempts`, `last_status`, `last_error`, `next_attempt_at`, `delivered_at` and `callback_host`.
+  - `account.webhook_secret()`, `account.rotate_webhook_secret()` (`WebhookSecret`) and `account.webhook_deliveries(limit=50)` (`WebhookDeliveries` of `WebhookDelivery`). A key limited to some APIs now raises `PermissionDeniedError` (403 `full_access_required`). The generated `get_the_webhook_signing_secret` / `rotate_the_webhook_signing_secret` (raw dicts) are kept.
+  - New `scrapebadger.webhooks` module: `verify_signature(secret, raw_body, signature, *, sent_at=None, tolerance_s=300)` checks `X-ScrapeBadger-Signature` in constant time and rejects a `sent_at` outside the tolerance. `parse_event(raw_body)` returns a `WebhookEvent` (the `request.completed` payload).
+  - `AsyncRequest` gains `status` (`"running"` / `"completed"`), `headers`, `body` (decoded JSON for a JSON response, else the text) and `replayed`. `running`, `data`, `credits_used` and `result_id` are unchanged. `requests.get` keeps its signature; a non-JSON result now comes back as text instead of `{}`.
+  - Idempotency keys, `callback_status` and `webhook_deliveries` need the API's SCR-652 release. Against an older API, an `Idempotency-Key` is ignored.
+- `scrapebadger.__version__` reported 0.77.0 since 0.78.0; it now matches the package version.
+- Also ships the generated `rufus` client merged after 0.79.0 (#103).
+
 ## [0.79.0] - 2026-11-14
 
 - **Grok API.** Adds the generated `grok` client for real Grok answers with web citations, X post references, multi-turn conversations, assistant modes, and brand-visibility analysis. Includes GET and POST ask/brand methods, conversation history, and models. (SCR-623)

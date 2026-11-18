@@ -22,6 +22,7 @@ The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web
 - **Type-safe** - Full type hints and Pydantic models for all responses
 - **Automatic pagination** - Iterator methods with smart rate limit handling
 - **Resilient retries** - Exponential backoff on transient errors
+- **Async requests and webhooks** - Submit any slow call, poll or `wait` for it, or take a signed webhook; idempotency keys make re-submits safe
 - **37+ Twitter endpoints** - Tweets, users, lists, communities, trends, geo, real-time streams
 - **20 Google product APIs** - Search (with optional deferred AI Overview follow-up), Maps, News, Hotels, Trends (incl. topic autocomplete), Jobs, Shopping (+ merchant URL enrichment), Patents, Scholar (search + profiles + author + author citation + cite formats), Images, Videos, Finance, AI Mode, Lens, **Local Pack**, **Shorts**, **Flights**, Products, **Ads Transparency Center**
 - **Vinted scraping** - Search items, item details, user profiles, brands, colors, markets
@@ -135,7 +136,7 @@ Etsy and AliExpress category navigation is separate from search: their search me
 | **ChatGPT** | Prompt the real chatgpt.com anonymously — structured answer with citations anchored to character offsets, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [ChatGPT Guide](docs/chatgpt.md) |
 | **Gemini** | Prompt the real gemini.google.com anonymously — structured answer with cited web sources, the full retrieved search trail, and AEO/GEO brand-visibility analysis | [Gemini Docs](https://docs.scrapebadger.com/gemini/overview) |
 
-## Quotes, feedback and async polling
+## Quotes and feedback
 
 These calls are free and never billed.
 
@@ -145,21 +146,82 @@ async with ScrapeBadger(api_key="your-api-key") as client:
     quote = await client.agent.quote("GET", "/v1/google/search", params={"q": "coffee"})
     print(quote.valid, quote.errors, quote.credits.max, quote.usd, quote.latency)
 
-    # Poll a call made with `Prefer: respond-async` (202 + request_id).
-    state = await client.requests.get(request_id)
-    if not state.running:
-        print(state.status_code, state.credits_used, state.data)
-
     # Report a bug or send feedback (pass the failing call's X-Request-ID).
     await client.agent.report_bug("Empty results for a valid query", request_id=request_id)
     await client.agent.feedback("Need a Google Maps photos endpoint")
 ```
 
-ScrapeBadger does not cache or store responses: every call is fetched fresh and billed, and `results.get` (the old free re-read) is deprecated because `GET /v1/results/{id}` was removed on 2026-11-09. To reshape a result, re-run the call with the `jq`, `fields` or `max_items` view parameters. `requests.get` returns `running=True` while the call is in progress — wait `retry_after_seconds` and poll again; never re-submit the call. Once finished it returns the original body, or raises the original call's error.
-
-The SDK's own methods never send `Prefer: respond-async`; `requests.get` polls a request ID obtained elsewhere (raw HTTP, the CLI or MCP server).
+ScrapeBadger does not cache or store responses: every call is fetched fresh and billed, and `results.get` (the old free re-read) is deprecated because `GET /v1/results/{id}` was removed on 2026-11-09. To reshape a result, re-run the call with the `jq`, `fields` or `max_items` view parameters.
 
 For an agent trial key, `await client.account.get_account_info()` carries an `agent_trial` block; parse it with `AgentTrial.model_validate(info["agent_trial"])` for `credits_remaining`, `expires_at` and `claim_url`.
+
+## Async requests and webhooks
+
+Slow calls can run asynchronously: AI asks such as Perplexity, ChatGPT or Gemini take 15–40 s, sometimes over a minute. `client.requests.submit` sends any `/v1` call with `Prefer: respond-async`. You get a `request_id` at once and the result later, by polling (free) or by a signed webhook. The call is billed once, when it completes; a call that never completes is not billed. Results are kept for about 15 minutes.
+
+```python
+from scrapebadger import ScrapeBadger
+
+async with ScrapeBadger(api_key="your-api-key") as client:
+    req = await client.requests.submit(
+        "/v1/perplexity/ask",
+        params={"prompt": "best crm for startups", "country": "us"},
+        callback_url="https://example.com/hooks/scrapebadger",
+        idempotency_key="crm-question-42",  # a re-submit with this key never runs or bills twice
+    )
+    print(req.request_id, req.status)  # "running": the result goes to the callback URL
+
+    # Or, without a webhook, wait for it here (polls are free and honour Retry-After):
+    done = await client.requests.wait(req.request_id, timeout=300)
+    print(done.status_code, done.body["answer"])
+```
+
+- `submit(path, *, method="GET", params=None, json=None, callback_url=None, wait=None, idempotency_key=None)` returns an `AsyncRequest`. That is `status="running"` with `request_id` and `retry_after_seconds`, or `status="completed"` with `status_code`, `headers` and `body` when the call finished within `wait` seconds (0–120). `wait` defaults to 0 with a `callback_url` (answer at once), otherwise to the API's default (25 s).
+- `idempotency_key` (1–200 visible ASCII characters) makes a re-submit safe. The same call with the same key within 15 minutes returns the first call's state with `replayed=True` instead of running it again. The same key with a different call raises `ScrapeBadgerError` 409 `idempotency_key_reused`. The SDK retries a submit whose answer was lost in transit only when it has a key.
+- `requests.get(request_id)` polls once. `requests.wait(request_id, timeout=600)` polls until the call is done and raises `AsyncRequestTimeoutError` (also a `TimeoutError`) if it is still running. The call keeps running either way: poll again, never re-submit. A finished call with an error status is raised as the matching exception (for example `ServerError` for a 502), as for a synchronous call.
+- `requests.callback_status(request_id)` reports the webhook delivery: `state` (`pending`, `delivering`, `delivered` or `failed`), `attempts`, `last_status`, `last_error`, `next_attempt_at` and `delivered_at`. `account.webhook_deliveries(limit=50)` lists the account's deliveries of the last 24 hours.
+- `requests.batch([...], callback_url=...)` submits up to 100 GET reads in one call.
+
+### Receive the webhook
+
+When the call completes, ScrapeBadger POSTs a `request.completed` event to the callback URL. It is signed with your account's secret: `(await client.account.webhook_secret()).secret`. Rotate it with `account.rotate_webhook_secret()`; both need a full-access key.
+
+- Verify the signature on the **raw** body before you trust it, and reject stale deliveries with `sent_at`.
+- Answer with a `2xx` within 10 s, and do slow work afterwards.
+- Failed deliveries are retried after 10 s, 60 s and 5 min, so deduplicate on `request_id`.
+
+```python
+import os
+
+from fastapi import FastAPI, HTTPException, Request
+from scrapebadger.webhooks import parse_event, verify_signature
+
+app = FastAPI()
+SECRET = os.environ["SCRAPEBADGER_WEBHOOK_SECRET"]
+seen: set[str] = set()  # use your database in production
+
+
+@app.post("/hooks/scrapebadger")
+async def scrapebadger_hook(request: Request) -> dict[str, bool]:
+    raw = await request.body()  # the raw bytes, before any JSON parsing
+    try:
+        event = parse_event(raw)
+    except ValueError:
+        raise HTTPException(400) from None
+    signature = request.headers.get("X-ScrapeBadger-Signature", "")
+    if not verify_signature(SECRET, raw, signature, sent_at=event.sent_at):
+        raise HTTPException(401)
+    if event.request_id not in seen:
+        seen.add(event.request_id)
+        # event.status and event.body are the call's own, errors included. A body over
+        # 1 MB is left out (event.body_omitted): fetch it from event.result_url.
+        print(event.status, event.body)
+    return {"ok": True}
+```
+
+`verify_signature(secret, raw_body, signature, *, sent_at=None, tolerance_s=300)` compares in constant time and never raises. It returns `False` for a wrong, missing or malformed signature, or for a `sent_at` more than `tolerance_s` seconds away. Pass the `sent_at` from the parsed body: the body is what is signed. `parse_event(raw_body)` returns a `WebhookEvent` with `event`, `request_id`, `batch_id`, `status`, `headers`, `body`, `body_omitted`, `body_size`, `result_url`, `result_expires_at`, `attempt` and `sent_at`. It raises `ValueError` for a body that is not such an event.
+
+See [Async requests and webhooks](https://docs.scrapebadger.com/long-running-requests) in the docs.
 
 ## Error Handling
 

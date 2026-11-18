@@ -38,6 +38,15 @@ RETRYABLE_TRANSPORT_ERRORS = (
     httpx.ProxyError,
 )
 
+# The subset raised before the request reached the server: safe to retry even for a
+# call that must not run twice (an async submit without an Idempotency-Key).
+UNSENT_TRANSPORT_ERRORS = (
+    httpx.ConnectError,
+    httpx.ConnectTimeout,
+    httpx.PoolTimeout,
+    httpx.ProxyError,
+)
+
 if TYPE_CHECKING:
     from collections.abc import Mapping
     from types import TracebackType
@@ -47,7 +56,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 # User agent for SDK requests
-SDK_VERSION = "0.79.0"
+SDK_VERSION = "0.80.0"
 USER_AGENT = f"scrapebadger-python/{SDK_VERSION}"
 
 
@@ -182,7 +191,12 @@ class BaseClient:
         if status_code == 403 and data.get("error") == "ip_not_allowed":
             raise IPNotAllowedError(message, status_code, data)
 
-        if status_code == 403 and data.get("error") == "insufficient_scope":
+        # full_access_required: the webhook secret and deliveries need a key that may
+        # call every API, not one limited to a few.
+        if status_code == 403 and data.get("error") in (
+            "insufficient_scope",
+            "full_access_required",
+        ):
             raise PermissionDeniedError(message, status_code, data)
 
         if status_code == 404:
@@ -217,7 +231,8 @@ class BaseClient:
         path: str,
         *,
         params: Mapping[str, Any] | None = None,
-        json: dict[str, Any] | None = None,
+        json: Any = None,
+        headers: Mapping[str, str] | None = None,
     ) -> httpx.Response:
         """Execute a single HTTP request without any retry logic.
 
@@ -226,6 +241,7 @@ class BaseClient:
             path: API endpoint path.
             params: Query parameters.
             json: JSON body for POST/PUT requests.
+            headers: Extra request headers for this call only.
 
         Returns:
             The raw httpx.Response.
@@ -236,7 +252,117 @@ class BaseClient:
             url=path,
             params=params,
             json=json,
+            headers=headers,
         )
+
+    async def _send(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+        json: Any = None,
+        headers: Mapping[str, str] | None = None,
+        retry_status: bool = True,
+        retry_transport: tuple[type[Exception], ...] = RETRYABLE_TRANSPORT_ERRORS,
+    ) -> httpx.Response:
+        """Send a request with the retry policy and error mapping; return the raw response.
+
+        The shared retry loop behind every call. A 4xx/5xx response raises the
+        matching ``ScrapeBadgerError`` subclass; anything below 400 is returned
+        undecoded.
+
+        Args:
+            method: HTTP method (GET, POST, etc.).
+            path: API endpoint path.
+            params: Query parameters (None values are dropped).
+            json: JSON body.
+            headers: Extra request headers for this call only.
+            retry_status: Retry the configured ``retry_on_status`` codes. Off for
+                reads of a stored result, whose status can't change. An
+                idempotent replay (``Idempotent-Replayed: true``) is a stored
+                result too and is never retried.
+            retry_transport: Transport errors to retry. ``UNSENT_TRANSPORT_ERRORS``
+                for a call that would run (and bill) a second time if the first
+                attempt got through.
+
+        Returns:
+            The raw httpx.Response (status below 400).
+
+        Raises:
+            ScrapeBadgerError: For API errors.
+            httpx.RequestError: For network errors after retries exhausted.
+        """
+        # Filter out None values from params
+        if params:
+            params = {k: v for k, v in params.items() if v is not None}
+
+        last_exception: Exception | None = None
+        for attempt in range(self._config.max_retries + 1):
+            try:
+                response = await self._execute_request(
+                    method, path, params=params, json=json, headers=headers
+                )
+
+                # Check for errors
+                if response.status_code >= 400:
+                    try:
+                        data: Any = response.json()
+                    except Exception:
+                        data = {}
+                    if not isinstance(data, dict):
+                        data = {}
+
+                    replayed = (
+                        response.headers.get("Idempotent-Replayed", "").strip().lower() == "true"
+                    )
+                    # Don't retry client errors (except specific status codes)
+                    if (
+                        not retry_status
+                        or replayed
+                        or response.status_code not in self._config.retry_on_status
+                    ):
+                        self._handle_error_response(response, data)
+
+                    # Retry on configured status codes
+                    if attempt < self._config.max_retries:
+                        delay = max(2**attempt, _retry_after_seconds(response, default=0))
+                        logger.warning(
+                            "⚠ %s %s — retrying in %ss (attempt %d/%d)",
+                            response.status_code,
+                            response.reason_phrase,
+                            delay,
+                            attempt + 1,
+                            self._config.max_retries,
+                        )
+                        await asyncio.sleep(delay)
+                        continue
+
+                    self._handle_error_response(response, data)
+
+                return response
+
+            except RETRYABLE_TRANSPORT_ERRORS as e:
+                last_exception = e
+                if isinstance(e, retry_transport) and attempt < self._config.max_retries:
+                    delay = 2**attempt
+                    error_type = type(e).__name__
+                    logger.warning(
+                        "⚠ %s — retrying in %ss (attempt %d/%d)",
+                        error_type,
+                        delay,
+                        attempt + 1,
+                        self._config.max_retries,
+                    )
+                    await asyncio.sleep(delay)
+                    continue
+                raise
+
+        # Should not reach here, but just in case
+        if last_exception:
+            raise last_exception
+        msg = "Request failed after retries"
+        raise ScrapeBadgerError(msg)
 
     async def _request_with_retry(
         self,
@@ -292,78 +418,25 @@ class BaseClient:
             ScrapeBadgerError: For API errors.
             httpx.RequestError: For network errors after retries exhausted.
         """
-        # Filter out None values from params
-        if params:
-            params = {k: v for k, v in params.items() if v is not None}
+        response = await self._send(method, path, params=params, json=json)
 
-        last_exception: Exception | None = None
-        for attempt in range(self._config.max_retries + 1):
-            try:
-                response = await self._execute_request(method, path, params=params, json=json)
+        # Parse response body
+        try:
+            data: dict[str, Any] = response.json()
+        except Exception:
+            data = {}
 
-                # Parse response body
-                try:
-                    data: dict[str, Any] = response.json()
-                except Exception:
-                    data = {}
+        # Check for application-level errors in response
+        # (bare JSON array bodies, e.g. /markets, have no .get)
+        if isinstance(data, dict) and data.get("error"):
+            raise ScrapeBadgerError(
+                data["error"],
+                response.status_code,
+                data,
+            )
 
-                # Build a plain dict of headers for the caller
-                headers: dict[str, str] = dict(response.headers)
-
-                # Check for errors
-                if response.status_code >= 400:
-                    # Don't retry client errors (except specific status codes)
-                    if response.status_code not in self._config.retry_on_status:
-                        self._handle_error_response(response, data)
-
-                    # Retry on configured status codes
-                    if attempt < self._config.max_retries:
-                        delay = max(2**attempt, _retry_after_seconds(response, default=0))
-                        logger.warning(
-                            "⚠ %s %s — retrying in %ss (attempt %d/%d)",
-                            response.status_code,
-                            response.reason_phrase,
-                            delay,
-                            attempt + 1,
-                            self._config.max_retries,
-                        )
-                        await asyncio.sleep(delay)
-                        continue
-
-                    self._handle_error_response(response, data)
-
-                # Check for application-level errors in response
-                # (bare JSON array bodies, e.g. /markets, have no .get)
-                if isinstance(data, dict) and data.get("error"):
-                    raise ScrapeBadgerError(
-                        data["error"],
-                        response.status_code,
-                        data,
-                    )
-
-                return data, headers, response.status_code
-
-            except RETRYABLE_TRANSPORT_ERRORS as e:
-                last_exception = e
-                if attempt < self._config.max_retries:
-                    delay = 2**attempt
-                    error_type = type(e).__name__
-                    logger.warning(
-                        "⚠ %s — retrying in %ss (attempt %d/%d)",
-                        error_type,
-                        delay,
-                        attempt + 1,
-                        self._config.max_retries,
-                    )
-                    await asyncio.sleep(delay)
-                    continue
-                raise
-
-        # Should not reach here, but just in case
-        if last_exception:
-            raise last_exception
-        msg = "Request failed after retries"
-        raise ScrapeBadgerError(msg)
+        # Build a plain dict of headers for the caller
+        return data, dict(response.headers), response.status_code
 
     async def _request(
         self,

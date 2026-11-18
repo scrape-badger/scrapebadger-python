@@ -1,4 +1,4 @@
-"""Agent platform API: quotes, feedback, async request polling and batches."""
+"""Agent platform API: quotes, feedback, async requests and batches."""
 
 from scrapebadger.agent.client import AgentClient, RequestsClient, ResultsClient
 from scrapebadger.agent.models import (
@@ -6,6 +6,7 @@ from scrapebadger.agent.models import (
     AsyncRequest,
     BatchItemResult,
     BatchSubmission,
+    CallbackStatus,
     FeedbackReceipt,
     Quote,
     QuoteCredits,
@@ -20,6 +21,7 @@ __all__ = [
     "AsyncRequest",
     "BatchItemResult",
     "BatchSubmission",
+    "CallbackStatus",
     "FeedbackReceipt",
     "Quote",
     "QuoteCredits",
