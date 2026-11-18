@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.81.0] - 2026-11-18
+
+### Added
+- `perplexity.ask_perplexity_a_question(..., html=True)` adds `answer_html`: the answer rendered as an HTML fragment, each `[n]` citation linked to its source.
+- `perplexity.ask_perplexity_a_question(..., raw=True)` adds `raw`: Perplexity's own final answer object as it sent it.
+- Both are sent only when True, so existing calls are unchanged. The POST form takes `"html": true` / `"raw": true` in the payload.
+
 ## [0.80.0] - 2026-11-18
 
 - **Async requests and webhooks.** Run any slow call asynchronously and get the result by polling or by a signed webhook. Submitting and polling are free; the call is billed once, when it completes. (SCR-652)

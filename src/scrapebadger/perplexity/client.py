@@ -21,10 +21,18 @@ class PerplexityClient:
         country: str | None = None,
         strict_country: bool = False,
         location: str | None = None,
+        html: bool = False,
+        raw: bool = False,
     ) -> dict[str, Any]:
         """Ask Perplexity a question.
 
         Generated from the OpenAPI spec; returns the raw response dict.
+
+        Args:
+            html: Also return ``answer_html``, the answer rendered as an HTML fragment with
+                each ``[n]`` citation linked to its source. Sent only when True.
+            raw: Also return ``raw``, Perplexity's own final answer object as it sent it.
+                Sent only when True.
         """
         params = {
             k: v
@@ -36,6 +44,10 @@ class PerplexityClient:
             }.items()
             if v is not None
         }
+        if html:
+            params["html"] = True
+        if raw:
+            params["raw"] = True
         return await self._client.get("/v1/perplexity/ask", params=params)
 
     async def ask_perplexity_a_question_post(
