@@ -100,3 +100,19 @@ async def test_brand_visibility_location(perplexity: PerplexityClient, base: Mag
     base.get.reset_mock()
     await perplexity.measure_a_brand_s_visibility_in_a_perplexity_answer(prompt="q", brand="Nike")
     assert "location" not in base.get.await_args.kwargs["params"]
+
+
+async def test_ask_omits_html_and_raw_by_default(
+    perplexity: PerplexityClient, base: MagicMock
+) -> None:
+    await perplexity.ask_perplexity_a_question(prompt="q")
+    params = base.get.await_args.kwargs["params"]
+    assert "html" not in params and "raw" not in params
+
+
+async def test_ask_sends_html_and_raw(perplexity: PerplexityClient, base: MagicMock) -> None:
+    await perplexity.ask_perplexity_a_question(prompt="q", html=True, raw=True)
+    base.get.assert_awaited_once_with(
+        "/v1/perplexity/ask",
+        params={"prompt": "q", "strict_country": False, "html": True, "raw": True},
+    )

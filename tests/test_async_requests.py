@@ -629,4 +629,6 @@ def test_public_exports() -> None:
         "webhooks",
     ):
         assert name in scrapebadger.__all__
-    assert scrapebadger.__version__ == "0.80.0"
+    from scrapebadger._internal.client import SDK_VERSION
+
+    assert scrapebadger.__version__ == SDK_VERSION
