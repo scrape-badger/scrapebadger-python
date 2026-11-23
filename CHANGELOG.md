@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.82.0] - 2026-11-23
+
+### Added
+- `google.search.search()` and `google.search.light()`: an `organic_results` item whose `link` is still a Google redirect (`https://www.google.com/goto?url=...`) now also has `link_token` (string) and `retry_after_seconds` (int, 0 = can be resolved right away). Both are `None` when `link` is already the real URL. The responses are plain dicts, so no call changes.
+- `google.search.resolve(results)` makes one `POST /v1/google/resolve` request and returns `{"results": [...], "retry_after_seconds": int | None}`. It takes 1 to 25 rows, each with a `link_token`; other fields are returned unchanged, so `organic_results` items can be sent as they are. Each returned row is resolved (`link` is the result's own URL, no `link_token`), not ready (`link_token` and `retry_after_seconds`; the token can differ from the one sent, always keep the latest) or failed (`link_token` and `error`; do not send it again). Costs no credits.
+- `google.search.resolve_all(results, *, max_wait=240.0)` calls `resolve` in requests of at most 25 rows, sleeps the `retry_after_seconds` the API returns (at least 1 second) and repeats until no row is waiting or `max_wait` seconds have passed. It returns a new list in the input order and does not change the input. Rows without a `link_token` are returned as they are and never sent. Rows that are still not ready at `max_wait` are returned with their latest `link_token` and `retry_after_seconds`; no exception is raised for them.
+- Google limits how fast the links of one result page can be followed. Polling this way, all ten links of a page are usually known 45 to 70 seconds after the search.
+
 ## [0.81.0] - 2026-11-18
 
 ### Added

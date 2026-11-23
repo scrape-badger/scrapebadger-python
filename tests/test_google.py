@@ -6,7 +6,10 @@ We mock BaseClient and assert the correct path + params are sent.
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock
+import copy
+from collections.abc import Iterator
+from typing import Any
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
@@ -41,6 +44,61 @@ def mock_base_client() -> MagicMock:
 @pytest.fixture
 def google(mock_base_client: MagicMock) -> GoogleClient:
     return GoogleClient(mock_base_client)
+
+
+GOTO = "https://www.google.com/goto?url=abc"
+
+
+def redirect_row(position: int, token: str | None = None, wait: int = 0) -> dict[str, Any]:
+    """An organic result whose link is still a Google redirect."""
+    return {
+        "position": position,
+        "title": f"Result {position}",
+        "link": GOTO,
+        "link_token": token or f"tok-{position}",
+        "retry_after_seconds": wait,
+    }
+
+
+def resolved_row(position: int) -> dict[str, Any]:
+    """The same result once resolved: the real link and no token."""
+    return {
+        "position": position,
+        "title": f"Result {position}",
+        "link": f"https://example.com/{position}",
+    }
+
+
+def sent_rows(mock_base_client: MagicMock) -> list[list[dict[str, Any]]]:
+    """The rows of every POST /v1/google/resolve made so far."""
+    for call in mock_base_client.post.await_args_list:
+        assert call.args == ("/v1/google/resolve",)
+    return [call.kwargs["json"]["results"] for call in mock_base_client.post.await_args_list]
+
+
+class FakeClock:
+    """Time moves only when the code under test sleeps."""
+
+    def __init__(self) -> None:
+        self.now = 1000.0
+        self.sleeps: list[float] = []
+
+    def monotonic(self) -> float:
+        return self.now
+
+    async def sleep(self, seconds: float) -> None:
+        self.sleeps.append(seconds)
+        self.now += seconds
+
+
+@pytest.fixture
+def clock() -> Iterator[FakeClock]:
+    fake = FakeClock()
+    with (
+        patch("scrapebadger.google.search.monotonic", fake.monotonic),
+        patch("scrapebadger.google.search.asyncio.sleep", fake.sleep),
+    ):
+        yield fake
 
 
 class TestGoogleClientWiring:
@@ -148,6 +206,257 @@ class TestSearchClient:
         # Light cannot be upgraded to full Search, so none of its controls are sent.
         for key in ("mode", "ai_overview", "expand_related_questions"):
             assert key not in params
+
+    @pytest.mark.asyncio
+    async def test_resolve_posts_results(
+        self, google: GoogleClient, mock_base_client: MagicMock
+    ) -> None:
+        rows = [redirect_row(1), redirect_row(2, wait=6)]
+        answer = {
+            "results": [resolved_row(1), redirect_row(2, "tok-2b", wait=6)],
+            "retry_after_seconds": 6,
+        }
+        mock_base_client.post.return_value = answer
+
+        out = await google.search.resolve(rows)
+
+        mock_base_client.post.assert_awaited_once_with("/v1/google/resolve", json={"results": rows})
+        assert out is answer
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_resolved_on_first_call(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        mock_base_client.post.return_value = {
+            "results": [resolved_row(1), resolved_row(2)],
+            "retry_after_seconds": None,
+        }
+
+        out = await google.search.resolve_all([redirect_row(1), redirect_row(2)])
+
+        assert out == [resolved_row(1), resolved_row(2)]
+        assert sent_rows(mock_base_client) == [[redirect_row(1), redirect_row(2)]]
+        assert clock.sleeps == []
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_retries_not_ready_row_with_new_token(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        mock_base_client.post.side_effect = [
+            {
+                "results": [resolved_row(1), redirect_row(2, "tok-2-new", wait=7)],
+                "retry_after_seconds": 7,
+            },
+            {"results": [resolved_row(2)], "retry_after_seconds": None},
+        ]
+
+        out = await google.search.resolve_all([redirect_row(1), redirect_row(2)])
+
+        assert out == [resolved_row(1), resolved_row(2)]
+        first, second = sent_rows(mock_base_client)
+        assert [row["link_token"] for row in first] == ["tok-1", "tok-2"]
+        # Only the row that was not ready goes out again, with the token from the answer.
+        assert second == [redirect_row(2, "tok-2-new", wait=7)]
+        assert clock.sleeps == [7]
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_sleeps_at_least_one_second(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        mock_base_client.post.side_effect = [
+            {"results": [redirect_row(1, wait=0)], "retry_after_seconds": 0},
+            {"results": [redirect_row(1)], "retry_after_seconds": None},
+            {"results": [resolved_row(1)], "retry_after_seconds": None},
+        ]
+
+        out = await google.search.resolve_all([redirect_row(1)])
+
+        assert out == [resolved_row(1)]
+        # A wait of 0 and a missing wait both become 1 second.
+        assert clock.sleeps == [1, 1]
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_does_not_resend_failed_row(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        failed = {**redirect_row(2), "error": "link could not be resolved"}
+        del failed["retry_after_seconds"]
+        mock_base_client.post.side_effect = [
+            {"results": [redirect_row(1, wait=3), failed], "retry_after_seconds": 3},
+            {"results": [resolved_row(1)], "retry_after_seconds": None},
+        ]
+
+        out = await google.search.resolve_all([redirect_row(1), redirect_row(2)])
+
+        assert out == [resolved_row(1), failed]
+        assert out[1]["link_token"] == "tok-2"
+        first, second = sent_rows(mock_base_client)
+        assert [row["position"] for row in first] == [1, 2]
+        assert [row["position"] for row in second] == [1]
+        assert clock.sleeps == [3]
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_never_sends_row_that_already_has_error(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        failed = {**redirect_row(1), "error": "link could not be resolved"}
+
+        out = await google.search.resolve_all([failed])
+
+        assert out == [failed]
+        mock_base_client.post.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_sends_chunks_of_25(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        async def answer(_path: str, *, json: dict[str, Any]) -> dict[str, Any]:
+            return {
+                "results": [resolved_row(row["position"]) for row in json["results"]],
+                "retry_after_seconds": None,
+            }
+
+        mock_base_client.post.side_effect = answer
+
+        out = await google.search.resolve_all([redirect_row(n) for n in range(1, 61)])
+
+        chunks = sent_rows(mock_base_client)
+        assert [len(chunk) for chunk in chunks] == [25, 25, 10]
+        assert [row["position"] for chunk in chunks for row in chunk] == list(range(1, 61))
+        assert out == [resolved_row(n) for n in range(1, 61)]
+        assert clock.sleeps == []
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_sleeps_smallest_wait_of_all_chunks(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        waits = iter([9, 4])
+        calls = 0
+
+        async def answer(_path: str, *, json: dict[str, Any]) -> dict[str, Any]:
+            nonlocal calls
+            calls += 1
+            if calls > 2:  # second round: everything resolves
+                return {
+                    "results": [resolved_row(row["position"]) for row in json["results"]],
+                    "retry_after_seconds": None,
+                }
+            wait = next(waits)
+            return {
+                "results": [redirect_row(row["position"], wait=wait) for row in json["results"]],
+                "retry_after_seconds": wait,
+            }
+
+        mock_base_client.post.side_effect = answer
+
+        out = await google.search.resolve_all([redirect_row(n) for n in range(1, 31)])
+
+        assert [len(chunk) for chunk in sent_rows(mock_base_client)] == [25, 5, 25, 5]
+        assert out == [resolved_row(n) for n in range(1, 31)]
+        assert clock.sleeps == [4]
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_returns_waiting_rows_at_deadline(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        calls = 0
+
+        async def answer(_path: str, *, json: dict[str, Any]) -> dict[str, Any]:
+            nonlocal calls
+            calls += 1
+            return {
+                "results": [
+                    redirect_row(row["position"], f"tok-{row['position']}-v{calls}", wait=7)
+                    for row in json["results"]
+                ],
+                "retry_after_seconds": 7,
+            }
+
+        mock_base_client.post.side_effect = answer
+
+        out = await google.search.resolve_all([redirect_row(1), redirect_row(2)], max_wait=10)
+
+        # No exception: the rows come back with their latest token and wait.
+        assert out == [redirect_row(1, "tok-1-v3", wait=7), redirect_row(2, "tok-2-v3", wait=7)]
+        # The second sleep is cut to what is left of max_wait, then one last request.
+        assert clock.sleeps == [7, 3]
+        assert calls == 3
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_max_wait_zero_sends_once(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        mock_base_client.post.return_value = {
+            "results": [redirect_row(1, "tok-1-new", wait=5)],
+            "retry_after_seconds": 5,
+        }
+
+        out = await google.search.resolve_all([redirect_row(1)], max_wait=0)
+
+        assert out == [redirect_row(1, "tok-1-new", wait=5)]
+        mock_base_client.post.assert_awaited_once()
+        assert clock.sleeps == []
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_skips_rows_without_token(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        real_null = {
+            "position": 1,
+            "link": "https://example.com/real-1",
+            "link_token": None,
+            "retry_after_seconds": None,
+        }
+        real_bare = {"position": 3, "link": "https://example.com/real-3"}
+        mock_base_client.post.return_value = {
+            "results": [resolved_row(2), resolved_row(4)],
+            "retry_after_seconds": None,
+        }
+
+        out = await google.search.resolve_all(
+            [real_null, redirect_row(2), real_bare, redirect_row(4)]
+        )
+
+        assert sent_rows(mock_base_client) == [[redirect_row(2), redirect_row(4)]]
+        assert out == [real_null, resolved_row(2), real_bare, resolved_row(4)]
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_nothing_to_resolve_makes_no_request(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        rows = [{"position": 1, "link": "https://example.com/1", "link_token": None}]
+
+        assert await google.search.resolve_all(rows) == rows
+        assert await google.search.resolve_all([]) == []
+        mock_base_client.post.assert_not_awaited()
+        assert clock.sleeps == []
+
+    @pytest.mark.asyncio
+    async def test_resolve_all_does_not_mutate_input(
+        self, google: GoogleClient, mock_base_client: MagicMock, clock: FakeClock
+    ) -> None:
+        rows = [
+            {"position": 1, "link": "https://example.com/1", "link_token": None},
+            {**redirect_row(2), "sitelinks": [{"title": "Docs"}]},
+            redirect_row(3),
+        ]
+        before = copy.deepcopy(rows)
+        row_ids = [id(row) for row in rows]
+        mock_base_client.post.side_effect = [
+            {
+                "results": [resolved_row(2), redirect_row(3, "tok-3-new", wait=2)],
+                "retry_after_seconds": 2,
+            },
+            {"results": [resolved_row(3)], "retry_after_seconds": None},
+        ]
+
+        out = await google.search.resolve_all(rows)
+
+        assert rows == before
+        assert [id(row) for row in rows] == row_ids
+        assert out is not rows
+        assert all(new is not old for new, old in zip(out, rows, strict=True))
+        assert out == [before[0], resolved_row(2), resolved_row(3)]
 
 
 class TestMapsClient:

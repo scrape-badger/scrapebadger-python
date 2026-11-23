@@ -24,7 +24,7 @@ The official Python SDK for [ScrapeBadger](https://scrapebadger.com) - async web
 - **Resilient retries** - Exponential backoff on transient errors
 - **Async requests and webhooks** - Submit any slow call, poll or `wait` for it, or take a signed webhook; idempotency keys make re-submits safe
 - **37+ Twitter endpoints** - Tweets, users, lists, communities, trends, geo, real-time streams
-- **20 Google product APIs** - Search (with optional deferred AI Overview follow-up), Maps, News, Hotels, Trends (incl. topic autocomplete), Jobs, Shopping (+ merchant URL enrichment), Patents, Scholar (search + profiles + author + author citation + cite formats), Images, Videos, Finance, AI Mode, Lens, **Local Pack**, **Shorts**, **Flights**, Products, **Ads Transparency Center**
+- **20 Google product APIs** - Search (with optional deferred AI Overview follow-up and free result link resolution), Maps, News, Hotels, Trends (incl. topic autocomplete), Jobs, Shopping (+ merchant URL enrichment), Patents, Scholar (search + profiles + author + author citation + cite formats), Images, Videos, Finance, AI Mode, Lens, **Local Pack**, **Shorts**, **Flights**, Products, **Ads Transparency Center**
 - **Vinted scraping** - Search items, item details, user profiles, brands, colors, markets
 - **Reddit scraping** - Search posts/subreddits/users/domains, subreddit posts, post comments, user profiles, trophies, wiki pages, moderators
 - **Web scraping** - Anti-bot bypass, JS rendering, screenshots, and selector/AI data extraction
