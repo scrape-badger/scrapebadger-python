@@ -31,7 +31,9 @@ async with ScrapeBadger(api_key="your-key") as client:
     )
     # Structured sections:
     #   serp["organic_results"]      — position, title, link, snippet, displayed_link,
-    #                                  date, sitelinks, rich_snippet, read_more_link
+    #                                  date, sitelinks, rich_snippet, read_more_link,
+    #                                  link_token, retry_after_seconds (see
+    #                                  "Resolving result links" below)
     #   serp["knowledge_graph"]      — title, type, description, attributes
     #   serp["ai_overview"]          — text_blocks (paragraph/heading/list, with
     #                                  reference_indexes), references, videos
@@ -72,6 +74,89 @@ Each answered question bills as one more Search request (credits = 20 x (1 +
 answered) at today's price); a question that does not come back is not billed.
 It adds about a second per question and upgrades `mode="fast"` to full. Light
 Search does not accept it.
+
+#### Resolving result links
+
+Google can return a result's URL as a redirect link
+(`https://www.google.com/goto?url=...`) instead of the page's own URL. In
+`search()` and `light()` responses, each `organic_results` item whose `link` is
+still a redirect has two more fields:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `link_token` | `str` or `None` | Send it to `resolve()` to get the real URL. |
+| `retry_after_seconds` | `int` or `None` | Seconds to wait before resolving. `0` means it can be resolved right away. |
+
+Both are `None` when `link` is already the real URL.
+
+Google limits how fast the links of one result page can be followed, so not
+every link is ready at once. `resolve_all()` sends the results, waits as long
+as the API asks, and repeats until every link is known. Resolving costs no
+credits.
+
+```python
+import asyncio
+
+from scrapebadger import ScrapeBadger
+
+
+async def main() -> None:
+    async with ScrapeBadger(api_key="your-key") as client:
+        serp = await client.google.search.search("python 3.13")
+        results = await client.google.search.resolve_all(serp["organic_results"])
+        for result in results:
+            if result.get("error"):
+                print(result["position"], "failed:", result["error"])
+            elif result.get("link_token"):
+                print(result["position"], "not ready, wait", result["retry_after_seconds"], "s")
+            else:
+                print(result["position"], result["link"])
+
+
+asyncio.run(main())
+```
+
+`resolve_all(results, *, max_wait=240.0)` returns a new list with one row per
+input row, in the same order. It does not change the list you pass in. Rows
+without a `link_token` are returned as they are and never sent. Each row that
+had a `link_token` comes back in one of three states:
+
+| State | How to tell | What to do |
+|---|---|---|
+| Resolved | No `link_token`, no `retry_after_seconds`, no `error` | `link` is the result's own URL. |
+| Not ready | `link_token` and `retry_after_seconds` (1 or more) | Wait that many seconds, then send the row again. The token can differ from the one you sent: always keep the latest. `link` is as you sent it. |
+| Failed | `link_token` and `error` (a string) | Do not send it again. |
+
+`resolve_all()` stops when no row is waiting or after `max_wait` seconds. It
+does not raise for rows that are still not ready at that point: they are
+returned with their latest `link_token` and `retry_after_seconds`, so you can
+pass them to `resolve_all()` or `resolve()` later.
+
+Typical timing with `resolve_all()`: all ten links of a result page are known
+45 to 70 seconds after the search. Once the result page is about 160 seconds old, every
+remaining link resolves in a single request.
+
+`resolve(results)` makes one `POST /v1/google/resolve` request, for your own
+loop. It takes 1 to 25 rows, each with a `link_token`. Other fields on a row
+are returned unchanged, so `organic_results` items can be sent as they are.
+
+```python
+async with ScrapeBadger(api_key="your-key") as client:
+    serp = await client.google.search.search("python 3.13")
+    pending = [r for r in serp["organic_results"] if r.get("link_token")]
+    if pending:
+        answer = await client.google.search.resolve(pending)
+        for row in answer["results"]:  # same order as sent
+            print(row["position"], row["link"], row.get("retry_after_seconds"))
+        # Smallest wait among the rows that are not ready, or None when none is waiting
+        print(answer["retry_after_seconds"])
+```
+
+Sending a token before its wait is over is not an error: the row comes back
+not ready with the wait that is left. An invalid request (no rows, more than
+25, or a row without `link_token`) raises `ValidationError` (422). When link
+resolution is temporarily unavailable the API answers 503 with `Retry-After`;
+the SDK retries it and raises `ServerError` if it still fails.
 
 ### Maps (Search, Place, Reviews, Photos, Posts)
 
@@ -353,6 +438,8 @@ look-alikes and lists the `variants` it searched.
 | Sub-client | Method | Description |
 |---|---|---|
 | `search` | `search(q, *, gl, hl, num, start, domain, device, ...)` | Web search with 21 parameters |
+| `search` | `resolve(results)` | Real URLs for up to 25 results with a `link_token`, one request (free) |
+| `search` | `resolve_all(results, *, max_wait)` | Resolve every result link, waiting and retrying as needed (free); returns a list |
 | `maps` | `search(q, *, ll, gl, hl, start)` | Place search by query |
 | `maps` | `place(*, place_id, data_id, hl, gl)` | Place detail |
 | `maps` | `reviews(data_id, *, sort_by, hl, next_page_token, results)` | Paginated reviews |
@@ -387,7 +474,7 @@ look-alikes and lists the `variants` it searched.
 | `ads` | `advertiser(advertiser_id, *, region, start_date, end_date)` | Disclosed spend and ad mix |
 | `ads` | `creative(advertiser_id, creative_id, *, region, political)` | One creative with variations |
 
-All methods are async and return `dict[str, Any]` responses matching the documented JSON shapes.
+All methods are async and return `dict[str, Any]` responses matching the documented JSON shapes, except `search.resolve_all`, which returns a list of result rows.
 
 ## Credit Costs
 
@@ -400,6 +487,7 @@ All methods are async and return `dict[str, Any]` responses matching the documen
 | `ads/search` | **25** |
 | `ads/advertisers` with `fuzzy=true` (billed as 3 lookups) | **45** |
 | `shopping/product`, `shopping/product/click` | **1** |
+| `resolve` (`/v1/google/resolve`) | **0** |
 | Failed requests | **0** |
 
 Prices change; `GET /api/public/pricing` (or the [pricing page](https://scrapebadger.com/pricing)) always has the live per-endpoint cost.

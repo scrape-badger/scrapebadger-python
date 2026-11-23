@@ -2,10 +2,22 @@
 
 from __future__ import annotations
 
+import asyncio
+from time import monotonic
 from typing import TYPE_CHECKING, Any, Literal, overload
 
 if TYPE_CHECKING:
     from scrapebadger._internal.client import BaseClient
+
+# POST /v1/google/resolve takes 1 to 25 rows per request.
+_RESOLVE_MAX_ROWS = 25
+# resolve_all() waits at least this long between two rounds of requests.
+_RESOLVE_MIN_WAIT_S = 1.0
+
+
+def _is_waiting(row: dict[str, Any]) -> bool:
+    """True when a row has a ``link_token`` to send and has not failed."""
+    return bool(row.get("link_token")) and row.get("error") is None
 
 
 class SearchClient:
@@ -16,6 +28,9 @@ class SearchClient:
         serp = await client.google.search.search("python 3.13")
         for result in serp["organic_results"]:
             print(result["title"], result["link"])
+
+        # Some links are still Google redirects: get the real URLs (free).
+        results = await client.google.search.resolve_all(serp["organic_results"])
         ```
     """
 
@@ -332,7 +347,11 @@ class SearchClient:
               organic_results_state
             - `organic_results`: position/title/link/snippet/displayed_link,
               plus `date`, `sitelinks`, `rich_snippet` and `read_more_link`
-              when Google shows them
+              when Google shows them. A result whose `link` is still a
+              Google redirect also has `link_token` and
+              `retry_after_seconds` (0 = can be resolved right away); both
+              are ``None`` when `link` is already the real URL. Pass the
+              results to :meth:`resolve_all` to get the real URLs.
             - `ads`, `knowledge_graph`, `related_searches`,
               `people_also_search_for`
             - `related_questions`: question, rank, `type` (``"ai_overview"``
@@ -679,7 +698,9 @@ class SearchClient:
             pagination}`` — no ``ai_overview`` / ``knowledge_graph`` /
             ``ads`` / ``local_results`` / ``news_results`` blocks.
             ``search_information.organic_results_state`` is filled, as on
-            full Search.
+            full Search. ``organic_results`` items carry ``link_token`` and
+            ``retry_after_seconds`` as on full Search; pass them to
+            :meth:`resolve_all` to get the real URLs.
         """
         params: dict[str, Any] = {
             "google_domain": google_domain,
@@ -732,3 +753,121 @@ class SearchClient:
             body, _, _ = await self._client.get_raw("/v1/google/light/search", params=params)
             return body.decode("utf-8")
         return await self._client.get("/v1/google/light/search", params=params)
+
+    async def resolve(self, results: list[dict[str, Any]]) -> dict[str, Any]:
+        """Get the real URLs of results whose ``link`` is a Google redirect.
+
+        Calls ``POST /v1/google/resolve`` once. Costs no credits.
+
+        A result from :meth:`search` or :meth:`light` whose ``link`` is still
+        a Google redirect (``https://www.google.com/goto?url=...``) has a
+        ``link_token``. Google limits how fast the links of one result page
+        can be followed, so a row can come back not ready, with the number of
+        seconds to wait. :meth:`resolve_all` does the waiting and retrying
+        for you.
+
+        Args:
+            results: 1 to 25 rows. Each row needs a non-empty string
+                ``link_token``. Any other fields are returned unchanged on
+                the row, so ``organic_results`` items can be sent as they
+                are.
+
+        Returns:
+            ``{"results": [...], "retry_after_seconds": int | None}``. The
+            rows come back in the order sent. Each row is one of:
+
+            - resolved: ``link`` is the result's own URL. The row has no
+              ``link_token``, ``retry_after_seconds`` or ``error``.
+            - not ready: the row has ``link_token`` and
+              ``retry_after_seconds`` (1 or more). Wait that many seconds,
+              then send the row again. The token can differ from the one
+              sent: always keep the latest. ``link`` is as sent.
+            - failed: the row has ``link_token`` as sent and ``error`` (a
+              string). Do not send it again.
+
+            The top-level ``retry_after_seconds`` is the smallest wait among
+            the not-ready rows, or ``None`` when no row is waiting. Sending
+            a token before its wait is over is not an error: the row comes
+            back not ready with the wait that is left.
+
+        Raises:
+            ValidationError: 422 for an empty list, more than 25 rows, or a
+                row without ``link_token``.
+            ServerError: 503 when link resolution is temporarily
+                unavailable. The SDK retries it first, like other 5xx.
+        """
+        return await self._client.post("/v1/google/resolve", json={"results": results})
+
+    async def resolve_all(
+        self, results: list[dict[str, Any]], *, max_wait: float = 240.0
+    ) -> list[dict[str, Any]]:
+        """Resolve every result link, waiting between requests as the API asks.
+
+        Calls :meth:`resolve` with the rows that have a ``link_token``, at
+        most 25 per request, then sleeps the smallest ``retry_after_seconds``
+        returned (at least 1 second) and sends the rows that are still not
+        ready again. It stops when no row is waiting or when ``max_wait``
+        seconds have passed. Costs no credits.
+
+        Polling this way, all ten links of a result page are usually known
+        45 to 70 seconds after the search. Once the result page is about 160
+        seconds old, every remaining link resolves in a single request.
+
+        Args:
+            results: Result rows, normally a search response's
+                ``organic_results``. Rows without a ``link_token`` are
+                returned as they are and never sent. The list and its rows
+                are not modified.
+            max_wait: Stop after this many seconds (default 240). The last
+                sleep is cut so that it does not pass this limit. With 0,
+                each row is sent once.
+
+        Returns:
+            A new list with one row per input row, in the same order. Each
+            row that had a ``link_token`` is in one of the states described
+            in :meth:`resolve`:
+
+            - resolved: ``link`` is the result's own URL.
+            - failed: the row has ``error``. It is not sent again.
+            - not ready: ``max_wait`` passed first. The row has its latest
+              ``link_token`` and ``retry_after_seconds``, so you can pass it
+              to :meth:`resolve` or :meth:`resolve_all` later. No exception
+              is raised for these rows.
+
+        Raises:
+            ScrapeBadgerError: A request failed (see :meth:`resolve`).
+
+        Example:
+            ```python
+            serp = await client.google.search.search("python 3.13")
+            results = await client.google.search.resolve_all(serp["organic_results"])
+            for result in results:
+                if result.get("error"):
+                    print("failed:", result["error"])
+                elif result.get("link_token"):
+                    print("not ready, wait", result["retry_after_seconds"], "s")
+                else:
+                    print(result["link"])
+            ```
+        """
+        rows = [dict(row) for row in results]
+        deadline = monotonic() + max_wait
+        waiting = [i for i, row in enumerate(rows) if _is_waiting(row)]
+        while waiting:
+            waits: list[float] = []
+            for start in range(0, len(waiting), _RESOLVE_MAX_ROWS):
+                chunk = waiting[start : start + _RESOLVE_MAX_ROWS]
+                response = await self.resolve([rows[i] for i in chunk])
+                for i, row in zip(chunk, response.get("results") or [], strict=False):
+                    if isinstance(row, dict):
+                        rows[i] = row
+                wait = response.get("retry_after_seconds")
+                if isinstance(wait, int | float):
+                    waits.append(wait)
+            waiting = [i for i in waiting if _is_waiting(rows[i])]
+            remaining = deadline - monotonic()
+            if not waiting or remaining <= 0:
+                break
+            delay = max(min(waits, default=_RESOLVE_MIN_WAIT_S), _RESOLVE_MIN_WAIT_S)
+            await asyncio.sleep(min(delay, remaining))
+        return rows
