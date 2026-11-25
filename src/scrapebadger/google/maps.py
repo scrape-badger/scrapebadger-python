@@ -104,10 +104,13 @@ class MapsClient:
         """Get full place detail by ``place_id`` or ``data_id``.
 
         Returns title, address, phone, website, GPS, rating, reviews_count,
-        rating_summary (per-star distribution), categories, extensions
-        (service_options, accessibility, offerings, payments, etc.),
-        weekly operating hours, popular_times graph (per-weekday busyness),
-        provider_id, permanently_closed flag, thumbnail, and photo list.
+        categories, extensions (amenity groups such as accessibility),
+        opening hours (``open_state``, today's ``hours``, and
+        ``operating_hours`` for the coming seven days), ``price_level``
+        (Google's price per person, e.g. "฿2,000+"), popular_times,
+        provider_id, ``thumbnail``/``image``, and up to 20 photo URLs.
+        ``service_options`` is None: Google no longer exposes those flags
+        to signed-out clients.
 
         At least one of ``place_id`` or ``data_id`` must be provided.
         """
@@ -175,21 +178,20 @@ class MapsClient:
     ) -> dict[str, Any]:
         """Get photos for a place.
 
-        Returns place-specific photo categories (Menu, Vibe, Comfort food,
-        individual dish names, etc.), photo URLs from all CDN families
-        (``/p/AF1Qip*``, ``/gps-cs-s/*``, ``/gps-proxy/*``), the total
-        photo count, and a pagination token.
+        Returns the photos Google exposes to signed-out clients (usually
+        the first 8 of the gallery) as ``thumbnail`` and ``image`` URLs.
+        ``pagination.total_results`` is the place's total photo count on
+        Google. There is one page (``pagination.next`` is None). To get
+        another size, replace a URL's ``=w..-h..-k-no`` suffix and keep
+        its path.
 
         Args:
             data_id: Google Maps data ID (``0x...:0x...``).
             hl: Language code.
             gl: Country code.
-            category_id: Filter by category ID from
-                ``response.categories[].id`` (e.g. Menu, Vibe).
-            next_page_token: Pagination token from previous
-                ``response.pagination.next``.
-            page_size: Photos per page (1-200). Use 200 to fetch all
-                photos in a single call for places with <~120 photos.
+            category_id: Accepted for compatibility; has no effect.
+            next_page_token: Accepted for compatibility; has no effect.
+            page_size: Accepted for compatibility; has no effect.
         """
         params: dict[str, Any] = {"data_id": data_id, "hl": hl, "gl": gl, "page_size": page_size}
         if category_id:

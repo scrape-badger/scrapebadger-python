@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.82.1] - 2026-11-25
+
+### Changed
+- **Google Maps docstrings (SCR-711).** `google.maps.place()` and `google.maps.photos()` now describe what the API returns. Place details carry opening hours (`open_state`, `hours`, `operating_hours`), `price_level` (Google's price per person), and `thumbnail`/`image`; `service_options` is None. Photos are one page, usually the first 8 that Google exposes, and `pagination.total_results` is the place's total photo count on Google. `category_id`, `next_page_token` and `page_size` are kept for compatibility but have no effect: the API never supported them. No signature changes.
+
 ## [0.82.0] - 2026-11-23
 
 ### Added
