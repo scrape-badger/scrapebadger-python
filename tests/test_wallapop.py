@@ -682,6 +682,20 @@ class TestWallapopClient:
         _, params = _call(mock_base_client)
         assert params == {"market": "es", "category_id": 100}
 
+    async def test_search_subcategory_ids(
+        self, wallapop_client: WallapopClient, mock_base_client: MagicMock
+    ) -> None:
+        mock_base_client.get.return_value = SEARCH_RESPONSE
+        await wallapop_client.search(category_id=24200, subcategory_ids=[9447, 10310])
+        _, params = _call(mock_base_client)
+        assert params == {"market": "es", "category_id": 24200, "subcategory_ids": "9447,10310"}
+        await wallapop_client.search(subcategory_ids="9447")
+        _, params = _call(mock_base_client)
+        assert params == {"market": "es", "subcategory_ids": "9447"}
+        await wallapop_client.search("iphone", subcategory_ids=[])
+        _, params = _call(mock_base_client)
+        assert params == {"query": "iphone", "market": "es"}
+
     async def test_search_next_page(
         self, wallapop_client: WallapopClient, mock_base_client: MagicMock
     ) -> None:
@@ -760,6 +774,9 @@ class TestWallapopClient:
         await wallapop_client.list_filters(category_id=24200, query="iphone")
         _, params = _call(mock_base_client)
         assert params == {"category_id": 24200, "query": "iphone", "market": "es"}
+        await wallapop_client.list_filters(category_id=24200, subcategory_ids=(9447,))
+        _, params = _call(mock_base_client)
+        assert params == {"category_id": 24200, "subcategory_ids": "9447", "market": "es"}
 
     async def test_list_filter_options(
         self, wallapop_client: WallapopClient, mock_base_client: MagicMock
@@ -771,6 +788,9 @@ class TestWallapopClient:
             "/v1/wallapop/filters/brand/options",
             {"query": "iphone", "market": "es"},
         )
+        await wallapop_client.list_filter_options("brand", subcategory_ids=[9447, "10310"])
+        _, params = _call(mock_base_client)
+        assert params == {"subcategory_ids": "9447,10310", "market": "es"}
 
     async def test_list_markets(
         self, wallapop_client: WallapopClient, mock_base_client: MagicMock

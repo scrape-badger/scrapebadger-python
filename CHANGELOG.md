@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.83.0] - 2026-11-26
+
+### Added
+- `wallapop.search(..., subcategory_ids=...)` narrows a search to Wallapop subcategories: the `subcategories` ids of `wallapop.list_categories()`, at any depth (e.g. `24200` Technology & electronics → `24201` Phones → `9447` Smartphones). Pass a list (`[9447, 10310]`) or a comma-separated string (`"9447,10310"`); several ids match any of them. Works with or without `category_id`, and on its own is enough to search (no `query` needed). A `next_page` cursor keeps the subcategories.
+- `wallapop.list_filters()` and `wallapop.list_filter_options()` take the same `subcategory_ids`, so filters and option lists match the subcategory (e.g. `list_filter_options("brand", subcategory_ids=[9447])` returns phone brands only).
+- New keyword-only arguments with a `None` default, so existing calls are unchanged.
+
 ## [0.82.1] - 2026-11-25
 
 ### Changed

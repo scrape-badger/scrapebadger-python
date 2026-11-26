@@ -26,6 +26,8 @@ from scrapebadger.wallapop.models import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from scrapebadger._internal.client import BaseClient
 
 OrderBy = Literal["most_relevance", "newest", "closest", "price_low_to_high", "price_high_to_low"]
@@ -36,6 +38,13 @@ Gearbox = Literal["manual", "automatic"]
 def _set(params: dict[str, Any]) -> dict[str, Any]:
     """Drop unset params (``None``) and boolean filters left at ``False``."""
     return {k: v for k, v in params.items() if v is not None and v is not False}
+
+
+def _ids(ids: Sequence[int | str] | str | None) -> str | None:
+    """``subcategory_ids`` as the API takes it: comma-separated, or None."""
+    if ids is None or isinstance(ids, str):
+        return ids
+    return ",".join(str(i) for i in ids) or None
 
 
 class WallapopClient:
@@ -91,6 +100,7 @@ class WallapopClient:
         longitude: float | None = None,
         distance_km: int | None = None,
         category_id: int | None = None,
+        subcategory_ids: Sequence[int | str] | str | None = None,
         min_price: float | None = None,
         max_price: float | None = None,
         condition: str | None = None,
@@ -113,8 +123,9 @@ class WallapopClient:
     ) -> SearchResponse:
         """Search Wallapop listings (40 per page).
 
-        Provide a ``query``, a ``category_id``, or both — or a ``next_page``
-        cursor, in which case the other filters are ignored.
+        Provide a ``query``, a ``category_id``, ``subcategory_ids``, or any
+        combination — or a ``next_page`` cursor, in which case the other
+        filters are ignored (the cursor already carries them).
 
         Args:
             query: Search text, e.g. "iphone 14".
@@ -123,6 +134,10 @@ class WallapopClient:
             longitude: Search centre longitude.
             distance_km: Radius around the centre, 1-500 km.
             category_id: Category id (see `list_categories`).
+            subcategory_ids: Subcategory ids from `list_categories` (the
+                ``subcategories`` of a category, at any depth), as a list such
+                as ``[9447, 10310]`` or a comma-separated string. Works with or
+                without ``category_id``.
             min_price: Minimum price.
             max_price: Maximum price.
             condition: Comma-separated: un_opened, in_box, new, as_good_as_new,
@@ -150,8 +165,8 @@ class WallapopClient:
 
         Raises:
             AuthenticationError: If the API key is invalid.
-            ValidationError: If neither query, category_id nor next_page is
-                given, or a parameter is out of range.
+            ValidationError: If none of query, category_id, subcategory_ids or
+                next_page is given, or a parameter is out of range.
 
         Example:
             ```python
@@ -164,6 +179,11 @@ class WallapopClient:
                 order_by="price_low_to_high",
             )
             print(cars.total_results)
+
+            # Smartphones (9447) under Technology & electronics (24200)
+            phones = await client.wallapop.search(
+                "iphone", category_id=24200, subcategory_ids=[9447]
+            )
             ```
         """
         params = _set(
@@ -174,6 +194,7 @@ class WallapopClient:
                 "longitude": longitude,
                 "distance_km": distance_km,
                 "category_id": category_id,
+                "subcategory_ids": _ids(subcategory_ids),
                 "min_price": min_price,
                 "max_price": max_price,
                 "condition": condition,
@@ -347,7 +368,8 @@ class WallapopClient:
                 Defaults to "es".
 
         Returns:
-            Category tree; ids are usable as the search ``category_id``.
+            Category tree; top-level ids are usable as the search
+            ``category_id``, nested ``subcategories`` ids as ``subcategory_ids``.
 
         Example:
             ```python
@@ -365,11 +387,14 @@ class WallapopClient:
         category_id: int | None = None,
         query: str | None = None,
         market: str = "es",
+        subcategory_ids: Sequence[int | str] | str | None = None,
     ) -> FiltersResponse:
         """Get the search filters Wallapop offers for a category/query.
 
         Args:
             category_id: Category the filters apply to.
+            subcategory_ids: Subcategory ids the filters apply to (a list or
+                a comma-separated string).
             query: Search text the filters apply to.
             market: Market code (es, it, pt). Defaults to "es".
 
@@ -387,7 +412,14 @@ class WallapopClient:
         """
         response = await self._client.get(
             "/v1/wallapop/filters",
-            params=_set({"category_id": category_id, "query": query, "market": market}),
+            params=_set(
+                {
+                    "category_id": category_id,
+                    "subcategory_ids": _ids(subcategory_ids),
+                    "query": query,
+                    "market": market,
+                }
+            ),
         )
         return FiltersResponse.model_validate(response)
 
@@ -398,6 +430,7 @@ class WallapopClient:
         category_id: int | None = None,
         query: str | None = None,
         market: str = "es",
+        subcategory_ids: Sequence[int | str] | str | None = None,
     ) -> FilterOptionsResponse:
         """Get a filter's long option list (e.g. brands, models).
 
@@ -407,6 +440,8 @@ class WallapopClient:
             category_id: Category the options apply to.
             query: Search text the options apply to.
             market: Market code (es, it, pt). Defaults to "es".
+            subcategory_ids: Subcategory ids the options apply to (a list or
+                a comma-separated string), e.g. ``[9447]`` for phone brands.
 
         Returns:
             The filter's options.
@@ -424,7 +459,14 @@ class WallapopClient:
         """
         response = await self._client.get(
             f"/v1/wallapop/filters/{filter_id}/options",
-            params=_set({"category_id": category_id, "query": query, "market": market}),
+            params=_set(
+                {
+                    "category_id": category_id,
+                    "subcategory_ids": _ids(subcategory_ids),
+                    "query": query,
+                    "market": market,
+                }
+            ),
         )
         return FilterOptionsResponse.model_validate(response)
 
