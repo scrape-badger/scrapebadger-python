@@ -1,10 +1,15 @@
 # Changelog
 
+## [0.83.1] - 2026-11-26
+
+### Changed
+- **Wallapop filters docs.** `wallapop.list_filters()` and `wallapop.list_filter_options()` need `category_id` whenever `subcategory_ids` is set: Wallapop rejects subcategories on its filter endpoints without their category, and the API answers 422 for that. The 0.83.0 example `list_filter_options("brand", subcategory_ids=[9447])` is corrected to `list_filter_options("brand", category_id=24200, subcategory_ids=[9447])`. `search()` still accepts `subcategory_ids` alone. No code or signature changes.
+
 ## [0.83.0] - 2026-11-26
 
 ### Added
 - `wallapop.search(..., subcategory_ids=...)` narrows a search to Wallapop subcategories: the `subcategories` ids of `wallapop.list_categories()`, at any depth (e.g. `24200` Technology & electronics → `24201` Phones → `9447` Smartphones). Pass a list (`[9447, 10310]`) or a comma-separated string (`"9447,10310"`); several ids match any of them. Works with or without `category_id`, and on its own is enough to search (no `query` needed). A `next_page` cursor keeps the subcategories.
-- `wallapop.list_filters()` and `wallapop.list_filter_options()` take the same `subcategory_ids`, so filters and option lists match the subcategory (e.g. `list_filter_options("brand", subcategory_ids=[9447])` returns phone brands only).
+- `wallapop.list_filters()` and `wallapop.list_filter_options()` take the same `subcategory_ids`, so filters and option lists match the subcategory (e.g. `list_filter_options("brand", category_id=24200, subcategory_ids=[9447])` returns phone brands only; the filters need `category_id`, see 0.83.1).
 - New keyword-only arguments with a `None` default, so existing calls are unchanged.
 
 ## [0.82.1] - 2026-11-25
