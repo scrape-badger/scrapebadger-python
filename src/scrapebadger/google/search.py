@@ -88,6 +88,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["html"],
     ) -> str: ...
 
@@ -142,6 +143,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["json"] = "json",
     ) -> dict[str, Any]: ...
 
@@ -196,6 +198,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["json", "html"],
     ) -> dict[str, Any] | str: ...
 
@@ -249,6 +252,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["json", "html"] = "json",
     ) -> dict[str, Any] | str:
         """Search Google and get a structured SERP response.
@@ -278,6 +282,7 @@ class SearchClient:
             sourceid: Google source identifier. Defaults to chrome; an empty string omits it.
             ie: Google input encoding hint. Defaults to UTF-8; an empty string omits it.
             user_agent: Custom User-Agent override.
+            defer_links: Skip inline URL lookups and return link tokens for resolve().
             output: json returns structured results; html returns the raw page.
             q: Search query (supports Google operators like `site:`, `intitle:`).
             gl: Country code (default "us").
@@ -427,6 +432,8 @@ class SearchClient:
             params["expand_related_questions"] = expand_related_questions
         if mode != "full":
             params["mode"] = mode
+        if defer_links:
+            params["defer_links"] = True
         if output == "html":
             body, _, _ = await self._client.get_raw("/v1/google/search", params=params)
             return body.decode("utf-8")
@@ -480,6 +487,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["html"],
     ) -> str: ...
 
@@ -531,6 +539,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["json"] = "json",
     ) -> dict[str, Any]: ...
 
@@ -582,6 +591,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["json", "html"],
     ) -> dict[str, Any] | str: ...
 
@@ -632,6 +642,7 @@ class SearchClient:
         sourceid: str | None = None,
         ie: str | None = None,
         user_agent: str | None = None,
+        defer_links: bool = False,
         output: Literal["json", "html"] = "json",
     ) -> dict[str, Any] | str:
         """Google Light Search — organic results + related searches only.
@@ -670,6 +681,7 @@ class SearchClient:
             sourceid: Google source identifier. Defaults to chrome; an empty string omits it.
             ie: Google input encoding hint. Defaults to UTF-8; an empty string omits it.
             user_agent: Custom User-Agent override.
+            defer_links: Skip inline URL lookups and return link tokens for resolve().
             output: json returns structured results; html returns the raw page.
             q: Search query (supports Google operators like `site:`).
             gl: Country code (default "us").
@@ -749,6 +761,8 @@ class SearchClient:
             "ibp": ibp,
             "uds": uds,
         }
+        if defer_links:
+            params["defer_links"] = True
         if output == "html":
             body, _, _ = await self._client.get_raw("/v1/google/light/search", params=params)
             return body.decode("utf-8")
