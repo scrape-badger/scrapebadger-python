@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.84.0
+
+- Search and Light accept `defer_links=True` to skip inline organic URL lookups. Use `resolve()` or `resolve_all()` when destinations are needed.
+
 ## [0.83.1] - 2026-11-26
 
 ### Changed
