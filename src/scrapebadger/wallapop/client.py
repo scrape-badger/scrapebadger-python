@@ -394,7 +394,8 @@ class WallapopClient:
         Args:
             category_id: Category the filters apply to.
             subcategory_ids: Subcategory ids the filters apply to (a list or
-                a comma-separated string).
+                a comma-separated string). Needs the ``category_id`` they
+                belong to; without it the API answers 422.
             query: Search text the filters apply to.
             market: Market code (es, it, pt). Defaults to "es".
 
@@ -441,7 +442,9 @@ class WallapopClient:
             query: Search text the options apply to.
             market: Market code (es, it, pt). Defaults to "es".
             subcategory_ids: Subcategory ids the options apply to (a list or
-                a comma-separated string), e.g. ``[9447]`` for phone brands.
+                a comma-separated string). Needs the ``category_id`` they
+                belong to, e.g. ``category_id=24200, subcategory_ids=[9447]``
+                for phone brands; without it the API answers 422.
 
         Returns:
             The filter's options.
